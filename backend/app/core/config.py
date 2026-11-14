@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Any
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -12,6 +13,19 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
     API_V1_STR: str = "/api/v1"
+
+    @field_validator("DEBUG", mode="before")
+    @classmethod
+    def parse_debug(cls, v: Any) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            val = v.strip().lower()
+            if val in ("true", "1", "yes", "y", "debug"):
+                return True
+            if val in ("false", "0", "no", "n", "release", "prod", "production"):
+                return False
+        return True
     
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
@@ -39,5 +53,6 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
+        extra = "ignore"
 
 settings = Settings()
