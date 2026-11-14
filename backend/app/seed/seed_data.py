@@ -96,27 +96,31 @@ def run_seed(force_reset: bool = False):
             source_type="ACTIVE_POINT", is_active=True
         ),
         Location(
-            id="loc-03", seller_id=None, name="Pasar Raya Padang (Kandidat)",
+            id="loc-03", seller_id="usr-seller-03", name="Pasar Raya Padang",
             latitude=-0.951, longitude=100.360, address="Jl. Sandang Pangan, Kampung Jao, Padang Barat",
-            source_type="CANDIDATE", is_active=False
+            source_type="ACTIVE_POINT", is_active=True
         ),
         Location(
-            id="loc-04", seller_id=None, name="Pantai Padang Taplau (Kandidat)",
+            id="loc-04", seller_id="usr-seller-04", name="Pantai Padang Taplau",
             latitude=-0.945, longitude=100.354, address="Jl. Samudera, Purus, Padang Barat",
-            source_type="CANDIDATE", is_active=False
+            source_type="ACTIVE_POINT", is_active=True
         ),
     ]
     db.add_all(locs)
 
-    # 5. Inventory: Gudang Pusat (Central) & Stok Seller
+    # 5. Inventory: Gudang Pusat (Central) & Stok 4 Seller Resmi
     invs = []
     for p in prods:
         # Gudang Pusat: 1.000 cup per item
         invs.append(Inventory(id=f"inv-central-{p.id}", product_id=p.id, scope_type="WAREHOUSE", scope_id="central", quantity=1000, reserved_quantity=0))
-        # Seller 1 (UNP): 50 cup per produk
+        # Seller 1 (UNP Air Tawar): 50 cup per produk
         invs.append(Inventory(id=f"inv-seller1-{p.id}", product_id=p.id, scope_type="SELLER", scope_id="usr-seller-01", quantity=50, reserved_quantity=0))
         # Seller 2 (Khatib Sulaiman): 40 cup per produk
         invs.append(Inventory(id=f"inv-seller2-{p.id}", product_id=p.id, scope_type="SELLER", scope_id="usr-seller-02", quantity=40, reserved_quantity=0))
+        # Seller 3 (Pasar Raya): 45 cup per produk
+        invs.append(Inventory(id=f"inv-seller3-{p.id}", product_id=p.id, scope_type="SELLER", scope_id="usr-seller-03", quantity=45, reserved_quantity=0))
+        # Seller 4 (Taplau): 55 cup per produk
+        invs.append(Inventory(id=f"inv-seller4-{p.id}", product_id=p.id, scope_type="SELLER", scope_id="usr-seller-04", quantity=55, reserved_quantity=0))
     db.add_all(invs)
 
     # 6. Inbound Stock Movements Gudang
@@ -193,42 +197,94 @@ def run_seed(force_reset: bool = False):
         db.bulk_insert_mappings(TransactionItem, txi_mappings)
         db.commit()
 
-    # 9. Tambahkan Transaksi Aktif 7 Hari Terakhir (November 8 - 14, 2026) untuk Demo Operasional
+    # 9. Tambahkan 48 Transaksi Aktif Terkini Tersinkronisasi (November 2026) untuk Demo Operasional
     now = datetime.datetime.utcnow()
     recent_txs = []
     recent_txis = []
     rec_idx = 1
-    for d in range(7, 0, -1):
-        dt = now - datetime.timedelta(days=d, hours=3)
-        # Transaksi UNP
-        t_id1 = f"tx-recent-unp-{d}"
-        recent_txs.append({
-            "id": t_id1, "seller_id": "usr-seller-01", "location_id": "loc-01",
-            "total_amount": 24000, "payment_method": "CASH", "payment_status": "PAID",
-            "idempotency_key": f"rec-idem-{rec_idx}", "created_at": dt
-        })
-        recent_txis.append({
-            "id": f"txi-rec-{rec_idx}", "transaction_id": t_id1,
-            "product_id": "prd-01", "quantity": 2, "unit_price": 12000, "subtotal": 24000
-        })
-        rec_idx += 1
 
-        # Transaksi Khatib Sulaiman
-        t_id2 = f"tx-recent-khatib-{d}"
-        dt2 = now - datetime.timedelta(days=d, hours=2)
-        recent_txs.append({
-            "id": t_id2, "seller_id": "usr-seller-02", "location_id": "loc-02",
-            "total_amount": 24000, "payment_method": "QRIS_STATIC", "payment_status": "PAID",
-            "idempotency_key": f"rec-idem-{rec_idx}", "created_at": dt2
-        })
-        recent_txis.append({
-            "id": f"txi-rec-{rec_idx}", "transaction_id": t_id2,
-            "product_id": "prd-02", "quantity": 2, "unit_price": 12000, "subtotal": 24000
-        })
-        rec_idx += 1
+    prod_catalog = [
+        ("prd-01", 12000),  # Kopi Susu Aren
+        ("prd-02", 12000),  # Americano
+        ("prd-03", 12000),  # Coklat
+        ("prd-04", 12000),  # Red Velvet
+        ("prd-05", 8000),   # Thai Tea
+        ("prd-06", 8000),   # Lemon Tea
+    ]
+
+    seller_configs = [
+        ("usr-seller-01", "loc-01", "unp"),
+        ("usr-seller-02", "loc-02", "khatib"),
+        ("usr-seller-03", "loc-03", "pasarraya"),
+        ("usr-seller-04", "loc-04", "taplau"),
+    ]
+
+    for s_idx, (s_id, l_id, s_code) in enumerate(seller_configs):
+        for tx_num in range(1, 13):
+            hours_ago = (12 - tx_num) * 5 + (s_idx * 1)
+            tx_time = now - datetime.timedelta(hours=hours_ago)
+            p_id, unit_p = prod_catalog[(tx_num + s_idx) % len(prod_catalog)]
+            qty = 1 if tx_num % 3 == 0 else (2 if tx_num % 2 == 0 else 1)
+            subtotal = qty * unit_p
+            pay_method = "CASH" if tx_num % 2 == 1 else "QRIS_STATIC"
+            t_id = f"tx-sync-{s_code}-{tx_num}"
+
+            recent_txs.append({
+                "id": t_id,
+                "seller_id": s_id,
+                "location_id": l_id,
+                "total_amount": subtotal,
+                "payment_method": pay_method,
+                "payment_status": "PAID",
+                "idempotency_key": f"sync-idem-{rec_idx}",
+                "created_at": tx_time
+            })
+            recent_txis.append({
+                "id": f"txi-sync-{rec_idx}",
+                "transaction_id": t_id,
+                "product_id": p_id,
+                "quantity": qty,
+                "unit_price": unit_p,
+                "subtotal": subtotal
+            })
+            rec_idx += 1
 
     db.bulk_insert_mappings(Transaction, recent_txs)
     db.bulk_insert_mappings(TransactionItem, recent_txis)
+
+    # 10. Tambahkan 4 Customer Pre-Order Aktif Terintegrasi
+    sample_orders = [
+        Order(
+            id="ORD-9041", order_number="ORD-20261114-9041", customer_id="usr-cust-01", seller_id="usr-seller-01", location_id="loc-01",
+            total_amount=24000, order_status="COMPLETED", payment_status="PAID", payment_method="QRIS_DYNAMIC",
+            created_at=now - datetime.timedelta(hours=3)
+        ),
+        Order(
+            id="ORD-9042", order_number="ORD-20261114-9042", customer_id="usr-cust-01", seller_id="usr-seller-01", location_id="loc-01",
+            total_amount=24000, order_status="READY_FOR_PICKUP", payment_status="PAID", payment_method="QRIS_DYNAMIC",
+            created_at=now - datetime.timedelta(hours=1, minutes=30)
+        ),
+        Order(
+            id="ORD-9043", order_number="ORD-20261114-9043", customer_id="usr-cust-01", seller_id="usr-seller-02", location_id="loc-02",
+            total_amount=20000, order_status="PREPARING", payment_status="PAID", payment_method="QRIS_DYNAMIC",
+            created_at=now - datetime.timedelta(minutes=45)
+        ),
+        Order(
+            id="ORD-9044", order_number="ORD-20261114-9044", customer_id="usr-cust-01", seller_id="usr-seller-04", location_id="loc-04",
+            total_amount=16000, order_status="CONFIRMED", payment_status="PAID", payment_method="QRIS_DYNAMIC",
+            created_at=now - datetime.timedelta(minutes=15)
+        ),
+    ]
+    db.add_all(sample_orders)
+
+    sample_order_items = [
+        OrderItem(id="oi-9041-1", order_id="ORD-9041", product_id="prd-01", quantity=2, unit_price=12000, subtotal=24000),
+        OrderItem(id="oi-9042-1", order_id="ORD-9042", product_id="prd-01", quantity=2, unit_price=12000, subtotal=24000),
+        OrderItem(id="oi-9043-1", order_id="ORD-9043", product_id="prd-02", quantity=1, unit_price=12000, subtotal=12000),
+        OrderItem(id="oi-9043-2", order_id="ORD-9043", product_id="prd-05", quantity=1, unit_price=8000, subtotal=8000),
+        OrderItem(id="oi-9044-1", order_id="ORD-9044", product_id="prd-06", quantity=2, unit_price=8000, subtotal=16000),
+    ]
+    db.add_all(sample_order_items)
     db.commit()
 
     total_tx_final = db.query(Transaction).count()

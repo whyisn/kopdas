@@ -72,8 +72,8 @@ class _RealLiveGoogleMapState extends State<RealLiveGoogleMap> {
       'cups_sold': s['cups_sold'] is num ? s['cups_sold'] : 0,
       'cash': s['cash'] is num ? s['cash'] : 0,
       'qris': s['qris'] is num ? s['qris'] : 0,
-      'lat': (s['lat'] is num) ? (s['lat'] as num).toDouble() : -6.2000,
-      'lng': (s['lng'] is num) ? (s['lng'] as num).toDouble() : 106.8200,
+      'lat': (s['lat'] is num) ? (s['lat'] as num).toDouble() : -0.9040,
+      'lng': (s['lng'] is num) ? (s['lng'] as num).toDouble() : 100.3530,
       'phone': s['phone']?.toString() ?? '',
     }).toList();
 
