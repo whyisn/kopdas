@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'core/constants.dart';
 import 'models/product.dart';
+import 'Frontend owner/owner_dashboard_view.dart';
 
 void main() {
   runApp(const KopiCerdasApp());
@@ -193,7 +194,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   Widget _buildActiveRoleBody() {
     switch (_currentRoleIndex) {
       case 0:
-        return _buildOwnerView();
+        return const OwnerDashboardView();
       case 1:
         return _buildSellerView();
       case 2:
