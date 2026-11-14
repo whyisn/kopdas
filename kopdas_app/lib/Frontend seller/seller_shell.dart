@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/constants.dart';
 import '../services/auth_service.dart';
+import '../services/demo_seller_store.dart';
 
 class SellerShell extends StatelessWidget {
   final GoRouterState state;
@@ -63,7 +64,9 @@ class SellerShell extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              session.name ?? 'Seller',
+              AppConstants.demoMode
+                  ? DemoSellerStore.sellerName
+                  : (session.name ?? 'Seller'),
               style: const TextStyle(fontSize: 13, color: Colors.white),
             ),
           ),

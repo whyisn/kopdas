@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  static const String appName = 'KopiCerdas AI';
+  static const String appName = 'Kopi Cerdas';
   static const String appTagline = 'Smart Coffee Network';
+
+  // Development Demo Mode: data simulasi lokal, tanpa login/token backend.
+  // Set false untuk Production Mode (login + API backend asli).
+  static const bool demoMode = true;
+
+  // Routing bypass mengikuti demo mode (skip login → Seller Dashboard).
+  static const bool devBypassAuth = demoMode;
 
   // API Backend Base URL (FastAPI)
   static const String apiBaseUrl = 'http://127.0.0.1:8000/api/v1';

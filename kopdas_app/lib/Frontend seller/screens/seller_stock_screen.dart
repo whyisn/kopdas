@@ -5,8 +5,7 @@ import '../../core/formatters.dart';
 import '../../models/category.dart';
 import '../../models/inventory.dart';
 import '../../models/product.dart';
-import '../../services/auth_service.dart';
-import '../../services/seller_api.dart';
+import '../../services/seller_repository.dart';
 import '../../widgets/app_states.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/section_card.dart';
@@ -35,7 +34,7 @@ class SellerStockScreen extends StatefulWidget {
 }
 
 class _SellerStockScreenState extends State<SellerStockScreen> {
-  final _api = SellerApi(sessionController.api);
+  final _repo = sellerRepository();
 
   bool _loading = true;
   String? _error;
@@ -58,11 +57,10 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
       _error = null;
     });
     try {
-      final sellerId = sessionController.userId!;
       final results = await Future.wait([
-        _api.myStock(sellerId),
-        _api.products(),
-        _api.categories(),
+        _repo.myStock(),
+        _repo.products(),
+        _repo.categories(),
       ]);
       if (!mounted) return;
       final stock = results[0] as List<InventoryModel>;
@@ -151,7 +149,7 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
                     icon: Icons.inventory_2_outlined,
                     title: 'Tidak ada produk',
                     message: _items.isEmpty
-                        ? 'Stok untuk akun ini belum tersedia dari backend.'
+                        ? 'Data stok belum tersedia.'
                         : 'Tidak ada produk yang cocok dengan pencarian/filter.',
                   )
                 : ListView.separated(
@@ -287,7 +285,7 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => Padding(
+      builder: (ctx) => SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -327,10 +325,10 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
                   Icon(Icons.lock_outline,
                       size: 18, color: Colors.brown.shade300),
                   const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      'Stok bersifat read-only. Penyesuaian stok dilakukan '
-                      'melalui backend (distribusi Owner / transaksi).',
+                  Expanded(
+                    child: const Text(
+                      'Stok bersifat read-only. Perubahan stok terjadi '
+                      'otomatis melalui transaksi penjualan.',
                       style: TextStyle(
                           fontSize: 12, color: Colors.black54, height: 1.4),
                     ),

@@ -8,9 +8,10 @@ import '../../models/location.dart';
 import '../../models/product.dart';
 import '../../models/transaction.dart';
 import '../../services/auth_service.dart';
-import '../../services/seller_api.dart';
+import '../../services/seller_repository.dart';
 import '../../widgets/app_dialogs.dart';
 import '../../widgets/app_states.dart';
+import '../../widgets/product_image.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/status_badge.dart';
 
@@ -28,7 +29,7 @@ class SellerPosScreen extends StatefulWidget {
 }
 
 class _SellerPosScreenState extends State<SellerPosScreen> {
-  final _api = SellerApi(sessionController.api);
+  final _repo = sellerRepository();
 
   bool _loading = true;
   String? _error;
@@ -56,12 +57,11 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
       _error = null;
     });
     try {
-      final sellerId = sessionController.userId!;
       final results = await Future.wait([
-        _api.products(),
-        _api.categories(),
-        _api.myStock(sellerId),
-        _api.myLocations(sellerId),
+        _repo.products(),
+        _repo.categories(),
+        _repo.myStock(),
+        _repo.myLocations(),
       ]);
       if (!mounted) return;
       final products = results[0] as List<ProductModel>;
@@ -123,6 +123,184 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
     }, modalSetState);
   }
 
+  void _addToCartQty(ProductModel p, int qty) {
+    final available = _availableByProduct[p.id] ?? 0;
+    final current = _cart[p.id]?.qty ?? 0;
+    final canAdd = available - current;
+    if (canAdd <= 0) {
+      showAppSnackBar(context, 'Stok ${p.name} tidak mencukupi.', isError: true);
+      return;
+    }
+    final add = qty < canAdd ? qty : canAdd;
+    _updateCart(() {
+      if (_cart.containsKey(p.id)) {
+        _cart[p.id]!.qty += add;
+      } else {
+        _cart[p.id] = _CartLine(p, add);
+      }
+    });
+    showAppSnackBar(context, '${p.name} ×$add ditambahkan ke keranjang.');
+  }
+
+  void _openPreview(ProductModel p) {
+    final available = _availableByProduct[p.id] ?? 0;
+    final inCart = _cart[p.id]?.qty ?? 0;
+    final maxAdd = available - inCart;
+    var qty = 1;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx2, setSheetState) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: AppConstants.surfaceColor,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.brown.shade100,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 200,
+                    width: double.infinity,
+                    child: ProductImage(
+                      product: p,
+                      iconSize: 72,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    p.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppConstants.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      StatusBadge(
+                        label: p.categoryName ?? 'Produk',
+                        color: AppConstants.primaryColor,
+                      ),
+                      const SizedBox(width: 6),
+                      StatusBadge(
+                        label: available > 0 ? 'Stok: $available' : 'Habis',
+                        color: available > 0
+                            ? AppConstants.statusSuccess
+                            : AppConstants.statusWarning,
+                      ),
+                    ],
+                  ),
+                  if (p.description != null && p.description!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      p.description!,
+                      style: const TextStyle(
+                          fontSize: 13, color: Colors.black54, height: 1.4),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  Text(
+                    formatRupiah(p.price),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: AppConstants.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (maxAdd > 0) ...[
+                    Row(
+                      children: [
+                        const Text('Jumlah',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
+                        const Spacer(),
+                        IconButton.outlined(
+                          onPressed: qty > 1
+                              ? () => setSheetState(() => qty--)
+                              : null,
+                          icon: const Icon(Icons.remove, size: 18),
+                        ),
+                        SizedBox(
+                          width: 40,
+                          child: Text(
+                            '$qty',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        IconButton.outlined(
+                          onPressed: qty < maxAdd
+                              ? () => setSheetState(() => qty++)
+                              : null,
+                          icon: const Icon(Icons.add, size: 18),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: () {
+                          _addToCartQty(p, qty);
+                          Navigator.of(ctx).pop();
+                        },
+                        icon: const Icon(Icons.add_shopping_cart),
+                        label: Text(
+                            'Tambah ke keranjang · ${formatRupiah(p.price * qty)}'),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppConstants.primaryColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                    ),
+                  ] else
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppConstants.statusWarning.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'Stok produk ini sudah habis atau seluruhnya ada di keranjang.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 13, color: AppConstants.statusWarning),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   void _changeQty(String productId, int delta, [StateSetter? modalSetState]) {
     final line = _cart[productId];
     if (line == null) return;
@@ -157,21 +335,20 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
       title: 'Konfirmasi transaksi',
       message: _paymentMethod == 'CASH'
           ? 'Catat penjualan tunai sebesar ${formatRupiah(_estimateTotal)} '
-              '($_cartCount item)? Total final dihitung backend.'
+              '($_cartCount item)?'
           : 'Pastikan pembayaran QRIS sebesar ${formatRupiah(_estimateTotal)} '
-              'telah diterima. Total final dihitung backend.',
+              'telah diterima sebelum konfirmasi.',
       confirmLabel: 'Proses',
     );
     if (!confirmed) return;
 
     _idempotencyKey ??=
-        'pos-${sessionController.userId}-${DateTime.now().microsecondsSinceEpoch}';
+        'pos-${AppConstants.demoMode ? 'local' : sessionController.userId}-${DateTime.now().microsecondsSinceEpoch}';
 
     setState(() => _submitting = true);
     modalSetState?.call(() {});
     try {
-      final trx = await _api.createTransaction(
-        sellerId: sessionController.userId!,
+      final trx = await _repo.createTransaction(
         locationId: _location!.id,
         paymentMethod: _paymentMethod,
         items: [
@@ -233,7 +410,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total (backend)',
+                const Text('Total',
                     style: TextStyle(fontWeight: FontWeight.w700)),
                 Text(
                   formatRupiah(trx.totalAmount),
@@ -345,7 +522,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                   gridDelegate:
                       const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    childAspectRatio: 0.82,
+                    childAspectRatio: 0.72,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
@@ -388,28 +565,58 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: canAdd ? () => _addToCart(p) : null,
+        onTap: () => _openPreview(p),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppConstants.backgroundColor.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: (p.imageUrl == null || p.imageUrl!.isEmpty)
-                      ? const Icon(Icons.coffee_outlined,
-                          size: 40, color: AppConstants.primaryColor)
-                      : Image.network(p.imageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => const Icon(
-                              Icons.coffee_outlined,
-                              size: 40,
-                              color: AppConstants.primaryColor)),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ProductImage(product: p, iconSize: 40),
+                    ),
+                    if (inCart > 0)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppConstants.primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$inCart di keranjang',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    if (available <= 0)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.45),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'HABIS',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 13,
+                                  letterSpacing: 1),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               const SizedBox(height: 8),
@@ -423,6 +630,11 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                   color: AppConstants.textDark,
                 ),
               ),
+              const SizedBox(height: 2),
+              Text(
+                p.categoryName ?? 'Produk',
+                style: const TextStyle(fontSize: 11, color: Colors.black45),
+              ),
               const SizedBox(height: 4),
               Text(
                 formatRupiah(p.price),
@@ -431,33 +643,36 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                   color: AppConstants.primaryColor,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               Row(
                 children: [
-                  Text(
-                    'Stok: $available',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: available > 0 ? Colors.black54 : AppConstants.statusWarning,
+                  Expanded(
+                    child: Text(
+                      'Stok: $available',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: available > 0
+                            ? Colors.black54
+                            : AppConstants.statusWarning,
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  if (inCart > 0)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: AppConstants.primaryColor,
-                        borderRadius: BorderRadius.circular(10),
+                  SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: IconButton.filled(
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      onPressed: canAdd ? () => _addToCart(p) : null,
+                      style: IconButton.styleFrom(
+                        backgroundColor: AppConstants.primaryColor,
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor: Colors.brown.shade100,
+                        disabledForegroundColor: Colors.black38,
                       ),
-                      child: Text(
-                        '$inCart',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700),
-                      ),
+                      icon: const Icon(Icons.add, size: 18),
                     ),
+                  ),
                 ],
               ),
             ],
@@ -533,62 +748,65 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.brown.shade100),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                const Icon(Icons.shopping_cart_outlined,
-                    color: AppConstants.primaryColor),
-                const SizedBox(width: 8),
-                const Text(
-                  'Keranjang',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppConstants.textDark,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  const Icon(Icons.shopping_cart_outlined,
+                      color: AppConstants.primaryColor),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Keranjang',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: AppConstants.textDark,
+                    ),
+                  ),
+                  const Spacer(),
+                  if (lines.isNotEmpty)
+                    TextButton(
+                      onPressed: _submitting
+                          ? null
+                          : () => _updateCart(() => _cart.clear(), modalSetState),
+                      child: const Text('Kosongkan'),
+                    ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            if (lines.isEmpty)
+              const Padding(
+                padding: EdgeInsets.all(24),
+                child: Center(
+                  child: Text(
+                    'Keranjang kosong.\nPilih produk untuk memulai.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black45, height: 1.5),
                   ),
                 ),
-                const Spacer(),
-                if (lines.isNotEmpty)
-                  TextButton(
-                    onPressed: _submitting
-                        ? null
-                        : () => _updateCart(() => _cart.clear(), modalSetState),
-                    child: const Text('Kosongkan'),
-                  ),
-              ],
-            ),
-          ),
-          const Divider(height: 1),
-          Expanded(
-            child: lines.isEmpty
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text(
-                        'Keranjang kosong.\nPilih produk untuk memulai.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black45, height: 1.5),
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(12),
-                    itemCount: lines.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) {
-                      final l = lines[i];
-                      return _buildCartLine(l, modalSetState);
-                    },
-                  ),
-          ),
-          const Divider(height: 1),
-          _buildCheckoutSection(modalSetState),
-        ],
+              )
+            else
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(12),
+                itemCount: lines.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
+                itemBuilder: (_, i) {
+                  final l = lines[i];
+                  return _buildCartLine(l, modalSetState);
+                },
+              ),
+            const Divider(height: 1),
+            _buildCheckoutSection(modalSetState),
+          ],
+        ),
       ),
     );
   }
@@ -656,7 +874,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
           ),
           const SizedBox(height: 2),
           const Text(
-            'Total final dihitung & divalidasi backend.',
+            'Total final dikonfirmasi saat transaksi diproses.',
             style: TextStyle(fontSize: 11, color: Colors.black38),
           ),
           const SizedBox(height: 12),
@@ -675,15 +893,15 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                 color: AppConstants.statusPending.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.info_outline,
+                  const Icon(Icons.info_outline,
                       size: 16, color: AppConstants.statusPending),
-                  SizedBox(width: 8),
-                  Expanded(
+                  const SizedBox(width: 8),
+                  const Expanded(
                     child: Text(
-                      'Gambar QRIS merchant belum tersedia dari backend. '
-                      'Pastikan pembayaran diterima sebelum konfirmasi.',
+                      'Pastikan pembayaran QRIS telah diterima sebelum '
+                      'konfirmasi transaksi.',
                       style: TextStyle(
                           fontSize: 11, color: Colors.black54, height: 1.3),
                     ),

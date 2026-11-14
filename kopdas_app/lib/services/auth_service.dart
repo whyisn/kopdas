@@ -52,3 +52,16 @@ class SessionController extends ChangeNotifier {
 }
 
 final SessionController sessionController = SessionController();
+
+/// Seller id untuk API; throw ApiException(401) bila belum login.
+String requireSellerId() {
+  final id = sessionController.userId;
+  if (id == null) {
+    throw ApiException(
+      401,
+      'Sesi login diperlukan untuk memuat data ini. '
+      'Silakan login terlebih dahulu.',
+    );
+  }
+  return id;
+}

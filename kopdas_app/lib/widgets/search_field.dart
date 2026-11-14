@@ -6,12 +6,14 @@ class SearchField extends StatelessWidget {
   final String hint;
   final ValueChanged<String> onChanged;
   final TextEditingController? controller;
+  final ValueChanged<String>? onSubmitted;
 
   const SearchField({
     super.key,
     required this.hint,
     required this.onChanged,
     this.controller,
+    this.onSubmitted,
   });
 
   @override
@@ -19,6 +21,7 @@ class SearchField extends StatelessWidget {
     return TextField(
       controller: controller,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: hint,

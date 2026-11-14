@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants.dart';
 import '../../core/formatters.dart';
 import '../../models/transaction.dart';
-import '../../services/auth_service.dart';
-import '../../services/seller_api.dart';
+import '../../services/seller_repository.dart';
 import '../../widgets/app_states.dart';
 import '../../widgets/search_field.dart';
 import '../../widgets/status_badge.dart';
@@ -19,7 +18,7 @@ class SellerHistoryScreen extends StatefulWidget {
 }
 
 class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
-  final _api = SellerApi(sessionController.api);
+  final _repo = sellerRepository();
 
   bool _loading = true;
   String? _error;
@@ -39,8 +38,7 @@ class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
       _error = null;
     });
     try {
-      final result =
-          await _api.myTransactions(sessionController.userId!, limit: 50);
+      final result = await _repo.myTransactions(limit: 50);
       if (!mounted) return;
       setState(() {
         _transactions = result;
@@ -240,7 +238,7 @@ class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => Padding(
+      builder: (ctx) => SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,

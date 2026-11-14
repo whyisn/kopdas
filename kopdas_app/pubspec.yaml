@@ -1,5 +1,5 @@
 name: kopdas_app
-description: "A new Flutter project."
+description: "Kopi Cerdas — Smart Coffee Network."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -36,6 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.2.0
   go_router: ^14.8.1
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
+  geolocator: ^14.1.2
+  shared_preferences: ^2.5.6
 
 dev_dependencies:
   flutter_test:

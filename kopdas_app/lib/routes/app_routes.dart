@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../core/constants.dart';
 import '../Frontend owner/owner_dashboard_view.dart';
 import '../Frontend seller/screens/seller_dashboard_screen.dart';
 import '../Frontend seller/screens/seller_history_screen.dart';
@@ -13,11 +14,16 @@ import '../screens/role_placeholder_screen.dart';
 import '../services/auth_service.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: AppConstants.devBypassAuth ? '/seller' : '/',
   refreshListenable: sessionController,
   redirect: (context, state) {
     final session = sessionController;
     final loc = state.matchedLocation;
+
+    // Dev bypass: lewati auth guard, tanpa redirect ke Login, tanpa loop.
+    if (AppConstants.devBypassAuth) {
+      return (loc == '/' || loc == '/login') ? '/seller' : null;
+    }
 
     if (!session.isLoggedIn) {
       return loc == '/login' ? null : '/login';

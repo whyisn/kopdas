@@ -4,9 +4,11 @@ import '../../core/constants.dart';
 import '../../core/formatters.dart';
 import '../../models/inventory.dart';
 import '../../models/location.dart';
+import '../../models/product.dart';
 import '../../models/transaction.dart';
 import '../../services/auth_service.dart';
-import '../../services/seller_api.dart';
+import '../../services/demo_seller_store.dart';
+import '../../services/seller_repository.dart';
 import '../../widgets/app_states.dart';
 import '../../widgets/section_card.dart';
 import '../../widgets/status_badge.dart';
@@ -21,13 +23,14 @@ class SellerDashboardScreen extends StatefulWidget {
 }
 
 class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
-  final _api = SellerApi(sessionController.api);
+  final _repo = sellerRepository();
 
   bool _loading = true;
   String? _error;
   List<LocationModel> _locations = [];
   List<InventoryModel> _stock = [];
   List<TransactionModel> _transactions = [];
+  List<ProductModel> _products = [];
 
   @override
   void initState() {
@@ -41,17 +44,18 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
       _error = null;
     });
     try {
-      final sellerId = sessionController.userId!;
       final results = await Future.wait([
-        _api.myLocations(sellerId),
-        _api.myStock(sellerId),
-        _api.myTransactions(sellerId, limit: 50),
+        _repo.myLocations(),
+        _repo.myStock(),
+        _repo.myTransactions(limit: 50),
+        _repo.products(),
       ]);
       if (!mounted) return;
       setState(() {
         _locations = results[0] as List<LocationModel>;
         _stock = results[1] as List<InventoryModel>;
         _transactions = results[2] as List<TransactionModel>;
+        _products = results[3] as List<ProductModel>;
         _loading = false;
       });
     } catch (e) {
@@ -97,11 +101,12 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
         children: [
           _buildGreeting(outlet),
           const SizedBox(height: 16),
-          _buildTodaySummary(todayRevenue, today.length, lowStock.length),
+          _buildTodaySummary(
+              todayRevenue, today.length, _products.length, lowStock.length),
           const SizedBox(height: 16),
           _buildLowStock(lowStock),
           const SizedBox(height: 16),
-          _buildOrdersNotice(),
+          _buildOrders(),
           const SizedBox(height: 16),
           _buildRecent(recent),
           const SizedBox(height: 24),
@@ -111,7 +116,9 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
   }
 
   Widget _buildGreeting(LocationModel? outlet) {
-    final name = sessionController.name ?? 'Seller';
+    final name = AppConstants.demoMode
+        ? DemoSellerStore.sellerName
+        : (sessionController.name ?? 'Seller');
     return SectionCard(
       child: Row(
         children: [
@@ -146,19 +153,25 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
               ],
             ),
           ),
-          if (outlet != null)
-            StatusBadge(
-              label: outlet.isActive ? 'AKTIF' : 'NONAKTIF',
-              color: outlet.isActive
-                  ? AppConstants.statusSuccess
-                  : Colors.blueGrey,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (outlet != null)
+                StatusBadge(
+                  label: outlet.isActive ? 'AKTIF' : 'NONAKTIF',
+                  color: outlet.isActive
+                      ? AppConstants.statusSuccess
+                      : Colors.blueGrey,
+                ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTodaySummary(int revenue, int trxCount, int lowCount) {
+  Widget _buildTodaySummary(
+      int revenue, int trxCount, int productCount, int lowCount) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -187,6 +200,17 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
               value: '$trxCount',
               icon: Icons.receipt_long_outlined,
               color: AppConstants.primaryColor,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            _StatTile(
+              label: 'Produk',
+              value: '$productCount',
+              icon: Icons.coffee_outlined,
+              color: AppConstants.accentColor,
             ),
             const SizedBox(width: 12),
             _StatTile(
@@ -247,22 +271,71 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
     );
   }
 
-  Widget _buildOrdersNotice() {
-    return SectionCard(
-      title: 'Pesanan baru',
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, size: 20, color: Colors.brown.shade300),
-          const SizedBox(width: 10),
-          const Expanded(
-            child: Text(
-              'Data pesanan belum tersedia dari backend. '
-              'Menunggu endpoint Orders Seller (list order & status).',
-              style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.4),
+  Widget _buildOrders() {
+    if (!AppConstants.demoMode) {
+      return SectionCard(
+        title: 'Pesanan baru',
+        child: Row(
+          children: [
+            Icon(Icons.info_outline, size: 20, color: Colors.brown.shade300),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: Text(
+                'Data pesanan belum tersedia.',
+                style:
+                    TextStyle(color: Colors.black54, fontSize: 13, height: 1.4),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      );
+    }
+
+    final active = demoSellerStore.ordersToProcess;
+    return SectionCard(
+      title: 'Pesanan perlu diproses',
+      trailing: Text(
+        '${active.length} pesanan',
+        style: TextStyle(fontSize: 11, color: Colors.brown.shade300),
       ),
+      child: active.isEmpty
+          ? const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                'Tidak ada pesanan yang perlu diproses.',
+                style: TextStyle(color: Colors.black54),
+              ),
+            )
+          : Column(
+              children: [
+                for (final o in active.take(4))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                o.orderNumber,
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${o.items.fold<int>(0, (s, i) => s + i.quantity)} item • ${formatRupiah(o.totalAmount)}',
+                                style: const TextStyle(
+                                    fontSize: 11, color: Colors.black45),
+                              ),
+                            ],
+                          ),
+                        ),
+                        StatusBadge.order(o.orderStatus),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 
