@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'real_web_map.dart';
 
 class OwnerDashboardView extends StatefulWidget {
   const OwnerDashboardView({super.key});
@@ -16,6 +17,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // Search filter
   String _searchFilter = '';
+
+  // Google Maps Live GPS State
+  double _liveMapLat = -6.2088;
+  double _liveMapLng = 106.8227;
+  int _liveMapZoom = 15;
+  String _focusedStaffId = 'USR-01';
 
   // ===========================================================================
   // DATA OPERASIONAL TERINTEGRASI (SINGLE SOURCE OF TRUTH)
@@ -42,6 +49,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'commission_paid': false,
       'gps_status': 'Live (4m akurasi)',
       'lat_long': '-6.2088, 106.8227',
+      'lat': -6.2088,
+      'lng': 106.8227,
       'map_x': 180.0,
       'map_y': 150.0,
     },
@@ -66,6 +75,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'commission_paid': false,
       'gps_status': 'Live (6m akurasi)',
       'lat_long': '-6.1994, 106.8326',
+      'lat': -6.1994,
+      'lng': 106.8326,
       'map_x': 320.0,
       'map_y': 110.0,
     },
@@ -90,6 +101,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'commission_paid': false,
       'gps_status': 'Live (5m akurasi)',
       'lat_long': '-6.1744, 106.8432',
+      'lat': -6.1744,
+      'lng': 106.8432,
       'map_x': 460.0,
       'map_y': 70.0,
     },
@@ -114,6 +127,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'commission_paid': false,
       'gps_status': 'Live (3m akurasi)',
       'lat_long': '-6.1668, 106.8312',
+      'lat': -6.1668,
+      'lng': 106.8312,
       'map_x': 270.0,
       'map_y': 40.0,
     },
@@ -138,6 +153,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'commission_paid': false,
       'gps_status': 'Offline',
       'lat_long': '-6.2185, 106.8302',
+      'lat': -6.2185,
+      'lng': 106.8302,
       'map_x': 240.0,
       'map_y': 230.0,
     },
@@ -153,12 +170,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   ];
 
   final List<Map<String, dynamic>> _locations = [
-    {'id': 'LOC-01', 'name': 'Halte Dukuh Atas Sudirman', 'seller': 'Budi Santoso (GRB-01)', 'traffic': 'Padat', 'footfall': '1.450/jam', 'score': 96.8, 'status': 'Terisi'},
-    {'id': 'LOC-02', 'name': 'Taman Suropati Menteng', 'seller': 'Ahmad Fauzi (GRB-02)', 'traffic': 'Sedang', 'footfall': '480/jam', 'score': 88.5, 'status': 'Terisi'},
-    {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda', 'seller': 'Hendra Wijaya (GRB-04)', 'traffic': 'Padat Komuter', 'footfall': '1.980/jam', 'score': 93.2, 'status': 'Terisi'},
-    {'id': 'LOC-04', 'name': 'Pojok Blok III Pasar Senen', 'seller': 'Siti Rahmawati (GRB-03)', 'traffic': 'Padat Niaga', 'footfall': '850/jam', 'score': 90.0, 'status': 'Terisi'},
-    {'id': 'LOC-05', 'name': 'Kampus UI Salemba Rektorat', 'seller': 'Tersedia untuk Tim', 'traffic': 'Normal', 'footfall': '720/jam', 'score': 87.4, 'status': 'Kosong'},
-    {'id': 'LOC-06', 'name': 'Kuningan Madya (Rasuna Said)', 'seller': 'Tersedia untuk Tim', 'traffic': 'Padat Kantor', 'footfall': '640/jam', 'score': 84.1, 'status': 'Kosong'},
+    {'id': 'LOC-01', 'name': 'Halte Dukuh Atas Sudirman', 'seller': 'Budi Santoso (GRB-01)', 'traffic': 'Padat', 'footfall': '1.450/jam', 'score': 96.8, 'status': 'Terisi', 'lat': -6.2088, 'lng': 106.8227},
+    {'id': 'LOC-02', 'name': 'Taman Suropati Menteng', 'seller': 'Ahmad Fauzi (GRB-02)', 'traffic': 'Sedang', 'footfall': '480/jam', 'score': 88.5, 'status': 'Terisi', 'lat': -6.1994, 'lng': 106.8326},
+    {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda', 'seller': 'Hendra Wijaya (GRB-04)', 'traffic': 'Padat Komuter', 'footfall': '1.980/jam', 'score': 93.2, 'status': 'Terisi', 'lat': -6.1668, 'lng': 106.8312},
+    {'id': 'LOC-04', 'name': 'Pojok Blok III Pasar Senen', 'seller': 'Siti Rahmawati (GRB-03)', 'traffic': 'Padat Niaga', 'footfall': '850/jam', 'score': 90.0, 'status': 'Terisi', 'lat': -6.1744, 'lng': 106.8432},
+    {'id': 'LOC-05', 'name': 'Kampus UI Salemba Rektorat', 'seller': 'Tersedia untuk Tim', 'traffic': 'Normal', 'footfall': '720/jam', 'score': 87.4, 'status': 'Kosong', 'lat': -6.1953, 'lng': 106.8502},
+    {'id': 'LOC-06', 'name': 'Kuningan Madya (Rasuna Said)', 'seller': 'Tersedia untuk Tim', 'traffic': 'Padat Kantor', 'footfall': '640/jam', 'score': 84.1, 'status': 'Kosong', 'lat': -6.2185, 'lng': 106.8302},
   ];
 
   final List<Map<String, dynamic>> _recentTransactions = [
@@ -232,7 +249,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   'total_commission': 0,
                   'commission_paid': false,
                   'gps_status': 'Offline',
-                  'lat_long': '-',
+                  'lat_long': '-6.1950, 106.8300',
+                  'lat': -6.1950,
+                  'lng': 106.8300,
                   'map_x': 200.0,
                   'map_y': 150.0,
                 });
@@ -729,17 +748,35 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         _cleanStatusPill(s['operational_status'] == 'ACTIVE_SELLING' ? 'Jualan' : 'Belum Mulai', s['operational_status'] == 'ACTIVE_SELLING'),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                final isSelling = s['operational_status'] == 'ACTIVE_SELLING';
-                                s['operational_status'] = isSelling ? 'OFFLINE' : 'ACTIVE_SELLING';
-                              });
-                            },
-                            child: Text(
-                              s['operational_status'] == 'ACTIVE_SELLING' ? 'Tutup' : 'Buka',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: s['operational_status'] == 'ACTIVE_SELLING' ? Colors.red : Colors.green),
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    final isSelling = s['operational_status'] == 'ACTIVE_SELLING';
+                                    s['operational_status'] = isSelling ? 'OFFLINE' : 'ACTIVE_SELLING';
+                                  });
+                                },
+                                child: Text(
+                                  s['operational_status'] == 'ACTIVE_SELLING' ? 'Tutup' : 'Buka',
+                                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: s['operational_status'] == 'ACTIVE_SELLING' ? Colors.red : Colors.green),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _liveMapLat = (s['lat'] as num).toDouble();
+                                    _liveMapLng = (s['lng'] as num).toDouble();
+                                    _liveMapZoom = 17;
+                                    _focusedStaffId = s['id'] as String;
+                                    _selectedNavIndex = 3; // Switch to Peta Live
+                                  });
+                                },
+                                child: const Icon(Icons.place_outlined, size: 15, color: Color(0xFF2563EB)),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -886,48 +923,591 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: PETA LIVE
+  // SUB-PAGES: PETA LIVE (INTERACTIVE GOOGLE MAPS)
   // ===========================================================================
   Widget _buildGoogleMapsMonitoringView() {
+    final focusedStaff = _staffList.firstWhere(
+      (s) => s['id'] == _focusedStaffId,
+      orElse: () => _staffList.first,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Peta Pantau Posisi Gerobak Realtime', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        const SizedBox(height: 12),
+        // Top Toolbar & Controls
         Container(
-          width: double.infinity,
-          height: 380,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFFF1F5F9),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xFFCBD5E1)),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
-          child: Stack(
+          child: Row(
             children: [
-              Positioned.fill(child: CustomPaint(painter: _SimpleMapPainter())),
-              for (final s in _staffList) ...[
-                if (s['operational_status'] == 'ACTIVE_SELLING') ...[
-                  Positioned(
-                    left: s['map_x'] as double,
-                    top: s['map_y'] as double,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(6), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 4)]),
-                      child: Row(
-                        children: [
-                          Icon(Icons.coffee, size: 12, color: (s['current_stock'] as int) < 20 ? Colors.redAccent : Colors.greenAccent),
-                          const SizedBox(width: 4),
-                          Text('${s['name'].toString().split(' ')[0]} (${s['current_stock']} Cup)', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ],
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'LIVE TELEMETRI GPS',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green, letterSpacing: 0.5),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                'Koordinat Aktif: ${_liveMapLat.toStringAsFixed(4)}, ${_liveMapLng.toStringAsFixed(4)} (Zoom ${_liveMapZoom}x)',
+                style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+              ),
+              const Spacer(),
+              // Zoom Controls
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  foregroundColor: const Color(0xFF0F172A),
+                  side: const BorderSide(color: Color(0xFFCBD5E1)),
+                ),
+                icon: const Icon(Icons.zoom_in, size: 16),
+                label: const Text('Zoom +', style: TextStyle(fontSize: 11)),
+                onPressed: () {
+                  setState(() {
+                    if (_liveMapZoom < 19) _liveMapZoom++;
+                  });
+                },
+              ),
+              const SizedBox(width: 6),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  foregroundColor: const Color(0xFF0F172A),
+                  side: const BorderSide(color: Color(0xFFCBD5E1)),
+                ),
+                icon: const Icon(Icons.zoom_out, size: 16),
+                label: const Text('Zoom -', style: TextStyle(fontSize: 11)),
+                onPressed: () {
+                  setState(() {
+                    if (_liveMapZoom > 10) _liveMapZoom--;
+                  });
+                },
+              ),
+              const SizedBox(width: 6),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0F172A),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                ),
+                icon: const Icon(Icons.my_location, size: 14),
+                label: const Text('Reset Peta (Jakarta Pusat)', style: TextStyle(fontSize: 11)),
+                onPressed: () {
+                  setState(() {
+                    _liveMapLat = -6.1950;
+                    _liveMapLng = 106.8300;
+                    _liveMapZoom = 14;
+                  });
+                },
+              ),
             ],
           ),
         ),
+        const SizedBox(height: 12),
+
+        // Two Column Layout
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left: Real Interactive Google Maps
+            Expanded(
+              flex: 7,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 520,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      children: [
+                        // The actual real Google Map widget
+                        RealLiveGoogleMap(
+                          latitude: _liveMapLat,
+                          longitude: _liveMapLng,
+                          zoom: _liveMapZoom,
+                        ),
+                        // Top info badge overlay
+                        Positioned(
+                          top: 12,
+                          left: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF0F172A).withOpacity(0.92),
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.place, size: 14, color: Colors.amberAccent),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Fokus: ${focusedStaff['name']} (${focusedStaff['cart_id']})',
+                                  style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '• ${focusedStaff['location']}',
+                                  style: const TextStyle(color: Colors.white70, fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Location intelligence recommendation banner
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.lightbulb_outline, size: 18, color: Color(0xFF475569)),
+                        const SizedBox(width: 10),
+                        const Expanded(
+                          child: Text(
+                            'Saran Lokasi AI: Jam padat komuter Stasiun Juanda diprediksi jam 16:30 - 18:30 WIB. Disarankan siapkan penambahan 40 cup untuk Gerobak 04.',
+                            style: TextStyle(fontSize: 11, color: Color(0xFF334155), height: 1.3),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            side: const BorderSide(color: Color(0xFF94A3B8)),
+                            foregroundColor: const Color(0xFF0F172A),
+                          ),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Notifikasi pengarahan lokasi telah dikirimkan ke petugas lapangan.')),
+                            );
+                          },
+                          child: const Text('Kirim Pengarahan', style: TextStyle(fontSize: 11)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+
+            // Right: Staff List & Focused Staff Telemetry
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Armada Gerobak Terpantau',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A)),
+                            ),
+                            Text(
+                              '${_staffList.where((s) => s['operational_status'] == 'ACTIVE_SELLING').length} Aktif Jualan',
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        // Staff List
+                        for (final s in _staffList) ...[
+                          _buildMapStaffTile(s),
+                          const SizedBox(height: 8),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Detail Telemetri Petugas Terpilih
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFCBD5E1)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.gps_fixed, size: 14, color: Color(0xFF0F172A)),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Telemetri: ${focusedStaff['name']}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A)),
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: (focusedStaff['operational_status'] == 'ACTIVE_SELLING') ? const Color(0xFFDCFCE7) : const Color(0xFFF1F5F9),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                focusedStaff['operational_status'] as String,
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                  color: (focusedStaff['operational_status'] == 'ACTIVE_SELLING') ? const Color(0xFF166534) : const Color(0xFF475569),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            _buildMiniTelemetryCard('Sisa Stok', '${focusedStaff['current_stock']} Cup', (focusedStaff['current_stock'] as int) < 20 ? Colors.red : const Color(0xFF0F172A)),
+                            const SizedBox(width: 8),
+                            _buildMiniTelemetryCard('Penjualan', '${focusedStaff['cups_sold']} Cup', const Color(0xFF0F172A)),
+                            const SizedBox(width: 8),
+                            _buildMiniTelemetryCard('Akurasi GPS', (focusedStaff['gps_status'] as String).split(' ').length > 1 ? (focusedStaff['gps_status'] as String).split(' ')[1] : '3m', const Color(0xFF0F172A)),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  foregroundColor: const Color(0xFF0F172A),
+                                  side: const BorderSide(color: Color(0xFF94A3B8)),
+                                ),
+                                icon: const Icon(Icons.share_location, size: 14),
+                                label: const Text('Tugaskan Lokasi Baru', style: TextStyle(fontSize: 11)),
+                                onPressed: () => _showRelocateStaffDialog(focusedStaff),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF0F172A),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                ),
+                                icon: const Icon(Icons.add_shopping_cart, size: 14),
+                                label: const Text('Kirim Stok Tambahan', style: TextStyle(fontSize: 11)),
+                                onPressed: () => _showAddStockToStaffDialog(focusedStaff),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
+    );
+  }
+
+  Widget _buildMapStaffTile(Map<String, dynamic> s) {
+    final isSelected = s['id'] == _focusedStaffId;
+    final isSelling = s['operational_status'] == 'ACTIVE_SELLING';
+    final isLowStock = isSelling && (s['current_stock'] as int) < 20;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _liveMapLat = (s['lat'] as num).toDouble();
+          _liveMapLng = (s['lng'] as num).toDouble();
+          _liveMapZoom = 17;
+          _focusedStaffId = s['id'] as String;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFF1F5F9) : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF0F172A) : const Color(0xFFE2E8F0),
+            width: isSelected ? 1.5 : 1.0,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: isSelling ? const Color(0xFFE2E8F0) : const Color(0xFFF1F5F9),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.storefront_outlined,
+                  size: 16,
+                  color: isSelling ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        s['name'] as String,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A)),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        s['cart_id'] as String,
+                        style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    s['location'] as String,
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF475569)),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Text(
+                        'Stok: ${s['current_stock']} Cup',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: isLowStock ? FontWeight.bold : FontWeight.normal,
+                          color: isLowStock ? Colors.red : const Color(0xFF64748B),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '• Terjual: ${s['cups_sold']} Cup',
+                        style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isSelling ? const Color(0xFFDCFCE7) : const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    isSelling ? 'LIVE' : 'OFFLINE',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                      color: isSelling ? const Color(0xFF166534) : const Color(0xFF64748B),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Pusatkan',
+                  style: TextStyle(fontSize: 10, color: Color(0xFF2563EB), fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMiniTelemetryCard(String label, String value, Color valueColor) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+            const SizedBox(height: 2),
+            Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: valueColor)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showRelocateStaffDialog(Map<String, dynamic> staff) {
+    String selectedLocName = _locations.first['name'];
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDlgState) => AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          title: Text('Tugaskan Lokasi Baru: ${staff['name']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+          content: SizedBox(
+            width: 420,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Unit Gerobak: ${staff['cart_id']}'),
+                const SizedBox(height: 4),
+                Text('Lokasi Saat Ini: ${staff['location']}', style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
+                const SizedBox(height: 16),
+                const Text('Pilih Titik Lapak Tujuan:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedLocName,
+                  decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  items: _locations.map((loc) {
+                    return DropdownMenuItem<String>(
+                      value: loc['name'] as String,
+                      child: Text('${loc['name']} (${loc['traffic']})', style: const TextStyle(fontSize: 12)),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setDlgState(() => selectedLocName = val);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
+              onPressed: () {
+                final targetLoc = _locations.firstWhere((loc) => loc['name'] == selectedLocName);
+                setState(() {
+                  staff['location'] = selectedLocName;
+                  staff['lat'] = targetLoc['lat'];
+                  staff['lng'] = targetLoc['lng'];
+                  staff['lat_long'] = '${targetLoc['lat']}, ${targetLoc['lng']}';
+                  _liveMapLat = (targetLoc['lat'] as num).toDouble();
+                  _liveMapLng = (targetLoc['lng'] as num).toDouble();
+                  _liveMapZoom = 17;
+                  _focusedStaffId = staff['id'] as String;
+                });
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Penugasan ${staff['cart_id']} ke $selectedLocName berhasil dikirimkan!')),
+                );
+              },
+              child: const Text('Konfirmasi Relokasi'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddStockToStaffDialog(Map<String, dynamic> staff) {
+    final qtyCtrl = TextEditingController(text: '30');
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text('Kirim Stok Tambahan: ${staff['cart_id']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+        content: SizedBox(
+          width: 380,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Petugas: ${staff['name']}'),
+              const SizedBox(height: 4),
+              Text('Sisa Stok Saat Ini: ${staff['current_stock']} Cup', style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
+              const SizedBox(height: 16),
+              TextField(
+                controller: qtyCtrl,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Jumlah Cup Tambahan (Gudang Pusat)', border: OutlineInputBorder()),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
+            onPressed: () {
+              final addQty = int.tryParse(qtyCtrl.text) ?? 0;
+              if (addQty <= 0) return;
+              setState(() {
+                staff['current_stock'] = (staff['current_stock'] as int) + addQty;
+                staff['morning_stock'] = (staff['morning_stock'] as int) + addQty;
+                _warehouseStock[0]['central_stock'] = (_warehouseStock[0]['central_stock'] as int) - addQty;
+              });
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Berhasil mengirim $addQty Cup tambahan ke ${staff['name']}')),
+              );
+            },
+            child: const Text('Kirim Stok'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -949,6 +1529,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               3: FlexColumnWidth(1.4),
               4: FlexColumnWidth(1.4),
               5: FlexColumnWidth(1.2),
+              6: FlexColumnWidth(1.2),
             },
             children: [
               TableRow(
@@ -960,6 +1541,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _cleanTh('Kondisi Lalu Lintas'),
                   _cleanTh('Pejalan Kaki'),
                   _cleanTh('Status'),
+                  _cleanTh('Aksi'),
                 ],
               ),
               for (final loc in _locations)
@@ -972,6 +1554,27 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     _cleanTd(loc['traffic']),
                     _cleanTd(loc['footfall']),
                     _cleanStatusPill(loc['status'] == 'Terisi' ? 'Terisi' : 'Kosong', loc['status'] == 'Terisi'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _liveMapLat = (loc['lat'] as num).toDouble();
+                            _liveMapLng = (loc['lng'] as num).toDouble();
+                            _liveMapZoom = 17;
+                            _selectedNavIndex = 3; // Switch to Peta Live
+                          });
+                        },
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.place_outlined, size: 14, color: Color(0xFF2563EB)),
+                            SizedBox(width: 4),
+                            Text('Peta', style: TextStyle(fontSize: 11, color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
             ],
@@ -1483,19 +2086,4 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     }
     return 'Rp ${buffer.toString().split('').reversed.join('')}';
   }
-}
-
-// Simple Vector Map Canvas (Clean & Minimal)
-class _SimpleMapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final linePaint = Paint()..color = const Color(0xFFCBD5E1)..strokeWidth = 2.0;
-    canvas.drawLine(const Offset(160, 0), const Offset(200, 380), linePaint);
-    canvas.drawLine(const Offset(240, 40), const Offset(250, 380), linePaint);
-    canvas.drawLine(const Offset(40, 150), const Offset(650, 140), linePaint);
-    canvas.drawLine(const Offset(180, 50), const Offset(550, 80), linePaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
