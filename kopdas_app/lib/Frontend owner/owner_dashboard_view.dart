@@ -2764,6 +2764,82 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
+  Widget _buildWarehouseKpiCard(String title, String value, String sub, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280), fontWeight: FontWeight.w500)),
+                const SizedBox(height: 4),
+                Text(value, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF111827), letterSpacing: -0.3)),
+                const SizedBox(height: 2),
+                Text(sub, style: TextStyle(fontSize: 10.5, color: color, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge(String status) {
+    Color bg = const Color(0xFFECFDF5);
+    Color border = const Color(0xFFA7F3D0);
+    Color dot = const Color(0xFF059669);
+    Color text = const Color(0xFF065F46);
+
+    if (status == 'Stok Menipis') {
+      bg = const Color(0xFFFEF2F2);
+      border = const Color(0xFFFECACA);
+      dot = const Color(0xFFDC2626);
+      text = const Color(0xFF991B1B);
+    } else if (status == 'Standby') {
+      bg = const Color(0xFFF3F4F6);
+      border = const Color(0xFFE5E7EB);
+      dot = const Color(0xFF6B7280);
+      text = const Color(0xFF374151);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: border),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: dot),
+          ),
+          const SizedBox(width: 5),
+          Text(status, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: text)),
+        ],
+      ),
+    );
+  }
+
   Widget _build3STab(String label, bool isSelected) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
