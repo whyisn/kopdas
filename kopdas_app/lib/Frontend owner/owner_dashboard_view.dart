@@ -80,7 +80,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'operational_status': 'ACTIVE_SELLING',
       'clock_in': '06:40 WIB',
       'morning_stock': 100,
-      'current_stock': 28,
+      'current_stock': 32,
       'cups_sold': 68,
       'cash': 520000,
       'qris': 900000,
@@ -105,7 +105,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'operational_status': 'ACTIVE_SELLING',
       'clock_in': '05:30 WIB',
       'morning_stock': 120,
-      'current_stock': 35,
+      'current_stock': 25,
       'cups_sold': 95,
       'cash': 640000,
       'qris': 1340000,
@@ -129,8 +129,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
       'clock_in': '05:50 WIB',
-      'morning_stock': 110,
-      'current_stock': 15,
+      'morning_stock': 150,
+      'current_stock': 32,
       'cups_sold': 118,
       'cash': 780000,
       'qris': 1670000,
@@ -4870,10 +4870,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               Table(
                 columnWidths: const {
                   0: FlexColumnWidth(2.6), // Armada & Petugas
-                  1: FlexColumnWidth(2.8), // Rekap Penjualan & % Tim
-                  2: FlexColumnWidth(2.2), // Top-Up Pagi
+                  1: FlexColumnWidth(2.8), // Penjualan Sebulan (% Tim)
+                  2: FlexColumnWidth(2.6), // Bawaan Pagi & Terjual Hari Ini
                   3: FlexColumnWidth(1.8), // Sisa Box (Target = 0)
-                  4: FlexColumnWidth(1.6), // Status Shift
+                  4: FlexColumnWidth(1.4), // Status Shift
                   5: FlexColumnWidth(2.6), // Aksi Disposisi & SOP Retur
                 },
                 children: [
@@ -4884,8 +4884,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     children: [
                       _cleanTh('Armada & Petugas'),
-                      _cleanTh('Rekap Penjualan & % Tim'),
-                      _cleanTh('Top-Up Pagi'),
+                      _cleanTh('Penjualan Sebulan (% Tim)'),
+                      _cleanTh('Bawaan Pagi & Terjual Hari Ini'),
                       _cleanTh('Sisa Box (Target = 0)'),
                       _cleanTh('Status Shift'),
                       _cleanTh('Aksi Disposisi & Retur'),
@@ -4964,41 +4964,75 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   borderRadius: BorderRadius.circular(2),
                                   child: LinearProgressIndicator(
                                     value: (teamPct / 40.0).clamp(0.0, 1.0),
-                                    minHeight: 5,
+                                    minHeight: 4,
                                     backgroundColor: const Color(0xFFE5E7EB),
                                     valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF2563EB)),
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Terjual Hari Ini: ${s['cups_sold']} Cup',
+                                  'Akumulasi sebulan (Total tim: $totalMonthlyAllTeams Cup)',
                                   style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280)),
                                 ),
                               ],
                             ),
                           ),
 
-                          // Col 2: Top-Up Pagi
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('${s['morning_stock']} Porsi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
+                          // Col 2: Bawaan Pagi & Terjual Hari Ini
+                          () {
+                            final int mStock = (s['morning_stock'] ?? 0) as int;
+                            final int sold = (s['cups_sold'] ?? 0) as int;
+                            final double dailyRate = mStock > 0 ? (sold / mStock * 100) : 0.0;
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text('$mStock Porsi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
+                                      const SizedBox(width: 6),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFECFDF5),
+                                          borderRadius: BorderRadius.circular(4),
+                                          border: Border.all(color: const Color(0xFFA7F3D0)),
+                                        ),
+                                        child: Text(
+                                          '$sold Terjual',
+                                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF047857)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  if (mStock > 0) ...[
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(2),
+                                      child: LinearProgressIndicator(
+                                        value: (dailyRate / 100.0).clamp(0.0, 1.0),
+                                        minHeight: 4,
+                                        backgroundColor: const Color(0xFFE5E7EB),
+                                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${dailyRate.toStringAsFixed(1)}% serapan terjual hari ini',
+                                      style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w500, color: Color(0xFF059669)),
+                                    ),
+                                  ] else ...[
+                                    const Text(
+                                      'Belum ada alokasi pagi',
+                                      style: TextStyle(fontSize: 10.5, color: Color(0xFF9CA3AF)),
+                                    ),
                                   ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  (s['morning_stock'] as int) > 0
-                                      ? 'Soft, Strong, Butter, Amr, Cok, Mat'
-                                      : 'Belum ada alokasi',
-                                  style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280)),
-                                ),
-                              ],
-                            ),
-                          ),
+                                ],
+                              ),
+                            );
+                          }(),
 
                           // Col 3: Sisa Box (Target = 0 Saat Pulang)
                           Padding(
