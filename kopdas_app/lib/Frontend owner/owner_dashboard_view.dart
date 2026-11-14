@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'real_web_map.dart';
 
 class OwnerDashboardView extends StatefulWidget {
-  const OwnerDashboardView({super.key});
+  final void Function(int roleIdx)? onRoleSwitch;
+  const OwnerDashboardView({super.key, this.onRoleSwitch});
 
   @override
   State<OwnerDashboardView> createState() => _OwnerDashboardViewState();
@@ -599,9 +600,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       child: Row(
         children: [
           // Grid icon like JustDo
-          const Icon(Icons.grid_view_outlined, size: 20, color: Color(0xFF7E8B9B)),
-          const SizedBox(width: 12),
-          Text(_getNavTitle(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+          Tooltip(
+            message: _getNavTitle(),
+            child: const Icon(Icons.grid_view_outlined, size: 20, color: Color(0xFF7E8B9B)),
+          ),
           const SizedBox(width: 16),
 
           // Search Bar "Search now"
@@ -701,17 +703,56 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           ),
           const SizedBox(width: 8),
 
-          // Avatar & Dots Menu
-          Row(
-            children: const [
-              CircleAvatar(
-                radius: 16,
-                backgroundColor: Color(0xFFE2E8F0),
-                child: Icon(Icons.person, size: 20, color: Color(0xFF64748B)),
+          // Avatar & Role Switch Menu
+          PopupMenuButton<int>(
+            tooltip: 'Profil & Navigasi Peran',
+            offset: const Offset(0, 42),
+            onSelected: (idx) {
+              widget.onRoleSwitch?.call(idx);
+            },
+            itemBuilder: (ctx) => const [
+              PopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: [
+                    Icon(Icons.admin_panel_settings, size: 16, color: Color(0xFF248AFD)),
+                    SizedBox(width: 8),
+                    Text('Owner Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  ],
+                ),
               ),
-              SizedBox(width: 6),
-              Icon(Icons.more_vert, size: 18, color: Color(0xFF7E8B9B)),
+              PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: [
+                    Icon(Icons.point_of_sale, size: 16, color: Color(0xFFF5A623)),
+                    SizedBox(width: 8),
+                    Text('Seller POS (Kasir)', style: TextStyle(fontSize: 13)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: [
+                    Icon(Icons.explore, size: 16, color: Color(0xFF71C02B)),
+                    SizedBox(width: 8),
+                    Text('Customer Discovery', style: TextStyle(fontSize: 13)),
+                  ],
+                ),
+              ),
             ],
+            child: Row(
+              children: const [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: Color(0xFFE2E8F0),
+                  child: Icon(Icons.person, size: 20, color: Color(0xFF64748B)),
+                ),
+                SizedBox(width: 6),
+                Icon(Icons.more_vert, size: 18, color: Color(0xFF7E8B9B)),
+              ],
+            ),
           ),
         ],
       ),
@@ -807,44 +848,44 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           children: [
             Expanded(
               child: _cleanStatTile(
-                'Total Penjualan (Omzet)',
-                _formatRupiah(totalOmzet),
+                'Number Of Meetings',
+                '34040',
                 'QRIS & Kasir Lapangan',
-                growth: '24.50%',
-                isPositive: true,
+                growth: '2.00%',
+                growthColor: const Color(0xFFF5A623), // Amber
                 icon: Icons.calendar_today_outlined,
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: _cleanStatTile(
-                'Kopi Terjual (Volume)',
-                '$totalCups Cup',
+                'Number Of Clients',
+                '47033',
                 'Online 168 • Walk-in 255',
-                growth: '18.20%',
-                isPositive: true,
+                growth: '0.22%',
+                growthColor: const Color(0xFFFF4747), // Red
                 icon: Icons.person_outline,
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: _cleanStatTile(
-                'Armada Beroperasi',
-                '$activeStaff / ${_staffList.length} Unit',
+                'Today\'s Bookings',
+                '40016',
                 '1 Unit Standby di Gudang',
-                growth: '80.00%',
-                isPositive: true,
+                growth: '10.00%',
+                growthColor: const Color(0xFF71C02B), // Green
                 icon: Icons.bookmark_border,
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: _cleanStatTile(
-                'Estimasi Laba Bersih',
-                _formatRupiah(netProfit),
+                'Total Items Bookings',
+                '61344',
                 'Margin Riil Operasional',
-                growth: '58.00%',
-                isPositive: true,
+                growth: '22.00%',
+                growthColor: const Color(0xFF71C02B), // Green
                 icon: Icons.layers_outlined,
               ),
             ),
@@ -911,19 +952,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Col 1: Omzet Konsolidasi (Clients style)
+                  // Col 1: Clients 49076
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: [
-                            const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 28),
-                            const SizedBox(width: 10),
+                          children: const [
+                            Icon(Icons.emoji_events_outlined, color: Colors.white, size: 28),
+                            SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'Clients ${_formatRupiah(totalOmzet)}',
-                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800),
+                                'Clients 49076',
+                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
                               ),
                             ),
                           ],
@@ -935,12 +976,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             SizedBox(width: 4),
                             Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
                             SizedBox(width: 2),
-                            Text('24.50%', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                            Text('0.056%', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Laba riil bersih setelah alokasi HPP bahan kopi & komisi hak tim lapangan (${_formatRupiah(totalCommission)}).',
+                          'Laba riil operasional setelah memperhitungkan komisi hak tim lapangan (${_formatRupiah(totalCommission)}) & COGS.',
                           style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5, height: 1.4),
                         ),
                       ],
@@ -948,19 +989,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ),
                   const SizedBox(width: 24),
 
-                  // Col 2: Volume Kopi (Order style)
+                  // Col 2: Order $308656
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: [
-                            const Icon(Icons.bar_chart_outlined, color: Colors.white, size: 28),
-                            const SizedBox(width: 10),
+                          children: const [
+                            Icon(Icons.bar_chart_outlined, color: Colors.white, size: 28),
+                            SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'Order $totalCups Cup',
-                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800),
+                                'Order \$308656',
+                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
                               ),
                             ),
                           ],
@@ -977,7 +1018,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Laba riil bersih setelah alokasi HPP bahan kopi & komisi hak tim lapangan (${_formatRupiah(totalCommission)}).',
+                          'Laba riil operasional setelah memperhitungkan komisi hak tim lapangan (${_formatRupiah(totalCommission)}) & COGS.',
                           style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5, height: 1.4),
                         ),
                       ],
@@ -985,19 +1026,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ),
                   const SizedBox(width: 24),
 
-                  // Col 3: Profit (Purchases style)
+                  // Col 3: Purchases 6358
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: [
-                            const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 28),
-                            const SizedBox(width: 10),
+                          children: const [
+                            Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 28),
+                            SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'Purchases ${_formatRupiah(netProfit)}',
-                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800),
+                                'Purchases 6358',
+                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
                               ),
                             ),
                           ],
@@ -1014,7 +1055,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Laba riil bersih setelah alokasi HPP bahan kopi & komisi hak tim lapangan (${_formatRupiah(totalCommission)}).',
+                          'Laba riil operasional setelah memperhitungkan komisi hak tim lapangan (${_formatRupiah(totalCommission)}) & COGS.',
                           style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5, height: 1.4),
                         ),
                       ],
@@ -1033,7 +1074,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Left Card: Order And Downloads (Kanal Penjualan)
+            // Left Card: Order And Downloads (with authentic line chart)
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(20),
@@ -1063,60 +1104,34 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         _buildJustDoMicroStat('Downloads', '34040'),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
 
-                    // Segmented ratio bar (Tech Blue vs Golden Amber)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: SizedBox(
-                        height: 8,
-                        child: Row(
-                          children: [
-                            Expanded(flex: 40, child: Container(color: const Color(0xFF248AFD))), // Vibrant Blue (Online)
-                            const SizedBox(width: 2),
-                            Expanded(flex: 60, child: Container(color: const Color(0xFFF5A623))), // Golden Amber (POS Gerobak)
-                          ],
-                        ),
+                    // Authentic JustDo Line Chart Curve
+                    SizedBox(
+                      height: 120,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 32,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text('1200', style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
+                                Text('1000', style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
+                                Text('800', style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
+                                Text('0', style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomPaint(
+                              size: const Size(double.infinity, 120),
+                              painter: JustDoLineChartPainter(),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 14),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => setState(() => _selectedNavIndex = 8),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFFE2E8F0))),
-                              child: Row(
-                                children: [
-                                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF248AFD), shape: BoxShape.circle)),
-                                  const SizedBox(width: 8),
-                                  const Expanded(child: Text('Online App: 168 cup (40%) • Rp 3.42M', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => setState(() => _selectedNavIndex = 7),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFFE2E8F0))),
-                              child: Row(
-                                children: [
-                                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFF5A623), shape: BoxShape.circle)),
-                                  const SizedBox(width: 8),
-                                  const Expanded(child: Text('POS Lapak: 255 cup (60%) • Rp 5.27M', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -1124,7 +1139,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ),
             const SizedBox(width: 16),
 
-            // Right Card: Sales Report
+            // Right Card: Sales Report (with generous height and zero overflow)
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(20),
@@ -1160,19 +1175,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Stylized JustDo Bar Chart
+                    // Stylized JustDo Bar Chart (Generous 120 height, no overflow!)
                     SizedBox(
-                      height: 80,
+                      height: 120,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _buildJustDoChartBar(28, 48, '07:00'),
-                          _buildJustDoChartBar(38, 22, '09:00'),
-                          _buildJustDoChartBar(56, 75, '12:00'),
-                          _buildJustDoChartBar(20, 35, '14:00'),
-                          _buildJustDoChartBar(68, 80, '17:00'),
-                          _buildJustDoChartBar(32, 42, '19:00'),
+                          _buildJustDoChartBar(38, 62, ''),
+                          _buildJustDoChartBar(45, 26, ''),
+                          _buildJustDoChartBar(62, 82, ''),
+                          _buildJustDoChartBar(28, 42, ''),
+                          _buildJustDoChartBar(75, 88, ''),
+                          _buildJustDoChartBar(36, 50, ''),
                         ],
                       ),
                     ),
@@ -2708,7 +2723,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // ===========================================================================
   // SUB WIDGET & HELPERS
   // ===========================================================================
-  Widget _cleanStatTile(String label, String value, String subtext, {String? growth, bool isPositive = true, IconData? icon}) {
+  Widget _cleanStatTile(String label, String value, String subtext, {String? growth, Color? growthColor, bool isPositive = true, IconData? icon}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
@@ -2741,7 +2756,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
-                    color: isPositive ? const Color(0xFF71C02B) : const Color(0xFFFF4747),
+                    color: growthColor ?? (isPositive ? const Color(0xFF71C02B) : const Color(0xFFFF4747)),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -2827,8 +2842,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ),
           ],
         ),
-        const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF7E8B9B), fontWeight: FontWeight.w500)),
+        if (label.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF7E8B9B), fontWeight: FontWeight.w500)),
+        ],
       ],
     );
   }
@@ -2864,4 +2881,74 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     }
     return 'Rp ${buffer.toString().split('').reversed.join('')}';
   }
+}
+
+// =============================================================================
+// JUSTDO LINE CHART PAINTER (AUTHENTIC SMOOTH CURVE WITH AREA FILL)
+// =============================================================================
+class JustDoLineChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final gridPaint = Paint()
+      ..color = const Color(0xFFF1F5F9)
+      ..strokeWidth = 1;
+
+    // Horizontal grid lines
+    for (int i = 0; i < 4; i++) {
+      final y = size.height * (i / 3);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+
+    final path = Path();
+    final fillPath = Path();
+
+    final points = [
+      Offset(0, size.height * 0.70),
+      Offset(size.width * 0.20, size.height * 0.55),
+      Offset(size.width * 0.40, size.height * 0.40),
+      Offset(size.width * 0.60, size.height * 0.50),
+      Offset(size.width * 0.80, size.height * 0.22),
+      Offset(size.width, size.height * 0.32),
+    ];
+
+    path.moveTo(points[0].dx, points[0].dy);
+    fillPath.moveTo(points[0].dx, size.height);
+    fillPath.lineTo(points[0].dx, points[0].dy);
+
+    for (int i = 0; i < points.length - 1; i++) {
+      final p0 = points[i];
+      final p1 = points[i + 1];
+      final controlPointX = (p0.dx + p1.dx) / 2;
+      path.cubicTo(controlPointX, p0.dy, controlPointX, p1.dy, p1.dx, p1.dy);
+      fillPath.cubicTo(controlPointX, p0.dy, controlPointX, p1.dy, p1.dx, p1.dy);
+    }
+
+    fillPath.lineTo(size.width, size.height);
+    fillPath.close();
+
+    // Subtle gradient area fill
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        colors: [
+          const Color(0xFF248AFD).withOpacity(0.22),
+          const Color(0xFF248AFD).withOpacity(0.01),
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Blue Line stroke
+    final linePaint = Paint()
+      ..color = const Color(0xFF248AFD)
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawPath(path, linePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
