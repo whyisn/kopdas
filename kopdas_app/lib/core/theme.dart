@@ -10,7 +10,7 @@ ThemeData buildAppTheme() {
       secondary: AppConstants.accentColor,
       surface: AppConstants.surfaceColor,
     ),
-    scaffoldBackgroundColor: const Color(0xFFF8F5F0),
+    scaffoldBackgroundColor: AppConstants.backgroundColor,
     useMaterial3: true,
     fontFamily: 'Segoe UI',
   );

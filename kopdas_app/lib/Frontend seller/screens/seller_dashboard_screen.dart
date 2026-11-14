@@ -116,14 +116,14 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
       child: Row(
         children: [
           Container(
-            width: 52,
-            height: 52,
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
-              color: AppConstants.primaryColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(14),
+              color: const Color(0xFF1E3932).withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.storefront,
-                color: AppConstants.primaryColor, size: 28),
+                color: Color(0xFF1E3932), size: 26),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -133,25 +133,34 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                 Text(
                   'Halo, $name',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w800,
-                    color: AppConstants.textDark,
+                    color: Color(0xFF111827),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  outlet?.name ?? 'Lokasi belum tersedia',
-                  style: const TextStyle(color: Colors.black54, fontSize: 13),
+                Row(
+                  children: [
+                    const Icon(Icons.place_outlined, size: 14, color: Color(0xFF6B7280)),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        outlet?.name ?? 'Lokasi gerobak belum ditugaskan',
+                        style: const TextStyle(color: Color(0xFF6B7280), fontSize: 12.5),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           if (outlet != null)
             StatusBadge(
-              label: outlet.isActive ? 'AKTIF' : 'NONAKTIF',
+              label: outlet.isActive ? 'ACTIVE_SELLING' : 'STANDBY',
               color: outlet.isActive
-                  ? AppConstants.statusSuccess
-                  : Colors.blueGrey,
+                  ? const Color(0xFF059669)
+                  : const Color(0xFF6B7280),
             ),
         ],
       ),
@@ -206,7 +215,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
       title: 'Stok menipis',
       trailing: Text(
         '≤ $_lowStockThreshold cup',
-        style: TextStyle(fontSize: 11, color: Colors.brown.shade300),
+        style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
       ),
       child: lowStock.isEmpty
           ? const Padding(
@@ -248,13 +257,13 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
   }
 
   Widget _buildOrdersNotice() {
-    return SectionCard(
+    return const SectionCard(
       title: 'Pesanan baru',
       child: Row(
         children: [
-          Icon(Icons.info_outline, size: 20, color: Colors.brown.shade300),
-          const SizedBox(width: 10),
-          const Expanded(
+          Icon(Icons.info_outline, size: 20, color: Color(0xFF9CA3AF)),
+          SizedBox(width: 10),
+          Expanded(
             child: Text(
               'Data pesanan belum tersedia dari backend. '
               'Menunggu endpoint Orders Seller (list order & status).',
@@ -345,14 +354,21 @@ class _StatTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppConstants.surfaceColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.brown.shade100),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 20, color: color),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(icon, size: 18, color: color),
+            ),
             const SizedBox(height: 10),
             FittedBox(
               fit: BoxFit.scaleDown,
@@ -360,16 +376,16 @@ class _StatTile extends StatelessWidget {
               child: Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 17,
+                  fontSize: 16.5,
                   fontWeight: FontWeight.w800,
-                  color: AppConstants.textDark,
+                  color: Color(0xFF111827),
                 ),
               ),
             ),
             const SizedBox(height: 2),
             Text(
               label,
-              style: const TextStyle(fontSize: 11, color: Colors.black54),
+              style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
             ),
           ],
         ),

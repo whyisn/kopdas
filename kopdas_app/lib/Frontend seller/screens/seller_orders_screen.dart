@@ -195,12 +195,17 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                     onSelected: (val) {
                       if (val) setState(() => _selectedFilter = f);
                     },
-                    selectedColor: AppConstants.primaryColor.withValues(alpha: 0.15),
-                    checkmarkColor: AppConstants.primaryColor,
+                    backgroundColor: Colors.white,
+                    selectedColor: const Color(0xFF1E3932),
+                    checkmarkColor: Colors.white,
+                    side: BorderSide(
+                      color: isSelected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
+                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     labelStyle: TextStyle(
-                      color: isSelected ? AppConstants.primaryColor : const Color(0xFF1F2937),
+                      color: isSelected ? Colors.white : const Color(0xFF4B5563),
                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                      fontSize: 13,
+                      fontSize: 12.5,
                     ),
                   ),
                 );
@@ -215,7 +220,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 32),
                 child: Column(
                   children: [
-                    Icon(Icons.inbox_outlined, size: 54, color: Colors.brown.shade200),
+                    Icon(Icons.inbox_outlined, size: 54, color: const Color(0xFF9CA3AF)),
                     const SizedBox(height: 12),
                     Text(
                       _selectedFilter == 'Semua'

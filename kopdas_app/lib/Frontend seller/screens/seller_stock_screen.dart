@@ -173,12 +173,17 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
-        selectedColor: AppConstants.accentColor.withValues(alpha: 0.35),
-        checkmarkColor: AppConstants.primaryDark,
+        backgroundColor: Colors.white,
+        selectedColor: const Color(0xFF1E3932),
+        checkmarkColor: Colors.white,
+        side: BorderSide(
+          color: selected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: TextStyle(
           fontSize: 12,
-          color: selected ? AppConstants.primaryDark : Colors.black87,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
+          color: selected ? Colors.white : const Color(0xFF4B5563),
+          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
         ),
       ),
     );
@@ -259,21 +264,22 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
   Widget _buildThumb(_StockItem item) {
     final url = item.product?.imageUrl;
     return Container(
-      width: 52,
-      height: 52,
+      width: 48,
+      height: 48,
       decoration: BoxDecoration(
-        color: AppConstants.backgroundColor.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       clipBehavior: Clip.antiAlias,
       child: (url == null || url.isEmpty)
           ? const Icon(Icons.coffee_outlined,
-              color: AppConstants.primaryColor, size: 26)
+              color: Color(0xFF1E3932), size: 24)
           : Image.network(
               url,
               fit: BoxFit.cover,
               errorBuilder: (_, _, _) => const Icon(Icons.coffee_outlined,
-                  color: AppConstants.primaryColor, size: 26),
+                  color: Color(0xFF1E3932), size: 24),
             ),
     );
   }
@@ -319,20 +325,21 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppConstants.backgroundColor.withValues(alpha: 0.5),
+                color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
-              child: Row(
+              child: const Row(
                 children: [
                   Icon(Icons.lock_outline,
-                      size: 18, color: Colors.brown.shade300),
-                  const SizedBox(width: 8),
-                  const Expanded(
+                      size: 18, color: Color(0xFF6B7280)),
+                  SizedBox(width: 8),
+                  Expanded(
                     child: Text(
                       'Stok bersifat read-only. Penyesuaian stok dilakukan '
                       'melalui backend (distribusi Owner / transaksi).',
                       style: TextStyle(
-                          fontSize: 12, color: Colors.black54, height: 1.4),
+                          fontSize: 12, color: Color(0xFF6B7280), height: 1.4),
                     ),
                   ),
                 ],

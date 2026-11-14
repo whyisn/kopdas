@@ -119,7 +119,7 @@ class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
                 const Spacer(),
                 Text(
                   'Filter di perangkat • maks. 50 terbaru',
-                  style: TextStyle(fontSize: 11, color: Colors.brown.shade300),
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                 ),
               ],
             ),
@@ -153,12 +153,17 @@ class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
         label: Text(label),
         selected: selected,
         onSelected: (_) => setState(() => _dateFilter = value),
-        selectedColor: AppConstants.accentColor.withValues(alpha: 0.35),
-        checkmarkColor: AppConstants.primaryDark,
+        backgroundColor: Colors.white,
+        selectedColor: AppConstants.primaryColor,
+        side: BorderSide(
+          color: selected ? AppConstants.primaryColor : const Color(0xFFE5E7EB),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        showCheckmark: false,
         labelStyle: TextStyle(
           fontSize: 12,
-          color: selected ? AppConstants.primaryDark : Colors.black87,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
+          color: selected ? Colors.white : const Color(0xFF374151),
+          fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
     );
@@ -169,13 +174,13 @@ class _SellerHistoryScreenState extends State<SellerHistoryScreen> {
     final itemCount = t.items.fold<int>(0, (s, i) => s + i.quantity);
     return Card(
       elevation: 0,
-      color: AppConstants.surfaceColor,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.brown.shade100),
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: Color(0xFFE5E7EB)),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         onTap: () => _showDetail(t),
         child: Padding(
           padding: const EdgeInsets.all(14),

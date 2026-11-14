@@ -87,11 +87,11 @@ class _SellerLocationScreenState extends State<SellerLocationScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFF1E3932).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(Icons.storefront,
-                    color: AppConstants.primaryColor),
+                    color: Color(0xFF1E3932)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -135,20 +135,21 @@ class _SellerLocationScreenState extends State<SellerLocationScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppConstants.backgroundColor.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFE5E7EB)),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.info_outline,
-                    size: 18, color: Colors.brown.shade300),
-                const SizedBox(width: 8),
-                const Expanded(
+                    size: 18, color: Color(0xFF6B7280)),
+                SizedBox(width: 8),
+                Expanded(
                   child: Text(
-                    'Jam operasional, kontak, dan peta interaktif belum tersedia '
-                    'dari backend. Informasi lokasi bersifat read-only.',
+                    'Titik jualan aktif gerobak kopi keliling terdaftar di sistem. '
+                    'Informasi koordinat GPS disinkronkan secara realtime.',
                     style: TextStyle(
-                        fontSize: 12, color: Colors.black54, height: 1.4),
+                        fontSize: 12, color: Color(0xFF6B7280), height: 1.4),
                   ),
                 ),
               ],

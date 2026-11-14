@@ -364,12 +364,17 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
-        selectedColor: AppConstants.accentColor.withValues(alpha: 0.35),
-        checkmarkColor: AppConstants.primaryDark,
+        backgroundColor: Colors.white,
+        selectedColor: const Color(0xFF1E3932),
+        checkmarkColor: Colors.white,
+        side: BorderSide(
+          color: selected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: TextStyle(
           fontSize: 12,
-          color: selected ? AppConstants.primaryDark : Colors.black87,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
+          color: selected ? Colors.white : const Color(0xFF4B5563),
+          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
         ),
       ),
     );
@@ -379,15 +384,17 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
     final available = _availableByProduct[p.id] ?? 0;
     final inCart = _cart[p.id]?.qty ?? 0;
     final canAdd = available > inCart;
-    return Card(
-      elevation: 0,
-      color: AppConstants.surfaceColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.brown.shade100),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: inCart > 0 ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
+          width: inCart > 0 ? 1.5 : 1,
+        ),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         onTap: canAdd ? () => _addToCart(p) : null,
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -398,64 +405,77 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppConstants.backgroundColor.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFF1F5F9)),
                   ),
                   child: (p.imageUrl == null || p.imageUrl!.isEmpty)
                       ? const Icon(Icons.coffee_outlined,
-                          size: 40, color: AppConstants.primaryColor)
+                          size: 38, color: Color(0xFF1E3932))
                       : Image.network(p.imageUrl!,
                           fit: BoxFit.cover,
                           errorBuilder: (_, _, _) => const Icon(
                               Icons.coffee_outlined,
-                              size: 40,
-                              color: AppConstants.primaryColor)),
+                              size: 38,
+                              color: Color(0xFF1E3932))),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 p.name,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
-                  color: AppConstants.textDark,
+                  color: Color(0xFF111827),
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 3),
               Text(
                 formatRupiah(p.price),
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
-                  color: AppConstants.primaryColor,
+                  fontSize: 13.5,
+                  color: Color(0xFF1E3932),
                 ),
               ),
               const SizedBox(height: 4),
               Row(
                 children: [
-                  Text(
-                    'Stok: $available',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: available > 0 ? Colors.black54 : AppConstants.statusWarning,
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: available > 5 ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: available > 5 ? const Color(0xFFA7F3D0) : const Color(0xFFFDE68A),
+                      ),
+                    ),
+                    child: Text(
+                      'Stok: $available',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: available > 5 ? const Color(0xFF065F46) : const Color(0xFF92400E),
+                      ),
                     ),
                   ),
                   const Spacer(),
                   if (inCart > 0)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppConstants.primaryColor,
+                        color: const Color(0xFF1E3932),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         '$inCart',
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700),
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                 ],
@@ -470,16 +490,16 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
   Widget _buildMobileCartBar() {
     return Material(
       elevation: 4,
-      borderRadius: BorderRadius.circular(14),
-      color: AppConstants.primaryDark,
+      borderRadius: BorderRadius.circular(12),
+      color: const Color(0xFF1E3932),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         onTap: _openCartSheet,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           child: Row(
             children: [
-              const Icon(Icons.shopping_cart, color: Colors.white),
+              const Icon(Icons.shopping_cart, color: Colors.white, size: 20),
               const SizedBox(width: 10),
               Text(
                 '$_cartCount item',
@@ -531,7 +551,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
       decoration: BoxDecoration(
         color: AppConstants.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.brown.shade100),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -734,13 +754,13 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: selected
-                ? AppConstants.primaryColor.withValues(alpha: 0.12)
-                : Colors.transparent,
+                ? const Color(0xFF1E3932).withOpacity(0.1)
+                : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: selected
-                  ? AppConstants.primaryColor
-                  : Colors.brown.shade200,
+                  ? const Color(0xFF1E3932)
+                  : const Color(0xFFE5E7EB),
               width: selected ? 1.5 : 1,
             ),
           ),
@@ -749,15 +769,15 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
               Icon(icon,
                   size: 20,
                   color: selected
-                      ? AppConstants.primaryColor
-                      : Colors.black54),
+                      ? const Color(0xFF1E3932)
+                      : const Color(0xFF6B7280)),
               const SizedBox(height: 4),
               Text(
                 method == 'CASH' ? 'Tunai' : 'QRIS',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
-                  color: selected ? AppConstants.primaryDark : Colors.black54,
+                  color: selected ? const Color(0xFF1E3932) : const Color(0xFF4B5563),
                 ),
               ),
             ],
