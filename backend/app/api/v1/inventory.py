@@ -50,6 +50,7 @@ def get_inventory(
     return results
 
 @router.post("/distributions")
+@router.post("/distribute")
 def distribute_stock(
     req: DistributionRequest,
     current_user: Optional[User] = Depends(get_optional_current_user),

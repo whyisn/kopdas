@@ -184,12 +184,16 @@ class OrderStatusUpdateRequest(BaseModel):
     status: str = Field(..., description="Status baru pesanan: PREPARING, READY_FOR_PICKUP, COMPLETED, CANCELLED")
 
 class QRISWebhookRequest(BaseModel):
-    provider_tx_id: str
-    merchant_id: str
-    amount: int
-    timestamp: str
-    rrn: str
+    provider_tx_id: Optional[str] = None
+    merchant_id: Optional[str] = "ID1020000000001"
+    amount: Optional[int] = None
+    gross_amount: Optional[int] = None
+    timestamp: Optional[str] = None
+    rrn: Optional[str] = None
     signature: Optional[str] = None
+    order_id: Optional[str] = None
+    event: Optional[str] = None
+    payment_method: Optional[str] = None
 
 # --- Locations ---
 class LocationCreateRequest(BaseModel):

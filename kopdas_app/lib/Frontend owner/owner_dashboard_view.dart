@@ -20,6 +20,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // Search filter
   String _searchFilter = '';
 
+  // Warehouse filter
+  String _warehouseCategoryFilter = 'Semua';
+
   // Sidebar Collapse State (3S.NET style)
   bool _isSidebarCollapsed = false;
 
@@ -161,12 +164,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   ];
 
   final List<Map<String, dynamic>> _warehouseStock = [
-    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'category': 'Signature', 'central_stock': 950, 'allocated': 160, 'held_by_cart': 120, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'category': 'Espresso', 'central_stock': 650, 'allocated': 90, 'held_by_cart': 75, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
-    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'category': 'Non-Coffee', 'central_stock': 430, 'allocated': 60, 'held_by_cart': 45, 'price': 22000, 'cost': 9000, 'status': 'Aman'},
-    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'category': 'Signature', 'central_stock': 520, 'allocated': 50, 'held_by_cart': 40, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
-    {'sku': 'PRD-05', 'name': 'Cold Brew Citrus Refresh', 'category': 'Artisan Brew', 'central_stock': 310, 'allocated': 40, 'held_by_cart': 30, 'price': 22000, 'cost': 8500, 'status': 'Aman'},
-    {'sku': 'PRD-06', 'name': 'Roti Bakar Kaya Butter', 'category': 'Bites', 'central_stock': 140, 'allocated': 40, 'held_by_cart': 35, 'price': 15000, 'cost': 6000, 'status': 'Stok Menipis'},
+    {'sku': 'KPS-01', 'name': 'Kopi Susu Soft', 'category': 'Kopi Susu', 'central_stock': 850, 'allocated': 160, 'held_by_cart': 110, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+    {'sku': 'KPS-02', 'name': 'Kopi Susu Strong', 'category': 'Kopi Susu', 'central_stock': 750, 'allocated': 140, 'held_by_cart': 95, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+    {'sku': 'KPS-03', 'name': 'Kopi Susu Butter', 'category': 'Kopi Susu', 'central_stock': 620, 'allocated': 120, 'held_by_cart': 80, 'min_stock': 120, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
+    {'sku': 'COF-01', 'name': 'Americano', 'category': 'Classic Coffee', 'central_stock': 540, 'allocated': 90, 'held_by_cart': 65, 'min_stock': 100, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
+    {'sku': 'NCF-01', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 480, 'allocated': 80, 'held_by_cart': 50, 'min_stock': 100, 'price': 18000, 'cost': 7000, 'status': 'Aman'},
+    {'sku': 'NCF-02', 'name': 'Matcha', 'category': 'Non-Coffee', 'central_stock': 410, 'allocated': 70, 'held_by_cart': 45, 'min_stock': 100, 'price': 20000, 'cost': 8500, 'status': 'Aman'},
   ];
 
   final List<Map<String, dynamic>> _locations = [
@@ -1268,7 +1271,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     _navItem(0, Icons.dashboard_outlined, 'Dashboard'),
                     _navItem(1, Icons.people_outline, 'Data Pelanggan & Tim'),
                     _navItem(3, Icons.map_outlined, 'Peta Live & GPS'),
-                    _navItem(4, Icons.place_outlined, 'Titik Lapak Jualan'),
                     _navItem(2, Icons.access_time, 'Absensi Shift'),
 
                     _sidebarCategoryHeader('LOGISTIK & KEUANGAN'),
@@ -3551,71 +3553,419 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: GUDANG & STOK
+  // SUB-PAGES: GUDANG & STOK (FOKUS MONITORING STOK 6 MENU UTAMA)
   // ===========================================================================
   Widget _buildWarehouseManagementView() {
+    final int totalCentralStock = _warehouseStock.fold<int>(0, (sum, item) => sum + (item['central_stock'] as int));
+    final int totalInCarts = _warehouseStock.fold<int>(0, (sum, item) => sum + ((item['held_by_cart'] ?? 0) as int));
+    final int grandTotalStock = totalCentralStock + totalInCarts;
+    final int lowStockItems = _warehouseStock.where((item) => (item['central_stock'] as int) <= ((item['min_stock'] ?? 150) as int)).length;
+
+    final categories = ['Semua', 'Kopi Susu', 'Classic Coffee', 'Non-Coffee'];
+    final filteredStock = _warehouseStock.where((item) {
+      final matchCat = _warehouseCategoryFilter == 'Semua' || item['category'] == _warehouseCategoryFilter;
+      return matchCat;
+    }).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. PAGE HEADER & QUICK ACTIONS
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Katalog Persediaan Gudang Pusat', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: _showAddStockDialog,
-                  child: const Text('+ Input Stok Masuk'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Gudang Pusat & Manajemen Stok',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Color(0xFF111827), letterSpacing: -0.3),
                 ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
-                  onPressed: _showDistributeStockDialog,
-                  child: const Text('Bagi ke Gerobak'),
+                SizedBox(height: 3),
+                Text(
+                  'Monitoring persediaan fisik 6 menu resmi KopiCerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
+                  style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
-            )
+            ),
+            Row(
+              children: [
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3932),
+                    side: const BorderSide(color: Color(0xFF1E3932)),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: _showAddStockDialog,
+                  icon: const Icon(Icons.add_box_outlined, size: 16),
+                  label: const Text('Input Stok Masuk', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3932),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: _showDistributeStockDialog,
+                  icon: const Icon(Icons.local_shipping_outlined, size: 16),
+                  label: const Text('Alokasi ke Gerobak', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
-        _tableContainer(
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.2),
-              1: FlexColumnWidth(2.5),
-              2: FlexColumnWidth(1.5),
-              3: FlexColumnWidth(1.4),
-              4: FlexColumnWidth(1.4),
-              5: FlexColumnWidth(1.4),
-              6: FlexColumnWidth(1.2),
-            },
+        // 2. CONSOLIDATED KPI SUMMARY BAR (FOKUS FISIK QUANTITY STOK)
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Total Stok Gudang Pusat',
+                    '$totalCentralStock Porsi',
+                    'Kapasitas Ruang Aman 85%',
+                    const Color(0xFF059669),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Stok Terbawa di Gerobak',
+                    '$totalInCarts Porsi',
+                    'Bawaan Aktif 5 Unit Lapangan',
+                    const Color(0xFFD97706),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Total Akumulasi Stok',
+                    '$grandTotalStock Porsi',
+                    'Konsolidasi Gudang + Gerobak',
+                    const Color(0xFF1E3932),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Status Persediaan 6 Menu',
+                    lowStockItems == 0 ? 'Semua Stok Aman' : '$lowStockItems SKU Menipis',
+                    lowStockItems == 0 ? 'Semua produk di atas batas aman' : 'Perlu order bahan baku',
+                    lowStockItems == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 3. MAIN WAREHOUSE STOCK TABLE CONTAINER (FOKUS FISIK STOK)
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TableRow(
-                decoration: const BoxDecoration(color: Color(0xFFFAFAFA), border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0)))),
-                children: [
-                  _cleanTh('SKU'),
-                  _cleanTh('Menu Kopi / Bahan'),
-                  _cleanTh('Kategori'),
-                  _cleanTh('Stok Pusat'),
-                  _cleanTh('Harga Modal'),
-                  _cleanTh('Harga Jual'),
-                  _cleanTh('Status'),
-                ],
-              ),
-              for (final w in _warehouseStock)
-                TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
+              // Toolbar: Title + Category Filter Chips
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _cleanTd(w['sku']),
-                    _cleanTd(w['name'], bold: true),
-                    _cleanTd(w['category']),
-                    _cleanTd('${w['central_stock']} Porsi', bold: true),
-                    _cleanTd(_formatRupiah(w['cost'] as num)),
-                    _cleanTd(_formatRupiah(w['price'] as num)),
-                    _cleanStatusPill(w['status'] == 'Aman' ? 'Aman' : 'Menipis', w['status'] == 'Aman'),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(7),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E3932).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Icon(Icons.inventory_2_outlined, color: Color(0xFF1E3932), size: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Persediaan Stok 6 Menu Utama',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                            ),
+                            Text(
+                              'Menampilkan  dari  menu resmi KopiCerdas',
+                              style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    // Filter category pills
+                    Row(
+                      children: categories.map((cat) {
+                        final isSel = _warehouseCategoryFilter == cat;
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: InkWell(
+                            onTap: () => setState(() => _warehouseCategoryFilter = cat),
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: isSel ? const Color(0xFF1E3932) : const Color(0xFFF3F4F6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                cat,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
+                                  color: isSel ? Colors.white : const Color(0xFF4B5563),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
+              ),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+
+              // Enhanced Data Table - Pure Stock Focused
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(1.2), // SKU
+                  1: FlexColumnWidth(2.6), // Menu Kopi
+                  2: FlexColumnWidth(1.5), // Kategori
+                  3: FlexColumnWidth(2.6), // Stok Gudang Pusat & Level Bar
+                  4: FlexColumnWidth(1.5), // Di Gerobak
+                  5: FlexColumnWidth(1.4), // Batas Min
+                  6: FlexColumnWidth(1.5), // Total Fisik
+                  7: FlexColumnWidth(1.4), // Status
+                  8: FlexColumnWidth(2.0), // Aksi Cepat
+                },
+                children: [
+                  TableRow(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF9FAFB),
+                      border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+                    ),
+                    children: [
+                      _cleanTh('SKU'),
+                      _cleanTh('Menu Produk'),
+                      _cleanTh('Kategori'),
+                      _cleanTh('Stok Gudang Pusat'),
+                      _cleanTh('Di Gerobak'),
+                      _cleanTh('Batas Min'),
+                      _cleanTh('Total Stok'),
+                      _cleanTh('Status'),
+                      _cleanTh('Aksi Cepat'),
+                    ],
+                  ),
+                  for (final w in filteredStock)
+                    TableRow(
+                      decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
+                      ),
+                      children: [
+                        // SKU
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF3F4F6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                w['sku'].toString(),
+                                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Menu Produk
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Text(
+                            w['name'].toString(),
+                            style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
+                          ),
+                        ),
+
+                        // Kategori
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF0FDF4),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: const Color(0xFFBBF7D0)),
+                              ),
+                              child: Text(
+                                w['category'].toString(),
+                                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF166534)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Stok Gudang Pusat & Visual Bar
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '',
+                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const Text('Porsi', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(2),
+                                child: LinearProgressIndicator(
+                                  value: ((w['central_stock'] as int) / 1000).clamp(0.0, 1.0),
+                                  minHeight: 6,
+                                  backgroundColor: const Color(0xFFE5E7EB),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    (w['central_stock'] as int) < ((w['min_stock'] ?? 150) as int)
+                                        ? const Color(0xFFDC2626)
+                                        : const Color(0xFF059669),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Di Gerobak
+                        _cleanTd('${w['held_by_cart'] ?? 0} Porsi', bold: true, color: const Color(0xFFD97706)),
+
+                        // Batas Minimum
+                        _cleanTd('${w['min_stock'] ?? 100} Porsi', color: const Color(0xFF6B7280)),
+
+                        // Total Stok (Gudang + Gerobak)
+                        _cleanTd('${(w['central_stock'] as int) + ((w['held_by_cart'] ?? 0) as int)} Porsi', bold: true, color: const Color(0xFF1E3932)),
+
+                        // Status Badge
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: w['status'] == 'Aman' ? const Color(0xFFECFDF5) : const Color(0xFFFEF2F2),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: w['status'] == 'Aman' ? const Color(0xFFA7F3D0) : const Color(0xFFFECACA),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: w['status'] == 'Aman' ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    w['status'] == 'Aman' ? 'Aman' : 'Menipis',
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: w['status'] == 'Aman' ? const Color(0xFF065F46) : const Color(0xFF991B1B),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Aksi Cepat
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InkWell(
+                                onTap: _showAddStockDialog,
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1E3932).withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.add, size: 12, color: Color(0xFF1E3932)),
+                                      SizedBox(width: 2),
+                                      Text(
+                                        'Restock',
+                                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              InkWell(
+                                onTap: _showDistributeStockDialog,
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3F4F6),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text(
+                                    'Kirim',
+                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ],
           ),
         ),
