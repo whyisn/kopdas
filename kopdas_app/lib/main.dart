@@ -15,17 +15,18 @@ class KopiCerdasApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppConstants.appName,
+      title: 'KopiCerdas AI',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: AppConstants.primaryColor,
-          primary: AppConstants.primaryColor,
-          secondary: AppConstants.accentColor,
-          surface: AppConstants.surfaceColor,
+          seedColor: const Color(0xFF1E3932), // Dark Forest Green (3S.NET / Starbucks style)
+          primary: const Color(0xFF1E3932),
+          secondary: const Color(0xFF134E4A),
+          surface: Colors.white,
         ),
         useMaterial3: true,
         fontFamily: 'Segoe UI',
+        scaffoldBackgroundColor: const Color(0xFFF9FAFB),
       ),
       home: const MainNavigationShell(),
     );
