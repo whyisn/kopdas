@@ -975,9 +975,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
   // ===========================================================================
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF9FAFB), // 3S.NET crisp light background
-      child: Row(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF9FAFB), // 3S.NET crisp light background
+      body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Sidebar 3S.NET Theme (Clean White, Forest Green Active Pill, Collapsible Toggle)
@@ -1145,8 +1145,8 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Admin Internet Desa', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
-                                Text('Administrator', style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
+                                Text('Owner KopiCerdas', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
+                                Text('Administrator Bisnis', style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
                               ],
                             ),
                           ),
@@ -1304,30 +1304,34 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
       child: Row(
         children: [
           // Breadcrumb / Title area
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _getNavTitle(),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF111827),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _getNavTitle(),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF111827),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              const SizedBox(height: 1),
-              const Text(
-                'KopiCerdas AI — Smart Operational & Intelligence Management',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFF6B7280),
-                  fontWeight: FontWeight.w400,
+                const SizedBox(height: 1),
+                const Text(
+                  'KopiCerdas AI — Smart Operational & Intelligence Management',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF6B7280),
+                    fontWeight: FontWeight.w400,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const Spacer(),
+          const SizedBox(width: 14),
 
           // Status Badge: Real-time Live Synced (like 3S.NET)
           Container(
@@ -1449,15 +1453,15 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
               CircleAvatar(
                 radius: 16,
                 backgroundColor: Color(0xFF1E3932),
-                child: Text('A', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                child: Text('OW', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
               SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Admin Internet Desa', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
-                  Text('Administrator', style: TextStyle(fontSize: 10, color: Color(0xFF6B7280))),
+                  Text('Owner KopiCerdas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                  Text('Administrator Bisnis', style: TextStyle(fontSize: 10, color: Color(0xFF6B7280))),
                 ],
               ),
             ],
@@ -1699,21 +1703,26 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Pipeline Calon Pelanggan & Penjualan (Dashboard)',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF111827), letterSpacing: -0.4),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  'Monitoring penjualan live gerobak, telemetri armada real-time, analisis AI cuaca/keramaian, dan rekonsiliasi kas tutup shift ($periodLabel)',
-                  style: const TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Pipeline Calon Pelanggan & Penjualan (Dashboard)',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF111827), letterSpacing: -0.4),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Monitoring penjualan live gerobak, telemetri armada real-time, analisis AI cuaca/keramaian, dan rekonsiliasi kas tutup shift ($periodLabel)',
+                    style: const TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
+                  ),
+                ],
+              ),
             ),
-            Row(
+            const SizedBox(width: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
@@ -1730,7 +1739,6 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                   icon: const Icon(Icons.refresh, size: 16),
                   label: const Text('Refresh', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600)),
                 ),
-                const SizedBox(width: 8),
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -1742,7 +1750,6 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                   icon: const Icon(Icons.psychology, size: 16, color: Color(0xFF1E3932)),
                   label: const Text('Analisis AI Alokasi', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600)),
                 ),
-                const SizedBox(width: 8),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E3932), // 3S.NET Dark Forest Green
