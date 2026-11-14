@@ -40,6 +40,8 @@ class MainNavigationShell extends StatefulWidget {
 
 class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentRoleIndex = 0; // 0: Owner, 1: Seller, 2: Customer
+  final bool _isBackendConnected = true;
+  final String _backendStatusText = 'Backend Siap (FastAPI :8000)';
 
   final List<ProductModel> _sampleProducts = [
     ProductModel(
@@ -82,18 +84,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentRoleIndex == 0) {
-      // 100% Pure JustDo Theme Canvas (No brown double header)
-      return Scaffold(
-        backgroundColor: const Color(0xFFF4F6F9),
-        body: OwnerDashboardView(
-          onRoleSwitch: (idx) {
-            setState(() => _currentRoleIndex = idx);
-          },
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -111,18 +101,44 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                 fontSize: 18,
               ),
             ),
+            const SizedBox(width: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppConstants.accentColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppConstants.accentColor, width: 0.8),
+              ),
+              child: const Text(
+                AppConstants.appTagline,
+                style: TextStyle(fontSize: 11, color: AppConstants.accentColor),
+              ),
+            ),
           ],
         ),
         actions: [
-          TextButton.icon(
-            onPressed: () => setState(() => _currentRoleIndex = 0),
-            icon: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 16),
-            label: const Text('Ke Owner Dashboard', style: TextStyle(color: Colors.white, fontSize: 12)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.circle,
+                  size: 10,
+                  color: _isBackendConnected
+                      ? Colors.greenAccent
+                      : Colors.orangeAccent,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  _backendStatusText,
+                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(width: 12),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(42),
+          preferredSize: const Size.fromHeight(48),
           child: Container(
             color: AppConstants.primaryColor,
             child: Row(
