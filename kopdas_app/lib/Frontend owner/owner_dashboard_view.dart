@@ -2734,73 +2734,53 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     const SizedBox(height: 14),
                     // INFORMASI CUACA HARI INI (KOTA PADANG)
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF9FAFB),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: const Color(0xFFE5E7EB)),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: const [
-                                  Icon(Icons.wb_sunny_outlined, size: 16, color: Color(0xFFD97706)),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Prakiraan Cuaca Hari Ini — Kota Padang:',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: Color(0xFF111827)),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFEFF6FF),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: const Color(0xFFBFDBFE)),
-                                ),
-                                child: const Text(
-                                  'Live BMKG Telemetri',
-                                  style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
-                                ),
-                              ),
-                            ],
+                          const Icon(Icons.wb_sunny_outlined, size: 16, color: Color(0xFFD97706)),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Prakiraan Cuaca Hari Ini (Kota Padang):',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: Color(0xFF111827)),
                           ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 6,
-                            children: [
-                              _buildWeatherPill('⛅ 28°C Cerah Berawan', const Color(0xFF059669)),
-                              _buildWeatherPill('🌡️ Suhu: 24°C - 31°C', const Color(0xFFD97706)),
-                              _buildWeatherPill('💧 Kelembapan: 78% RH', const Color(0xFF2563EB)),
-                              _buildWeatherPill('💨 Angin: 11 km/jam Barat Daya', const Color(0xFF4B5563)),
-                              _buildWeatherPill('☀️ Indeks UV: 5.4 (Sedang)', const Color(0xFFB45309)),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
+                          const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                             decoration: BoxDecoration(
                               color: const Color(0xFFF0FDF4),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(4),
                               border: Border.all(color: const Color(0xFFBBF7D0)),
                             ),
-                            child: Row(
-                              children: const [
-                                Icon(Icons.verified_outlined, size: 16, color: Color(0xFF15803D)),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Kondisi cuaca hari ini (28°C Cerah Berawan) sangat kondusif untuk penjualan lapangan. AI mengaktifkan baseline alokasi optimal 550 porsi dengan estimasi serapan rata-rata 94.8% di 4 armada gerobak aktif.',
-                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Color(0xFF166534)),
-                                  ),
-                                ),
-                              ],
+                            child: const Text(
+                              '⛅ 28°C Cerah Berawan',
+                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          const Expanded(
+                            child: Text(
+                              'Cuaca kondusif untuk penjualan outdoor. AI mengaktifkan alokasi optimal 550 porsi (serapan 94.8%).',
+                              style: TextStyle(fontSize: 11.5, color: Color(0xFF4B5563)),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF6FF),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: const Color(0xFFBFDBFE)),
+                            ),
+                            child: const Text(
+                              'Live BMKG',
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
                             ),
                           ),
                         ],
@@ -3272,90 +3252,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  Widget _buildWeatherPill(String text, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.25)),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: color),
-      ),
-    );
-  }
-
-  Widget _buildWeatherMetricTile(String label, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(label, style: const TextStyle(fontSize: 9.5, color: Color(0xFF6B7280), fontWeight: FontWeight.w500)),
-              Text(value, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: color)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHourlyForecastItem({
-    required IconData icon,
-    required Color iconColor,
-    required String period,
-    required String temp,
-    required String weather,
-    required String insight,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 14, color: iconColor),
-            const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                period,
-                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 3),
-        Row(
-          children: [
-            Text(temp, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF111827))),
-            const SizedBox(width: 4),
-            Text('• $weather', style: const TextStyle(fontSize: 10.5, color: Color(0xFF4B5563))),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          insight,
-          style: const TextStyle(fontSize: 9.5, color: Color(0xFF6B7280), height: 1.3),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
-  }
 
   TableRow _buildAiAnalysisRow(
     String area,
@@ -6024,156 +5920,53 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
         // 2. INFORMASI CUACA HARI INI (KOTA PADANG)
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: const Color(0xFFE5E7EB)),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.wb_sunny_outlined, size: 18, color: Color(0xFFD97706)),
-                      SizedBox(width: 8),
-                      Text(
-                        'Informasi Cuaca Hari Ini — Kota Padang',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF111827)),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFBFDBFE)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.sensors, size: 12, color: Color(0xFF1D4ED8)),
-                        SizedBox(width: 5),
-                        Text(
-                          'Live BMKG Telemetri • 24 Jam',
-                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              const Icon(Icons.wb_sunny_outlined, size: 16, color: Color(0xFFD97706)),
+              const SizedBox(width: 8),
+              const Text(
+                'Informasi Cuaca Hari Ini (Kota Padang):',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: Color(0xFF111827)),
               ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 10,
-                runSpacing: 8,
-                children: [
-                  _buildWeatherMetricTile('Kondisi Hari Ini', 'Cerah Berawan', Icons.cloud_outlined, const Color(0xFF059669)),
-                  _buildWeatherMetricTile('Suhu Udara', '28°C (24°C - 31°C)', Icons.thermostat_outlined, const Color(0xFFD97706)),
-                  _buildWeatherMetricTile('Kelembapan', '78% RH (Normal)', Icons.water_drop_outlined, const Color(0xFF2563EB)),
-                  _buildWeatherMetricTile('Kecepatan Angin', '11 km/jam Barat Daya', Icons.air, const Color(0xFF4B5563)),
-                  _buildWeatherMetricTile('Indeks UV', 'UV 5.4 (Sedang)', Icons.wb_sunny_outlined, const Color(0xFFD97706)),
-                  _buildWeatherMetricTile('Potensi Presipitasi', '15% (Rendah)', Icons.umbrella_outlined, const Color(0xFF6B7280)),
-                ],
-              ),
-              const SizedBox(height: 12),
-              // 1-Day Forecast Timeline (Pagi, Siang, Sore, Malam)
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFF3F4F6)),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final bool isCompact = constraints.maxWidth < 680;
-                    final slots = [
-                      _buildHourlyForecastItem(
-                        icon: Icons.wb_cloudy_outlined,
-                        iconColor: const Color(0xFF059669),
-                        period: 'Pagi (06:00 - 11:00)',
-                        temp: '26°C',
-                        weather: 'Cerah Berawan',
-                        insight: 'Suhu sejuk, ideal untuk pembukaan lapak & komuter awal.',
-                      ),
-                      _buildHourlyForecastItem(
-                        icon: Icons.wb_sunny_outlined,
-                        iconColor: const Color(0xFFD97706),
-                        period: 'Siang (11:00 - 15:00)',
-                        temp: '31°C',
-                        weather: 'Cerah Hangat',
-                        insight: 'Puncak konsumsi minuman dingin (Kopi Susu Aren es & Americano).',
-                      ),
-                      _buildHourlyForecastItem(
-                        icon: Icons.wb_twilight_outlined,
-                        iconColor: const Color(0xFF2563EB),
-                        period: 'Sore (15:00 - 18:00)',
-                        temp: '28°C',
-                        weather: 'Berawan Sejuk',
-                        insight: 'Trafik santai di Taplau & kawasan kantor, perputaran non-coffee tinggi.',
-                      ),
-                      _buildHourlyForecastItem(
-                        icon: Icons.nights_stay_outlined,
-                        iconColor: const Color(0xFF4B5563),
-                        period: 'Malam (18:00 - 21:00)',
-                        temp: '25°C',
-                        weather: 'Teduh Kondusif',
-                        insight: 'Penutupan shift aman, serapan sisa stok dan rekonsiliasi kas gerobak.',
-                      ),
-                    ];
-
-                    if (isCompact) {
-                      return Wrap(
-                        spacing: 12,
-                        runSpacing: 10,
-                        children: slots.map((s) => SizedBox(width: (constraints.maxWidth - 20) / 2, child: s)).toList(),
-                      );
-                    }
-
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: slots[0]),
-                        Container(width: 1, height: 48, color: const Color(0xFFE5E7EB), margin: const EdgeInsets.symmetric(horizontal: 10)),
-                        Expanded(child: slots[1]),
-                        Container(width: 1, height: 48, color: const Color(0xFFE5E7EB), margin: const EdgeInsets.symmetric(horizontal: 10)),
-                        Expanded(child: slots[2]),
-                        Container(width: 1, height: 48, color: const Color(0xFFE5E7EB), margin: const EdgeInsets.symmetric(horizontal: 10)),
-                        Expanded(child: slots[3]),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 12),
-              // AI Demand Rationale Banner
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF0FDF4),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(4),
                   border: Border.all(color: const Color(0xFFBBF7D0)),
                 ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.verified_outlined, size: 18, color: Color(0xFF15803D)),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Analisis Operasional AI: Prakiraan cuaca 1 hari di Kota Padang (28°C cerah berawan) sangat kondusif untuk seluruh 4 armada gerobak outdoor. Potensi hujan lebat minim (15%). Rekomendasi total alokasi 550 porsi dengan estimasi serapan rata-rata 94.8% dan fokus seimbang antara Kopi Susu Aren es dan varian segar non-coffee.',
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF166534),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  '⛅ 28°C Cerah Berawan',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Text(
+                  'Cuaca harian kondusif untuk penjualan outdoor. AI menetapkan target alokasi optimal 550 porsi (serapan 94.8%) di 4 armada aktif.',
+                  style: TextStyle(fontSize: 11.5, color: Color(0xFF4B5563)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: const Color(0xFFBFDBFE)),
+                ),
+                child: const Text(
+                  'Live BMKG',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
                 ),
               ),
             ],
