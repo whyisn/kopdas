@@ -5683,9 +5683,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   void _applyAiAllocationToStaff(String staffId, int totalAlloc, Map<String, int> menuAlloc) {
+    String staffName = '';
     setState(() {
       for (var s in _staffList) {
         if (s['id'] == staffId) {
+          staffName = s['name'].toString();
           s['morning_stock'] = totalAlloc;
           s['current_stock'] = totalAlloc;
           s['operational_status'] = 'ACTIVE_SELLING';
@@ -5697,7 +5699,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('✓ Rekomendasi AI berhasil diterapkan: $totalAlloc Cup dialokasikan ke gerobak!'),
+        content: Text('✓ Disposisi AI berhasil diterapkan: $totalAlloc Porsi dialokasikan ke armada $staffName!'),
         backgroundColor: const Color(0xFF1E3932),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
@@ -6197,12 +6199,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 s['id'] as String,
                                 totalAlloc,
                                 {
-                                  'soft': breakdown['soft'] as int,
-                                  'strong': breakdown['strong'] as int,
-                                  'butter': breakdown['butter'] as int,
-                                  'americano': breakdown['americano'] as int,
-                                  'coklat': breakdown['coklat'] as int,
-                                  'matcha': breakdown['matcha'] as int,
+                                  'aren': (breakdown['aren'] as num?)?.toInt() ?? 0,
+                                  'americano': (breakdown['americano'] as num?)?.toInt() ?? 0,
+                                  'coklat': (breakdown['coklat'] as num?)?.toInt() ?? 0,
+                                  'red_velvet': (breakdown['red_velvet'] as num?)?.toInt() ?? 0,
+                                  'thai_tea': (breakdown['thai_tea'] as num?)?.toInt() ?? 0,
+                                  'lemon_tea': (breakdown['lemon_tea'] as num?)?.toInt() ?? 0,
                                 },
                               ),
                               icon: const Icon(Icons.check, size: 13),
