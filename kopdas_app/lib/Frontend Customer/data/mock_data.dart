@@ -66,9 +66,9 @@ class MockData {
 
   static const favoriteIds = ['prd-01', 'prd-02', 'prd-05', 'prd-04'];
 
-  static const sizes = <Option>[Option('Standar')];
-  static const temps = ['Dingin', 'Panas'];
-  static const sugars = ['Normal', 'Kurang manis', 'Tanpa gula'];
+  static const sizes = <Option>[];
+  static const temps = <String>[];
+  static const sugars = <String>[];
   static const addons = <Option>[];
 
   static const pickupTimes = ['Secepatnya', '10 menit lagi', '20 menit lagi', '30 menit lagi'];

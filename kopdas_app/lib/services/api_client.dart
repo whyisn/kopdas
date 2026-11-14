@@ -26,9 +26,20 @@ class ApiClient {
 
   Uri _uri(String path, [Map<String, String>? query]) {
     final base = Uri.parse(AppConstants.apiBaseUrl);
+    String cleanPath = path;
+    final Map<String, String> qp = {};
+    if (query != null) qp.addAll(query);
+
+    if (path.contains('?')) {
+      final idx = path.indexOf('?');
+      cleanPath = path.substring(0, idx);
+      final queryStr = path.substring(idx + 1);
+      qp.addAll(Uri.splitQueryString(queryStr));
+    }
+
     return base.replace(
-      path: '${base.path}$path',
-      queryParameters: (query == null || query.isEmpty) ? null : query,
+      path: '${base.path}$cleanPath',
+      queryParameters: qp.isEmpty ? null : qp,
     );
   }
 
@@ -41,30 +52,30 @@ class ApiClient {
     return _send(() => _client.get(_uri(path, query), headers: _headers));
   }
 
-  Future<dynamic> post(String path, {Object? body}) {
+  Future<dynamic> post(String path, {Object? body, Map<String, String>? query}) {
     return _send(
       () => _client.post(
-        _uri(path),
+        _uri(path, query),
         headers: _headers,
         body: body == null ? null : jsonEncode(body),
       ),
     );
   }
 
-  Future<dynamic> patch(String path, {Object? body}) {
+  Future<dynamic> patch(String path, {Object? body, Map<String, String>? query}) {
     return _send(
       () => _client.patch(
-        _uri(path),
+        _uri(path, query),
         headers: _headers,
         body: body == null ? null : jsonEncode(body),
       ),
     );
   }
 
-  Future<dynamic> put(String path, {Object? body}) {
+  Future<dynamic> put(String path, {Object? body, Map<String, String>? query}) {
     return _send(
       () => _client.put(
-        _uri(path),
+        _uri(path, query),
         headers: _headers,
         body: body == null ? null : jsonEncode(body),
       ),

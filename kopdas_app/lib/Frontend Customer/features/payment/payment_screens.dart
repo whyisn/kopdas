@@ -74,6 +74,14 @@ class _BillScreenState extends State<BillScreen> {
   @override
   void initState() {
     super.initState();
+    // Inisialisasi QRIS Midtrans asli jika belum termuat
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final o = context.read<OrderProvider>();
+      if (o.midtransQrString == null && o.backendOrderId.isNotEmpty) {
+        o.initMidtransCharge('qris');
+      }
+    });
+
     // 1. Timer hitung mundur batas waktu pembayaran
     _tick = Timer.periodic(const Duration(milliseconds: 500), (_) {
       if (!mounted) return;
@@ -209,23 +217,55 @@ class _BillScreenState extends State<BillScreen> {
         case PayMethod.qris:
           final qrData = o.midtransQrString?.isNotEmpty == true
               ? o.midtransQrString!
-              : 'PAY${o.orderCode}';
+              : '';
+          final hasRealQr = qrData.isNotEmpty;
+
           return Column(spacing: 10, children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: const Color(0xFFECFDF5),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: const Color(0xFFA7F3D0)),
               ),
-              child: const Text(
-                'MIDTRANS SANDBOX QRIS',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.verified, size: 14, color: Color(0xFF065F46)),
+                  const SizedBox(width: 4),
+                  Text(
+                    hasRealQr ? 'MIDTRANS CORE API QRIS (LIVE SANDBOX)' : 'MEMUAT QRIS DARI MIDTRANS…',
+                    style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                  ),
+                ],
               ),
             ),
-            QrBox(qrData),
-            Text('Pindai dengan GoPay, BCA, atau aplikasi perbankan apa pun.',
-                textAlign: TextAlign.center, style: mut(context, 12.5)),
+            if (hasRealQr)
+              QrBox(qrData, size: 210)
+            else
+              Container(
+                height: 200,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                alignment: Alignment.center,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Spin(size: 32),
+                    SizedBox(height: 12),
+                    Text('Menghubungkan ke Midtrans…', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  ],
+                ),
+              ),
+            Text(
+              'Pindai QRIS ini dengan BCA Mobile, GoPay, ShopeePay, OVO, Dana, atau mobile banking lainnya.',
+              textAlign: TextAlign.center,
+              style: mut(context, 12.5),
+            ),
           ]);
         case PayMethod.wallet:
           return Column(
@@ -324,15 +364,15 @@ class _BillScreenState extends State<BillScreen> {
                   style: body(context, size: 13, w: FontWeight.w600, color: p.bad)),
             ),
           ]),
-        DemoBox(title: 'Integrasi Midtrans (Local Notification)', children: [
+        DemoBox(title: 'Pengujian Webhook Midtrans (Notifikasi Lokal)', children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Notification URL (Lokal):\n${o.midtransNotificationUrl}',
+            Text('Endpoint Notifikasi Midtrans:\n${o.midtransNotificationUrl}',
                 style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280))),
             const SizedBox(height: 8),
             Row(spacing: 8, children: [
               Expanded(
                 child: AppButton(
-                  label: 'Simulasi Bayar (Settlement)',
+                  label: 'Kirim Webhook Settlement (Bayar Sukses)',
                   small: true,
                   onPressed: () async {
                     await o.triggerMidtransLocalSimulation();

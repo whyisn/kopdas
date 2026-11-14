@@ -1,8 +1,10 @@
 import base64
 import hashlib
+import json
 import logging
+import urllib.request
+import urllib.error
 from typing import Any, Dict, List, Optional
-import httpx
 from app.core.config import settings
 
 logger = logging.getLogger("midtrans_service")
@@ -37,6 +39,34 @@ class MidtransService:
         encoded = base64.b64encode(f"{self.server_key}:".encode()).decode()
         return f"Basic {encoded}"
 
+    def _http_post(self, url: str, payload: Dict[str, Any], timeout: float = 12.0) -> Optional[Dict[str, Any]]:
+        """Helper HTTP POST menggunakan urllib standar tanpa dependensi pihak ketiga."""
+        data_bytes = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data_bytes,
+            headers={
+                "Authorization": self.auth_header,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                resp_body = resp.read().decode("utf-8")
+                return json.loads(resp_body)
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="ignore")
+            logger.warning(f"Midtrans HTTP {e.code} for {url}: {err_body}")
+            try:
+                return json.loads(err_body)
+            except Exception:
+                return None
+        except Exception as e:
+            logger.warning(f"Midtrans network error for {url}: {e}")
+            return None
+
     def create_snap_transaction(
         self,
         order_id: str,
@@ -45,7 +75,7 @@ class MidtransService:
         items: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
         """
-        Membuat Snap Transaction token & redirect URL ke Midtrans.
+        Membuat Snap Transaction token & redirect URL ke Midtrans Sandbox/Prod.
         """
         payload: Dict[str, Any] = {
             "transaction_details": {
@@ -70,37 +100,21 @@ class MidtransService:
                     "quantity": qty,
                     "name": name
                 })
-            # Midtrans mengharuskan sum(price * qty) == gross_amount
             sum_items = sum(x["price"] * x["quantity"] for x in item_details)
             if sum_items == gross_amount:
                 payload["item_details"] = item_details
 
-        headers = {
-            "Authorization": self.auth_header,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
+        url = f"{self.snap_base_url}/transactions"
+        data = self._http_post(url, payload)
 
-        try:
-            with httpx.Client(timeout=10.0) as client:
-                res = client.post(
-                    f"{self.snap_base_url}/transactions",
-                    headers=headers,
-                    json=payload
-                )
-                if res.status_code in (200, 201):
-                    data = res.json()
-                    return {
-                        "token": data.get("token"),
-                        "redirect_url": data.get("redirect_url"),
-                        "mode": "REAL_SANDBOX"
-                    }
-                else:
-                    logger.warning(f"Midtrans Snap API returned {res.status_code}: {res.text}")
-        except Exception as e:
-            logger.warning(f"Midtrans Snap connection failed ({e}), using elegant sandbox fallback.")
+        if data and "token" in data:
+            return {
+                "token": data.get("token"),
+                "redirect_url": data.get("redirect_url"),
+                "mode": "REAL_SANDBOX"
+            }
 
-        # Elegant fallback for offline / network isolated testing
+        # Fallback graceful jika jaringan offline / isolasi
         fallback_token = f"snap-{order_id}"
         return {
             "token": fallback_token,
@@ -115,6 +129,7 @@ class MidtransService:
     ) -> Dict[str, Any]:
         """
         Membuat transaksi QRIS dinamis resmi melalui Midtrans Core API.
+        Mengembalikan qr_string (format EMVCo) dan qr_url resmi Midtrans.
         """
         payload = {
             "payment_type": "qris",
@@ -127,40 +142,25 @@ class MidtransService:
             }
         }
 
-        headers = {
-            "Authorization": self.auth_header,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
+        url = f"{self.api_base_url}/charge"
+        data = self._http_post(url, payload)
 
-        try:
-            with httpx.Client(timeout=10.0) as client:
-                res = client.post(
-                    f"{self.api_base_url}/charge",
-                    headers=headers,
-                    json=payload
-                )
-                if res.status_code in (200, 201):
-                    data = res.json()
-                    qr_url = ""
-                    for act in data.get("actions", []):
-                        if act.get("name") in ("generate-qr-code", "generate-qr-code-v2"):
-                            qr_url = act.get("url", "")
-                            break
-                    return {
-                        "status_code": data.get("status_code"),
-                        "transaction_id": data.get("transaction_id"),
-                        "qr_string": data.get("qr_string", ""),
-                        "qr_url": qr_url,
-                        "expiry_time": data.get("expiry_time"),
-                        "mode": "REAL_SANDBOX"
-                    }
-                else:
-                    logger.warning(f"Midtrans Core API QRIS returned {res.status_code}: {res.text}")
-        except Exception as e:
-            logger.warning(f"Midtrans Core API QRIS connection failed ({e}), using fallback.")
+        if data and ("qr_string" in data or "actions" in data):
+            qr_url = ""
+            for act in data.get("actions", []):
+                if act.get("name") in ("generate-qr-code", "generate-qr-code-v2"):
+                    qr_url = act.get("url", "")
+                    break
+            return {
+                "status_code": data.get("status_code", "201"),
+                "transaction_id": data.get("transaction_id", ""),
+                "qr_string": data.get("qr_string", ""),
+                "qr_url": qr_url,
+                "expiry_time": data.get("expiry_time", ""),
+                "mode": "REAL_SANDBOX"
+            }
 
-        # Fallback QR string format
+        # Fallback QR string format EMVCo jika server offline
         return {
             "status_code": "201",
             "transaction_id": f"tx-midtrans-{order_id}",
@@ -178,27 +178,21 @@ class MidtransService:
         signature_key: str
     ) -> bool:
         """
-        Validasi signature webhook Midtrans:
-        SHA512(order_id + status_code + gross_amount + ServerKey)
+        Validasi SHA-512 signature key Midtrans:
+        signature = SHA512(order_id + status_code + gross_amount + ServerKey)
         """
-        if not signature_key:
-            return False
-        
-        # Gross amount di Midtrans webhook bisa '12000.00' atau '12000'
-        # Formula resmi: order_id + status_code + gross_amount + server_key
-        raw = f"{order_id}{status_code}{gross_amount}{self.server_key}"
-        expected = hashlib.sha512(raw.encode("utf-8")).hexdigest()
-        if expected.lower() == signature_key.lower():
-            return True
-            
-        # Toleransi jika gross_amount berakhiran .00 atau tidak
+        amounts_to_test = [gross_amount]
         if "." in gross_amount:
-            alt_amount = gross_amount.split(".")[0]
+            amounts_to_test.append(gross_amount.split(".")[0])
         else:
-            alt_amount = f"{gross_amount}.00"
-        raw_alt = f"{order_id}{status_code}{alt_amount}{self.server_key}"
-        expected_alt = hashlib.sha512(raw_alt.encode("utf-8")).hexdigest()
-        return expected_alt.lower() == signature_key.lower()
+            amounts_to_test.append(f"{gross_amount}.00")
+
+        for amt in amounts_to_test:
+            raw = f"{order_id}{status_code}{amt}{self.server_key}"
+            expected = hashlib.sha512(raw.encode("utf-8")).hexdigest()
+            if expected.lower() == signature_key.lower():
+                return True
+        return False
 
     def generate_signature(
         self,
@@ -207,9 +201,10 @@ class MidtransService:
         gross_amount: str
     ) -> str:
         """
-        Helper untuk menghasilkan signature SHA512 yang valid untuk pengujian / simulasi lokal.
+        Menghasilkan signature SHA-512 resmi untuk simulasi webhook lokal.
         """
-        raw = f"{order_id}{status_code}{gross_amount}{self.server_key}"
+        amt = f"{gross_amount}.00" if "." not in str(gross_amount) else str(gross_amount)
+        raw = f"{order_id}{status_code}{amt}{self.server_key}"
         return hashlib.sha512(raw.encode("utf-8")).hexdigest()
 
 midtrans_service = MidtransService()

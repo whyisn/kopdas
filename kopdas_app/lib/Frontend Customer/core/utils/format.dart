@@ -24,7 +24,7 @@ String greeting([DateTime? now]) {
 
 String starsText(int n) => '★' * n + '☆' * (5 - n);
 
-String ratingText(double r) => r.toString().replaceAll('.', ',');
+String ratingText(double r) => r.toStringAsFixed(1).replaceAll('.', ',');
 
 String clockText([DateTime? t]) {
   final d = t ?? DateTime.now();

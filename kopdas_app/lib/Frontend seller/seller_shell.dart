@@ -90,13 +90,20 @@ class SellerShell extends StatelessWidget {
               children: [
                 const Text(
                   'KopiCerdas',
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    color: Color(0xFF111827),
+                  ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 1.5,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFECFDF5),
                         borderRadius: BorderRadius.circular(4),
@@ -104,14 +111,21 @@ class SellerShell extends StatelessWidget {
                       ),
                       child: const Text(
                         'SELLER PORTAL',
-                        style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF065F46),
+                        ),
                       ),
                     ),
                     if (isWide) ...[
                       const SizedBox(width: 6),
                       const Text(
                         'Gerobak Lapangan Padang',
-                        style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Color(0xFF6B7280),
+                        ),
                       ),
                     ],
                   ],
@@ -139,8 +153,15 @@ class SellerShell extends StatelessWidget {
                     radius: 12,
                     backgroundColor: const Color(0xFF1E3932),
                     child: Text(
-                      (session.name?.isNotEmpty == true ? session.name![0] : 'S').toUpperCase(),
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                      (session.name?.isNotEmpty == true
+                              ? session.name![0]
+                              : 'S')
+                          .toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -150,11 +171,18 @@ class SellerShell extends StatelessWidget {
                     children: [
                       Text(
                         session.name ?? 'Seller',
-                        style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF111827),
+                        ),
                       ),
                       const Text(
                         'Petugas Lapangan',
-                        style: TextStyle(fontSize: 9.5, color: Color(0xFF6B7280)),
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          color: Color(0xFF6B7280),
+                        ),
                       ),
                     ],
                   ),
@@ -178,8 +206,13 @@ class SellerShell extends StatelessWidget {
               radius: 14,
               backgroundColor: const Color(0xFF1E3932),
               child: Text(
-                (session.name?.isNotEmpty == true ? session.name![0] : 'S').toUpperCase(),
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                (session.name?.isNotEmpty == true ? session.name![0] : 'S')
+                    .toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kopdas_app/services/api_client.dart';
 import 'package:kopdas_app/services/auth_service.dart';
@@ -259,9 +258,47 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ---------- menu & kustomisasi ----------
+  // ---------- menu & keranjang langsung ----------
   void setCategory(String c) {
     category = c;
+    notifyListeners();
+  }
+
+  int qtyInCart(String pid) {
+    for (final i in items) {
+      if (i.pid == pid) return i.qty;
+    }
+    return 0;
+  }
+
+  /// Tambah/kurangi produk langsung ke keranjang dengan validasi stok riil
+  void addProductDirect(Product p, [int delta = 1]) {
+    final maxStock = stockOf(p.id);
+    if (maxStock <= 0 && delta > 0) return;
+
+    CartItem? existing;
+    for (final i in items) {
+      if (i.pid == p.id) {
+        existing = i;
+        break;
+      }
+    }
+
+    if (existing != null) {
+      final newQty = existing.qty + delta;
+      if (newQty <= 0) {
+        items.remove(existing);
+      } else {
+        existing.qty = newQty.clamp(1, maxStock);
+      }
+    } else if (delta > 0) {
+      items.add(CartItem(
+        pid: p.id,
+        name: p.name,
+        qty: 1,
+        unit: p.price,
+      ));
+    }
     notifyListeners();
   }
 
@@ -270,15 +307,10 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSize(String v) { draft!.size = v; notifyListeners(); }
-  void setTemp(String v) { draft!.temp = v; notifyListeners(); }
-  void setSugar(String v) { draft!.sugar = v; notifyListeners(); }
-
-  void toggleAddon(String v) {
-    final a = draft!.addons;
-    a.contains(v) ? a.remove(v) : a.add(v);
-    notifyListeners();
-  }
+  void setSize(String v) {}
+  void setTemp(String v) {}
+  void setSugar(String v) {}
+  void toggleAddon(String v) {}
 
   void draftQty(int d) {
     if (draft == null) return;
@@ -290,26 +322,7 @@ class OrderProvider extends ChangeNotifier {
   void addDraftToCart() {
     final d = draft!;
     final p = productOf(d.pid);
-    final it = CartItem(
-      pid: p.id,
-      name: p.name,
-      temp: d.temp,
-      sugar: d.sugar,
-      note: d.note.trim(),
-      qty: d.qty,
-      unit: p.price,
-    );
-    CartItem? existing;
-    for (final i in items) {
-      if (i.key == it.key) existing = i;
-    }
-    if (existing != null) {
-      final maxStock = stockOf(p.id);
-      existing.qty = (existing.qty + it.qty).clamp(1, maxStock);
-    } else {
-      items.add(it);
-    }
-    notifyListeners();
+    addProductDirect(p, d.qty);
   }
 
   void changeQty(int i, int d) {
@@ -376,8 +389,8 @@ class OrderProvider extends ChangeNotifier {
       }
       paymentReceived = false;
 
-      // Buat transaksi Midtrans secara otomatis setelah order terdaftar
-      await initMidtransCharge('snap');
+      // Buat transaksi QRIS Midtrans secara otomatis setelah order terdaftar
+      await initMidtransCharge('qris');
 
       notifyListeners();
       return true;
@@ -472,7 +485,11 @@ class OrderProvider extends ChangeNotifier {
     if (backendOrderId.isNotEmpty) {
       try {
         await sessionController.api.post(
-          '/payments/midtrans/simulate-notification?order_id=$backendOrderId&action=settlement',
+          '/payments/midtrans/simulate-notification',
+          query: {
+            'order_id': backendOrderId,
+            'action': 'settlement',
+          },
           body: {},
         );
         await checkOrderStatus();
@@ -490,6 +507,9 @@ class OrderProvider extends ChangeNotifier {
       deadline = DateTime.now().add(payWindow);
     }
     paymentReceived = false;
+    if (midtransQrString == null && backendOrderId.isNotEmpty) {
+      initMidtransCharge('qris');
+    }
     notifyListeners();
   }
 

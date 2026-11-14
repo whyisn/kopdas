@@ -12,29 +12,39 @@ class CheckoutScreen extends StatelessWidget {
       title: 'Checkout',
       back: true,
       footer: AppButton(
-        label: 'Validasi dan lanjutkan',
-        onPressed: () => context.push(Routes.validate),
+        label: 'Lanjut ke Pembayaran',
+        onPressed: () => context.push(Routes.waiting),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         CartInfoCard(title: 'Ambil di ${c.name}', subtitle: '${c.spot} · ${fmtDist(o.distance(c))}'),
-        const SectionTitle('Waktu ambil'),
+        const SectionTitle('Waktu Ambil'),
         Wrap(spacing: 8, runSpacing: 8, children: [
           for (final t in MockData.pickupTimes)
             AppChip(label: t, selected: o.pickup == t, onTap: () => o.setPickup(t)),
         ]),
-        const SectionTitle('Pesananmu'),
+        const SectionTitle('Rincian Pesanan'),
         OrderLines(o.items),
         PriceSummary(subtotal: o.subtotal, fee: OrderProvider.serviceFee, total: o.total),
-        Text('Pembayaran dilakukan setelah gerobak menerima pesananmu.', style: mut(context, 12)),
-        const SizedBox(height: 14),
-        DemoBox(title: 'Simulasi validasi', children: [
-          ChoiceTile(
-            selected: o.simulateChange,
-            onTap: o.toggleSim,
-            label: Text('Ada perubahan harga atau stok',
-                style: body(context, w: FontWeight.w600)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(10),
           ),
-        ]),
+          child: Row(
+            children: [
+              const Icon(Icons.check_circle_outline, size: 18, color: Color(0xFF1E3932)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Stok produk di gerobak ${c.name} akan langsung diverifikasi saat checkout.',
+                  style: TextStyle(fontSize: 12.5, color: context.pal.muted),
+                ),
+              ),
+            ],
+          ),
+        ),
       ]),
     );
   }

@@ -720,19 +720,10 @@ class OrderLines extends StatelessWidget {
   Widget build(BuildContext context) => Column(children: [
         for (final i in items)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('${i.qty}× ${i.name}', style: dsp(context, 16, w: FontWeight.w700)),
-                  Text(
-                    '${i.optText}${i.note.isNotEmpty ? ' · “${i.note}”' : ''}',
-                    style: mut(context, 13),
-                  ),
-                ]),
-              ),
-              const SizedBox(width: 12),
-              Text(rp(i.unit * i.qty), style: body(context, w: FontWeight.w800)),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text('${i.qty}× ${i.name}', style: body(context, size: 15, w: FontWeight.w700)),
+              Text(rp(i.unit * i.qty), style: body(context, size: 15, w: FontWeight.w800)),
             ]),
           ),
       ]);
@@ -790,11 +781,7 @@ class CartEditor extends StatelessWidget {
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(o.items[x].name, style: dsp(context, 16, w: FontWeight.w700)),
-                Text(
-                  '${o.items[x].optText}${o.items[x].note.isNotEmpty ? ' · “${o.items[x].note}”' : ''}',
-                  style: mut(context, 13),
-                ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Row(children: [
                   QtyStepper(
                     value: o.items[x].qty,
@@ -815,61 +802,6 @@ class CartEditor extends StatelessWidget {
           ]),
         ),
     ]);
-  }
-}
-
-class BarcodeBox extends StatelessWidget {
-  final String code;
-  const BarcodeBox(this.code, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.pal;
-    final bars = <double>[];
-    for (var i = 0; i < code.length; i++) {
-      final v = code.codeUnitAt(i) % 4;
-      bars.addAll([v == 0 ? 1.5 : (v == 1 ? 3.0 : (v == 2 ? 2.0 : 4.0)), 2.0]);
-    }
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: p.line),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 48,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var i = 0; i < bars.length; i++)
-                  Container(
-                    width: bars[i],
-                    margin: EdgeInsets.only(right: i % 2 == 0 ? 1.5 : 2.0),
-                    color: i % 2 == 0 ? Colors.black : Colors.transparent,
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            code,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 2.5,
-              fontFamily: 'monospace',
-              color: Colors.black87,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 

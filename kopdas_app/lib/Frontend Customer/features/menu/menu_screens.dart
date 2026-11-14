@@ -55,6 +55,8 @@ class MenuScreen extends StatelessWidget {
           Builder(builder: (context) {
             final availStock = o.stockOf(pr.id);
             final isOutOfStock = availStock <= 0;
+            final inCart = o.qtyInCart(pr.id);
+
             return Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(border: Border(bottom: BorderSide(color: p.line))),
@@ -91,30 +93,63 @@ class MenuScreen extends StatelessWidget {
                     ),
                   ]),
                 ),
-                Semantics(
-                  button: true,
-                  label: 'Pilih ${pr.name}',
-                  child: GestureDetector(
-                    onTap: isOutOfStock
-                        ? null
-                        : () {
-                            o.startDraft(pr.id);
-                            context.push(Routes.customize);
-                          },
-                    child: Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: isOutOfStock ? const Color(0xFFE2E8F0) : p.accent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: isOutOfStock ? const Color(0xFF94A3B8) : p.onAccent,
+                if (isOutOfStock)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text('Habis', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+                  )
+                else if (inCart > 0)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: p.surface2,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: p.line),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          iconSize: 18,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.remove, color: p.ink),
+                          onPressed: () => o.addProductDirect(pr, -1),
+                        ),
+                        Text('$inCart', style: body(context, w: FontWeight.w700)),
+                        IconButton(
+                          iconSize: 18,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.add, color: p.accent),
+                          onPressed: inCart >= availStock ? null : () => o.addProductDirect(pr, 1),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  Semantics(
+                    button: true,
+                    label: 'Tambah ${pr.name}',
+                    child: GestureDetector(
+                      onTap: () => o.addProductDirect(pr, 1),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: p.accent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: p.onAccent,
+                        ),
                       ),
                     ),
                   ),
-                ),
               ]),
             );
           }),
@@ -123,119 +158,16 @@ class MenuScreen extends StatelessWidget {
   }
 }
 
-class CustomizeScreen extends StatefulWidget {
+class CustomizeScreen extends StatelessWidget {
   const CustomizeScreen({super.key});
-  @override
-  State<CustomizeScreen> createState() => _CustomizeScreenState();
-}
-
-class _CustomizeScreenState extends State<CustomizeScreen> {
-  late final TextEditingController _note;
-
-  @override
-  void initState() {
-    super.initState();
-    _note = TextEditingController(text: context.read<OrderProvider>().draft?.note ?? '');
-  }
-
-  @override
-  void dispose() {
-    _note.dispose();
-    super.dispose();
-  }
-
-  Widget _group(BuildContext context, String title, List<Widget> chips) => Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 8, children: [
-          Text(title, style: body(context, size: 14, w: FontWeight.w700)),
-          Wrap(spacing: 8, runSpacing: 8, children: chips),
-        ]),
-      );
 
   @override
   Widget build(BuildContext context) {
-    final p = context.pal;
-    final o = context.watch<OrderProvider>();
-    final d = o.draft;
-    if (d == null) return const SizedBox.shrink();
-    final prod = o.productOf(d.pid);
-    final availStock = o.stockOf(prod.id);
-
-    return AppScaffold(
-      title: 'Atur pesanan dan jumlah',
-      back: true,
-      footer: Row(spacing: 12, children: [
-        QtyStepper(
-          value: d.qty,
-          onMinus: () => o.draftQty(-1),
-          onPlus: () => o.draftQty(1),
-        ),
-        Expanded(
-          child: AppButton(
-            label: 'Tambah ke keranjang · ${rp(prod.price * d.qty)}',
-            onPressed: () {
-              d.note = _note.text;
-              o.addDraftToCart();
-              context.replace(Routes.cart);
-            },
-          ),
-        ),
-      ]),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(spacing: 14, children: [
-          ProductThumb(prod, box: 84, icon: 56),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(prod.name, style: dsp(context, 22)),
-              Text(prod.description, style: mut(context, 13)),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Text(rp(prod.price), style: body(context, size: 16, w: FontWeight.w800)),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFECFDF5),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: const Color(0xFFA7F3D0)),
-                    ),
-                    child: Text(
-                      'Tersedia: $availStock cup',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF065F46),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ]),
-          ),
-        ]),
-        if (prod.isDrink) ...[
-          _group(context, 'Suhu Penyajian', [
-            for (final t in MockData.temps)
-              AppChip(label: t, selected: d.temp == t, onTap: () => o.setTemp(t)),
-          ]),
-          _group(context, 'Tingkat Manis', [
-            for (final s in MockData.sugars)
-              AppChip(label: s, selected: d.sugar == s, onTap: () => o.setSugar(s)),
-          ]),
-        ],
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: AppField(
-            label: 'Catatan untuk barista (opsional)',
-            controller: _note,
-            hint: 'Contoh: es sedikit, pisahkan sedotan',
-            maxLines: 2,
-          ),
-        ),
-        const SizedBox(height: 12),
-      ]),
-    );
+    // Alihkan langsung ke keranjang karena fitur varian telah dihapus
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.replace(Routes.cart);
+    });
+    return const Scaffold(body: Center(child: Spin()));
   }
 }
 
