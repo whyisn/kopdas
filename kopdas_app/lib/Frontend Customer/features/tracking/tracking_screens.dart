@@ -8,59 +8,92 @@ class MakingScreen extends StatefulWidget {
 }
 
 class _MakingScreenState extends State<MakingScreen> {
-  Timer? _t, _poll;
+  Timer? _poll;
   bool _gone = false;
 
   @override
   void initState() {
     super.initState();
-    _t = Timer(const Duration(seconds: 15), _next);
-    // Realtime polling ke database backend untuk update status dari Seller
+    // Realtime polling ke database backend untuk mendengarkan perubahan status dari Seller
     _poll = Timer.periodic(const Duration(seconds: 2), (_) async {
       if (!mounted || _gone) return;
       final o = context.read<OrderProvider>();
       await o.checkOrderStatus();
-      if (o.orderStatus == 'READY_FOR_PICKUP' || o.orderStatus == 'COMPLETED') {
-        _next();
+      if (o.orderStatus == 'READY_FOR_PICKUP') {
+        _goToPickup();
+      } else if (o.orderStatus == 'COMPLETED') {
+        _goToDone();
       }
     });
   }
 
   @override
   void dispose() {
-    _t?.cancel();
     _poll?.cancel();
     super.dispose();
   }
 
-  void _next() {
+  void _goToPickup() {
     if (_gone || !mounted) return;
     _gone = true;
-    context.replace(Routes.ready);
+    context.replace(Routes.pickupCode);
+  }
+
+  void _goToDone() {
+    if (_gone || !mounted) return;
+    _gone = true;
+    context.replace(Routes.done);
   }
 
   @override
   Widget build(BuildContext context) {
     final o = context.watch<OrderProvider>();
     final c = o.cart;
-    final eta = c.waitMinutes + o.count;
+    final isPreparing = o.orderStatus == 'PREPARING';
+
     return AppScaffold(
-      title: 'Menyiapkan kopi',
+      title: 'Status Pesanan',
       canPop: false,
-      footer: AppButton(label: 'Percepat (demo)', kind: BtnKind.alt, onPressed: _next),
+      footer: AppButton(
+        label: 'Lihat Barcode Pengambilan',
+        icon: Icons.qr_code_scanner_rounded,
+        onPressed: _goToPickup,
+      ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 14, children: [
-        Column(spacing: 8, children: [
-          Text('Nomor pesanan', style: mut(context, 13)),
-          Text(o.orderCode, style: dsp(context, 34).copyWith(letterSpacing: 2)),
+        Column(spacing: 6, children: [
+          Text('Nomor Pesanan Anda', style: mut(context, 13)),
+          Text(o.orderCode, style: dsp(context, 30).copyWith(letterSpacing: 2, fontWeight: FontWeight.w800)),
         ]),
         Timeline([
-          TrackRow(TrkState.done, 'Pesanan dibayar', '${c.name} menerima pembayaranmu'),
-          TrackRow(TrkState.now, 'Gerobak menyiapkan kopi',
-              'Barista membuat ${o.count} item · ± $eta menit'),
-          const TrackRow(TrkState.todo, 'Siap diambil'),
+          TrackRow(TrkState.done, 'Pembayaran Terkonfirmasi', '${c.name} telah menerima order'),
+          TrackRow(
+            isPreparing ? TrkState.now : TrkState.todo,
+            'Barista Menyiapkan Kopi',
+            isPreparing ? 'Kopi sedang diracik barista' : 'Menunggu antrean barista',
+          ),
+          const TrackRow(TrkState.todo, 'Siap Diambil di Gerobak', 'Tunjukkan barcode ke seller'),
         ]),
-        const LoadingBar(seconds: 7),
-        Text('Waktu pada demo ini dipercepat.', style: mut(context, 12)),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              const Spin(size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  isPreparing
+                      ? 'Barista sedang membuat pesananmu. Layar akan beralih otomatis saat siap.'
+                      : 'Menunggu konfirmasi pembuatan dari barista gerobak...',
+                  style: body(context, size: 13, w: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+        ),
         AppCard(child: OrderLines(o.items)),
       ]),
     );
@@ -74,9 +107,13 @@ class ReadyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final o = context.watch<OrderProvider>();
     return AppScaffold(
-      title: 'Pesanan siap',
+      title: 'Pesanan Siap',
       canPop: false,
-      footer: AppButton(label: 'Buka notifikasi', onPressed: () => context.replace(Routes.pickupCode)),
+      footer: AppButton(
+        label: 'Buka Barcode Pengambilan',
+        icon: Icons.qr_code_2_rounded,
+        onPressed: () => context.replace(Routes.pickupCode),
+      ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 18, children: [
         const SizedBox(height: 6),
         NotifCard(
@@ -85,38 +122,96 @@ class ReadyScreen extends StatelessWidget {
           onTap: () => context.replace(Routes.pickupCode),
         ),
         StatusHeader(
-          icon: Icons.check_rounded,
+          icon: Icons.check_circle_rounded,
           kind: BadgeKind.ok,
-          title: 'Pesananmu siap diambil',
+          title: 'Pesananmu Siap Diambil!',
           message:
-              'Barista ${o.cart.name} sudah menyiapkan kopimu. Ketuk notifikasi untuk membuka kode pickup.',
+              'Barista ${o.cart.name} sudah selesai membuat pesananmu. Ketuk tombol di bawah untuk menampilkan barcode pengambilan barang.',
         ),
       ]),
     );
   }
 }
 
-class PickupCodeScreen extends StatelessWidget {
+class PickupCodeScreen extends StatefulWidget {
   const PickupCodeScreen({super.key});
+
+  @override
+  State<PickupCodeScreen> createState() => _PickupCodeScreenState();
+}
+
+class _PickupCodeScreenState extends State<PickupCodeScreen> {
+  Timer? _poll;
+  bool _gone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Auto-poll mendengarkan seller mengklik "Serahkan ke Pelanggan (COMPLETED)"
+    _poll = Timer.periodic(const Duration(seconds: 2), (_) async {
+      if (!mounted || _gone) return;
+      final o = context.read<OrderProvider>();
+      await o.checkOrderStatus();
+      if (o.orderStatus == 'COMPLETED') {
+        _finish();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _poll?.cancel();
+    super.dispose();
+  }
+
+  void _finish() {
+    if (_gone || !mounted) return;
+    _gone = true;
+    context.replace(Routes.done);
+  }
 
   @override
   Widget build(BuildContext context) {
     final o = context.watch<OrderProvider>();
+    final c = o.cart;
+
     return AppScaffold(
-      title: 'Kode pickup',
+      title: 'Barcode Pengambilan Barang',
       canPop: false,
       footer: AppButton(
-        label: 'Menuju gerobak',
-        icon: Icons.directions_walk_rounded,
-        onPressed: () => context.replace(Routes.arrive),
+        label: 'Pesanan Sudah Saya Terima',
+        icon: Icons.check_circle_outline,
+        onPressed: _finish,
       ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.center, spacing: 14, children: [
+      body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 14, children: [
+        StatusHeader(
+          icon: Icons.qr_code_scanner_rounded,
+          kind: BadgeKind.ok,
+          title: 'Barcode Pengambilan Barang',
+          message: 'Tunjukkan Barcode atau QR code berikut kepada barista ${c.name} saat mengambil minuman.',
+        ),
+        Center(child: BarcodeBox(o.orderCode)),
+        const SizedBox(height: 4),
+        Center(child: QrBox(o.orderCode, size: 170)),
         const SizedBox(height: 6),
-        NotifCard(cartName: o.cart.name, code: o.orderCode),
-        QrBox(o.orderCode),
-        Text(o.orderCode, style: dsp(context, 44).copyWith(letterSpacing: 2.6)),
-        Text('Simpan kode ini. Barista akan memintanya saat kamu tiba di gerobak.',
-            textAlign: TextAlign.center, style: mut(context, 15)),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.location_on, size: 18, color: Color(0xFF1E3932)),
+                  const SizedBox(width: 6),
+                  Text(c.name, style: body(context, w: FontWeight.w700)),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(c.spot, style: mut(context, 12)),
+              const Divider(height: 16),
+              OrderLines(o.items),
+            ],
+          ),
+        ),
       ]),
     );
   }
@@ -172,22 +267,23 @@ class VerifyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final o = context.watch<OrderProvider>();
     return AppScaffold(
-      title: 'Verifikasi kode',
+      title: 'Verifikasi Kode',
       canPop: false,
       footer: AppButton(
-        label: 'Simulasi: barista memverifikasi kode',
-        kind: BtnKind.alt,
+        label: 'Pesanan Selesai Diterima',
+        icon: Icons.check_circle_outline,
         onPressed: () {
           o.initReceived();
-          context.replace(Routes.handover);
+          context.replace(Routes.done);
         },
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, spacing: 14, children: [
         const SizedBox(height: 6),
-        QrBox(o.orderCode),
-        Text(o.orderCode, style: dsp(context, 44).copyWith(letterSpacing: 2.6)),
-        Text('Tunjukkan layar ini ke barista ${o.cart.name} untuk diverifikasi.',
-            textAlign: TextAlign.center, style: mut(context, 15)),
+        BarcodeBox(o.orderCode),
+        const SizedBox(height: 4),
+        QrBox(o.orderCode, size: 170),
+        Text('Tunjukkan Barcode atau Kode Pesanan ini ke barista ${o.cart.name}.',
+            textAlign: TextAlign.center, style: mut(context, 14)),
         AppCard(child: OrderLines(o.items)),
       ]),
     );

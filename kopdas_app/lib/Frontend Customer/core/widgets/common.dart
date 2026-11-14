@@ -763,7 +763,7 @@ class PriceSummary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 14),
       child: Column(spacing: 8, children: [
         row('Subtotal', rp(subtotal)),
-        row('Biaya layanan', rp(fee)),
+        if (fee > 0) row('Biaya layanan', rp(fee)),
         Divider(color: p.line, height: 12),
         row(totalLabel, rp(total), bold: true),
       ]),
@@ -815,6 +815,61 @@ class CartEditor extends StatelessWidget {
           ]),
         ),
     ]);
+  }
+}
+
+class BarcodeBox extends StatelessWidget {
+  final String code;
+  const BarcodeBox(this.code, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.pal;
+    final bars = <double>[];
+    for (var i = 0; i < code.length; i++) {
+      final v = code.codeUnitAt(i) % 4;
+      bars.addAll([v == 0 ? 1.5 : (v == 1 ? 3.0 : (v == 2 ? 2.0 : 4.0)), 2.0]);
+    }
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: p.line),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 48,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < bars.length; i++)
+                  Container(
+                    width: bars[i],
+                    margin: EdgeInsets.only(right: i % 2 == 0 ? 1.5 : 2.0),
+                    color: i % 2 == 0 ? Colors.black : Colors.transparent,
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            code,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 2.5,
+              fontFamily: 'monospace',
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

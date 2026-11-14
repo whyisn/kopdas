@@ -12,7 +12,7 @@ import '../data/models/product.dart';
 enum PayMethod { qris, wallet, va }
 
 class OrderProvider extends ChangeNotifier {
-  static const serviceFee = 1000;
+  static const serviceFee = 0;
   static const payWindow = Duration(seconds: 180);
   final _rand = Random();
 
@@ -20,6 +20,7 @@ class OrderProvider extends ChangeNotifier {
   List<CoffeeCart> _dynamicCarts = [];
   List<Product> _dynamicProducts = [];
   List<String> _dynamicCategories = [];
+  Map<String, int> stockByProduct = {};
   bool isLoadingBackend = false;
 
   // Lokasi & gerobak
@@ -140,7 +141,7 @@ class OrderProvider extends ChangeNotifier {
           const Offset(118, 62),
         ];
         final pos = idx < offsets.length ? offsets[idx] : const Offset(150, 100);
-        final sellerId = 'usr-seller-0${(idx % 2) + 1}';
+        final sellerId = l['seller_id'] as String? ?? 'usr-seller-0${(idx % 4) + 1}';
 
         cartList.add(CoffeeCart(
           id: id,
@@ -158,7 +159,11 @@ class OrderProvider extends ChangeNotifier {
         ));
         idx++;
       }
-      if (cartList.isNotEmpty) _dynamicCarts = cartList;
+      if (cartList.isNotEmpty) {
+        _dynamicCarts = cartList;
+        // Ambil stok awal gerobak pertama
+        fetchStockForCart(cartList.first.sellerId);
+      }
 
     } catch (e) {
       debugPrint('Note: Menggunakan dataset Padang fallback ($e)');
@@ -167,6 +172,25 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Ambil stok riil seller gerobak dari backend SQLite
+  Future<void> fetchStockForCart(String sellerId) async {
+    try {
+      final res = await sessionController.api.get('/inventory?scope_type=SELLER&scope_id=$sellerId') as List<dynamic>;
+      final map = <String, int>{};
+      for (final item in res) {
+        final pid = item['product_id'] as String;
+        final avail = (item['available_quantity'] as num?)?.toInt() ?? 0;
+        map[pid] = avail;
+      }
+      stockByProduct = map;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('fetchStock note: $e');
+    }
+  }
+
+  int stockOf(String pid) => stockByProduct[pid] ?? 50;
 
   // ---------- turunan ----------
   Product productOf(String id) {
@@ -202,17 +226,9 @@ class OrderProvider extends ChangeNotifier {
       max(0, (deadline.difference(DateTime.now()).inMilliseconds / 1000).ceil());
 
   int draftUnit(DraftItem d) {
+    // Harga murni produk database tanpa ukuran/addon fiktif
     final p = productOf(d.pid);
-    var u = p.price;
-    if (p.isDrink) {
-      u += MockData.sizes.firstWhere((s) => s.name == d.size, orElse: () => MockData.sizes.first).extra;
-      for (final a in d.addons) {
-        try {
-          u += MockData.addons.firstWhere((x) => x.name == a).extra;
-        } catch (_) {}
-      }
-    }
-    return u;
+    return p.price;
   }
 
   // ---------- lokasi ----------
@@ -236,6 +252,10 @@ class OrderProvider extends ChangeNotifier {
 
   void selectCart(String id) {
     cartId = id;
+    try {
+      final c = allCarts.firstWhere((x) => x.id == id);
+      fetchStockForCart(c.sellerId);
+    } catch (_) {}
     notifyListeners();
   }
 
@@ -261,7 +281,9 @@ class OrderProvider extends ChangeNotifier {
   }
 
   void draftQty(int d) {
-    draft!.qty = (draft!.qty + d).clamp(1, 20);
+    if (draft == null) return;
+    final maxStock = max(1, stockOf(draft!.pid));
+    draft!.qty = (draft!.qty + d).clamp(1, maxStock);
     notifyListeners();
   }
 
@@ -271,24 +293,28 @@ class OrderProvider extends ChangeNotifier {
     final it = CartItem(
       pid: p.id,
       name: p.name,
-      size: p.isDrink ? d.size : '',
-      temp: p.isDrink ? d.temp : '',
-      sugar: p.isDrink ? d.sugar : '',
-      addons: p.isDrink ? ([...d.addons]..sort()) : [],
+      temp: d.temp,
+      sugar: d.sugar,
       note: d.note.trim(),
       qty: d.qty,
-      unit: draftUnit(d),
+      unit: p.price,
     );
     CartItem? existing;
     for (final i in items) {
       if (i.key == it.key) existing = i;
     }
-    existing != null ? existing.qty += it.qty : items.add(it);
+    if (existing != null) {
+      final maxStock = stockOf(p.id);
+      existing.qty = (existing.qty + it.qty).clamp(1, maxStock);
+    } else {
+      items.add(it);
+    }
     notifyListeners();
   }
 
   void changeQty(int i, int d) {
-    items[i].qty = (items[i].qty + d).clamp(1, 20);
+    final maxStock = max(1, stockOf(items[i].pid));
+    items[i].qty = (items[i].qty + d).clamp(1, maxStock);
     notifyListeners();
   }
 

@@ -218,8 +218,8 @@ class _WaitingScreenState extends State<WaitingScreen> {
     final orderProv = context.read<OrderProvider>();
     final success = await orderProv.createRealOrder();
     
-    // Beri jeda halus agar transisi UI terlihat jelas
-    _t = Timer(const Duration(milliseconds: 1800), () {
+    // Beri jeda halus agar transisi verifikasi stok terlihat natural
+    _t = Timer(const Duration(milliseconds: 1500), () {
       if (_gone || !mounted) return;
       _gone = true;
       if (success) {
@@ -236,47 +236,40 @@ class _WaitingScreenState extends State<WaitingScreen> {
     super.dispose();
   }
 
-  void _accept() {
-    if (_gone || !mounted) return;
-    _gone = true;
-    context.read<OrderProvider>().acceptOrder();
-    context.replace(Routes.reserve);
-  }
-
-  void _reject() {
-    if (_gone || !mounted) return;
-    _gone = true;
-    context.read<OrderProvider>().rejectOrder();
-    context.replace(Routes.rejected);
-  }
-
   @override
   Widget build(BuildContext context) {
     final c = context.read<OrderProvider>().cart;
+    final o = context.watch<OrderProvider>();
     return AppScaffold(
-      title: 'Menunggu konfirmasi',
+      title: 'Menghubungkan ke gerobak',
       canPop: false,
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         StatusHeader(
-          badgeChild: const Spin(size: 42),
-          title: 'Menunggu ${c.name}',
-          message: 'Permintaanmu sudah terkirim ke gerobak. Sistem sedang memverifikasi stok dan antrean.',
+          badgeChild: const Spin(size: 44),
+          title: 'Memverifikasi dengan ${c.name}',
+          message: 'Sistem sedang mencadangkan stok ${o.count} item di database gerobak dan menyiapkan jalur pembayaran Midtrans.',
         ),
-        const SizedBox(height: 16),
-        const LoadingBar(seconds: 4),
-        const SizedBox(height: 16),
-        DemoBox(
-          title: 'Simulasi respons gerobak',
-          hint: 'Permintaan diproses otomatis dengan validasi stok riil backend.',
-          children: [
-            Row(spacing: 8, children: [
-              Expanded(child: AppButton(label: 'Gerobak menerima', small: true, onPressed: _accept)),
-              Expanded(
-                child: AppButton(
-                    label: 'Gerobak menolak', small: true, kind: BtnKind.line, onPressed: _reject),
+        const SizedBox(height: 24),
+        const LoadingBar(seconds: 2),
+        const SizedBox(height: 20),
+        AppCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.shield_outlined, size: 18, color: Color(0xFF1E3932)),
+                  const SizedBox(width: 8),
+                  Text('Validasi Stok Real-Time', style: body(context, w: FontWeight.w700)),
+                ],
               ),
-            ]),
-          ],
+              const SizedBox(height: 6),
+              Text(
+                'Pesanan dikirimkan langsung ke antrean seller di titik ${c.name}.',
+                style: mut(context, 13),
+              ),
+            ],
+          ),
         ),
       ]),
     );
