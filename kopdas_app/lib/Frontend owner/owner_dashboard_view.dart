@@ -164,12 +164,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   ];
 
   final List<Map<String, dynamic>> _warehouseStock = [
-    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'category': 'Signature', 'central_stock': 950, 'allocated': 160, 'held_by_cart': 120, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'category': 'Espresso', 'central_stock': 650, 'allocated': 90, 'held_by_cart': 75, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
-    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'category': 'Non-Coffee', 'central_stock': 430, 'allocated': 60, 'held_by_cart': 45, 'price': 22000, 'cost': 9000, 'status': 'Aman'},
-    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'category': 'Signature', 'central_stock': 520, 'allocated': 50, 'held_by_cart': 40, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
-    {'sku': 'PRD-05', 'name': 'Cold Brew Citrus Refresh', 'category': 'Artisan Brew', 'central_stock': 310, 'allocated': 40, 'held_by_cart': 30, 'price': 22000, 'cost': 8500, 'status': 'Aman'},
-    {'sku': 'PRD-06', 'name': 'Roti Bakar Kaya Butter', 'category': 'Bites', 'central_stock': 140, 'allocated': 40, 'held_by_cart': 35, 'price': 15000, 'cost': 6000, 'status': 'Stok Menipis'},
+    {'sku': 'KPS-01', 'name': 'Kopi Susu Soft', 'category': 'Kopi Susu', 'central_stock': 850, 'allocated': 160, 'held_by_cart': 110, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+    {'sku': 'KPS-02', 'name': 'Kopi Susu Strong', 'category': 'Kopi Susu', 'central_stock': 750, 'allocated': 140, 'held_by_cart': 95, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+    {'sku': 'KPS-03', 'name': 'Kopi Susu Butter', 'category': 'Kopi Susu', 'central_stock': 620, 'allocated': 120, 'held_by_cart': 80, 'min_stock': 120, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
+    {'sku': 'COF-01', 'name': 'Americano', 'category': 'Classic Coffee', 'central_stock': 540, 'allocated': 90, 'held_by_cart': 65, 'min_stock': 100, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
+    {'sku': 'NCF-01', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 480, 'allocated': 80, 'held_by_cart': 50, 'min_stock': 100, 'price': 18000, 'cost': 7000, 'status': 'Aman'},
+    {'sku': 'NCF-02', 'name': 'Matcha', 'category': 'Non-Coffee', 'central_stock': 410, 'allocated': 70, 'held_by_cart': 45, 'min_stock': 100, 'price': 20000, 'cost': 8500, 'status': 'Aman'},
   ];
 
   final List<Map<String, dynamic>> _locations = [
@@ -3553,15 +3553,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: GUDANG & STOK (ENTERPRISE INVENTORY MANAGEMENT)
+  // SUB-PAGES: GUDANG & STOK (FOKUS MONITORING STOK 6 MENU UTAMA)
   // ===========================================================================
   Widget _buildWarehouseManagementView() {
     final int totalCentralStock = _warehouseStock.fold<int>(0, (sum, item) => sum + (item['central_stock'] as int));
-    final num totalAssetValue = _warehouseStock.fold<num>(0, (sum, item) => sum + ((item['central_stock'] as int) * (item['cost'] as num)));
     final int totalInCarts = _warehouseStock.fold<int>(0, (sum, item) => sum + ((item['held_by_cart'] ?? 0) as int));
-    final int criticalItems = _warehouseStock.where((item) => item['status'] == 'Stok Menipis' || (item['central_stock'] as int) < 200).length;
+    final int grandTotalStock = totalCentralStock + totalInCarts;
+    final int lowStockItems = _warehouseStock.where((item) => (item['central_stock'] as int) <= ((item['min_stock'] ?? 150) as int)).length;
 
-    final categories = ['Semua', 'Signature', 'Espresso', 'Non-Coffee', 'Artisan Brew', 'Bites'];
+    final categories = ['Semua', 'Kopi Susu', 'Classic Coffee', 'Non-Coffee'];
     final filteredStock = _warehouseStock.where((item) {
       final matchCat = _warehouseCategoryFilter == 'Semua' || item['category'] == _warehouseCategoryFilter;
       return matchCat;
@@ -3579,12 +3579,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  'Gudang Pusat & Manajemen Persediaan Stok',
+                  'Gudang Pusat & Manajemen Stok',
                   style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Color(0xFF111827), letterSpacing: -0.3),
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Monitoring persediaan bahan baku hub utama, batas stok aman minimum, valuasi aset HPP, dan distribusi armada',
+                  'Monitoring persediaan fisik 6 menu resmi KopiCerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
                   style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
@@ -3620,7 +3620,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 16),
 
-        // 2. CONSOLIDATED KPI SUMMARY BAR (3S.NET STANDARDS)
+        // 2. CONSOLIDATED KPI SUMMARY BAR (FOKUS FISIK QUANTITY STOK)
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -3634,35 +3634,35 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   child: _buildConsolidatedColumn(
                     'Total Stok Gudang Pusat',
                     '$totalCentralStock Porsi',
-                    'Kapasitas Ruang Penyimpanan 85%',
+                    'Kapasitas Ruang Aman 85%',
                     const Color(0xFF059669),
                   ),
                 ),
                 const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
                 Expanded(
                   child: _buildConsolidatedColumn(
-                    'Valuasi Aset Persediaan',
-                    _formatRupiah(totalAssetValue),
-                    'Akumulasi Nilai Modal HPP Bahan',
-                    const Color(0xFF1E3932),
-                  ),
-                ),
-                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
-                Expanded(
-                  child: _buildConsolidatedColumn(
-                    'Stok Terbawa Gerobak',
+                    'Stok Terbawa di Gerobak',
                     '$totalInCarts Porsi',
-                    'Teralokasi Aktif di Lapangan',
+                    'Bawaan Aktif 5 Unit Lapangan',
                     const Color(0xFFD97706),
                   ),
                 ),
                 const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
                 Expanded(
                   child: _buildConsolidatedColumn(
-                    'Peringatan Stok Minimum',
-                    criticalItems == 0 ? 'Semua Aman' : '$criticalItems SKU Menipis',
-                    criticalItems == 0 ? 'Persediaan di atas batas aman' : 'Roti Bakar (< 150 porsi)',
-                    criticalItems == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                    'Total Akumulasi Stok',
+                    '$grandTotalStock Porsi',
+                    'Konsolidasi Gudang + Gerobak',
+                    const Color(0xFF1E3932),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Status Persediaan 6 Menu',
+                    lowStockItems == 0 ? 'Semua Stok Aman' : '$lowStockItems SKU Menipis',
+                    lowStockItems == 0 ? 'Semua produk di atas batas aman' : 'Perlu order bahan baku',
+                    lowStockItems == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
                   ),
                 ),
               ],
@@ -3671,49 +3671,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 18),
 
-        // 3. LOW STOCK WARNING BANNER (CONDITIONAL)
-        if (criticalItems > 0) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFBEB),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFFDE68A)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Icon(Icons.warning_amber_rounded, color: Color(0xFFD97706), size: 20),
-                    SizedBox(width: 10),
-                    Text(
-                      'Peringatan Stok: Terdapat 1 SKU (Roti Bakar Kaya Butter) dengan sisa 140 porsi di bawah batas aman (150 porsi). Segera jadwalkan pembelian bahan baku.',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF92400E)),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: _showAddStockDialog,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD97706),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Text(
-                      'Restock Sekarang',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-        ],
-
-        // 4. MAIN WAREHOUSE STOCK TABLE CONTAINER
+        // 3. MAIN WAREHOUSE STOCK TABLE CONTAINER (FOKUS FISIK STOK)
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -3723,7 +3681,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Table Toolbar: Title + Category Filter Chips
+              // Toolbar: Title + Category Filter Chips
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
                 child: Row(
@@ -3744,11 +3702,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Katalog Persediaan Bahan Baku & Stok Siap Jual',
+                              'Persediaan Stok 6 Menu Utama',
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
-                              'Menampilkan ${filteredStock.length} dari ${_warehouseStock.length} SKU terdaftar di Gudang Pusat Bendungan Hilir',
+                              'Menampilkan  dari  menu resmi KopiCerdas',
                               style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                             ),
                           ],
@@ -3789,19 +3747,18 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               ),
               const Divider(height: 1, color: Color(0xFFE5E7EB)),
 
-              // Enhanced Data Table
+              // Enhanced Data Table - Pure Stock Focused
               Table(
                 columnWidths: const {
-                  0: FlexColumnWidth(1.2),
-                  1: FlexColumnWidth(2.6),
-                  2: FlexColumnWidth(1.4),
-                  3: FlexColumnWidth(2.0),
-                  4: FlexColumnWidth(1.4),
-                  5: FlexColumnWidth(1.4),
-                  6: FlexColumnWidth(1.4),
-                  7: FlexColumnWidth(1.2),
-                  8: FlexColumnWidth(1.4),
-                  9: FlexColumnWidth(1.8),
+                  0: FlexColumnWidth(1.2), // SKU
+                  1: FlexColumnWidth(2.6), // Menu Kopi
+                  2: FlexColumnWidth(1.5), // Kategori
+                  3: FlexColumnWidth(2.6), // Stok Gudang Pusat & Level Bar
+                  4: FlexColumnWidth(1.5), // Di Gerobak
+                  5: FlexColumnWidth(1.4), // Batas Min
+                  6: FlexColumnWidth(1.5), // Total Fisik
+                  7: FlexColumnWidth(1.4), // Status
+                  8: FlexColumnWidth(2.0), // Aksi Cepat
                 },
                 children: [
                   TableRow(
@@ -3811,13 +3768,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     children: [
                       _cleanTh('SKU'),
-                      _cleanTh('Menu Kopi / Bahan'),
+                      _cleanTh('Menu Produk'),
                       _cleanTh('Kategori'),
-                      _cleanTh('Stok Pusat'),
+                      _cleanTh('Stok Gudang Pusat'),
                       _cleanTh('Di Gerobak'),
-                      _cleanTh('HPP Modal'),
-                      _cleanTh('Harga Jual'),
-                      _cleanTh('Margin'),
+                      _cleanTh('Batas Min'),
+                      _cleanTh('Total Stok'),
                       _cleanTh('Status'),
                       _cleanTh('Aksi Cepat'),
                     ],
@@ -3847,22 +3803,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           ),
                         ),
 
-                        // Menu Kopi / Bahan
+                        // Menu Produk
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                w['name'].toString(),
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
-                              ),
-                              const SizedBox(height: 2),
-                              const Text(
-                                'Bahan standar racikan KopiCerdas',
-                                style: TextStyle(fontSize: 10.5, color: Color(0xFF9CA3AF)),
-                              ),
-                            ],
+                          child: Text(
+                            w['name'].toString(),
+                            style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
                           ),
                         ),
 
@@ -3886,7 +3832,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           ),
                         ),
 
-                        // Stok Pusat & Progress Indicator
+                        // Stok Gudang Pusat & Visual Bar
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                           child: Column(
@@ -3895,7 +3841,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                               Row(
                                 children: [
                                   Text(
-                                    '${w['central_stock']}',
+                                    '',
                                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
                                   ),
                                   const SizedBox(width: 4),
@@ -3907,10 +3853,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 borderRadius: BorderRadius.circular(2),
                                 child: LinearProgressIndicator(
                                   value: ((w['central_stock'] as int) / 1000).clamp(0.0, 1.0),
-                                  minHeight: 5,
+                                  minHeight: 6,
                                   backgroundColor: const Color(0xFFE5E7EB),
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    (w['central_stock'] as int) < 200 ? const Color(0xFFDC2626) : const Color(0xFF059669),
+                                    (w['central_stock'] as int) < ((w['min_stock'] ?? 150) as int)
+                                        ? const Color(0xFFDC2626)
+                                        : const Color(0xFF059669),
                                   ),
                                 ),
                               ),
@@ -3921,18 +3869,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         // Di Gerobak
                         _cleanTd('${w['held_by_cart'] ?? 0} Porsi', bold: true, color: const Color(0xFFD97706)),
 
-                        // HPP Modal
-                        _cleanTd(_formatRupiah(w['cost'] as num)),
+                        // Batas Minimum
+                        _cleanTd('${w['min_stock'] ?? 100} Porsi', color: const Color(0xFF6B7280)),
 
-                        // Harga Jual
-                        _cleanTd(_formatRupiah(w['price'] as num), bold: true),
-
-                        // Margin
-                        _cleanTd(
-                          '${(((w['price'] as num) - (w['cost'] as num)) / (w['price'] as num) * 100).toStringAsFixed(1)}%',
-                          bold: true,
-                          color: const Color(0xFF059669),
-                        ),
+                        // Total Stok (Gudang + Gerobak)
+                        _cleanTd('${(w['central_stock'] as int) + ((w['held_by_cart'] ?? 0) as int)} Porsi', bold: true, color: const Color(0xFF1E3932)),
 
                         // Status Badge
                         Padding(
@@ -4028,97 +3969,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
-
-        // 5. OPERATIONAL WAREHOUSE FACILITY & LOGISTICS INFO CARD
-        Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Col 1: Facility Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(Icons.warehouse_outlined, size: 16, color: Color(0xFF1E3932)),
-                        SizedBox(width: 6),
-                        Text(
-                          'Fasilitas Hub Gudang Pusat',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    _buildWarehouseDetailRow('Lokasi Hub', 'Jl. Bendungan Hilir No. 42, Jakarta Pusat'),
-                    _buildWarehouseDetailRow('Kapasitas Total', '10.000 Porsi Minuman & Kemasan'),
-                    _buildWarehouseDetailRow('Suhu Cold Storage', '3°C - 5°C (Chiller Susu & Espresso)'),
-                    _buildWarehouseDetailRow('Jam Distribusi', '05:00 - 07:00 WIB (Shift Pagi)'),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 20),
-              Container(width: 1, height: 95, color: const Color(0xFFE5E7EB)),
-              const SizedBox(width: 20),
-
-              // Col 2: Standard Operating Procedure
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(Icons.rule_outlined, size: 16, color: Color(0xFF1E3932)),
-                        SizedBox(width: 6),
-                        Text(
-                          'SOP Alokasi & Rekonsiliasi Gudang',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    _buildWarehouseDetailRow('Alokasi Pagi', 'Wajib diinput sebelum jam 06:30 WIB'),
-                    _buildWarehouseDetailRow('Stok Cadangan', 'Penambahan stok darurat diverifikasi via GPS'),
-                    _buildWarehouseDetailRow('Retur Sisa Box', 'Cup fisik pulang direkonsiliasi tutup shift'),
-                    _buildWarehouseDetailRow('Audit Fisik', 'Stock opname menyeluruh setiap hari Minggu'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
-    );
-  }
-
-  Widget _buildWarehouseDetailRow(String label, String val) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              val,
-              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
