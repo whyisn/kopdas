@@ -9,261 +9,392 @@ class OwnerDashboardView extends StatefulWidget {
 
 class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   int _selectedNavIndex = 0;
-  String _locationFilter = 'ALL';
-  String _sellerFilter = 'ALL';
 
-  // --- DATA KOPICERDAS AI SUITE ---
-  final List<Map<String, dynamic>> _kpis = const [
-    {'title': 'Total Omzet Bisnis', 'value': 'Rp 14.250.000', 'sub': '+18.4% vs target harian', 'color': Color(0xFF10B981), 'icon': Icons.payments_outlined},
-    {'title': 'Laba Bersih Operasional', 'value': 'Rp 8.120.000', 'sub': 'Margin Kontribusi 57.0%', 'color': Color(0xFF0284C7), 'icon': Icons.account_balance_wallet_outlined},
-    {'title': 'Total Cup Terjual', 'value': '748 Cup', 'sub': 'Kapasitas Terpakai 62.3%', 'color': Color(0xFFF59E0B), 'icon': Icons.local_cafe_outlined},
-    {'title': 'Penetrasi QRIS Statis', 'value': '68.4%', 'sub': '492 Trx QRIS • Terverifikasi PJP', 'color': Color(0xFF6366F1), 'icon': Icons.qr_code_2},
-  ];
-
-  final List<Map<String, dynamic>> _fieldStaff = const [
+  // --- 1. DATA PETUGAS LAPANGAN & AKUN (LENGKAP DENGAN ABSENSI, STATUS ON/OFF, KOMISI, TITIK LOKASI) ---
+  final List<Map<String, dynamic>> _staffAccounts = [
     {
-      'staff_id': 'STF-01',
-      'name': 'Budi Santoso (Pak Darto)',
+      'id': 'USR-SLR-01',
+      'username': 'budi_sudirman',
+      'name': 'Budi Santoso',
       'phone': '0812-8821-9901',
+      'role': 'SELLER_LEAD',
       'cart_id': 'GRB-01 (Sudirman)',
-      'location': 'Halte Dukuh Atas Sudirman (Pintu Barat)',
+      'selected_location': 'Halte Dukuh Atas Sudirman (Pintu Barat)',
       'coordinates': '-6.2088, 106.8227',
-      'shift': 'Pagi (06.30 - 15.00 WIB)',
-      'sales_cup': '142 Cup',
-      'cash_collected': 'Rp 900.000',
+      'is_store_open': true, // Petugas sudah klik 'Buka Jualan' di app seller
+      'attendance_time': '06:15 WIB (On-Time)',
+      'morning_stock_picked': '120 Cup (Lengkap)',
+      'commission_rate': 1500, // Rp 1.500 per cup terjual
+      'cups_sold_today': 142,
+      'total_commission': 'Rp 213.000',
+      'cash_in_hand': 'Rp 900.000',
       'qris_collected': 'Rp 1.940.000',
-      'stock_left': '42 / 120 Cup',
+      'current_stock': '42 / 120 Cup',
+      'active_orders_count': 3,
       'status': 'AKTIF JUALAN',
-      'device_status': 'GPS & POS Online',
-      'color': Color(0xFF10B981)
+      'color': const Color(0xFF10B981),
     },
     {
-      'staff_id': 'STF-02',
-      'name': 'Ahmad Fauzi (Gerobak Sore)',
+      'id': 'USR-SLR-02',
+      'username': 'ahmad_suropati',
+      'name': 'Ahmad Fauzi',
       'phone': '0813-1102-4451',
+      'role': 'SELLER_REGULER',
       'cart_id': 'GRB-02 (Suropati)',
-      'location': 'Taman Suropati & Taman Kodok Menteng',
+      'selected_location': 'Taman Suropati & Taman Kodok Menteng',
       'coordinates': '-6.1994, 106.8326',
-      'shift': 'Sore (14.00 - 22.00 WIB)',
-      'sales_cup': '68 Cup',
-      'cash_collected': 'Rp 520.000',
+      'is_store_open': true,
+      'attendance_time': '13:45 WIB (On-Time)',
+      'morning_stock_picked': '100 Cup (Lengkap)',
+      'commission_rate': 1500,
+      'cups_sold_today': 68,
+      'total_commission': 'Rp 102.000',
+      'cash_in_hand': 'Rp 520.000',
       'qris_collected': 'Rp 900.000',
-      'stock_left': '28 / 100 Cup',
+      'current_stock': '28 / 100 Cup',
+      'active_orders_count': 1,
       'status': 'AKTIF JUALAN',
-      'device_status': 'GPS & POS Online',
-      'color': Color(0xFF10B981)
+      'color': const Color(0xFF10B981),
     },
     {
-      'staff_id': 'STF-03',
-      'name': 'Siti Rahmawati (Mbak Ayu)',
+      'id': 'USR-SLR-03',
+      'username': 'siti_senen',
+      'name': 'Siti Rahmawati',
       'phone': '0857-4491-0023',
+      'role': 'SELLER_REGULER',
       'cart_id': 'GRB-03 (Pasar Senen)',
-      'location': 'Pojok Blok III & Halte Senen Sentral',
+      'selected_location': 'Pojok Blok III & Halte Senen Sentral',
       'coordinates': '-6.1744, 106.8432',
-      'shift': 'Pagi (05.30 - 14.00 WIB)',
-      'sales_cup': '95 Cup',
-      'cash_collected': 'Rp 640.000',
+      'is_store_open': true,
+      'attendance_time': '05:20 WIB (On-Time)',
+      'morning_stock_picked': '120 Cup (Lengkap)',
+      'commission_rate': 1500,
+      'cups_sold_today': 95,
+      'total_commission': 'Rp 142.500',
+      'cash_in_hand': 'Rp 640.000',
       'qris_collected': 'Rp 1.340.000',
-      'stock_left': '35 / 120 Cup',
+      'current_stock': '35 / 120 Cup',
+      'active_orders_count': 2,
       'status': 'AKTIF JUALAN',
-      'device_status': 'GPS & POS Online',
-      'color': Color(0xFF10B981)
+      'color': const Color(0xFF10B981),
     },
     {
-      'staff_id': 'STF-04',
-      'name': 'Hendra Wijaya (Roda Biru)',
+      'id': 'USR-SLR-04',
+      'username': 'hendra_juanda',
+      'name': 'Hendra Wijaya',
       'phone': '0821-7781-3312',
+      'role': 'SELLER_REGULER',
       'cart_id': 'GRB-04 (Juanda)',
-      'location': 'Pintu Timur Stasiun Commuter Juanda',
+      'selected_location': 'Pintu Timur Stasiun Commuter Juanda',
       'coordinates': '-6.1668, 106.8312',
-      'shift': 'Full Day (06.00 - 20.00 WIB)',
-      'sales_cup': '118 Cup',
-      'cash_collected': 'Rp 780.000',
+      'is_store_open': true,
+      'attendance_time': '05:50 WIB (On-Time)',
+      'morning_stock_picked': '110 Cup (Lengkap)',
+      'commission_rate': 1500,
+      'cups_sold_today': 118,
+      'total_commission': 'Rp 177.000',
+      'cash_in_hand': 'Rp 780.000',
       'qris_collected': 'Rp 1.670.000',
-      'stock_left': '15 / 110 Cup',
+      'current_stock': '15 / 110 Cup',
+      'active_orders_count': 4,
       'status': 'PERLU RESTOCK',
-      'device_status': 'Low Stock Alert (15 cup)',
-      'color': Color(0xFFEF4444)
+      'color': const Color(0xFFEF4444),
+    },
+    {
+      'id': 'USR-SLR-05',
+      'username': 'rizky_kuningan',
+      'name': 'Rizky Pratama',
+      'phone': '0812-9900-1122',
+      'role': 'SELLER_TRAINEE',
+      'cart_id': 'GRB-05 (Standby)',
+      'selected_location': 'Area Kampus UI Salemba (Rencana)',
+      'coordinates': '-6.1951, 106.8504',
+      'is_store_open': false, // Petugas belum buka toko / absen libur
+      'attendance_time': 'Belum Absen / Off',
+      'morning_stock_picked': '0 Cup (Belum Ambil)',
+      'commission_rate': 1200,
+      'cups_sold_today': 0,
+      'total_commission': 'Rp 0',
+      'cash_in_hand': 'Rp 0',
+      'qris_collected': 'Rp 0',
+      'current_stock': '0 Cup',
+      'active_orders_count': 0,
+      'status': 'OFFLINE (TIDAK JUALAN)',
+      'color': const Color(0xFF94A3B8),
     },
   ];
 
-  final List<Map<String, dynamic>> _locationsWithMap = const [
+  // --- 2. DATA PERSEDIAAN GUDANG PUSAT (BISA DIINPUT & DITAMBAH OWNER) ---
+  final List<Map<String, dynamic>> _warehouseStock = [
+    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'cat': 'Signature', 'stock': 850, 'reserved': 40, 'avail': 810, 'status': 'AMAN', 'color': const Color(0xFF10B981)},
+    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'cat': 'Classic Espresso', 'stock': 620, 'reserved': 15, 'avail': 605, 'status': 'AMAN', 'color': const Color(0xFF10B981)},
+    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'cat': 'Non-Coffee', 'stock': 420, 'reserved': 20, 'avail': 400, 'status': 'AMAN', 'color': const Color(0xFF10B981)},
+    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'cat': 'Signature', 'stock': 510, 'reserved': 30, 'avail': 480, 'status': 'AMAN', 'color': const Color(0xFF10B981)},
+    {'sku': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'cat': 'Camilan', 'stock': 250, 'reserved': 10, 'avail': 240, 'status': 'PERHATIAN', 'color': const Color(0xFFF59E0B)},
+    {'sku': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'cat': 'Classic Espresso', 'stock': 380, 'reserved': 5, 'avail': 375, 'status': 'AMAN', 'color': const Color(0xFF10B981)},
+  ];
+
+  // --- 3. DATA TITIK LOKASI JUALAN & REKOMENDASI AI UNTUK DIPILIH PETUGAS ---
+  final List<Map<String, dynamic>> _availableSpots = [
     {
       'id': 'LOC-01',
       'name': 'Koridor Sudirman - Halte Dukuh Atas',
-      'address': 'Jl. Jend. Sudirman Kav 10, Jakarta Pusat',
+      'seller_active': 'Budi Santoso (GRB-01)',
+      'status': 'TERISI (ONLINE)',
+      'morning_stock_quota': '120 Cup (Susu Aren 60, Americano 40, Latte 20)',
+      'pedestrian_density': '1.450 org/jam',
       'lat_long': '-6.2088, 106.8227',
-      'seller_assigned': 'Budi Santoso (Pak Darto)',
-      'pedestrian_density': 'Sangat Tinggi (1.450 pejalan/jam)',
-      'poi_nearby': 'Stasiun KRL Sudirman, MRT Dukuh Atas, LRT Jabodebek',
-      'weather': 'Cerah 31°C (Kondusif Es Kopi)',
-      'today_sales': '142 Cup',
-      'score': '96.8',
-      'status': 'OPERASIONAL',
-      'color': Color(0xFF10B981)
+      'score': '96.8 / 100',
+      'is_occupied': true,
     },
     {
       'id': 'LOC-02',
       'name': 'Taman Suropati & Taman Kodok Menteng',
-      'address': 'Kawasan Taman Menteng, Jakarta Pusat',
+      'seller_active': 'Ahmad Fauzi (GRB-02)',
+      'status': 'TERISI (ONLINE)',
+      'morning_stock_quota': '100 Cup (Matcha 40, Susu Aren 30, Roti 30)',
+      'pedestrian_density': '480 org/jam',
       'lat_long': '-6.1994, 106.8326',
-      'seller_assigned': 'Ahmad Fauzi (Gerobak Sore)',
-      'pedestrian_density': 'Sedang (480 pengunjung/jam)',
-      'poi_nearby': 'Area Jogging, Spot Nongkrong Mahasiswa, Komunitas Musik',
-      'weather': 'Berawan 29°C',
-      'today_sales': '68 Cup',
-      'score': '88.5',
-      'status': 'OPERASIONAL',
-      'color': Color(0xFF10B981)
+      'score': '88.5 / 100',
+      'is_occupied': true,
     },
     {
       'id': 'LOC-03',
       'name': 'Pintu Timur Stasiun Juanda Commuter',
-      'address': 'Jl. Ir. H. Juanda No. 1, Gambir',
+      'seller_active': 'Hendra Wijaya (GRB-04)',
+      'status': 'TERISI (ONLINE)',
+      'morning_stock_quota': '110 Cup (Americano 50, Susu Aren 40, Cold Brew 20)',
+      'pedestrian_density': '980 org/jam',
       'lat_long': '-6.1668, 106.8312',
-      'seller_assigned': 'Hendra Wijaya (Roda Biru)',
-      'pedestrian_density': 'Tinggi (980 komuter/jam)',
-      'poi_nearby': 'Masjid Istiqlal, Gereja Katedral, Halte Juanda',
-      'weather': 'Cerah Berawan 30°C',
-      'today_sales': '118 Cup',
-      'score': '93.2',
-      'status': 'OPERASIONAL',
-      'color': Color(0xFF10B981)
+      'score': '93.2 / 100',
+      'is_occupied': true,
     },
     {
       'id': 'LOC-04',
       'name': 'Pasar Senen Blok III & Halte Senen',
-      'address': 'Jl. Stasiun Senen, Senen',
+      'seller_active': 'Siti Rahmawati (GRB-03)',
+      'status': 'TERISI (ONLINE)',
+      'morning_stock_quota': '120 Cup (Susu Aren 70, Roti Bakar 30, Kopi Hitam 20)',
+      'pedestrian_density': '850 org/jam',
       'lat_long': '-6.1744, 106.8432',
-      'seller_assigned': 'Siti Rahmawati (Mbak Ayu)',
-      'pedestrian_density': 'Tinggi (850 pedagang/jam)',
-      'poi_nearby': 'Pusat Grosir Senen, Halte Transjakarta Senen',
-      'weather': 'Panas 32°C',
-      'today_sales': '95 Cup',
-      'score': '90.0',
-      'status': 'OPERASIONAL',
-      'color': Color(0xFF10B981)
+      'score': '90.0 / 100',
+      'is_occupied': true,
     },
     {
       'id': 'LOC-05',
-      'name': 'Area Kampus UI Salemba - Rektorat',
-      'address': 'Jl. Salemba Raya No. 4, Kenari',
+      'name': 'Area Kampus UI Salemba - Gedung Rektorat',
+      'seller_active': 'KOSONG (BISA DIPILIH)',
+      'status': 'SIAP DIPILIH PETUGAS',
+      'morning_stock_quota': '90 Cup (Matcha 35, Aren 35, Cold Brew 20)',
+      'pedestrian_density': '720 mhs/jam',
       'lat_long': '-6.1951, 106.8504',
-      'seller_assigned': 'BELUM ADA (KANDIDAT AI)',
-      'pedestrian_density': 'Potensi Tinggi (720 civitas/jam)',
-      'poi_nearby': 'Fakultas Kedokteran UI, RS Cipto Mangunkusumo (RSCM)',
-      'weather': 'Cerah 31°C',
-      'today_sales': '0 Cup',
-      'score': '87.4',
-      'status': 'KANDIDAT AI',
-      'color': Color(0xFFF59E0B)
+      'score': '87.4 / 100',
+      'is_occupied': false,
     },
     {
       'id': 'LOC-06',
       'name': 'Kawasan Perkantoran Kuningan Madya',
-      'address': 'Jl. HR Rasuna Said Kav C-18',
+      'seller_active': 'KOSONG (BISA DIPILIH)',
+      'status': 'SIAP DIPILIH PETUGAS',
+      'morning_stock_quota': '100 Cup (Americano 50, Aren 30, Latte 20)',
+      'pedestrian_density': '640 kry/jam',
       'lat_long': '-6.2185, 106.8302',
-      'seller_assigned': 'BELUM ADA (KANDIDAT AI)',
-      'pedestrian_density': 'Potensi Tinggi (640 pekerja/jam)',
-      'poi_nearby': 'Plaza Festival, Setiabudi One, Halte GOR Soemantri',
-      'weather': 'Cerah 31°C',
-      'today_sales': '0 Cup',
-      'score': '84.1',
-      'status': 'KANDIDAT AI',
-      'color': Color(0xFFF59E0B)
+      'score': '84.1 / 100',
+      'is_occupied': false,
     },
   ];
 
-  final List<Map<String, dynamic>> _warehouse = const [
-    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'stock': '850 Cup', 'reserved': '40 Cup', 'avail': '810 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'stock': '620 Cup', 'reserved': '15 Cup', 'avail': '605 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'stock': '420 Cup', 'reserved': '20 Cup', 'avail': '400 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'stock': '510 Cup', 'reserved': '30 Cup', 'avail': '480 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'stock': '250 Porsi', 'reserved': '10 Porsi', 'avail': '240 Porsi', 'status': 'PERHATIAN', 'color': Color(0xFFF59E0B)},
-    {'sku': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'stock': '380 Cup', 'reserved': '5 Cup', 'avail': '375 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
+  // --- 4. DATA PRE-ORDER REALTIME & KASIR WALK-IN ---
+  final List<Map<String, dynamic>> _liveOrders = [
+    {'id': 'PO-9041', 'customer': 'Rani Anggraini', 'seller': 'Budi Santoso (Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 'Rp 37.000', 'status': 'CONFIRMED', 'pay': 'PAID (QRIS)', 'pjp_ref': 'QRIS-GOPAY-849102', 'time': '13:18 WIB'},
+    {'id': 'PO-9040', 'customer': 'Bagus Prasetyo', 'seller': 'Hendra (Juanda)', 'items': '1x Americano Double Shot', 'total': 'Rp 16.000', 'status': 'READY_FOR_PICKUP', 'pay': 'PAID (QRIS)', 'pjp_ref': 'QRIS-BCA-920145', 'time': '13:10 WIB'},
+    {'id': 'PO-9039', 'customer': 'Clarissa Olivia', 'seller': 'Siti Rahma (Senen)', 'items': '2x Matcha Latte', 'total': 'Rp 49.000', 'status': 'PENDING_PAYMENT', 'pay': 'PENDING', 'pjp_ref': 'MENUNGGU WEBHOOK', 'time': '13:22 WIB'},
+    {'id': 'PO-9038', 'customer': 'Farhan Maulana', 'seller': 'Budi Santoso (Sudirman)', 'items': '1x Cafe Latte + 1x Roti Bakar', 'total': 'Rp 38.000', 'status': 'CONFIRMED', 'pay': 'PAID (QRIS)', 'pjp_ref': 'QRIS-SHOPEE-119402', 'time': '13:24 WIB'},
   ];
 
-  final List<Map<String, dynamic>> _aiRecommendations = const [
-    {
-      'priority': 'URGENT',
-      'cart': 'Koridor Sudirman (Pak Darto)',
-      'product': 'Kopi Susu Gula Aren',
-      'now': '42 Cup',
-      'rec': '75 Cup (+33 Cup)',
-      'rationale': 'Lonjakan komuter jam makan siang (11.45 - 13.30). Stok saat ini berisiko stock-out pukul 12.15.',
-      'color': Color(0xFFEF4444)
-    },
-    {
-      'priority': 'HIGH',
-      'cart': 'Stasiun Juanda (Roda Biru)',
-      'product': 'Americano Double Shot',
-      'now': '15 Cup',
-      'rec': '45 Cup (+30 Cup)',
-      'rationale': 'Kebutuhan asupan kafein pekerja kereta sore hari. Margin kotor tinggi Rp 10.500/cup.',
-      'color': Color(0xFFF59E0B)
-    },
-    {
-      'priority': 'MEDIUM',
-      'cart': 'Taman Suropati (Gerobak Sore)',
-      'product': 'Matcha Uji Latte Creamy',
-      'now': '12 Cup',
-      'rec': '35 Cup (+23 Cup)',
-      'rationale': 'Pergeseran pola konsumsi non-kopi anak muda sore hari (15.00 - 18.00).',
-      'color': Color(0xFF0284C7)
-    },
-    {
-      'priority': 'MEDIUM',
-      'cart': 'Pasar Senen (Mbak Ayu)',
-      'product': 'Roti Bakar Cokelat Keju',
-      'now': '8 Porsi',
-      'rec': '25 Porsi (+17 Porsi)',
-      'rationale': 'Tingkat bundling menu camilan dengan kopi mencapai 38% di area pasar.',
-      'color': Color(0xFF0284C7)
-    },
-  ];
+  // --- MODAL 1: TAMBAH / SETTING AKUN PETUGAS LAPANGAN ---
+  void _showAddStaffModal() {
+    final nameCtrl = TextEditingController();
+    final usernameCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final cartCtrl = TextEditingController(text: 'GRB-06');
+    final commissionCtrl = TextEditingController(text: '1500');
 
-  final List<Map<String, dynamic>> _preOrders = const [
-    {'id': 'PO-9041', 'customer': 'Rani Anggraini', 'seller': 'Pak Darto (Sudirman)', 'items': '2x Kopi Susu Aren (Pickup 11:45)', 'total': 'Rp 37.000', 'order_status': 'CONFIRMED', 'pay_status': 'PAID', 'ref': 'QRIS-GOPAY-849102'},
-    {'id': 'PO-9040', 'customer': 'Bagus Prasetyo', 'seller': 'Roda Biru (Juanda)', 'items': '1x Americano (Pickup 11:30)', 'total': 'Rp 16.000', 'order_status': 'READY_FOR_PICKUP', 'pay_status': 'PAID', 'ref': 'QRIS-BCA-920145'},
-    {'id': 'PO-9039', 'customer': 'Clarissa Olivia', 'seller': 'Mbak Ayu (Senen)', 'items': '2x Matcha Latte', 'total': 'Rp 49.000', 'order_status': 'PENDING_PAYMENT', 'pay_status': 'PENDING', 'ref': 'MENUNGGU PJP NOTIF'},
-  ];
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.person_add_alt_1, color: Color(0xFF0F172A)),
+            SizedBox(width: 10),
+            Text('Tambah & Atur Akun Petugas Lapangan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+          ],
+        ),
+        content: SizedBox(
+          width: 500,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Data Petugas & Kredensial Login:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const SizedBox(height: 8),
+                TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nama Lengkap Petugas', border: OutlineInputBorder())),
+                const SizedBox(height: 10),
+                TextField(controller: usernameCtrl, decoration: const InputDecoration(labelText: 'Username Login Aplikasi Seller', border: OutlineInputBorder())),
+                const SizedBox(height: 10),
+                TextField(controller: phoneCtrl, decoration: const InputDecoration(labelText: 'Nomor WhatsApp / HP Aktif', border: OutlineInputBorder())),
+                const SizedBox(height: 14),
 
-  final List<Map<String, dynamic>> _walkins = const [
-    {'id': 'TX-20261114-089', 'seller': 'Pak Darto (Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 'Rp 36.000', 'method': 'QRIS_STATIC', 'time': '11:15 WIB'},
-    {'id': 'TX-20261114-088', 'seller': 'Gerobak Sore (Suropati)', 'items': '1x Americano + 1x Roti Bakar', 'total': 'Rp 30.000', 'method': 'CASH', 'time': '11:08 WIB'},
-    {'id': 'TX-20261114-087', 'seller': 'Mbak Ayu (Senen)', 'items': '3x Kopi Susu Aren', 'total': 'Rp 54.000', 'method': 'QRIS_STATIC', 'time': '10:55 WIB'},
-    {'id': 'TX-20261114-086', 'seller': 'Roda Biru (Juanda)', 'items': '2x Cold Brew Citrus', 'total': 'Rp 40.000', 'method': 'QRIS_STATIC', 'time': '10:42 WIB'},
-  ];
+                const Text('Alokasi Unit Gerobak & Sistem Komisi:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const SizedBox(height: 8),
+                TextField(controller: cartCtrl, decoration: const InputDecoration(labelText: 'ID Gerobak Keliling', border: OutlineInputBorder())),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: commissionCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Besaran Komisi per Cup (Rp)', prefixText: 'Rp ', border: OutlineInputBorder()),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(8)),
+                  child: const Text('ℹ️ Setelah akun dibuat, petugas dapat login di HP masing-masing, memilih titik jualan, mengambil kuota stok pagi, dan menekan "Buka Toko" untuk mulai aktif jualan.', style: TextStyle(fontSize: 12, color: Color(0xFF475569))),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
+            onPressed: () {
+              if (nameCtrl.text.isEmpty) return;
+              setState(() {
+                _staffAccounts.add({
+                  'id': 'USR-SLR-0${_staffAccounts.length + 1}',
+                  'username': usernameCtrl.text.isNotEmpty ? usernameCtrl.text : 'seller_baru',
+                  'name': nameCtrl.text,
+                  'phone': phoneCtrl.text.isNotEmpty ? phoneCtrl.text : '0812-0000-0000',
+                  'role': 'SELLER_REGULER',
+                  'cart_id': cartCtrl.text,
+                  'selected_location': 'Belum Memilih Lokasi',
+                  'coordinates': '-6.2000, 106.8200',
+                  'is_store_open': false,
+                  'attendance_time': 'Belum Absen',
+                  'morning_stock_picked': '0 Cup',
+                  'commission_rate': int.tryParse(commissionCtrl.text) ?? 1500,
+                  'cups_sold_today': 0,
+                  'total_commission': 'Rp 0',
+                  'cash_in_hand': 'Rp 0',
+                  'qris_collected': 'Rp 0',
+                  'current_stock': '0 Cup',
+                  'active_orders_count': 0,
+                  'status': 'MENUNGGU AKTIVASI',
+                  'color': const Color(0xFFF59E0B),
+                });
+              });
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Akun petugas lapangan berhasil ditambahkan!')));
+            },
+            child: const Text('Simpan Akun Petugas'),
+          ),
+        ],
+      ),
+    );
+  }
 
-  final List<Map<String, dynamic>> _products = const [
-    {'id': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'cat': 'Signature', 'hpp': 'Rp 7.500', 'price': 'Rp 18.000', 'margin': 'Rp 10.500', 'marginPct': '58.3%'},
-    {'id': 'PRD-02', 'name': 'Americano Double Shot', 'cat': 'Classic Espresso', 'hpp': 'Rp 4.500', 'price': 'Rp 15.000', 'margin': 'Rp 10.500', 'marginPct': '70.0%'},
-    {'id': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'cat': 'Non-Coffee', 'hpp': 'Rp 9.500', 'price': 'Rp 24.000', 'margin': 'Rp 14.500', 'marginPct': '60.4%'},
-    {'id': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'cat': 'Signature', 'hpp': 'Rp 8.500', 'price': 'Rp 22.000', 'margin': 'Rp 13.500', 'marginPct': '61.4%'},
-    {'id': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'cat': 'Camilan', 'hpp': 'Rp 6.000', 'price': 'Rp 15.000', 'margin': 'Rp 9.000', 'marginPct': '60.0%'},
-    {'id': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'cat': 'Classic Espresso', 'hpp': 'Rp 7.000', 'price': 'Rp 20.000', 'margin': 'Rp 13.000', 'marginPct': '65.0%'},
-  ];
-
-  void _showDistributeModal() {
-    String selectedSeller = 'GRB-01';
-    String selectedProduct = 'PRD-01';
-    final qtyController = TextEditingController(text: '30');
+  // --- MODAL 2: INPUT / TAMBAH STOK GUDANG PUSAT OLEH OWNER ---
+  void _showAddWarehouseStockModal() {
+    String selectedSku = 'PRD-01';
+    final qtyCtrl = TextEditingController(text: '100');
 
     showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
+        builder: (context, setModalState) => AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Row(
+          title: const Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: const Color(0xFF0F172A).withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
-                child: const Icon(Icons.local_shipping_outlined, color: Color(0xFF0F172A)),
-              ),
-              const SizedBox(width: 12),
-              const Text('Alokasi Stok ke Petugas Lapangan (Seller)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+              Icon(Icons.add_box_outlined, color: Color(0xFF0F172A)),
+              SizedBox(width: 10),
+              Text('Input / Restock Persediaan Gudang Pusat', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+            ],
+          ),
+          content: SizedBox(
+            width: 460,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Pilih Menu / Bahan Baku Kopi:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const SizedBox(height: 6),
+                DropdownButtonFormField<String>(
+                  value: selectedSku,
+                  decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  items: _warehouseStock.map((w) => DropdownMenuItem(value: w['sku'].toString(), child: Text('${w['sku']} • ${w['name']} (Sisa: ${w['avail']})'))).toList(),
+                  onChanged: (val) {
+                    if (val != null) setModalState(() => selectedSku = val);
+                  },
+                ),
+                const SizedBox(height: 14),
+                const Text('Jumlah Stok Masuk (Cup / Porsi):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: qtyCtrl,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(hintText: 'Contoh: 150', border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
+              onPressed: () {
+                final addQty = int.tryParse(qtyCtrl.text) ?? 0;
+                if (addQty <= 0) return;
+                setState(() {
+                  for (var item in _warehouseStock) {
+                    if (item['sku'] == selectedSku) {
+                      item['stock'] = (item['stock'] as int) + addQty;
+                      item['avail'] = (item['avail'] as int) + addQty;
+                    }
+                  }
+                });
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Stok gudang pusat berhasil ditambahkan!')));
+              },
+              child: const Text('Tambah ke Gudang'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- MODAL 3: DISTRIBUSI ALOKASI STOK PAGI DARI GUDANG KE GEROBAK ---
+  void _showDistributeMorningStockModal() {
+    String selectedSeller = _staffAccounts.first['id'];
+    String selectedProduct = 'PRD-01';
+    final qtyCtrl = TextEditingController(text: '30');
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) => AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Row(
+            children: [
+              Icon(Icons.local_shipping_outlined, color: Color(0xFF0F172A)),
+              SizedBox(width: 10),
+              Text('Alokasi Stok Bawaan ke Petugas Lapangan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
             ],
           ),
           content: SizedBox(
@@ -272,57 +403,55 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Pilih Petugas & Gerobak Tujuan:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const Text('Pilih Petugas Lapangan Tujuan:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
                 const SizedBox(height: 6),
                 DropdownButtonFormField<String>(
                   value: selectedSeller,
-                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
-                  items: const [
-                    DropdownMenuItem(value: 'GRB-01', child: Text('Budi Santoso • GRB-01 (Sudirman)')),
-                    DropdownMenuItem(value: 'GRB-02', child: Text('Ahmad Fauzi • GRB-02 (Suropati)')),
-                    DropdownMenuItem(value: 'GRB-03', child: Text('Siti Rahmawati • GRB-03 (Pasar Senen)')),
-                    DropdownMenuItem(value: 'GRB-04', child: Text('Hendra Wijaya • GRB-04 (Juanda)')),
-                  ],
+                  decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  items: _staffAccounts.map((s) => DropdownMenuItem(value: s['id'].toString(), child: Text('${s['name']} • ${s['cart_id']} (${s['status']})'))).toList(),
                   onChanged: (val) {
-                    if (val != null) setDialogState(() => selectedSeller = val);
+                    if (val != null) setModalState(() => selectedSeller = val);
                   },
                 ),
                 const SizedBox(height: 14),
-                const Text('Pilih Menu Produk:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const Text('Pilih Menu Produk Gudang:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
                 const SizedBox(height: 6),
                 DropdownButtonFormField<String>(
                   value: selectedProduct,
-                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
-                  items: const [
-                    DropdownMenuItem(value: 'PRD-01', child: Text('Kopi Susu Gula Aren (Sedia: 810 Cup)')),
-                    DropdownMenuItem(value: 'PRD-02', child: Text('Americano Double Shot (Sedia: 605 Cup)')),
-                    DropdownMenuItem(value: 'PRD-03', child: Text('Matcha Uji Latte Creamy (Sedia: 400 Cup)')),
-                    DropdownMenuItem(value: 'PRD-04', child: Text('Cafe Latte Steam Velvet (Sedia: 480 Cup)')),
-                  ],
+                  decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  items: _warehouseStock.map((w) => DropdownMenuItem(value: w['sku'].toString(), child: Text('${w['name']} (Sedia Gudang: ${w['avail']})'))).toList(),
                   onChanged: (val) {
-                    if (val != null) setDialogState(() => selectedProduct = val);
+                    if (val != null) setModalState(() => selectedProduct = val);
                   },
                 ),
                 const SizedBox(height: 14),
-                const Text('Jumlah Alokasi (Cup / Porsi):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
+                const Text('Jumlah Stok yang Dibawa (Cup / Porsi):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155))),
                 const SizedBox(height: 6),
                 TextField(
-                  controller: qtyController,
+                  controller: qtyCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: 'Contoh: 30', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  decoration: const InputDecoration(hintText: 'Contoh: 30', border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
                 ),
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal', style: TextStyle(color: Color(0xFF64748B)))),
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12)),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
               onPressed: () {
+                final qty = int.tryParse(qtyCtrl.text) ?? 0;
+                if (qty <= 0) return;
+                setState(() {
+                  // Kurangi stok gudang
+                  for (var w in _warehouseStock) {
+                    if (w['sku'] == selectedProduct && (w['avail'] as int) >= qty) {
+                      w['avail'] = (w['avail'] as int) - qty;
+                    }
+                  }
+                });
                 Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Berhasil mendistribusikan alokasi stok ke gerobak seller!')),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Alokasi stok berhasil dicatat dan dikirim ke gerobak petugas!')));
               },
               child: const Text('Kirim Alokasi Stok'),
             ),
@@ -335,22 +464,22 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF8FAFC), // Ultra-clean background
+      color: const Color(0xFFF8FAFC),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Sidebar Nav
+          // 1. Enterprise Sidebar Navigation
           _buildSidebar(),
 
-          // 2. Main Content
+          // 2. Main Executive Screen
           Expanded(
             child: Column(
               children: [
                 _buildTopHeader(),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(28),
-                    child: _buildSelectedView(),
+                    padding: const EdgeInsets.all(26),
+                    child: _buildCurrentModuleView(),
                   ),
                 ),
               ],
@@ -362,8 +491,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   Widget _buildSidebar() {
+    int activeStaffCount = _staffAccounts.where((s) => s['is_store_open'] == true).length;
+
     return Container(
-      width: 270,
+      width: 275,
       decoration: const BoxDecoration(
         color: Color(0xFF0F172A), // Slate 900
         border: Border(right: BorderSide(color: Color(0xFF1E293B), width: 1)),
@@ -373,7 +504,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(22),
               child: Row(
                 children: [
                   Container(
@@ -395,21 +526,21 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             const Divider(height: 1, color: Color(0xFF1E293B)),
 
             const SizedBox(height: 14),
-            _sidebarCategory('MONITORING BISNIS'),
+            _sidebarCategory('MONITORING ARMADA & TIM'),
             _sidebarItem(0, Icons.grid_view_outlined, 'Executive Dashboard'),
-            _sidebarItem(1, Icons.badge_outlined, 'Petugas Lapangan (Seller)', badge: '4 Aktif'),
-            _sidebarItem(2, Icons.map_outlined, 'Peta Geospasial & Lapak', badge: '6 Titik'),
+            _sidebarItem(1, Icons.badge_outlined, 'Petugas & Akun Lapangan', badge: '$activeStaffCount Aktif Jualan'),
+            _sidebarItem(2, Icons.map_outlined, 'Peta Live Posisi & Lapak', badge: 'Live GPS'),
+            _sidebarItem(3, Icons.monetization_on_outlined, 'Sistem Komisi Penjualan', badge: 'Rp/Cup'),
 
             const SizedBox(height: 14),
-            _sidebarCategory('OPERASIONAL & STOK'),
-            _sidebarItem(3, Icons.inventory_2_outlined, 'Stok Gudang & Distribusi'),
-            _sidebarItem(4, Icons.psychology_outlined, 'AI Demand & Alokasi (MILP)', badge: 'Optimal'),
-            _sidebarItem(5, Icons.receipt_long_outlined, 'Transaksi & QRIS PJP'),
-            _sidebarItem(6, Icons.coffee_outlined, 'Master Produk & HPP'),
+            _sidebarCategory('LOGISTIK & KONTROL STOK'),
+            _sidebarItem(4, Icons.warehouse_outlined, 'Stok Gudang Pusat (Owner)'),
+            _sidebarItem(5, Icons.psychology_outlined, 'AI Demand & Alokasi (MILP)', badge: 'Optimal'),
+            _sidebarItem(6, Icons.receipt_long_outlined, 'Live Order & QRIS PJP', badge: '${_liveOrders.length} Trx'),
 
             const SizedBox(height: 24),
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(color: const Color(0xFF1E293B), borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFF334155))),
@@ -420,30 +551,36 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       children: [
                         Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
                         const SizedBox(width: 8),
-                        const Text('Koneksi Backend REST', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                        const Text('Sinkronisasi Realtime', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text('FastAPI :8000 • Database Live', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+                    Text('$activeStaffCount Gerobak Sedang Online Jualan', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
                     const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF38BDF8),
-                          foregroundColor: const Color(0xFF0F172A),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF38BDF8), foregroundColor: const Color(0xFF0F172A), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(vertical: 9)),
+                            onPressed: _showDistributeMorningStockModal,
+                            child: const Text('Bagi Stok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                          ),
                         ),
-                        onPressed: _showDistributeModal,
-                        icon: const Icon(Icons.send_outlined, size: 16),
-                        label: const Text('Kirim Stok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                      ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(foregroundColor: Colors.white, side: const BorderSide(color: Color(0xFF475569)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(vertical: 9)),
+                            onPressed: _showAddStaffModal,
+                            child: const Text('+ Akun', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -509,7 +646,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       child: Row(
         children: [
           Text(
-            _getSectionTitle(),
+            _getModuleTitle(),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
           ),
           const Spacer(),
@@ -521,7 +658,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Menyinkronkan data bisnis terbaru...')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Menyinkronkan GPS gerobak, orderan masuk, dan kas lapangan realtime...')));
             },
             icon: const Icon(Icons.refresh, size: 16),
             label: const Text('Refresh Realtime', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
@@ -537,54 +674,54 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  String _getSectionTitle() {
+  String _getModuleTitle() {
     switch (_selectedNavIndex) {
-      case 0: return 'Executive Dashboard & Financial KPI';
-      case 1: return 'Monitoring Armada Petugas Lapangan (Seller)';
-      case 2: return 'Peta Geospasial Titik Gerobak & Evaluasi Lapak';
-      case 3: return 'Persediaan Stok Pusat & Mutasi Distribusi';
-      case 4: return 'AI Demand Forecasting & Optimasi Alokasi (MILP)';
-      case 5: return 'Monitoring Transaksi, Mutasi, dan Validasi QRIS PJP';
-      case 6: return 'Master Produk, Biaya Pokok Produksi (HPP) & Margin';
-      default: return 'Owner Executive Suite';
+      case 0: return 'Executive Dashboard & Omzet Konsolidasi';
+      case 1: return 'Pengaturan Akun Petugas Lapangan & Kontrol Absensi';
+      case 2: return 'Peta Geospasial Realtime Posisi Tim & Pilihan Titik Jualan';
+      case 3: return 'Sistem Rekap Komisi Penjualan Tim Lapangan';
+      case 4: return 'Input Stok Gudang Pusat (Owner) & Pembagian Bawaan Pagi';
+      case 5: return 'AI Demand Forecasting & Optimasi Alokasi (MILP)';
+      case 6: return 'Monitoring Live Order & Pembayaran QRIS PJP';
+      default: return 'KopiCerdas AI Owner Suite';
     }
   }
 
-  Widget _buildSelectedView() {
+  Widget _buildCurrentModuleView() {
     switch (_selectedNavIndex) {
       case 0: return _buildExecutiveDashboard();
-      case 1: return _buildFieldStaffView();
-      case 2: return _buildLocationsAndMapView();
-      case 3: return _buildInventoryView();
-      case 4: return _buildAiOptimizationView();
-      case 5: return _buildTransactionsOrdersView();
-      case 6: return _buildProductsView();
+      case 1: return _buildStaffAccountManagementView();
+      case 2: return _buildLiveMapGeospatialView();
+      case 3: return _buildCommissionSystemView();
+      case 4: return _buildWarehouseManagementView();
+      case 5: return _buildAiOptimizationView();
+      case 6: return _buildLiveTransactionsOrdersView();
       default: return _buildExecutiveDashboard();
     }
   }
 
-  // 0. EXECUTIVE DASHBOARD
+  // ==========================================
+  // MODULE 0: EXECUTIVE DASHBOARD
+  // ==========================================
   Widget _buildExecutiveDashboard() {
-    List<Widget> kpiWidgets = [];
-    for (int i = 0; i < _kpis.length; i++) {
-      final k = _kpis[i];
-      kpiWidgets.add(
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: i == _kpis.length - 1 ? 0 : 16.0),
-            child: _kpiCard(k['title'], k['value'], k['sub'], k['icon'], k['color']),
-          ),
-        ),
-      );
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: kpiWidgets),
+        // KPI Cards Row
+        Row(
+          children: [
+            Expanded(child: _kpiCard('Omzet Konsolidasi Hari Ini', 'Rp 14.250.000', '+18.4% vs kemarin', Icons.monetization_on_outlined, const Color(0xFF10B981))),
+            const SizedBox(width: 16),
+            Expanded(child: _kpiCard('Laba Bersih Operasional', 'Rp 8.120.000', 'Margin Sehat 57.0%', Icons.account_balance_wallet_outlined, const Color(0xFF0284C7))),
+            const SizedBox(width: 16),
+            Expanded(child: _kpiCard('Total Cup Terjual', '748 Cup', '4 Gerobak Aktif Jualan', Icons.local_cafe_outlined, const Color(0xFFF59E0B))),
+            const SizedBox(width: 16),
+            Expanded(child: _kpiCard('Total Komisi Petugas', 'Rp 634.500', 'Insentif Terakumulasi', Icons.military_tech_outlined, const Color(0xFF8B5CF6))),
+          ],
+        ),
         const SizedBox(height: 24),
 
-        // Urgent Alert
+        // Urgent Alert Box
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFFDE68A))),
@@ -596,15 +733,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('AI ALERT: Peringatan Kritis Kehabisan Stok di Gerobak 04 (Stasiun Juanda)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF92400E))),
+                    Text('PERINGATAN STOK: Gerobak 04 (Hendra - Stasiun Juanda) Sisa 15 Cup', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF92400E))),
                     SizedBox(height: 4),
-                    Text('Sisa stok Kopi Susu Aren tinggal 15 cup. Berdasarkan laju konsumsi komuter kereta, stok akan habis dalam 38 menit ke depan. Segera lakukan distribusi tambahan dari gudang pusat.', style: TextStyle(color: Color(0xFFB45309), fontSize: 13)),
+                    Text('Laju pembelian tinggi di stasiun kereta. Diprediksi habis pukul 13.50 WIB. Segera kirimkan stok tambahan dari gudang.', style: TextStyle(color: Color(0xFFB45309), fontSize: 13)),
                   ],
                 ),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFD97706), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                onPressed: _showDistributeModal,
+                onPressed: _showDistributeMorningStockModal,
                 child: const Text('Kirim Stok Darurat'),
               ),
             ],
@@ -612,7 +749,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 24),
 
-        // Fleet Quick Overview
+        // Ringkasan Cepat Petugas & Lokasi
         Container(
           padding: const EdgeInsets.all(22),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE2E8F0))),
@@ -625,19 +762,20 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Ringkasan Petugas Gerobak Hari Ini', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0F172A))),
-                      Text('Pantau performa penjualan dan kas masuk dari seluruh seller lapangan.', style: TextStyle(color: Color(0xFF64748B), fontSize: 12)),
+                      Text('Status Petugas Lapangan Yang Sedang Aktif Jualan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0F172A))),
+                      Text('Hanya petugas yang sudah absen dan membuka toko yang statusnya ONLINE di peta dan sistem.', style: TextStyle(color: Color(0xFF64748B), fontSize: 12)),
                     ],
                   ),
-                  TextButton.icon(
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                     onPressed: () => setState(() => _selectedNavIndex = 1),
-                    icon: const Icon(Icons.arrow_forward, size: 16),
-                    label: const Text('Lihat Detail Seluruh Petugas'),
+                    icon: const Icon(Icons.settings, size: 16),
+                    label: const Text('Kelola Semua Akun'),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              _buildStaffTableMini(),
+              const SizedBox(height: 18),
+              _buildStaffTableSummary(),
             ],
           ),
         ),
@@ -645,8 +783,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 1. MONITORING PETUGAS LAPANGAN (SELLER) VIEW
-  Widget _buildFieldStaffView() {
+  // ==========================================
+  // MODULE 1: SETTING & PENGATURAN AKUN TIM LAPANGAN + ABSENSI
+  // ==========================================
+  Widget _buildStaffAccountManagementView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -656,33 +796,34 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Monitoring Armada Petugas Lapangan (Seller)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-                Text('Pantau lokasi live, nomor kontak, jadwal shift, uang kas fisik terkumpul, dan sisa stok gerobak.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+                Text('Manajemen Akun Tim Lapangan & Kontrol Operasional', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+                Text('Atur akun login, nomor HP, peran, unit gerobak, status toko buka/tutup, dan rekonsiliasi kas.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
               ],
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-              onPressed: _showDistributeModal,
-              icon: const Icon(Icons.local_shipping_outlined, size: 18),
-              label: const Text('Kirim Alokasi Stok ke Petugas'),
+              onPressed: _showAddStaffModal,
+              icon: const Icon(Icons.person_add_alt_1, size: 18),
+              label: const Text('Tambah Akun Petugas Baru'),
             ),
           ],
         ),
         const SizedBox(height: 20),
 
-        // Staff Cards Grid
+        // Grid Kartu Akun Petugas
         Wrap(
           spacing: 16,
           runSpacing: 16,
-          children: _fieldStaff.map((stf) {
-            final isCritical = stf['status'] == 'PERLU RESTOCK';
+          children: _staffAccounts.map((s) {
+            bool isOpen = s['is_store_open'] == true;
+
             return Container(
               width: 380,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: isCritical ? const Color(0xFFFCA5A5) : const Color(0xFFE2E8F0), width: isCritical ? 1.5 : 1),
+                border: Border.all(color: isOpen ? const Color(0xFFE2E8F0) : const Color(0xFFCBD5E1), width: isOpen ? 1 : 1.5),
                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 8, offset: const Offset(0, 2))],
               ),
               child: Column(
@@ -695,30 +836,31 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundColor: const Color(0xFF0F172A),
-                            child: Text(stf['name'].toString().substring(0, 1), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            backgroundColor: isOpen ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
+                            child: Text(s['name'].toString().substring(0, 1), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(width: 12),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(stf['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A))),
-                              Text('ID: ${stf['staff_id']} • Telp: ${stf['phone']}', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11)),
+                              Text(s['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A))),
+                              Text('User: @${s['username']} • ID: ${s['id']}', style: const TextStyle(color: Color(0xFF64748B), fontSize: 11)),
                             ],
                           ),
                         ],
                       ),
-                      _statusBadge(stf['status'], stf['color']),
+                      _statusBadge(isOpen ? 'AKTIF JUALAN' : 'OFFLINE / TUTUP', isOpen ? const Color(0xFF10B981) : const Color(0xFF94A3B8)),
                     ],
                   ),
                   const SizedBox(height: 14),
                   const Divider(height: 1),
                   const SizedBox(height: 12),
 
-                  _infoRow(Icons.storefront, 'Gerobak', stf['cart_id']),
-                  _infoRow(Icons.location_on_outlined, 'Titik Posisi', stf['location']),
-                  _infoRow(Icons.schedule, 'Jadwal Shift', stf['shift']),
-                  _infoRow(Icons.gps_fixed, 'Status GPS/POS', stf['device_status']),
+                  _infoRow(Icons.phone_outlined, 'Kontak Petugas', s['phone']),
+                  _infoRow(Icons.storefront, 'Gerobak Unit', s['cart_id']),
+                  _infoRow(Icons.location_on_outlined, 'Lokasi Terpilih', s['selected_location']),
+                  _infoRow(Icons.access_time, 'Status Absensi Pagi', s['attendance_time']),
+                  _infoRow(Icons.inventory_outlined, 'Stok Bawaan Pagi', s['morning_stock_picked']),
 
                   const SizedBox(height: 12),
                   Container(
@@ -730,31 +872,31 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Sisa Stok Gerobak:', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                            Text(stf['stock_left'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: isCritical ? const Color(0xFFEF4444) : const Color(0xFF0F172A))),
+                            Text(s['current_stock'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A))),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Total Penjualan Hari Ini:', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                            Text(stf['sales_cup'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF10B981))),
+                            const Text('Terjual Hari Ini:', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                            Text('${s['cups_sold_today']} Cup', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF10B981))),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Penerimaan Kasir Fisik (CASH):', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                            Text(stf['cash_collected'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+                            const Text('Komisi Petugas:', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                            Text('${s['total_commission']} (@Rp ${s['commission_rate']})', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF8B5CF6))),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Penerimaan QRIS Statis:', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                            Text(stf['qris_collected'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF6366F1))),
+                            const Text('Uang Fisik Kasir (CASH):', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                            Text(s['cash_in_hand'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A))),
                           ],
                         ),
                       ],
@@ -765,22 +907,24 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   Row(
                     children: [
                       Expanded(
-                        child: OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(vertical: 10)),
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Menghubungi nomor ${stf['phone']}...')));
+                            setState(() {
+                              s['is_store_open'] = !s['is_store_open'];
+                              s['status'] = s['is_store_open'] ? 'AKTIF JUALAN' : 'OFFLINE (TIDAK JUALAN)';
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Status operasional ${s['name']} diubah menjadi ${s['is_store_open'] ? 'ONLINE' : 'OFFLINE'}')));
                           },
-                          icon: const Icon(Icons.phone_outlined, size: 16),
-                          label: const Text('Hubungi', style: TextStyle(fontSize: 12)),
+                          child: Text(isOpen ? 'Set Tutup' : 'Set Buka Jualan', style: TextStyle(fontSize: 12, color: isOpen ? Colors.red : Colors.green, fontWeight: FontWeight.bold)),
                         ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(vertical: 10)),
-                          onPressed: _showDistributeModal,
-                          icon: const Icon(Icons.add_shopping_cart, size: 16),
-                          label: const Text('Kirim Stok', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                          onPressed: _showDistributeMorningStockModal,
+                          child: const Text('Beri Stok', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -794,19 +938,42 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 2. PETA GEOSPASIAL & LOCATION SCORING VIEW
-  Widget _buildLocationsAndMapView() {
+  // ==========================================
+  // MODULE 2: PETA GEOSPASIAL LIVE POSISI TIM & TITIK PILIHAN
+  // ==========================================
+  Widget _buildLiveMapGeospatialView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Pemetaan Geospasial & Location Scoring Titik Jualan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-        const Text('Evaluasi titik lapak gerobak aktif dan analisis kandidat ekspansi berbasis skor AI (trafik pejalan kaki transit POI & historis).', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Peta Geospasial Realtime Posisi Armada & Pilihan Lokasi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+                Text('Memantau koordinat GPS aktif seluruh petugas, titik jualan yang sudah terisi, dan titik potensial kosong yang siap dipilih.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(color: const Color(0xFF10B981).withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
+              child: const Row(
+                children: [
+                  Icon(Icons.gps_fixed, size: 16, color: Color(0xFF10B981)),
+                  SizedBox(width: 6),
+                  Text('GPS & Telemetri Active', style: TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.bold, fontSize: 12)),
+                ],
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 20),
 
-        // Visual Map Representation Container
+        // Visual Interactive Map Frame
         Container(
           width: double.infinity,
-          height: 320,
+          height: 380,
           decoration: BoxDecoration(
             color: const Color(0xFFE2E8F0),
             borderRadius: BorderRadius.circular(16),
@@ -814,7 +981,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           ),
           child: Stack(
             children: [
-              // Map background mock
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
@@ -823,36 +989,46 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.map, size: 64, color: Colors.blueGrey.shade200),
+                        Icon(Icons.map, size: 68, color: Colors.blueGrey.shade200),
                         const SizedBox(height: 8),
-                        Text('INTERACTIVE GEOSPATIAL MAP VIEW (JABODETABEK NETWORK)', style: TextStyle(color: Colors.blueGrey.shade400, fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1.1)),
-                        Text('Menampilkan 4 Titik Operasional Aktif • 2 Titik Kandidat Rekomendasi AI', style: TextStyle(color: Colors.blueGrey.shade400, fontSize: 11)),
+                        Text('PETA DIGITAL WILAYAH OPERASIONAL KOPICERDAS (JABODETABEK)', style: TextStyle(color: Colors.blueGrey.shade500, fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1.1)),
+                        Text('Titik Gerobak Aktif memancarkan sinyal GPS realtime saat petugas menekan "Buka Toko"', style: TextStyle(color: Colors.blueGrey.shade400, fontSize: 11)),
                       ],
                     ),
                   ),
                 ),
               ),
 
-              // Simulated Map Markers
-              _mapMarker(120, 80, 'GRB-01 Sudirman', '142 Cup', isOperasional: true),
-              _mapMarker(240, 160, 'GRB-02 Suropati', '68 Cup', isOperasional: true),
-              _mapMarker(380, 70, 'GRB-04 Juanda', '118 Cup (Restock!)', isOperasional: true, isCritical: true),
-              _mapMarker(480, 140, 'GRB-03 Senen', '95 Cup', isOperasional: true),
-              _mapMarker(600, 90, 'Kandidat AI: UI Salemba', 'Skor 87.4', isOperasional: false),
-              _mapMarker(720, 190, 'Kandidat AI: Kuningan', 'Skor 84.1', isOperasional: false),
+              // Markers for Active Sellers
+              _liveMapPin(90, 70, 'Budi (GRB-01)', 'Sudirman • Sisa 42 Cup', isOnline: true),
+              _liveMapPin(260, 160, 'Ahmad (GRB-02)', 'Suropati • Sisa 28 Cup', isOnline: true),
+              _liveMapPin(420, 80, 'Hendra (GRB-04)', 'Juanda • RESTOCK! (15 Cup)', isOnline: true, isAlert: true),
+              _liveMapPin(560, 150, 'Siti Rahma (GRB-03)', 'Pasar Senen • Sisa 35 Cup', isOnline: true),
 
-              // Map Overlay Badge
+              // Markers for Available Empty Spots to pick
+              _liveMapPin(720, 90, 'Lapak Kosong: Kampus UI Salemba', 'Kuota: 90 Cup • Skor 87.4', isOnline: false),
+              _liveMapPin(860, 220, 'Lapak Kosong: Kuningan Madya', 'Kuota: 100 Cup • Skor 84.1', isOnline: false),
+
+              // Overlay Map Legend
               Positioned(
-                top: 16,
-                right: 16,
+                bottom: 16,
+                left: 16,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(10), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8)]),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)]),
                   child: const Row(
                     children: [
-                      Icon(Icons.layers_outlined, color: Color(0xFF38BDF8), size: 16),
-                      SizedBox(width: 8),
-                      Text('Layer: Trafik Transit POI & Cuaca Aktif', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                      Icon(Icons.circle, color: Color(0xFF10B981), size: 10),
+                      SizedBox(width: 6),
+                      Text('Gerobak Online', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                      SizedBox(width: 14),
+                      Icon(Icons.circle, color: Color(0xFFEF4444), size: 10),
+                      SizedBox(width: 6),
+                      Text('Stok Menipis (<20 Cup)', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                      SizedBox(width: 14),
+                      Icon(Icons.circle, color: Color(0xFFF59E0B), size: 10),
+                      SizedBox(width: 6),
+                      Text('Titik Kosong Bisa Dipilih', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -862,52 +1038,52 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 24),
 
-        // Location Detail Table
+        // Tabel Detail Lokasi & Kuota Bawaan Pagi
         Container(
           padding: const EdgeInsets.all(22),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE2E8F0))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Data Detail Titik Gerobak & Indikator AI', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0F172A))),
+              const Text('Katalog Lokasi Jualan & Panduan Kuota Stok Bawaan Pagi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0F172A))),
+              const SizedBox(height: 6),
+              const Text('Petugas lapangan sebelum berangkat melihat daftar kuota stok ini agar tahu berapa cup dan varian yang harus diambil dari gudang pusat.', style: TextStyle(color: Color(0xFF64748B), fontSize: 12)),
               const SizedBox(height: 16),
               Table(
                 columnWidths: const {
                   0: FlexColumnWidth(1),
                   1: FlexColumnWidth(2.5),
                   2: FlexColumnWidth(2),
-                  3: FlexColumnWidth(2.2),
-                  4: FlexColumnWidth(2.2),
+                  3: FlexColumnWidth(3),
+                  4: FlexColumnWidth(1.5),
                   5: FlexColumnWidth(1.2),
                   6: FlexColumnWidth(1.2),
-                  7: FlexColumnWidth(1.2),
                 },
                 children: [
                   TableRow(
                     decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
                     children: [
                       _th('ID'),
-                      _th('Nama Area & Posisi'),
-                      _th('Petugas Bertugas'),
+                      _th('Area & Landmark Lokasi'),
+                      _th('Petugas Yang Menempati'),
+                      _th('Rekomendasi Bawaan Pagi (Porsi)'),
                       _th('Trafik Pejalan Kaki'),
-                      _th('Titik Transit POI'),
-                      _th('Kondisi Cuaca'),
                       _th('Skor AI'),
                       _th('Status'),
                     ],
                   ),
-                  ..._locationsWithMap.map((loc) {
+                  ..._availableSpots.map((spot) {
+                    bool isOcc = spot['is_occupied'] == true;
                     return TableRow(
                       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                       children: [
-                        _td(loc['id']),
-                        _td(loc['name'], bold: true),
-                        _td(loc['seller_assigned']),
-                        _td(loc['pedestrian_density']),
-                        _td(loc['poi_nearby'], italic: true),
-                        _td(loc['weather']),
-                        _td('${loc['score']} / 100', bold: true, color: const Color(0xFF0284C7)),
-                        _statusBadge(loc['status'], loc['color']),
+                        _td(spot['id']),
+                        _td(spot['name'], bold: true),
+                        _td(spot['seller_active']),
+                        _td(spot['morning_stock_quota'], color: const Color(0xFF0284C7), bold: true),
+                        _td(spot['pedestrian_density']),
+                        _td(spot['score'], bold: true),
+                        _statusBadge(isOcc ? 'TERISI' : 'BISA DIPILIH', isOcc ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
                       ],
                     );
                   }),
@@ -920,8 +1096,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 3. INVENTORY VIEW
-  Widget _buildInventoryView() {
+  // ==========================================
+  // MODULE 3: SISTEM REKAP KOMISI PENJUALAN
+  // ==========================================
+  Widget _buildCommissionSystemView() {
+    num totalKomisiSemua = _staffAccounts.fold(0, (acc, s) => acc + (s['cups_sold_today'] * s['commission_rate']));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -931,15 +1111,106 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Persediaan Gudang Pusat (Central Hub)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-                Text('Sumber kebenaran tunggal stok fisik, reservasi pre-order aktif, dan stok siap distribusi.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+                Text('Sistem Komisi Penjualan Tim Lapangan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+                Text('Perhitungan insentif otomatis berdasarkan setiap cup kopi yang berhasil terjual oleh masing-masing seller.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
               ],
             ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-              onPressed: _showDistributeModal,
-              icon: const Icon(Icons.local_shipping_outlined, size: 18),
-              label: const Text('Buat Alokasi Distribusi Baru', style: TextStyle(fontWeight: FontWeight.bold)),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(color: const Color(0xFF8B5CF6).withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
+              child: Text(
+                'Total Insentif Hari Ini: Rp ${totalKomisiSemua.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}',
+                style: const TextStyle(color: Color(0xFF6D28D9), fontWeight: FontWeight.bold, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+
+        Container(
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE2E8F0))),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1.2),
+              1: FlexColumnWidth(2.2),
+              2: FlexColumnWidth(1.5),
+              3: FlexColumnWidth(1.5),
+              4: FlexColumnWidth(1.5),
+              5: FlexColumnWidth(2),
+              6: FlexColumnWidth(1.5),
+            },
+            children: [
+              TableRow(
+                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+                children: [
+                  _th('ID Petugas'),
+                  _th('Nama Petugas Lapangan'),
+                  _th('Cup Terjual'),
+                  _th('Rate Komisi / Cup'),
+                  _th('Total Komisi (Rp)'),
+                  _th('Omzet Dihasilkan'),
+                  _th('Status Pencairan'),
+                ],
+              ),
+              ..._staffAccounts.map((s) {
+                int rate = s['commission_rate'] as int;
+                int sold = s['cups_sold_today'] as int;
+                int komisi = rate * sold;
+
+                return TableRow(
+                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+                  children: [
+                    _td(s['id']),
+                    _td(s['name'], bold: true),
+                    _td('$sold Cup'),
+                    _td('Rp $rate / cup'),
+                    _td('Rp ${komisi.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}', bold: true, color: const Color(0xFF10B981)),
+                    _td('Kas: ${s['cash_in_hand']} • QRIS: ${s['qris_collected']}'),
+                    _statusBadge(sold > 0 ? 'SIAP SETOR & CAIR' : 'BELUM ADA PENJUALAN', sold > 0 ? const Color(0xFF10B981) : const Color(0xFF94A3B8)),
+                  ],
+                );
+              }),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ==========================================
+  // MODULE 4: INPUT STOK GUDANG PUSAT (OWNER/ADMIN)
+  // ==========================================
+  Widget _buildWarehouseManagementView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Manajemen & Input Persediaan Gudang Pusat (Owner/Admin)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+                Text('Owner menginput stok masuk, mengontrol stok fisik, reservasi pre-order, dan membagikan stok bawaan pagi ke gerobak.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+              ],
+            ),
+            Row(
+              children: [
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11)),
+                  onPressed: _showAddWarehouseStockModal,
+                  icon: const Icon(Icons.add_box_outlined, size: 18),
+                  label: const Text('Input Stok Baru Gudang', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11)),
+                  onPressed: _showDistributeMorningStockModal,
+                  icon: const Icon(Icons.local_shipping_outlined, size: 18),
+                  label: const Text('Bagi Stok ke Gerobak', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
             ),
           ],
         ),
@@ -955,7 +1226,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               2: FlexColumnWidth(1.5),
               3: FlexColumnWidth(1.5),
               4: FlexColumnWidth(1.5),
-              5: FlexColumnWidth(1.2),
+              5: FlexColumnWidth(1.5),
+              6: FlexColumnWidth(1.2),
             },
             children: [
               TableRow(
@@ -963,22 +1235,24 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 children: [
                   _th('Kode SKU'),
                   _th('Nama Menu / Bahan'),
+                  _th('Kategori'),
                   _th('Stok Fisik Total'),
                   _th('Direservasi Pre-Order'),
                   _th('Siap Didistribusikan'),
-                  _th('Status Gudang'),
+                  _th('Status'),
                 ],
               ),
-              ..._warehouse.map((inv) {
+              ..._warehouseStock.map((w) {
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(inv['sku']),
-                    _td(inv['name'], bold: true),
-                    _td(inv['stock']),
-                    _td(inv['reserved']),
-                    _td(inv['avail'], bold: true, color: const Color(0xFF0284C7)),
-                    _statusBadge(inv['status'], inv['color']),
+                    _td(w['sku']),
+                    _td(w['name'], bold: true),
+                    _td(w['cat']),
+                    _td('${w['stock']} Cup'),
+                    _td('${w['reserved']} Cup (Tahan)'),
+                    _td('${w['avail']} Cup', bold: true, color: const Color(0xFF0284C7)),
+                    _statusBadge(w['status'], w['color']),
                   ],
                 );
               }),
@@ -989,7 +1263,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 4. AI OPTIMIZATION & FORECASTING VIEW
+  // ==========================================
+  // MODULE 5: AI OPTIMIZATION & FORECASTING (MILP)
+  // ==========================================
   Widget _buildAiOptimizationView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1069,27 +1345,44 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('Aksi Owner'),
                 ],
               ),
-              ..._aiRecommendations.map((r) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _statusBadge(r['priority'], r['color']),
-                    _td(r['cart'], bold: true),
-                    _td(r['product']),
-                    _td(r['now']),
-                    _td(r['rec'], bold: true, color: const Color(0xFF10B981)),
-                    _td(r['rationale'], italic: true),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
-                        onPressed: _showDistributeModal,
-                        child: const Text('Setujui', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                      ),
+              TableRow(
+                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+                children: [
+                  _statusBadge('URGENT', const Color(0xFFEF4444)),
+                  _td('Koridor Sudirman (Pak Darto)', bold: true),
+                  _td('Kopi Susu Gula Aren'),
+                  _td('42 Cup'),
+                  _td('75 Cup (+33 Cup)', bold: true, color: const Color(0xFF10B981)),
+                  _td('Lonjakan komuter jam makan siang (11.45 - 13.30). Stok saat ini berisiko stock-out pukul 12.15.', italic: true),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
+                      onPressed: _showDistributeMorningStockModal,
+                      child: const Text('Setujui', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                     ),
-                  ],
-                );
-              }),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+                children: [
+                  _statusBadge('HIGH', const Color(0xFFF59E0B)),
+                  _td('Stasiun Juanda (Roda Biru)', bold: true),
+                  _td('Americano Double Shot'),
+                  _td('15 Cup'),
+                  _td('45 Cup (+30 Cup)', bold: true, color: const Color(0xFF10B981)),
+                  _td('Kebutuhan asupan kafein pekerja kereta sore hari. Margin kotor tinggi Rp 10.500/cup.', italic: true),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
+                      onPressed: _showDistributeMorningStockModal,
+                      child: const Text('Setujui', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -1097,13 +1390,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 5. TRANSACTIONS & QRIS ORDERS
-  Widget _buildTransactionsOrdersView() {
+  // ==========================================
+  // MODULE 6: LIVE ORDER PRE-ORDER & QRIS PJP
+  // ==========================================
+  Widget _buildLiveTransactionsOrdersView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Daftar Pre-Order Pelanggan (QRIS Statis Online Terverifikasi PJP)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-        const Text('Sesuai regulasi: status PAID hanya berubah setelah konfirmasi resmi webhook/inquiry PJP. Tidak ada verifikasi otomatis palsu.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+        const Text('Monitoring Live Order Masuk & Validasi Pembayaran QRIS PJP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+        const Text('Pelanggan melakukan pre-order online ke gerobak seller. Status pembayaran sinkron otomatis dengan notifikasi resmi PJP/Acquirer.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
         const SizedBox(height: 16),
 
         Container(
@@ -1113,7 +1408,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             columnWidths: const {
               0: FlexColumnWidth(1.2),
               1: FlexColumnWidth(2),
-              2: FlexColumnWidth(1.8),
+              2: FlexColumnWidth(2.2),
               3: FlexColumnWidth(2.5),
               4: FlexColumnWidth(1.2),
               5: FlexColumnWidth(1.5),
@@ -1134,8 +1429,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('PJP Reference'),
                 ],
               ),
-              ..._preOrders.map((o) {
-                final isPaid = o['pay_status'] == 'PAID';
+              ..._liveOrders.map((o) {
+                bool isPaid = o['pay'].toString().contains('PAID');
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
@@ -1144,55 +1439,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     _td(o['seller']),
                     _td(o['items']),
                     _td(o['total'], bold: true),
-                    _statusBadge(o['order_status'], const Color(0xFF0284C7)),
-                    _statusBadge(o['pay_status'], isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
-                    _td(o['ref'], italic: true),
-                  ],
-                );
-              }),
-            ],
-          ),
-        ),
-        const SizedBox(height: 32),
-
-        const Text('Riwayat Penjualan Langsung Walk-In Seller (Kasir Lapangan)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-        const Text('Transaksi tunai (CASH) dan QRIS Statis langsung di gerobak seller dengan pemotongan stok otomatis.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
-        const SizedBox(height: 16),
-
-        Container(
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE2E8F0))),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.5),
-              1: FlexColumnWidth(2.5),
-              2: FlexColumnWidth(2.5),
-              3: FlexColumnWidth(1.5),
-              4: FlexColumnWidth(1.5),
-              5: FlexColumnWidth(1.2),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('ID Transaksi'),
-                  _th('Gerobak Seller'),
-                  _th('Item Terjual'),
-                  _th('Total Penerimaan'),
-                  _th('Metode Pembayaran'),
-                  _th('Waktu Trx'),
-                ],
-              ),
-              ..._walkins.map((tx) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(tx['id']),
-                    _td(tx['seller'], bold: true),
-                    _td(tx['items']),
-                    _td(tx['total'], bold: true, color: const Color(0xFF10B981)),
-                    _statusBadge(tx['method'], tx['method'] == 'QRIS_STATIC' ? const Color(0xFF6366F1) : const Color(0xFF64748B)),
-                    _td(tx['time']),
+                    _statusBadge(o['status'], const Color(0xFF0284C7)),
+                    _statusBadge(o['pay'], isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
+                    _td(o['pjp_ref'], italic: true),
                   ],
                 );
               }),
@@ -1203,98 +1452,43 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  // 6. MASTER PRODUCTS & MARGIN
-  Widget _buildProductsView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Master Katalog Produk & Analisis Margin Laba', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-        const Text('Kelola harga jual resmi, biaya modal bahan per cup (HPP), dan proyeksi margin kontribusi.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
-        const SizedBox(height: 20),
-
-        Container(
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFE2E8F0))),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.2),
-              1: FlexColumnWidth(2.5),
-              2: FlexColumnWidth(1.8),
-              3: FlexColumnWidth(1.5),
-              4: FlexColumnWidth(1.5),
-              5: FlexColumnWidth(1.5),
-              6: FlexColumnWidth(1.2),
-              7: FlexColumnWidth(1.2),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('Kode Menu'),
-                  _th('Nama Menu Kopi / Makanan'),
-                  _th('Kategori'),
-                  _th('Harga Pokok (HPP)'),
-                  _th('Harga Jual Resmi'),
-                  _th('Laba Kotor (Margin)'),
-                  _th('Margin %'),
-                  _th('Status'),
-                ],
-              ),
-              ..._products.map((p) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(p['id']),
-                    _td(p['name'], bold: true),
-                    _td(p['cat']),
-                    _td(p['hpp']),
-                    _td(p['price'], bold: true),
-                    _td(p['margin'], bold: true, color: const Color(0xFF10B981)),
-                    _td(p['marginPct']),
-                    _statusBadge('ACTIVE', const Color(0xFF10B981)),
-                  ],
-                );
-              }),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Mini fleet table for Dashboard Overview
-  Widget _buildStaffTableMini() {
+  // --- SUB WIDGET HELPER ---
+  Widget _buildStaffTableSummary() {
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(2),
         1: FlexColumnWidth(2.5),
         2: FlexColumnWidth(1.5),
-        3: FlexColumnWidth(1.8),
-        4: FlexColumnWidth(1.5),
-        5: FlexColumnWidth(1.2),
+        3: FlexColumnWidth(1.5),
+        4: FlexColumnWidth(1.8),
+        5: FlexColumnWidth(1.5),
+        6: FlexColumnWidth(1.2),
       },
       children: [
         TableRow(
           decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
           children: [
             _th('Petugas Seller'),
-            _th('Titik Gerobak'),
+            _th('Titik Gerobak & Lokasi'),
+            _th('Absen Pagi'),
             _th('Penjualan'),
             _th('Sisa Stok'),
-            _th('Uang Fisik Kasir'),
-            _th('Status'),
+            _th('Komisi Hari Ini'),
+            _th('Status Toko'),
           ],
         ),
-        ..._fieldStaff.map((stf) {
+        ..._staffAccounts.map((s) {
+          bool isOpen = s['is_store_open'] == true;
           return TableRow(
             decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
             children: [
-              _td(stf['name'], bold: true),
-              _td(stf['cart_id']),
-              _td(stf['sales_cup']),
-              _td(stf['stock_left'], bold: true, color: stf['color']),
-              _td(stf['cash_collected'], bold: true),
-              _statusBadge(stf['status'], stf['color']),
+              _td(s['name'], bold: true),
+              _td('${s['cart_id']}\n${s['selected_location']}'),
+              _td(s['attendance_time']),
+              _td('${s['cups_sold_today']} Cup'),
+              _td(s['current_stock'], bold: true, color: s['color']),
+              _td(s['total_commission'], bold: true, color: const Color(0xFF8B5CF6)),
+              _statusBadge(isOpen ? 'BUKA' : 'TUTUP', isOpen ? const Color(0xFF10B981) : const Color(0xFF94A3B8)),
             ],
           );
         }),
@@ -1302,29 +1496,29 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  Widget _mapMarker(double left, double top, String title, String subtitle, {bool isOperasional = true, bool isCritical = false}) {
+  Widget _liveMapPin(double left, double top, String title, String subtitle, {required bool isOnline, bool isAlert = false}) {
     return Positioned(
       left: left,
       top: top,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: isCritical ? const Color(0xFFEF4444) : (isOperasional ? const Color(0xFF0F172A) : Colors.white),
+          color: isAlert ? const Color(0xFFEF4444) : (isOnline ? const Color(0xFF0F172A) : Colors.white),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isOperasional ? Colors.transparent : const Color(0xFFF59E0B), width: 1.5),
+          border: Border.all(color: isOnline ? Colors.transparent : const Color(0xFFF59E0B), width: 1.5),
           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 2))],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(isOperasional ? Icons.coffee : Icons.place_outlined, color: isOperasional ? Colors.white : const Color(0xFFD97706), size: 14),
+            Icon(isOnline ? Icons.coffee : Icons.place_outlined, color: isOnline ? Colors.white : const Color(0xFFD97706), size: 14),
             const SizedBox(width: 6),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(title, style: TextStyle(color: isOperasional ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 11)),
-                Text(subtitle, style: TextStyle(color: isOperasional ? const Color(0xFF38BDF8) : const Color(0xFF64748B), fontSize: 9)),
+                Text(title, style: TextStyle(color: isOnline ? Colors.white : const Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 11)),
+                Text(subtitle, style: TextStyle(color: isOnline ? const Color(0xFF38BDF8) : const Color(0xFF64748B), fontSize: 9)),
               ],
             )
           ],
