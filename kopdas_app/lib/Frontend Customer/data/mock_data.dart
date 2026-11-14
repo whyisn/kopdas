@@ -79,7 +79,7 @@ class MockData {
   static const reviewTags = ['Cepat', 'Enak', 'Ramah', 'Porsi pas', 'Harga cocok'];
   static const ratingLabels = ['', 'Kurang', 'Biasa saja', 'Lumayan', 'Enak', 'Luar biasa'];
 
-  /// Daftar gerobak KopiCerdas AI operasional Padang
+  /// Daftar gerobak Kopi Cerdas operasional Padang
   static const carts = <CoffeeCart>[
     CoffeeCart(
       id: 'loc-01',

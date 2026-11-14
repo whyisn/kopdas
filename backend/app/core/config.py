@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DB_PATH = (BASE_DIR / "kopicerdas.db").resolve().as_posix()
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "KopiCerdas AI API"
+    PROJECT_NAME: str = "Kopi Cerdas API"
     VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 jam
     
-    QRIS_MERCHANT_NAME: str = "KopiCerdas Keliling"
+    QRIS_MERCHANT_NAME: str = "Kopi Cerdas Keliling"
     QRIS_NMID: str = "ID1020000000001"
     QRIS_IMAGE_URL: str = "/assets/qris/merchant_static.png"
     QRIS_SIMULATOR_SECRET: str = "qris-dev-sim-secret-key"

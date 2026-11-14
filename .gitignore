@@ -1,5 +1,5 @@
 # ========================================================
-# KopiCerdas AI (KopDas) - .gitignore
+# Kopi Cerdas (KopDas) - .gitignore
 # Aturan: Hanya file build bawaan Flutter dan file lokal mesin
 # yang mengganggu kinerja tim yang dikecualikan.
 # Database (*.db) dan aset proyek diizinkan di-push.

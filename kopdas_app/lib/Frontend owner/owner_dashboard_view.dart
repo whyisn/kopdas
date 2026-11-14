@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../services/owner_api.dart';
 import 'real_web_map.dart';
 import 'web_download_helper.dart';
 
@@ -30,26 +31,26 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // Sidebar Collapse State (3S.NET style)
   bool _isSidebarCollapsed = false;
 
-  // Google Maps Live GPS State
-  double _liveMapLat = -6.2088;
-  double _liveMapLng = 106.8227;
-  int _liveMapZoom = 15;
-  String _focusedStaffId = 'USR-01';
+  // Google Maps Live GPS State (Pusat Jaringan Kota Padang)
+  double _liveMapLat = -0.9040;
+  double _liveMapLng = 100.3530;
+  int _liveMapZoom = 14;
+  String _focusedStaffId = 'usr-seller-01';
 
   // Weather Intelligence Simulation State (AI Recommendation Engine)
   String _aiWeatherMode = 'NORMAL'; // 'NORMAL', 'RAIN', 'PEAK_SUNNY'
 
   // ===========================================================================
-  // DATA OPERASIONAL TERINTEGRASI (SINGLE SOURCE OF TRUTH)
+  // DATA OPERASIONAL TERINTEGRASI PADANG (SINGLE SOURCE OF TRUTH)
   // ===========================================================================
   final List<Map<String, dynamic>> _staffList = [
     {
-      'id': 'USR-01',
-      'username': 'budi_sudirman',
-      'name': 'Budi Santoso',
+      'id': 'usr-seller-01',
+      'username': 'seller1',
+      'name': 'Ahmad Fauzi',
       'phone': '0812-8821-9901',
-      'cart_id': 'GRB-01 (Sudirman)',
-      'location': 'Halte Dukuh Atas Sudirman',
+      'cart_id': 'loc-01 (UNP)',
+      'location': 'Kampus UNP Air Tawar, Padang Utara',
       'role': 'Seller Lead',
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
@@ -62,19 +63,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'cash_submitted': 900000,
       'cash_status': 'BALANCE',
       'gps_status': 'Live (4m akurasi)',
-      'lat_long': '-6.2088, 106.8227',
-      'lat': -6.2088,
-      'lng': 106.8227,
+      'lat_long': '-0.8960, 100.3500',
+      'lat': -0.8960,
+      'lng': 100.3500,
       'map_x': 180.0,
       'map_y': 150.0,
     },
     {
-      'id': 'USR-02',
-      'username': 'ahmad_suropati',
-      'name': 'Ahmad Fauzi',
+      'id': 'usr-seller-02',
+      'username': 'seller2',
+      'name': 'Rian Syahputra',
       'phone': '0813-1102-4451',
-      'cart_id': 'GRB-02 (Suropati)',
-      'location': 'Taman Suropati Menteng',
+      'cart_id': 'loc-02 (Khatib Sulaiman)',
+      'location': 'Sentra Kantor Khatib Sulaiman, Padang',
       'role': 'Seller Reguler',
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
@@ -87,19 +88,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'cash_submitted': 520000,
       'cash_status': 'BALANCE',
       'gps_status': 'Live (6m akurasi)',
-      'lat_long': '-6.1994, 106.8326',
-      'lat': -6.1994,
-      'lng': 106.8326,
+      'lat_long': '-0.9040, 100.3530',
+      'lat': -0.9040,
+      'lng': 100.3530,
       'map_x': 320.0,
       'map_y': 110.0,
     },
     {
-      'id': 'USR-03',
-      'username': 'siti_senen',
-      'name': 'Siti Rahmawati',
+      'id': 'usr-seller-03',
+      'username': 'seller3',
+      'name': 'Fauzan Akbar',
       'phone': '0857-4491-0023',
-      'cart_id': 'GRB-03 (Pasar Senen)',
-      'location': 'Pojok Blok III Senen',
+      'cart_id': 'loc-03 (Pasar Raya)',
+      'location': 'Pintu Barat Pasar Raya Padang',
       'role': 'Seller Reguler',
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
@@ -112,19 +113,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'cash_submitted': 640000,
       'cash_status': 'BALANCE',
       'gps_status': 'Live (5m akurasi)',
-      'lat_long': '-6.1744, 106.8432',
-      'lat': -6.1744,
-      'lng': 106.8432,
+      'lat_long': '-0.9510, 100.3600',
+      'lat': -0.9510,
+      'lng': 100.3600,
       'map_x': 460.0,
       'map_y': 70.0,
     },
     {
-      'id': 'USR-04',
-      'username': 'hendra_juanda',
-      'name': 'Hendra Wijaya',
+      'id': 'usr-seller-04',
+      'username': 'seller4',
+      'name': 'Doni Pratama',
       'phone': '0821-7781-3312',
-      'cart_id': 'GRB-04 (Juanda)',
-      'location': 'Pintu Timur Stasiun Juanda',
+      'cart_id': 'loc-04 (Taplau)',
+      'location': 'Kawasan Wisata Pantai Padang Taplau',
       'role': 'Seller Reguler',
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
@@ -137,86 +138,167 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'cash_submitted': 780000,
       'cash_status': 'BALANCE',
       'gps_status': 'Live (3m akurasi)',
-      'lat_long': '-6.1668, 106.8312',
-      'lat': -6.1668,
-      'lng': 106.8312,
+      'lat_long': '-0.9450, 100.3540',
+      'lat': -0.9450,
+      'lng': 100.3540,
       'map_x': 270.0,
       'map_y': 40.0,
-    },
-    {
-      'id': 'USR-05',
-      'username': 'rizky_kuningan',
-      'name': 'Rizky Pratama',
-      'phone': '0812-9900-1122',
-      'cart_id': 'GRB-05 (Standby)',
-      'location': 'Kuningan Madya (Lapak Rencana)',
-      'role': 'Seller Trainee',
-      'account_status': 'ACTIVE',
-      'operational_status': 'NOT_STARTED',
-      'clock_in': 'Belum Mulai',
-      'morning_stock': 0,
-      'current_stock': 0,
-      'cups_sold': 0,
-      'cash': 0,
-      'qris': 0,
-      'cash_submitted': 0,
-      'cash_status': 'STANDBY',
-      'gps_status': 'Offline',
-      'lat_long': '-6.2185, 106.8302',
-      'lat': -6.2185,
-      'lng': 106.8302,
-      'map_x': 240.0,
-      'map_y': 230.0,
     },
   ];
 
   final List<Map<String, dynamic>> _warehouseStock = [
-    {'sku': 'KPS-01', 'name': 'Kopi Susu Soft', 'category': 'Kopi Susu', 'central_stock': 850, 'allocated': 160, 'held_by_cart': 110, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-    {'sku': 'KPS-02', 'name': 'Kopi Susu Strong', 'category': 'Kopi Susu', 'central_stock': 750, 'allocated': 140, 'held_by_cart': 95, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-    {'sku': 'KPS-03', 'name': 'Kopi Susu Butter', 'category': 'Kopi Susu', 'central_stock': 620, 'allocated': 120, 'held_by_cart': 80, 'min_stock': 120, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
-    {'sku': 'COF-01', 'name': 'Americano', 'category': 'Classic Coffee', 'central_stock': 540, 'allocated': 90, 'held_by_cart': 65, 'min_stock': 100, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
-    {'sku': 'NCF-01', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 480, 'allocated': 80, 'held_by_cart': 50, 'min_stock': 100, 'price': 18000, 'cost': 7000, 'status': 'Aman'},
-    {'sku': 'NCF-02', 'name': 'Matcha', 'category': 'Non-Coffee', 'central_stock': 410, 'allocated': 70, 'held_by_cart': 45, 'min_stock': 100, 'price': 20000, 'cost': 8500, 'status': 'Aman'},
+    {'sku': 'prd-01', 'name': 'Kopi Susu Aren', 'category': 'Coffee', 'central_stock': 1000, 'allocated': 90, 'held_by_cart': 90, 'min_stock': 150, 'price': 12000, 'cost': 5000, 'status': 'Aman'},
+    {'sku': 'prd-02', 'name': 'Americano', 'category': 'Coffee', 'central_stock': 1000, 'allocated': 75, 'held_by_cart': 75, 'min_stock': 150, 'price': 12000, 'cost': 4500, 'status': 'Aman'},
+    {'sku': 'prd-03', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 1000, 'allocated': 80, 'held_by_cart': 80, 'min_stock': 120, 'price': 12000, 'cost': 5500, 'status': 'Aman'},
+    {'sku': 'prd-04', 'name': 'Red Velvet', 'category': 'Non-Coffee', 'central_stock': 1000, 'allocated': 70, 'held_by_cart': 70, 'min_stock': 100, 'price': 12000, 'cost': 5500, 'status': 'Aman'},
+    {'sku': 'prd-05', 'name': 'Thai Tea', 'category': 'Tea', 'central_stock': 1000, 'allocated': 95, 'held_by_cart': 95, 'min_stock': 100, 'price': 8000, 'cost': 3000, 'status': 'Aman'},
+    {'sku': 'prd-06', 'name': 'Lemon Tea', 'category': 'Tea', 'central_stock': 1000, 'allocated': 85, 'held_by_cart': 85, 'min_stock': 100, 'price': 8000, 'cost': 3000, 'status': 'Aman'},
   ];
 
   final List<Map<String, dynamic>> _locations = [
-    {'id': 'LOC-01', 'name': 'Halte Dukuh Atas Sudirman', 'seller': 'Budi Santoso (GRB-01)', 'traffic': 'Padat', 'footfall': '1.450/jam', 'score': 96.8, 'status': 'Terisi', 'lat': -6.2088, 'lng': 106.8227},
-    {'id': 'LOC-02', 'name': 'Taman Suropati Menteng', 'seller': 'Ahmad Fauzi (GRB-02)', 'traffic': 'Sedang', 'footfall': '480/jam', 'score': 88.5, 'status': 'Terisi', 'lat': -6.1994, 'lng': 106.8326},
-    {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda', 'seller': 'Hendra Wijaya (GRB-04)', 'traffic': 'Padat Komuter', 'footfall': '1.980/jam', 'score': 93.2, 'status': 'Terisi', 'lat': -6.1668, 'lng': 106.8312},
-    {'id': 'LOC-04', 'name': 'Pojok Blok III Pasar Senen', 'seller': 'Siti Rahmawati (GRB-03)', 'traffic': 'Padat Niaga', 'footfall': '850/jam', 'score': 90.0, 'status': 'Terisi', 'lat': -6.1744, 'lng': 106.8432},
-    {'id': 'LOC-05', 'name': 'Kampus UI Salemba Rektorat', 'seller': 'Tersedia untuk Tim', 'traffic': 'Normal', 'footfall': '720/jam', 'score': 87.4, 'status': 'Kosong', 'lat': -6.1953, 'lng': 106.8502},
-    {'id': 'LOC-06', 'name': 'Kuningan Madya (Rasuna Said)', 'seller': 'Tersedia untuk Tim', 'traffic': 'Padat Kantor', 'footfall': '640/jam', 'score': 84.1, 'status': 'Kosong', 'lat': -6.2185, 'lng': 106.8302},
+    {'id': 'loc-01', 'name': 'Kampus UNP Air Tawar', 'seller': 'Ahmad Fauzi (seller1)', 'traffic': 'Padat Mahasiswa', 'footfall': '1.620/jam', 'score': 96.8, 'status': 'Terisi', 'lat': -0.8960, 'lng': 100.3500},
+    {'id': 'loc-02', 'name': 'Perkantoran Khatib Sulaiman', 'seller': 'Rian Syahputra (seller2)', 'traffic': 'Padat Perkantoran', 'footfall': '1.180/jam', 'score': 92.4, 'status': 'Terisi', 'lat': -0.9040, 'lng': 100.3530},
+    {'id': 'loc-03', 'name': 'Pasar Raya Padang (Kandidat)', 'seller': 'Fauzan Akbar (seller3)', 'traffic': 'Padat Sentra Niaga', 'footfall': '1.950/jam', 'score': 94.1, 'status': 'Terisi', 'lat': -0.9510, 'lng': 100.3600},
+    {'id': 'loc-04', 'name': 'Pantai Padang Taplau (Kandidat)', 'seller': 'Doni Pratama (seller4)', 'traffic': 'Ramai Wisata Sore', 'footfall': '1.420/jam', 'score': 91.5, 'status': 'Terisi', 'lat': -0.9450, 'lng': 100.3540},
   ];
 
   final List<Map<String, dynamic>> _recentTransactions = [
-    {'id': 'TRX-1089', 'time': '13:42', 'seller': 'Budi (Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'method': 'QRIS', 'pjp': 'BCA Settlement'},
-    {'id': 'TRX-1088', 'time': '13:38', 'seller': 'Hendra (Juanda)', 'items': '1x Americano', 'total': 15000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
-    {'id': 'TRX-1087', 'time': '13:25', 'seller': 'Ahmad (Suropati)', 'items': '1x Matcha + 1x Roti Bakar', 'total': 37000, 'method': 'QRIS', 'pjp': 'GoPay Webhook'},
-    {'id': 'TRX-1086', 'time': '13:14', 'seller': 'Siti (Senen)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
+    {'id': 'TRX-1089', 'time': '13:42', 'seller': 'Ahmad (UNP)', 'items': '2x Kopi Susu Aren', 'total': 24000, 'method': 'QRIS', 'pjp': 'QRIS Static'},
+    {'id': 'TRX-1088', 'time': '13:38', 'seller': 'Rian (Khatib Sulaiman)', 'items': '1x Americano', 'total': 12000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
+    {'id': 'TRX-1087', 'time': '13:25', 'seller': 'Fauzan (Pasar Raya)', 'items': '1x Red Velvet + 1x Thai Tea', 'total': 20000, 'method': 'QRIS', 'pjp': 'QRIS Static'},
+    {'id': 'TRX-1086', 'time': '13:14', 'seller': 'Doni (Taplau)', 'items': '2x Lemon Tea Dingin', 'total': 16000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
   ];
 
   final List<Map<String, dynamic>> _customerOrders = [
-    {'id': 'ORD-9042', 'time': '13:40', 'customer': 'Farhan Maulana', 'seller': 'Budi (Sudirman)', 'items': '1x Latte + 1x Roti Kaya', 'total': 35000, 'status': 'Diproses', 'pay': 'LUNAS (QRIS)'},
-    {'id': 'ORD-9041', 'time': '13:28', 'customer': 'Rani Anggraini', 'seller': 'Budi (Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'status': 'Siap Diambil', 'pay': 'LUNAS (QRIS)'},
-    {'id': 'ORD-9040', 'time': '13:10', 'customer': 'Bagus Prasetyo', 'seller': 'Hendra (Juanda)', 'items': '1x Americano Dingin', 'total': 15000, 'status': 'Selesai', 'pay': 'LUNAS (QRIS)'},
-    {'id': 'ORD-9039', 'time': '13:35', 'customer': 'Clarissa Olivia', 'seller': 'Siti (Senen)', 'items': '2x Matcha Latte', 'total': 44000, 'status': 'Menunggu Bayar', 'pay': 'PENDING'},
+    {'id': 'ORD-9042', 'time': '13:40', 'customer': 'Maya Customer', 'seller': 'Ahmad (UNP)', 'items': '2x Kopi Susu Aren', 'total': 24000, 'status': 'Diproses', 'pay': 'LUNAS (QRIS)'},
+    {'id': 'ORD-9041', 'time': '13:28', 'customer': 'Rani Mahasiswi', 'seller': 'Ahmad (UNP)', 'items': '1x Americano + 1x Coklat', 'total': 24000, 'status': 'Siap Diambil', 'pay': 'LUNAS (QRIS)'},
+    {'id': 'ORD-9040', 'time': '13:10', 'customer': 'Bagus Prasetyo', 'seller': 'Rian (Khatib Sulaiman)', 'items': '2x Thai Tea', 'total': 16000, 'status': 'Selesai', 'pay': 'LUNAS (QRIS)'},
+    {'id': 'ORD-9039', 'time': '13:35', 'customer': 'Clarissa Olivia', 'seller': 'Doni (Taplau)', 'items': '2x Lemon Tea', 'total': 16000, 'status': 'Menunggu Bayar', 'pay': 'PENDING'},
   ];
+
+  bool _isLoadingLive = false;
+  Map<String, dynamic>? _liveAnalytics;
 
   @override
   void initState() {
     super.initState();
     _resetWarehouseStock();
+    _fetchLiveBackendData();
+  }
+
+  Future<void> _fetchLiveBackendData() async {
+    if (!mounted) return;
+    setState(() => _isLoadingLive = true);
+    try {
+      final int days = _activeTimeFilter == 'Hari Ini'
+          ? 1
+          : (_activeTimeFilter == 'Kemarin' ? 2 : (_activeTimeFilter == '7 Hari' ? 7 : 30));
+
+      final analytics = await ownerApi.getSalesAnalytics(days: days);
+      final invList = await ownerApi.getInventory();
+      final txList = await ownerApi.getTransactions(limit: 20);
+      final ordList = await ownerApi.getOrders(limit: 20);
+
+      if (!mounted) return;
+      setState(() {
+        if (analytics.isNotEmpty && analytics.containsKey('summary')) {
+          _liveAnalytics = analytics;
+        }
+
+        // Sinkronisasi stok gudang pusat dari database jika ada
+        if (invList.isNotEmpty) {
+          for (var item in invList) {
+            if (item is Map && item['scope_type'] == 'WAREHOUSE') {
+              final prodId = item['product_id']?.toString() ?? '';
+              final qty = (item['quantity'] as num?)?.toInt() ?? 1000;
+              final found = _warehouseStock.firstWhere((w) => w['sku'] == prodId, orElse: () => {});
+              if (found.isNotEmpty) {
+                found['central_stock'] = qty;
+              }
+            }
+          }
+        }
+
+        // Sinkronisasi transaksi terkini dari database jika ada
+        if (txList.isNotEmpty) {
+          _recentTransactions.clear();
+          for (var t in txList) {
+            if (t is Map) {
+              final locId = t['location_id']?.toString() ?? '';
+              final seller = locId == 'loc-01'
+                  ? 'Ahmad (UNP)'
+                  : (locId == 'loc-02'
+                      ? 'Rian (Khatib Sulaiman)'
+                      : (locId == 'loc-03' ? 'Fauzan (Pasar Raya)' : 'Doni (Taplau)'));
+              final method = t['payment_method']?.toString() == 'CASH' ? 'TUNAI' : 'QRIS';
+              final pjp = method == 'QRIS' ? 'QRIS Static' : 'Kasir Fisik';
+              final tDate = t['created_at']?.toString() ?? '';
+              final timeStr = tDate.length >= 16 ? tDate.substring(11, 16) : 'Live';
+              _recentTransactions.add({
+                'id': t['id']?.toString() ?? 'TRX',
+                'time': timeStr,
+                'seller': seller,
+                'items': 'Minuman KopiCerdas',
+                'total': (t['total_amount'] as num?)?.toInt() ?? 0,
+                'method': method,
+                'pjp': pjp,
+              });
+            }
+          }
+        }
+
+        // Sinkronisasi order pre-order customer dari database jika ada
+        if (ordList.isNotEmpty) {
+          _customerOrders.clear();
+          for (var o in ordList) {
+            if (o is Map) {
+              final locId = o['location_id']?.toString() ?? '';
+              final seller = locId == 'loc-01'
+                  ? 'Ahmad (UNP)'
+                  : (locId == 'loc-02'
+                      ? 'Rian (Khatib Sulaiman)'
+                      : (locId == 'loc-03' ? 'Fauzan (Pasar Raya)' : 'Doni (Taplau)'));
+              final oDate = o['created_at']?.toString() ?? '';
+              final timeStr = oDate.length >= 16 ? oDate.substring(11, 16) : 'Live';
+              final statusRaw = o['order_status']?.toString() ?? 'CONFIRMED';
+              final statusDisplay = statusRaw == 'COMPLETED'
+                  ? 'Selesai'
+                  : (statusRaw == 'READY_FOR_PICKUP'
+                      ? 'Siap Diambil'
+                      : (statusRaw == 'PREPARING' ? 'Diproses' : 'Menunggu'));
+              final payRaw = o['payment_status']?.toString() ?? 'PAID';
+              final payDisplay = payRaw == 'PAID' ? 'LUNAS (QRIS)' : 'PENDING';
+
+              _customerOrders.add({
+                'id': o['id']?.toString() ?? 'ORD',
+                'time': timeStr,
+                'customer': 'Maya Customer',
+                'seller': seller,
+                'items': 'Pre-Order KopiCerdas',
+                'total': (o['total_amount'] as num?)?.toInt() ?? 0,
+                'status': statusDisplay,
+                'pay': payDisplay,
+              });
+            }
+          }
+        }
+      });
+    } catch (_) {
+      // Fallback tetap aman
+    } finally {
+      if (mounted) setState(() => _isLoadingLive = false);
+    }
   }
 
   void _resetWarehouseStock() {
     _warehouseStock.clear();
     _warehouseStock.addAll([
-      {'sku': 'KPS-01', 'name': 'Kopi Susu Soft', 'category': 'Kopi Susu', 'central_stock': 850, 'allocated': 160, 'held_by_cart': 110, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-      {'sku': 'KPS-02', 'name': 'Kopi Susu Strong', 'category': 'Kopi Susu', 'central_stock': 750, 'allocated': 140, 'held_by_cart': 95, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
-      {'sku': 'KPS-03', 'name': 'Kopi Susu Butter', 'category': 'Kopi Susu', 'central_stock': 620, 'allocated': 120, 'held_by_cart': 80, 'min_stock': 120, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
-      {'sku': 'COF-01', 'name': 'Americano', 'category': 'Classic Coffee', 'central_stock': 540, 'allocated': 90, 'held_by_cart': 65, 'min_stock': 100, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
-      {'sku': 'NCF-01', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 480, 'allocated': 80, 'held_by_cart': 50, 'min_stock': 100, 'price': 18000, 'cost': 7000, 'status': 'Aman'},
-      {'sku': 'NCF-02', 'name': 'Matcha', 'category': 'Non-Coffee', 'central_stock': 410, 'allocated': 70, 'held_by_cart': 45, 'min_stock': 100, 'price': 20000, 'cost': 8500, 'status': 'Aman'},
+      {'sku': 'prd-01', 'name': 'Kopi Susu Aren', 'category': 'Coffee', 'central_stock': 1000, 'allocated': 90, 'held_by_cart': 90, 'min_stock': 150, 'price': 12000, 'cost': 5000, 'status': 'Aman'},
+      {'sku': 'prd-02', 'name': 'Americano', 'category': 'Coffee', 'central_stock': 1000, 'allocated': 75, 'held_by_cart': 75, 'min_stock': 150, 'price': 12000, 'cost': 4500, 'status': 'Aman'},
+      {'sku': 'prd-03', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 1000, 'allocated': 80, 'held_by_cart': 80, 'min_stock': 120, 'price': 12000, 'cost': 5500, 'status': 'Aman'},
+      {'sku': 'prd-04', 'name': 'Red Velvet', 'category': 'Non-Coffee', 'central_stock': 1000, 'allocated': 70, 'held_by_cart': 70, 'min_stock': 100, 'price': 12000, 'cost': 5500, 'status': 'Aman'},
+      {'sku': 'prd-05', 'name': 'Thai Tea', 'category': 'Tea', 'central_stock': 1000, 'allocated': 95, 'held_by_cart': 95, 'min_stock': 100, 'price': 8000, 'cost': 3000, 'status': 'Aman'},
+      {'sku': 'prd-06', 'name': 'Lemon Tea', 'category': 'Tea', 'central_stock': 1000, 'allocated': 85, 'held_by_cart': 85, 'min_stock': 100, 'price': 8000, 'cost': 3000, 'status': 'Aman'},
     ]);
   }
 
@@ -227,7 +309,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     final nameCtrl = TextEditingController();
     final userCtrl = TextEditingController();
     final phoneCtrl = TextEditingController();
-    final cartCtrl = TextEditingController(text: 'GRB-0${_staffList.length + 1}');
+    final cartCtrl = TextEditingController(text: 'loc-0${_staffList.length + 1}');
 
     showDialog(
       context: context,
@@ -532,14 +614,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   void _showDistributeStockDialog([String? defaultStaffId]) {
     String selectedSellerId = defaultStaffId ?? _staffList.first['id'];
     
-    // Setiap barang dimulai dari 0 sesuai SOP KopiCerdas
+    // Setiap barang dimulai dari 0 sesuai SOP KopiCerdas Padang
     final Map<String, int> allocationMap = {
-      'KPS-01': 0,
-      'KPS-02': 0,
-      'KPS-03': 0,
-      'COF-01': 0,
-      'NCF-01': 0,
-      'NCF-02': 0,
+      'prd-01': 0,
+      'prd-02': 0,
+      'prd-03': 0,
+      'prd-04': 0,
+      'prd-05': 0,
+      'prd-06': 0,
     };
 
     showDialog(
@@ -1128,21 +1210,21 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // MODAL 3: Tax Report Official CSV Export Dialog (Requirement 8)
   void _showTaxReportExportDialog() {
     final List<Map<String, dynamic>> records = [
-      {'no': 'INV-20261114-001', 'tgl': '14/11/2026', 'sumber': 'GRB-01 (Sudirman)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 900000, 'qris': 0, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-002', 'tgl': '14/11/2026', 'sumber': 'GRB-01 (Sudirman)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1940000, 'dpp': 1940000, 'pph': 9700, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-003', 'tgl': '14/11/2026', 'sumber': 'GRB-02 (Suropati)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 520000, 'qris': 0, 'dpp': 520000, 'pph': 2600, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-004', 'tgl': '14/11/2026', 'sumber': 'GRB-02 (Suropati)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 900000, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-005', 'tgl': '14/11/2026', 'sumber': 'GRB-03 (Senen)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 640000, 'qris': 0, 'dpp': 640000, 'pph': 3200, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-006', 'tgl': '14/11/2026', 'sumber': 'GRB-03 (Senen)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1340000, 'dpp': 1340000, 'pph': 6700, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-007', 'tgl': '14/11/2026', 'sumber': 'GRB-04 (Juanda)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 780000, 'qris': 0, 'dpp': 780000, 'pph': 3900, 'kjs': '411128-420'},
-      {'no': 'INV-20261114-008', 'tgl': '14/11/2026', 'sumber': 'GRB-04 (Juanda)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1580000, 'dpp': 1580000, 'pph': 7900, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-001', 'tgl': '14/11/2026', 'sumber': 'loc-01 (UNP)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 900000, 'qris': 0, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-002', 'tgl': '14/11/2026', 'sumber': 'loc-01 (UNP)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1940000, 'dpp': 1940000, 'pph': 9700, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-003', 'tgl': '14/11/2026', 'sumber': 'loc-02 (Khatib Sulaiman)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 520000, 'qris': 0, 'dpp': 520000, 'pph': 2600, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-004', 'tgl': '14/11/2026', 'sumber': 'loc-02 (Khatib Sulaiman)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 900000, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-005', 'tgl': '14/11/2026', 'sumber': 'loc-03 (Pasar Raya)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 640000, 'qris': 0, 'dpp': 640000, 'pph': 3200, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-006', 'tgl': '14/11/2026', 'sumber': 'loc-03 (Pasar Raya)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1340000, 'dpp': 1340000, 'pph': 6700, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-007', 'tgl': '14/11/2026', 'sumber': 'loc-04 (Taplau)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 780000, 'qris': 0, 'dpp': 780000, 'pph': 3900, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-008', 'tgl': '14/11/2026', 'sumber': 'loc-04 (Taplau)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1580000, 'dpp': 1580000, 'pph': 7900, 'kjs': '411128-420'},
       {'no': 'INV-20261114-009', 'tgl': '14/11/2026', 'sumber': 'Discovery App Pre-Order', 'kanal': 'Online App', 'metode': 'QRIS Dinamis', 'cash': 0, 'qris': 3420000, 'dpp': 3420000, 'pph': 17100, 'kjs': '411128-420'},
     ];
 
     final csvBuffer = StringBuffer();
     csvBuffer.writeln('No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Penerimaan_Cash_IDR,Penerimaan_QRIS_IDR,Total_Omzet_DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan');
     for (final r in records) {
-      csvBuffer.writeln('${r['no']},${r['tgl']},"${r['sumber']}",${r['kanal']},${r['metode']},${r['cash']},${r['qris']},${r['dpp']},0.5%,${r['pph']},${r['kjs']},"Penjualan KopiCerdas Lapangan"');
+      csvBuffer.writeln('${r['no']},${r['tgl']},"${r['sumber']}",${r['kanal']},${r['metode']},${r['cash']},${r['qris']},${r['dpp']},0.5%,${r['pph']},${r['kjs']},"Penjualan Kopi Cerdas Lapangan"');
     }
     csvBuffer.writeln('TOTAL,14/11/2026,"Konsolidasi Seluruh Kanal",Semua,Cash+QRIS,2840000,5850000,8690000,0.5%,43450,411128-420,"Total Omzet & PPh Final UMKM PP 55/2022"');
     final String csvData = csvBuffer.toString();
@@ -1448,7 +1530,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                         onPressed: () {
                           // Real Browser File Download!
-                          downloadWebFile(csvData, 'Laporan_Pajak_KopiCerdas_14Nov2026.csv');
+                          downloadWebFile(csvData, 'Laporan_Pajak_Kopi_Cerdas_14Nov2026.csv');
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Color(0xFF065F46),
@@ -1459,7 +1541,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Text(
-                                      'File "Laporan_Pajak_KopiCerdas_14Nov2026.csv" berhasil diunduh ke folder Downloads!',
+                                      'File "Laporan_Pajak_Kopi_Cerdas_14Nov2026.csv" berhasil diunduh ke folder Downloads!',
                                       style: TextStyle(fontWeight: FontWeight.w600),
                                     ),
                                   ),
@@ -1606,7 +1688,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'KopiCerdas AI',
+                                'Kopi Cerdas',
                                 style: TextStyle(
                                   color: Color(0xFF111827),
                                   fontWeight: FontWeight.w800,
@@ -1682,7 +1764,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Owner KopiCerdas', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
+                                Text('Owner Kopi Cerdas', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
                                 Text('Administrator Bisnis', style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
                               ],
                             ),
@@ -1857,7 +1939,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 const SizedBox(height: 1),
                 const Text(
-                  'KopiCerdas AI — Smart Operational & Intelligence Management',
+                  'Kopi Cerdas — Smart Operational & Intelligence Management',
                   style: TextStyle(
                     fontSize: 11,
                     color: Color(0xFF6B7280),
@@ -1905,6 +1987,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 return InkWell(
                   onTap: () {
                     setState(() => _activeTimeFilter = label);
+                    _fetchLiveBackendData();
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -1946,8 +2029,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             ),
             onPressed: () {
+              _fetchLiveBackendData();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(duration: Duration(seconds: 1), content: Text('Sinkronisasi data real-time diperbarui.')),
+                const SnackBar(duration: Duration(seconds: 1), content: Text('Sinkronisasi data real-time diperbarui dari backend.')),
               );
             },
             icon: const Icon(Icons.refresh, size: 15),
@@ -1997,7 +2081,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Owner KopiCerdas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                  Text('Owner Kopi Cerdas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
                   Text('Administrator Bisnis', style: TextStyle(fontSize: 10, color: Color(0xFF6B7280))),
                 ],
               ),
@@ -2023,7 +2107,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       case 10: return 'Analisis AI Permintaan & Optimasi Stok';
       case 11: return 'Laporan Keuangan & Pelaporan Pajak Resmi';
       case 12: return 'Pengaturan Sistem Operasional';
-      default: return 'Portal Owner KopiCerdas';
+      default: return 'Portal Owner Kopi Cerdas';
     }
   }
 
@@ -2060,11 +2144,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 22.0, 'amber': 30.0, 'label': '19:00'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Soft', 'sold': '172 cup (50%)', 'omzet': 3096000, 'stock': '850 cup'},
-            {'name': 'Kopi Susu Strong', 'sold': '80 cup (23%)', 'omzet': 1440000, 'stock': '750 cup'},
-            {'name': 'Kopi Susu Butter', 'sold': '48 cup (14%)', 'omzet': 960000, 'stock': '620 cup'},
-            {'name': 'Americano', 'sold': '31 cup (9%)', 'omzet': 465000, 'stock': '540 cup'},
-            {'name': 'Coklat', 'sold': '10 cup (3%)', 'omzet': 180000, 'stock': '480 cup'},
+            {'name': 'Kopi Susu Aren', 'sold': '172 cup (50%)', 'omzet': 2064000, 'stock': '1.000 cup'},
+            {'name': 'Americano', 'sold': '80 cup (23%)', 'omzet': 960000, 'stock': '1.000 cup'},
+            {'name': 'Thai Tea', 'sold': '48 cup (14%)', 'omzet': 384000, 'stock': '1.000 cup'},
+            {'name': 'Coklat', 'sold': '31 cup (9%)', 'omzet': 372000, 'stock': '1.000 cup'},
+            {'name': 'Lemon Tea', 'sold': '10 cup (3%)', 'omzet': 80000, 'stock': '1.000 cup'},
           ],
           'speed_label': '+12.3% vs hari sebelumnya',
           'speed_rows': [
@@ -2103,11 +2187,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 55.0, 'amber': 75.0, 'label': 'Sab'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Soft', 'sold': '1.350 cup (51%)', 'omzet': 24300000, 'stock': '850 cup'},
-            {'name': 'Kopi Susu Strong', 'sold': '615 cup (23%)', 'omzet': 11070000, 'stock': '750 cup'},
-            {'name': 'Kopi Susu Butter', 'sold': '395 cup (15%)', 'omzet': 7900000, 'stock': '620 cup'},
-            {'name': 'Americano', 'sold': '215 cup (8%)', 'omzet': 3225000, 'stock': '540 cup'},
-            {'name': 'Coklat', 'sold': '75 cup (3%)', 'omzet': 1350000, 'stock': '480 cup'},
+            {'name': 'Kopi Susu Aren', 'sold': '1.350 cup (51%)', 'omzet': 16200000, 'stock': '1.000 cup'},
+            {'name': 'Americano', 'sold': '615 cup (23%)', 'omzet': 7380000, 'stock': '1.000 cup'},
+            {'name': 'Thai Tea', 'sold': '395 cup (15%)', 'omzet': 3160000, 'stock': '1.000 cup'},
+            {'name': 'Coklat', 'sold': '215 cup (8%)', 'omzet': 2580000, 'stock': '1.000 cup'},
+            {'name': 'Lemon Tea', 'sold': '75 cup (3%)', 'omzet': 600000, 'stock': '1.000 cup'},
           ],
           'speed_label': '+18.7% vs minggu lalu',
           'speed_rows': [
@@ -2144,11 +2228,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 55.0, 'amber': 72.0, 'label': 'Mgg 4'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Soft', 'sold': '5.940 cup (51%)', 'omzet': 106920000, 'stock': '850 cup'},
-            {'name': 'Kopi Susu Strong', 'sold': '2.680 cup (23%)', 'omzet': 48240000, 'stock': '750 cup'},
-            {'name': 'Kopi Susu Butter', 'sold': '1.740 cup (15%)', 'omzet': 34800000, 'stock': '620 cup'},
-            {'name': 'Americano', 'sold': '940 cup (8%)', 'omzet': 14100000, 'stock': '540 cup'},
-            {'name': 'Coklat', 'sold': '340 cup (3%)', 'omzet': 6120000, 'stock': '480 cup'},
+            {'name': 'Kopi Susu Aren', 'sold': '5.940 cup (51%)', 'omzet': 71280000, 'stock': '1.000 cup'},
+            {'name': 'Americano', 'sold': '2.680 cup (23%)', 'omzet': 32160000, 'stock': '1.000 cup'},
+            {'name': 'Thai Tea', 'sold': '1.740 cup (15%)', 'omzet': 13920000, 'stock': '1.000 cup'},
+            {'name': 'Coklat', 'sold': '940 cup (8%)', 'omzet': 11280000, 'stock': '1.000 cup'},
+            {'name': 'Lemon Tea', 'sold': '340 cup (3%)', 'omzet': 2720000, 'stock': '1.000 cup'},
           ],
           'speed_label': '+31.4% vs bulan sebelumnya',
           'speed_rows': [
@@ -2193,11 +2277,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 28.0, 'amber': 38.0, 'label': '19:00'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Soft', 'sold': '215 cup (51%)', 'omzet': 3870000, 'stock': '850 cup'},
-            {'name': 'Kopi Susu Strong', 'sold': '98 cup (23%)', 'omzet': 1764000, 'stock': '750 cup'},
-            {'name': 'Kopi Susu Butter', 'sold': '62 cup (15%)', 'omzet': 1240000, 'stock': '620 cup'},
-            {'name': 'Americano', 'sold': '36 cup (8%)', 'omzet': 540000, 'stock': '540 cup'},
-            {'name': 'Coklat', 'sold': '12 cup (3%)', 'omzet': 216000, 'stock': '480 cup'},
+            {'name': 'Kopi Susu Aren', 'sold': '215 cup (51%)', 'omzet': 2580000, 'stock': '1.000 cup'},
+            {'name': 'Americano', 'sold': '98 cup (23%)', 'omzet': 1176000, 'stock': '1.000 cup'},
+            {'name': 'Thai Tea', 'sold': '62 cup (15%)', 'omzet': 496000, 'stock': '1.000 cup'},
+            {'name': 'Coklat', 'sold': '36 cup (8%)', 'omzet': 432000, 'stock': '1.000 cup'},
+            {'name': 'Lemon Tea', 'sold': '12 cup (3%)', 'omzet': 96000, 'stock': '1.000 cup'},
           ],
           'speed_label': '+24% vs kemarin',
           'speed_rows': [
@@ -2263,8 +2347,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                   ),
                   onPressed: () {
+                    _fetchLiveBackendData();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(duration: Duration(seconds: 1), content: Text('Data operasional & telemetri gerobak diperbarui.')),
+                      const SnackBar(duration: Duration(seconds: 1), content: Text('Data operasional & telemetri gerobak diperbarui dari backend.')),
                     );
                   },
                   icon: const Icon(Icons.refresh, size: 16),
@@ -2430,7 +2515,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               const SizedBox(width: 10),
               const Expanded(
                 child: Text(
-                  'Peringatan Stok Menipis: Hendra Wijaya - GRB-04 Stasiun Juanda sisa 15 Cup. Peak komuter pulang kerja KRL 16:30 WIB. Model AI menyarankan restock 20 cup segera.',
+                  'Peringatan Stok Menipis: Doni Pratama - loc-04 Pantai Taplau sisa 15 Cup. Peak sore wisatawan 16:30 WIB. Model AI menyarankan restock 20 cup segera.',
                   style: TextStyle(fontSize: 12, color: Color(0xFF92400E), fontWeight: FontWeight.w600),
                 ),
               ),
@@ -2483,13 +2568,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopSellerRow('1', 'Budi Santoso - GRB-01', '142 / 120 Cup • 118%', 'Omzet: Rp 2.840.000 • Cash: Rp 900.000 | QRIS: Rp 1.940.000', 1.0, const Color(0xFF059669)),
+                    _buildTopSellerRow('1', 'Ahmad Fauzi - loc-01 (UNP)', '142 / 120 Cup • 118%', 'Omzet: Rp 2.840.000 • Cash: Rp 900.000 | QRIS: Rp 1.940.000', 1.0, const Color(0xFF059669)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('2', 'Hendra Wijaya - GRB-04', '118 / 110 Cup • 107%', 'Omzet: Rp 2.360.000 • Cash: Rp 780.000 | QRIS: Rp 1.580.000', 0.95, const Color(0xFF0D9488)),
+                    _buildTopSellerRow('2', 'Doni Pratama - loc-04 (Taplau)', '118 / 110 Cup • 107%', 'Omzet: Rp 2.360.000 • Cash: Rp 780.000 | QRIS: Rp 1.580.000', 0.95, const Color(0xFF0D9488)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('3', 'Siti Rahmawati - GRB-03', '95 / 120 Cup • 79%', 'Omzet: Rp 1.980.000 • Cash: Rp 640.000 | QRIS: Rp 1.340.000', 0.79, const Color(0xFF2563EB)),
+                    _buildTopSellerRow('3', 'Fauzan Akbar - loc-03 (Pasar Raya)', '95 / 120 Cup • 79%', 'Omzet: Rp 1.980.000 • Cash: Rp 640.000 | QRIS: Rp 1.340.000', 0.79, const Color(0xFF2563EB)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('4', 'Ahmad Fauzi - GRB-02', '68 / 120 Cup • 56%', 'Omzet: Rp 1.420.000 • Cash: Rp 520.000 | QRIS: Rp 900.000', 0.56, const Color(0xFFD97706)),
+                    _buildTopSellerRow('4', 'Rian Syahputra - loc-02 (Khatib Sulaiman)', '68 / 120 Cup • 56%', 'Omzet: Rp 1.420.000 • Cash: Rp 520.000 | QRIS: Rp 900.000', 0.56, const Color(0xFFD97706)),
                   ],
                 ),
               ),
@@ -2523,13 +2608,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopAreaTile('1', 'Pintu Timur Stasiun Juanda', '155 Cup terjual', 'Peak: 07:00-09:15 & 16:30-18:30 KRL • Arus 14.800/jam', isAlert: true, alertText: 'Sisa 15 cup'),
+                    _buildTopAreaTile('1', 'Kawasan Wisata Pantai Padang Taplau', '155 Cup terjual', 'Peak: 16:00-18:30 Sunset Wisata • Arus 14.800/jam', isAlert: true, alertText: 'Sisa 15 cup'),
                     const SizedBox(height: 10),
-                    _buildTopAreaTile('2', 'Halte Dukuh Atas Sudirman', '142 Cup terjual', 'Peak: 07:30-09:30 & 12:00-13:30 • Arus 12.200/jam', isAlert: false, alertText: 'Aman 42 cup'),
+                    _buildTopAreaTile('2', 'Kampus UNP Air Tawar', '142 Cup terjual', 'Peak: 07:30-09:30 & 12:00-13:30 Mahasiswa • Arus 12.200/jam', isAlert: false, alertText: 'Aman 42 cup'),
                     const SizedBox(height: 10),
-                    _buildTopAreaTile('3', 'Pojok Blok III Pasar Senen', '95 Cup terjual', 'Peak: 06:00-10:00 Grosir • Arus 8.500/jam', isAlert: false, alertText: 'Aman 35 cup'),
+                    _buildTopAreaTile('3', 'Pintu Barat Pasar Raya Padang', '95 Cup terjual', 'Peak: 06:00-10:00 Grosir • Arus 8.500/jam', isAlert: false, alertText: 'Aman 35 cup'),
                     const SizedBox(height: 10),
-                    _buildTopAreaTile('4', 'Taman Suropati Menteng', '68 Cup terjual', 'Peak: 17:30-21:00 Santai Malam • Arus 4.200/jam', isAlert: false, alertText: 'Aman 28 cup'),
+                    _buildTopAreaTile('4', 'Sentra Kantor Khatib Sulaiman', '68 Cup terjual', 'Peak: 12:00-14:00 Istirahat Kantor • Arus 4.200/jam', isAlert: false, alertText: 'Aman 28 cup'),
                   ],
                 ),
               ),
@@ -2563,13 +2648,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopProductTile('1', 'Kopi Susu Soft', '215 Cup • 50.8%', 'Rp 3.870.000 • Gudang: 850 porsi', '+28%'),
+                    _buildTopProductTile('1', 'Kopi Susu Aren', '215 Cup • 50.8%', 'Rp 2.580.000 • Gudang: 1.000 porsi', '+28%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('2', 'Kopi Susu Strong', '98 Cup • 23.2%', 'Rp 1.764.000 • Gudang: 750 porsi', '+15%'),
+                    _buildTopProductTile('2', 'Americano', '98 Cup • 23.2%', 'Rp 1.176.000 • Gudang: 1.000 porsi', '+15%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('3', 'Kopi Susu Butter', '62 Cup • 14.6%', 'Rp 1.240.000 • Gudang: 620 porsi', '+9%'),
+                    _buildTopProductTile('3', 'Thai Tea', '62 Cup • 14.6%', 'Rp 496.000 • Gudang: 1.000 porsi', '+9%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('4', 'Americano', '36 Cup • 8.5%', 'Rp 540.000 • Gudang: 540 porsi', '+5%'),
+                    _buildTopProductTile('4', 'Coklat', '36 Cup • 8.5%', 'Rp 432.000 • Gudang: 1.000 porsi', '+5%'),
                   ],
                 ),
               ),
@@ -2684,10 +2769,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           Expanded(
                             child: Text(
                               _aiWeatherMode == 'RAIN'
-                                  ? 'Prakiraan Hujan di Jakarta (24°C - BMKG): Arus pejalan kaki trotoar outdoor melandai. AI merekomendasikan pemangkasan alokasi (-20%) untuk mencegah es mencair & cup sisa basi, sementara varian rasa hangat & creamy (Kopi Susu Butter & Coklat) dipertahankan stabil.'
+                                  ? 'Prakiraan Hujan di Padang (24°C - BMKG): Arus pejalan kaki trotoar outdoor melandai. AI merekomendasikan pemangkasan alokasi (-20%) untuk mencegah es mencair & cup sisa basi, sementara varian rasa hangat & creamy (Coklat & Red Velvet) dipertahankan stabil.'
                                   : (_aiWeatherMode == 'PEAK_SUNNY'
-                                      ? 'Prakiraan Cerah Panas Terik (32°C - BMKG): Indeks dahaga komuter melonjak. AI merekomendasikan penambahan alokasi stok (+22%) khususnya Americano dingin & Kopi Susu Soft guna mencegah kehabisan stok (stockout) pada jam sibuk siang/sore.'
-                                      : 'Kondisi Berawan Normal (28°C - BMKG): Alokasi stok menggunakan baseline standar owner berdasarkan tren riil transaksi 6 menu resmi KopiCerdas di titik lapak komuter Jakarta.'),
+                                      ? 'Prakiraan Cerah Panas Terik (32°C - BMKG): Indeks dahaga komuter melonjak. AI merekomendasikan penambahan alokasi stok (+22%) khususnya Americano dingin & Kopi Susu Aren es guna mencegah kehabisan stok (stockout) pada jam sibuk siang/sore.'
+                                      : 'Kondisi Berawan Normal (28°C - BMKG): Alokasi stok menggunakan baseline standar owner berdasarkan tren riil transaksi 6 menu resmi KopiCerdas di titik lapak Padang.'),
                               style: TextStyle(
                                 fontSize: 11.5,
                                 fontWeight: FontWeight.w500,
@@ -2728,173 +2813,173 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ),
                   if (_aiWeatherMode == 'RAIN') ...[
                     _buildAiAnalysisRow(
-                      'Halte Dukuh Atas Sudirman (GRB-01)',
-                      'Transit Komuter MRT/KRL & Perkantoran',
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Area Kampus & Mahasiswa',
                       '145 Cup',
                       'Bawa kini: 180 cup',
                       '135 – 145 Cup',
                       'Terserap: 138 cup',
-                      '24°C Hujan Deras',
+                      '24°C Hujan Deras Tropis',
                       'Indeks Es Kopi -20%',
-                      'Halte & MRT Berteduh',
-                      '8.500 org/jam • Komuter Berteduh',
-                      'Pangkas varian es -20%. Pertahankan stok Kopi Susu Butter & Kopi Susu Strong hangat untuk komuter berteduh di halte.',
+                      'Gedung Kuliah Berteduh',
+                      '8.500 mhs/jam • Mahasiswa Berteduh',
+                      'Pangkas varian es -20%. Pertahankan stok Kopi Susu Aren & Coklat hangat untuk mahasiswa berteduh di selasar kampus.',
                       isWarning: true,
                     ),
                     _buildAiAnalysisRow(
-                      'Taman Suropati Menteng (GRB-02)',
-                      'Kawasan Taman Kota & Rekreasi',
+                      'Sentra Kantor Khatib Sulaiman (loc-02)',
+                      'Sentra Perkantoran & Bisnis Padang',
                       '80 Cup',
                       'Bawa kini: 100 cup',
                       '70 – 80 Cup',
                       'Terserap: 74 cup',
-                      '24°C Hujan Angin Taman',
-                      'Aktivitas Taman Turun',
-                      'Lengang Hujan',
-                      '1.800 org/jam • Area Rindang Basah',
-                      'Aktivitas santai taman berkurang saat hujan. Pangkas alokasi ke 80 cup, tonjolkan varian Coklat & Matcha hangat.',
+                      '24°C Hujan Deras Siang',
+                      'Aktivitas Kantor Menurun',
+                      'Lobi Gedung Kantor',
+                      '2.800 org/jam • Karyawan Indoor',
+                      'Karyawan enggan keluar gedung saat hujan. Pangkas alokasi ke 80 cup, tonjolkan varian Americano & Coklat hangat.',
                       isWarning: true,
                     ),
                     _buildAiAnalysisRow(
-                      'Pojok Blok III Senen (GRB-03)',
+                      'Pintu Barat Pasar Raya Padang (loc-03)',
                       'Sentra Niaga & Pasar Tradisional',
                       '95 Cup',
                       'Bawa kini: 120 cup',
                       '85 – 95 Cup',
                       'Terserap: 88 cup',
-                      '24°C Hujan Becek Pasar',
+                      '24°C Hujan Tropis Padang',
                       'Los Dalam Tetap Ramai',
                       'Padat Los Dalam',
-                      '6.200 org/jam • Pedagang Los',
-                      'Aktivitas pasar dalam los tetap berjalan. Rekomendasi 95 cup aman dengan fokus Kopi Susu Strong & Soft.',
+                      '6.200 org/jam • Pedagang Los Pasar',
+                      'Aktivitas pasar dalam los tetap berjalan lancar. Rekomendasi 95 cup aman dengan fokus Kopi Susu Aren & Americano hangat.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Pintu Timur Stasiun Juanda (GRB-04)',
-                      'Stasiun Transit Komuter KRL',
-                      '120 Cup',
-                      'Bawa kini: 150 cup',
-                      '110 – 120 Cup',
-                      'Terserap: 114 cup',
-                      '24°C Hujan Komuter KRL',
-                      'Demand Kopi Hangat Naik',
-                      'Komuter Transit Cepat',
-                      '9.800 org/jam • Arus KRL Jam Sibuk',
-                      'Penumpang KRL tetap masif namun berjalan cepat menghindari hujan. Rekomendasi 120 cup fokus pesanan take-away cepat Strong.',
-                      isWarning: false,
+                      'Kawasan Wisata Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari & Pantai',
+                      '70 Cup',
+                      'Bawa kini: 110 cup',
+                      '65 – 70 Cup',
+                      'Terserap: 68 cup',
+                      '24°C Hujan Angin Pantai',
+                      'Wisatawan Pantai Surut',
+                      'Lengang Hujan Tepi Laut',
+                      '1.500 org/jam • Tenda Wisata',
+                      'Pengunjung pantai berkurang drastis saat hujan badai pesisir. Pangkas kuota ke 70 cup guna mencegah pemborosan bahan.',
+                      isWarning: true,
                     ),
                   ] else if (_aiWeatherMode == 'PEAK_SUNNY') ...[
                     _buildAiAnalysisRow(
-                      'Halte Dukuh Atas Sudirman (GRB-01)',
-                      'Transit Komuter MRT/KRL & Perkantoran',
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Area Kampus & Mahasiswa',
                       '215 Cup',
                       'Bawa kini: 180 cup',
                       '200 – 215 Cup',
                       'Terserap: 206 cup',
-                      '32°C Panas Terik Aspal',
+                      '32°C Panas Terik Pesisir',
                       'Indeks Es Kopi +25%',
-                      'Sangat Padat Komuter',
-                      '16.500 org/jam • Jam Masuk & Pulang',
-                      'Peluang omzet tinggi! Lonjakan dahaga komuter kantor. Tambah alokasi Americano & Kopi Susu Soft dingin (+20%).',
+                      'Sangat Padat Mahasiswa',
+                      '16.500 mhs/jam • Pergantian Jam Kuliah',
+                      'Peluang omzet tinggi! Lonjakan dahaga mahasiswa antar kelas. Tambah alokasi Americano dingin & Kopi Susu Aren es (+20%).',
                       isWarning: true,
                     ),
                     _buildAiAnalysisRow(
-                      'Taman Suropati Menteng (GRB-02)',
-                      'Kawasan Taman Kota & Rekreasi',
+                      'Sentra Kantor Khatib Sulaiman (loc-02)',
+                      'Sentra Perkantoran & Bisnis Padang',
                       '125 Cup',
                       'Bawa kini: 100 cup',
                       '115 – 125 Cup',
                       'Terserap: 118 cup',
-                      '32°C Panas Teduh Taman',
+                      '32°C Terik Kawasan Bisnis',
                       'Demand Varian Dingin Naik',
-                      'Ramai Warga & Komunitas',
-                      '7.200 org/jam • Santai Pagi & Sore',
-                      'Warga menikmati keteduhan taman. Tambah varian Kopi Susu Butter, Kopi Susu Soft, dan Matcha dingin.',
+                      'Ramai Karyawan Istirahat',
+                      '7.200 org/jam • Makan Siang Kantor',
+                      'Karyawan berburu minuman dingin saat istirahat siang. Tambah pasokan Thai Tea dingin dan Lemon Tea es.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Pojok Blok III Senen (GRB-03)',
+                      'Pintu Barat Pasar Raya Padang (loc-03)',
                       'Sentra Niaga & Pasar Tradisional',
                       '145 Cup',
                       'Bawa kini: 120 cup',
                       '135 – 145 Cup',
                       'Terserap: 136 cup',
                       '33°C Terik Los Niaga',
-                      'Demand Kopi Segar Naik',
-                      'Padat Aktivitas Grosir',
-                      '11.500 org/jam • Pedagang & Kuli',
-                      'Aktivitas pasar padat, tambah stok Kopi Susu Strong dingin untuk stamina pedagang dan pembeli grosir.',
+                      'Demand Minuman Segar Melonjak',
+                      'Padat Aktivitas Perdagangan',
+                      '11.500 org/jam • Pedagang & Pengunjung',
+                      'Aktivitas pasar padat, tambah stok Lemon Tea dingin dan Kopi Susu Aren es untuk stamina pedagang pasar.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Pintu Timur Stasiun Juanda (GRB-04)',
-                      'Stasiun Transit Komuter KRL',
+                      'Kawasan Wisata Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari & Pantai',
                       '185 Cup',
-                      'Bawa kini: 150 cup',
+                      'Bawa kini: 110 cup',
                       '170 – 185 Cup',
                       'Terserap: 178 cup',
-                      '32°C Terik Stasiun Transit',
-                      'Indeks Dahaga KRL +30%',
-                      'Sangat Padat Penumpang',
-                      '18.200 org/jam • Puncak Arus Komuter',
-                      'Stok kritis! Lonjakan dahaga ekstrem komuter KRL. Alokasikan 185 cup Strong & Americano dingin guna cegah stockout.',
+                      '32°C Panas Terik Wisata Pantai',
+                      'Indeks Dahaga Wisata +35%',
+                      'Sangat Padat Wisatawan Sore',
+                      '18.200 org/jam • Sunset Taplau',
+                      'Stok kritis! Wisatawan memadati bibir pantai Taplau sore hari. Alokasikan 185 cup Thai Tea & Lemon Tea es guna cegah stockout.',
                       isWarning: true,
                     ),
                   ] else ...[
                     _buildAiAnalysisRow(
-                      'Halte Dukuh Atas Sudirman (GRB-01)',
-                      'Transit Komuter MRT/KRL & Perkantoran',
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Area Kampus & Mahasiswa',
                       '180 Cup',
                       'Bawa kini: 180 cup',
                       '165 – 180 Cup',
                       'Terserap: 170 cup',
-                      '28°C Berawan Normal',
+                      '28°C Berawan Cerah',
                       'Demand Kopi Susu Seimbang',
-                      'Komuter Perkantoran',
-                      '12.400 org/jam • Arus Pagi Normal',
-                      'Optimal: Baseline standar 180 cup sesuai tren komuter MRT/KRL Dukuh Atas. Komposisi Strong & Americano optimal.',
+                      'Aktivitas Kampus Normal',
+                      '12.400 mhs/jam • Arus Mahasiswa Normal',
+                      'Optimal: Baseline standar 180 cup sesuai tren sirkulasi mahasiswa UNP. Komposisi Kopi Susu Aren & Americano optimal.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Taman Suropati Menteng (GRB-02)',
-                      'Kawasan Taman Kota & Rekreasi',
+                      'Sentra Kantor Khatib Sulaiman (loc-02)',
+                      'Sentra Perkantoran & Bisnis Padang',
                       '100 Cup',
                       'Bawa kini: 100 cup',
                       '85 – 100 Cup',
                       'Terserap: 92 cup',
-                      '28°C Sejuk Taman Normal',
-                      'Demand Lembut & Non-Kopi',
-                      'Warga Santai & Olahraga',
-                      '5.200 org/jam • Jam Santai',
-                      'Optimal: Komposisi seimbang Kopi Susu Soft, Kopi Susu Butter, Coklat, dan Matcha terserap 92%.',
+                      '28°C Cuaca Tropis Normal',
+                      'Demand Kopi & Teh Seimbang',
+                      'Pekerja & Pengunjung Instansi',
+                      '5.200 org/jam • Jam Kerja Normal',
+                      'Optimal: Komposisi seimbang Kopi Susu Aren, Americano, dan Thai Tea terserap 92%.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Pojok Blok III Senen (GRB-03)',
+                      'Pintu Barat Pasar Raya Padang (loc-03)',
                       'Sentra Niaga & Pasar Tradisional',
                       '120 Cup',
                       'Bawa kini: 120 cup',
                       '105 – 120 Cup',
                       'Terserap: 112 cup',
-                      '28°C Teduh Normal',
+                      '28°C Cerah Berawan',
                       'Baseline Tren Riil Pasar',
                       'Pedagang & Pembeli Niaga',
                       '8.900 org/jam • Aktivitas Belanja',
-                      'Stabil: 120 cup mencukupi perputaran kas harian pedagang pasar sejak pagi subuh.',
+                      'Stabil: 120 cup mencukupi perputaran kas harian gerobak di Pasar Raya sejak pagi hari.',
                       isWarning: false,
                     ),
                     _buildAiAnalysisRow(
-                      'Pintu Timur Stasiun Juanda (GRB-04)',
-                      'Stasiun Transit Komuter KRL',
+                      'Kawasan Wisata Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari & Pantai',
                       '150 Cup',
-                      'Bawa kini: 150 cup',
+                      'Bawa kini: 110 cup',
                       '135 – 150 Cup',
                       'Terserap: 142 cup',
-                      '28°C Normal Transit Stasiun',
-                      'Demand Kopi Susu Strong Kuat',
-                      'Ribuan Penumpang KRL',
-                      '14.600 org/jam • Peak 06:45–09:15',
-                      'Optimal: 150 cup Strong & Americano terserap maksimal. Sisa stok aman hingga pergantian shift siang.',
+                      '28°C Angin Pantai Normal',
+                      'Demand Teh & Kopi Dingin Stabil',
+                      'Wisatawan & Warga Olahraga',
+                      '14.600 org/jam • Peak 16:00–18:30',
+                      'Optimal: 150 cup varian teh dan kopi dingin terserap maksimal menjelang matahari terbenam.',
                       isWarning: false,
                     ),
                   ],
@@ -4248,7 +4333,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Monitoring persediaan fisik 6 menu resmi KopiCerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
+                  'Monitoring persediaan fisik 6 menu resmi Kopi Cerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
                   style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
@@ -4370,7 +4455,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
-                              'Menampilkan  dari  menu resmi KopiCerdas',
+                              'Menampilkan  dari  menu resmi Kopi Cerdas',
                               style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                             ),
                           ],
@@ -4642,11 +4727,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // ===========================================================================
   Widget _buildStockDistributionView() {
     final Map<String, int> monthlyCupsMap = {
-      'USR-01': 1450,
-      'USR-02': 920,
-      'USR-03': 990,
-      'USR-04': 1100,
-      'USR-05': 0,
+      'usr-seller-01': 1450,
+      'usr-seller-02': 920,
+      'usr-seller-03': 990,
+      'usr-seller-04': 1100,
     };
     final int totalMonthlyAllTeams = monthlyCupsMap.values.fold(0, (sum, v) => sum + v);
 
@@ -4753,7 +4837,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'SOP KopiCerdas: Setiap tanggal baru, stok gerobak di-reset ke 0 untuk ditop-up pagi hari. Setiap pulang shift sore, petugas wajib membalikkan seluruh sisa kopi ke Gudang Pusat sehingga stok harian gerobak kembali = 0.',
+                  'SOP Kopi Cerdas: Setiap tanggal baru, stok gerobak di-reset ke 0 untuk ditop-up pagi hari. Setiap pulang shift sore, petugas wajib membalikkan seluruh sisa kopi ke Gudang Pusat sehingga stok harian gerobak kembali = 0.',
                   style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Color(0xFF166534)),
                 ),
               ),
@@ -5536,148 +5620,148 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // SUB-PAGES: ANALISIS AI PERMINTAAN & OPTIMASI STOK (LOGIC AI KOPICERDAS)
   // ===========================================================================
   Map<String, dynamic> _getStaffAiBreakdown(String staffId, String weatherMode) {
-    if (staffId == 'USR-01') {
-      // Budi Santoso - GRB-01 Sudirman (Transit MRT/KRL & Perkantoran)
+    if (staffId == 'usr-seller-01') {
+      // Ahmad Fauzi - loc-01 UNP Air Tawar (Area Kampus & Mahasiswa)
       if (weatherMode == 'RAIN') {
         return {
           'total': 145,
-          'soft': 32, 'strong': 52, 'butter': 22, 'americano': 24, 'coklat': 8, 'matcha': 7,
+          'aren': 40, 'americano': 30, 'coklat': 25, 'red_velvet': 20, 'thai_tea': 15, 'lemon_tea': 15,
           'absorbed': 138, 'rate': 95.2,
-          'peak': '07:00 - 09:30 WIB',
+          'peak': '07:30 - 10:00 WIB',
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
-          'rationale': 'Arus komuter berteduh di halte. Demand Strong & Butter hangat mendominasi.',
+          'rationale': 'Arus mahasiswa berteduh di selasar gedung. Demand Kopi Susu Aren & Coklat hangat mendominasi.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
           'total': 215,
-          'soft': 50, 'strong': 70, 'butter': 20, 'americano': 55, 'coklat': 10, 'matcha': 10,
+          'aren': 65, 'americano': 45, 'coklat': 25, 'red_velvet': 25, 'thai_tea': 30, 'lemon_tea': 25,
           'absorbed': 206, 'rate': 95.8,
-          'peak': '07:00 - 10:00 & 16:30',
+          'peak': '09:00 - 13:00 WIB',
           'status': '⚡ Dahaga Tinggi (+20%)',
           'status_color': const Color(0xFFD97706),
-          'rationale': 'Panas terik memicu lonjakan Americano & Soft dingin. Perlu pasokan es ekstra.',
+          'rationale': 'Panas pesisir memicu lonjakan es Kopi Susu Aren & Americano dingin antar jadwal kuliah.',
         };
       } else {
         return {
           'total': 180,
-          'soft': 40, 'strong': 65, 'butter': 20, 'americano': 40, 'coklat': 8, 'matcha': 7,
+          'aren': 55, 'americano': 35, 'coklat': 20, 'red_velvet': 20, 'thai_tea': 25, 'lemon_tea': 25,
           'absorbed': 170, 'rate': 94.4,
-          'peak': '06:30 - 09:30 WIB',
+          'peak': '07:30 - 11:30 WIB',
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
-          'rationale': 'Baseline normal komuter perkantoran Dukuh Atas. Komposisi kafein kuat seimbang.',
+          'rationale': 'Baseline pergerakan mahasiswa UNP Air Tawar. Varian kopi dan teh terserap stabil.',
         };
       }
-    } else if (staffId == 'USR-02') {
-      // Ahmad Fauzi - GRB-02 Suropati (Taman & Rekreasi)
+    } else if (staffId == 'usr-seller-02') {
+      // Rian Syahputra - loc-02 Khatib Sulaiman (Perkantoran & Bisnis)
       if (weatherMode == 'RAIN') {
         return {
           'total': 80,
-          'soft': 24, 'strong': 8, 'butter': 22, 'americano': 6, 'coklat': 10, 'matcha': 10,
+          'aren': 25, 'americano': 20, 'coklat': 15, 'red_velvet': 10, 'thai_tea': 5, 'lemon_tea': 5,
           'absorbed': 74, 'rate': 92.5,
           'peak': '08:00 - 10:30 WIB',
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
-          'rationale': 'Taman sepi saat hujan. Alokasi 80 cup aman mencegah es mencair & cup basi.',
+          'rationale': 'Karyawan kantor jarang keluar saat hujan deras. Alokasi 80 cup aman mencegah sisa bahan.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
           'total': 125,
-          'soft': 40, 'strong': 12, 'butter': 28, 'americano': 15, 'coklat': 12, 'matcha': 18,
+          'aren': 40, 'americano': 30, 'coklat': 15, 'red_velvet': 15, 'thai_tea': 15, 'lemon_tea': 10,
           'absorbed': 118, 'rate': 94.4,
-          'peak': '07:00 - 11:00 & 15:30',
-          'status': '⚡ Puncak Santai (+25%)',
+          'peak': '11:30 - 14:00 WIB',
+          'status': '⚡ Puncak Istirahat (+25%)',
           'status_color': const Color(0xFFD97706),
-          'rationale': 'Warga menikmati taman teduh. Permintaan varian Butter, Soft, Matcha tinggi.',
+          'rationale': 'Karyawan instansi berburu minuman segar saat istirahat makan siang Khatib Sulaiman.',
         };
       } else {
         return {
           'total': 100,
-          'soft': 30, 'strong': 10, 'butter': 25, 'americano': 10, 'coklat': 12, 'matcha': 13,
+          'aren': 35, 'americano': 25, 'coklat': 12, 'red_velvet': 10, 'thai_tea': 10, 'lemon_tea': 8,
           'absorbed': 92, 'rate': 92.0,
-          'peak': '07:00 - 10:30 WIB',
+          'peak': '08:00 - 13:30 WIB',
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
-          'rationale': 'Profil komunitas santai taman. Varian rasa lembut & non-kopi laku seimbang.',
+          'rationale': 'Profil perkantoran Khatib Sulaiman. Kebutuhan kafein kerja terserap optimal.',
         };
       }
-    } else if (staffId == 'USR-03') {
-      // Siti Rahmawati - GRB-03 Senen (Sentra Niaga)
+    } else if (staffId == 'usr-seller-03') {
+      // Fauzan Akbar - loc-03 Pasar Raya (Sentra Niaga)
       if (weatherMode == 'RAIN') {
         return {
           'total': 95,
-          'soft': 28, 'strong': 38, 'butter': 10, 'americano': 7, 'coklat': 8, 'matcha': 4,
+          'aren': 35, 'americano': 25, 'coklat': 15, 'red_velvet': 10, 'thai_tea': 5, 'lemon_tea': 5,
           'absorbed': 88, 'rate': 92.6,
           'peak': '06:00 - 10:00 WIB',
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
-          'rationale': 'Aktivitas los dalam pasar tetap ada. Fokus stok varian kopi pekat penambah tenaga.',
+          'rationale': 'Aktivitas dalam los pasar tetap berjalan lancar. Fokus kopi hangat penambah stamina.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
           'total': 145,
-          'soft': 45, 'strong': 50, 'butter': 10, 'americano': 20, 'coklat': 10, 'matcha': 10,
+          'aren': 50, 'americano': 30, 'coklat': 15, 'red_velvet': 15, 'thai_tea': 20, 'lemon_tea': 15,
           'absorbed': 136, 'rate': 93.8,
-          'peak': '05:30 - 11:30 WIB',
+          'peak': '07:00 - 12:00 WIB',
           'status': '⚡ Panas Niaga (+20%)',
           'status_color': const Color(0xFFD97706),
-          'rationale': 'Pedagang & pembeli grosir butuh kopi es segar saat cuaca gerah di area pasar.',
+          'rationale': 'Pedagang & pembeli grosir butuh minuman dingin penyegar stamina di area pasar.',
         };
       } else {
         return {
           'total': 120,
-          'soft': 35, 'strong': 45, 'butter': 10, 'americano': 12, 'coklat': 10, 'matcha': 8,
+          'aren': 40, 'americano': 28, 'coklat': 14, 'red_velvet': 12, 'thai_tea': 14, 'lemon_tea': 12,
           'absorbed': 112, 'rate': 93.3,
-          'peak': '05:30 - 11:00 WIB',
+          'peak': '06:00 - 11:00 WIB',
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
-          'rationale': 'Arus pedagang stabil sejak subuh. Strong & Soft menjadi tulang punggung penjualan.',
+          'rationale': 'Arus pedagang Pasar Raya stabil sejak pagi hari. Kopi Susu Aren menjadi menu terfavorit.',
         };
       }
-    } else if (staffId == 'USR-04') {
-      // Hendra Wijaya - GRB-04 Juanda (Transit KRL)
+    } else if (staffId == 'usr-seller-04') {
+      // Doni Pratama - loc-04 Taplau (Kawasan Wisata Bahari)
       if (weatherMode == 'RAIN') {
         return {
-          'total': 120,
-          'soft': 25, 'strong': 50, 'butter': 12, 'americano': 20, 'coklat': 8, 'matcha': 5,
-          'absorbed': 114, 'rate': 95.0,
-          'peak': '06:30 - 09:00 WIB',
-          'status': 'Pangkas Hujan (-20%)',
+          'total': 70,
+          'aren': 20, 'americano': 15, 'coklat': 15, 'red_velvet': 10, 'thai_tea': 5, 'lemon_tea': 5,
+          'absorbed': 68, 'rate': 97.1,
+          'peak': '16:00 - 18:00 WIB',
+          'status': 'Pangkas Hujan (-30%)',
           'status_color': const Color(0xFF2563EB),
-          'rationale': 'Penumpang KRL berjalan cepat menghindari tempias hujan. Take-away cepat Strong hangat.',
+          'rationale': 'Wisatawan pantai surut saat hujan angin laut. Kuota 70 cup menjaga efisiensi operasional.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
           'total': 185,
-          'soft': 42, 'strong': 70, 'butter': 10, 'americano': 48, 'coklat': 8, 'matcha': 7,
+          'aren': 50, 'americano': 30, 'coklat': 20, 'red_velvet': 20, 'thai_tea': 35, 'lemon_tea': 30,
           'absorbed': 178, 'rate': 96.2,
-          'peak': '06:30 - 09:30 & 16:30',
-          'status': '⚡ Waspada Stockout (+25%)',
+          'peak': '15:30 - 18:45 WIB',
+          'status': '⚡ Puncak Wisata (+30%)',
           'status_color': const Color(0xFFDC2626),
-          'rationale': 'Trafik KRL masif. Risiko kehabisan stok jam 09:00 jika bawaan kurang dari 180 cup.',
+          'rationale': 'Sunset Taplau dipadati pengunjung! Lonjakan dahaga varian teh dingin & kopi es.',
         };
       } else {
         return {
           'total': 150,
-          'soft': 32, 'strong': 60, 'butter': 10, 'americano': 35, 'coklat': 8, 'matcha': 5,
+          'aren': 45, 'americano': 25, 'coklat': 18, 'red_velvet': 17, 'thai_tea': 25, 'lemon_tea': 20,
           'absorbed': 142, 'rate': 94.7,
-          'peak': '06:30 - 09:30 WIB',
+          'peak': '15:30 - 18:30 WIB',
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
-          'rationale': 'Volume stasiun transit KRL sangat stabil. Permintaan Strong & Americano tercepat.',
+          'rationale': 'Sore hari wisatawan & warga jogging meramaikan Taplau. Minuman es terserap maksimal.',
         };
       }
     } else {
-      // USR-05 Rizky Pratama (Standby)
+      // Armada Tambahan / Standby
       return {
-        'total': weatherMode == 'RAIN' ? 60 : (weatherMode == 'PEAK_SUNNY' ? 95 : 80),
-        'soft': 20, 'strong': 25, 'butter': 10, 'americano': 15, 'coklat': 5, 'matcha': 5,
+        'total': weatherMode == 'RAIN' ? 50 : (weatherMode == 'PEAK_SUNNY' ? 80 : 60),
+        'aren': 20, 'americano': 10, 'coklat': 10, 'red_velvet': 10, 'thai_tea': 5, 'lemon_tea': 5,
         'absorbed': 0, 'rate': 0.0,
-        'peak': 'Rencana Lapak 07:00 WIB',
+        'peak': 'Rencana Lapak 08:00 WIB',
         'status': 'Standby Deploy',
         'status_color': const Color(0xFF6B7280),
-        'rationale': 'Lapak rencana koridor Rasuna Said. AI merekomendasikan alokasi awal 80 cup saat go-live.',
+        'rationale': 'Titik cadangan operasional Kota Padang. Rekomendasi alokasi awal saat penggelaran armada tambahan.',
       };
     }
   }
@@ -5707,10 +5791,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   void _applyAllAiAllocations() {
     final Map<String, int> targets = _aiWeatherMode == 'RAIN'
-        ? {'USR-01': 145, 'USR-02': 80, 'USR-03': 95, 'USR-04': 120, 'USR-05': 0}
+        ? {'usr-seller-01': 145, 'usr-seller-02': 80, 'usr-seller-03': 95, 'usr-seller-04': 120}
         : (_aiWeatherMode == 'PEAK_SUNNY'
-            ? {'USR-01': 215, 'USR-02': 125, 'USR-03': 145, 'USR-04': 185, 'USR-05': 0}
-            : {'USR-01': 180, 'USR-02': 100, 'USR-03': 120, 'USR-04': 150, 'USR-05': 0});
+            ? {'usr-seller-01': 215, 'usr-seller-02': 125, 'usr-seller-03': 145, 'usr-seller-04': 185}
+            : {'usr-seller-01': 180, 'usr-seller-02': 100, 'usr-seller-03': 120, 'usr-seller-04': 150});
 
     setState(() {
       for (var s in _staffList) {
@@ -5905,7 +5989,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ],
                   ),
                   const Text(
-                    'Prakiraan BMKG DKI Jakarta • Live Telemetri',
+                    'Prakiraan BMKG Kota Padang • Live Telemetri',
                     style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                   ),
                 ],
@@ -5940,10 +6024,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Expanded(
                       child: Text(
                         isRain
-                            ? 'Analisis Logika Hujan: Arus pejalan kaki trotoar outdoor melandai (-20%). AI memangkas alokasi total ke 440 porsi untuk mencegah es mencair & cup basi. Namun komposisi rasa creamy & hangat (Kopi Susu Butter & Coklat) dipertahankan stabil karena dicari saat udara dingin.'
+                            ? 'Analisis Logika Hujan: Arus pejalan kaki trotoar outdoor melandai (-20%). AI memangkas alokasi total ke 390 porsi untuk mencegah es mencair & cup basi. Namun komposisi rasa creamy & hangat (Coklat & Red Velvet) dipertahankan stabil karena dicari saat udara dingin.'
                             : (isSunny
-                                ? 'Analisis Logika Panas Terik: Suhu 32°C memicu lonjakan dahaga komuter (+22%). AI solver merekomendasikan kenaikan alokasi total ke 670 porsi dengan fokus utama Americano Dingin & Kopi Susu Soft guna memaksimalkan omzet dan mencegah kehabisan stok jam sibuk.'
-                                : 'Analisis Logika Normal (28°C): Alokasi optimal 550 porsi terdistribusi seimbang pada 4 armada aktif KopiCerdas Jakarta. Arus komuter pagi & sore terserap rata-rata 94.8% sesuai baseline transaksi historis.'),
+                                ? 'Analisis Logika Panas Terik: Suhu 32°C memicu lonjakan dahaga komuter pesisir (+22%). AI solver merekomendasikan kenaikan alokasi total ke 670 porsi dengan fokus utama Americano Dingin & Kopi Susu Aren guna memaksimalkan omzet dan mencegah kehabisan stok jam sibuk.'
+                                : 'Analisis Logika Normal (28°C): Alokasi optimal 550 porsi terdistribusi seimbang pada 4 armada aktif KopiCerdas Padang. Arus mahasiswa & kantor terserap rata-rata 94.8% sesuai baseline transaksi historis.'),
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
@@ -6056,7 +6140,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     children: [
                       _cleanTh('Armada & Titik Lapak'),
-                      _cleanTh('Rekomendasi 6 Menu Resmi (Soft, Strong, Butter, Amr, Cok, Mat)'),
+                      _cleanTh('Rekomendasi 6 Menu Resmi (Aren, Amr, Coklat, Red Velvet, Thai Tea, Lemon Tea)'),
                       _cleanTh('Total AI'),
                       _cleanTh('Prediksi Laku'),
                       _cleanTh('Status AI'),
@@ -6104,12 +6188,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   spacing: 6,
                                   runSpacing: 4,
                                   children: [
-                                    _buildAiMenuBadge('Soft', breakdown['soft'] as int, const Color(0xFFFDF2E9), const Color(0xFFC05621)),
-                                    _buildAiMenuBadge('Strong', breakdown['strong'] as int, const Color(0xFFFEF3C7), const Color(0xFF92400E)),
-                                    _buildAiMenuBadge('Butter', breakdown['butter'] as int, const Color(0xFFFEF9C3), const Color(0xFF854D0E)),
+                                    _buildAiMenuBadge('Aren', breakdown['aren'] as int, const Color(0xFFFDF2E9), const Color(0xFFC05621)),
                                     _buildAiMenuBadge('Amr', breakdown['americano'] as int, const Color(0xFFEFF6FF), const Color(0xFF1D4ED8)),
                                     _buildAiMenuBadge('Coklat', breakdown['coklat'] as int, const Color(0xFFF5EBE6), const Color(0xFF5E3A1C)),
-                                    _buildAiMenuBadge('Matcha', breakdown['matcha'] as int, const Color(0xFFECFDF5), const Color(0xFF065F46)),
+                                    _buildAiMenuBadge('Red Velvet', breakdown['red_velvet'] as int, const Color(0xFFFDF2F8), const Color(0xFF9D174D)),
+                                    _buildAiMenuBadge('Thai Tea', breakdown['thai_tea'] as int, const Color(0xFFFEF3C7), const Color(0xFF92400E)),
+                                    _buildAiMenuBadge('Lemon Tea', breakdown['lemon_tea'] as int, const Color(0xFFECFDF5), const Color(0xFF065F46)),
                                   ],
                                 ),
                                 const SizedBox(height: 5),
@@ -6214,26 +6298,26 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           children: [
             Expanded(
               child: _buildAiActionCard(
-                'Jam Puncak Transit KRL (Juanda & Sudirman)',
-                'Arus komuter KRL & MRT terkonsentrasi pukul 06:45 - 09:15 WIB. Permintaan Kopi Susu Strong dan Americano melonjak tajam. Siapkan termos konsentrat espresso & cup take-away lebih awal.',
-                Icons.train_outlined,
+                'Jam Puncak Mahasiswa & Kantor (UNP & Khatib Sulaiman)',
+                'Arus mahasiswa UNP dan pekerja kantor Khatib Sulaiman terkonsentrasi pukul 07:30 - 10:00 WIB. Permintaan Kopi Susu Aren dan Americano melonjak tajam. Siapkan cup take-away lebih awal.',
+                Icons.school_outlined,
                 const Color(0xFF2563EB),
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: _buildAiActionCard(
-                'Puncak Kedua Sore Hari (Taman Suropati)',
-                'Taman Suropati memiliki siklus keramaian sore pukul 15:30 - 18:00 WIB (olahraga & komunitas). Permintaan didominasi Kopi Susu Butter dan Matcha dingin (+45%). Pertahankan stok buffer sore.',
-                Icons.park_outlined,
+                'Puncak Sore Hari Kawasan Wisata (Pantai Padang Taplau)',
+                'Pantai Taplau memiliki siklus keramaian sore pukul 16:00 - 18:30 WIB (wisatawan & sunset). Permintaan didominasi Thai Tea dan Lemon Tea dingin (+45%). Pertahankan stok buffer sore.',
+                Icons.beach_access_outlined,
                 const Color(0xFF059669),
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: _buildAiActionCard(
-                'Kesiapan Gudang Pusat (Hub Benhil)',
-                'Kebutuhan alokasi 550 porsi hari ini hanya menyerap 18.3% dari total kapasitas gudang pusat (3.000 porsi). Seluruh bahan baku 6 menu berstatus AMAN tanpa risiko kelangkaan stok.',
+                'Kesiapan Gudang Pusat (Hub Padang)',
+                'Kebutuhan alokasi hari ini menyerap sebagian kapasitas gudang pusat (6.000 porsi). Seluruh bahan baku 6 menu berstatus AMAN tanpa risiko kelangkaan stok.',
                 Icons.warehouse_outlined,
                 const Color(0xFFD97706),
               ),
@@ -6471,7 +6555,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(decoration: const InputDecoration(labelText: 'Nama Usaha', border: OutlineInputBorder()), controller: TextEditingController(text: 'KopiCerdas Jaringan Gerobak')),
+              TextField(decoration: const InputDecoration(labelText: 'Nama Usaha', border: OutlineInputBorder()), controller: TextEditingController(text: 'Kopi Cerdas Jaringan Gerobak')),
               const SizedBox(height: 12),
               TextField(decoration: const InputDecoration(labelText: 'Jam Buka Shift Pagi', border: OutlineInputBorder()), controller: TextEditingController(text: '05:30 WIB')),
               const SizedBox(height: 12),

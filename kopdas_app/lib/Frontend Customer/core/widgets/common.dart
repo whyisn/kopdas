@@ -898,7 +898,7 @@ class BrandBlock extends StatelessWidget {
         decoration: BoxDecoration(color: p.surface2, borderRadius: BorderRadius.circular(28)),
         child: const GerobakArt(width: 112),
       ),
-      Text('Ngopi\nGerobak', style: dsp(context, 34, h: 1.05)),
+      Text('Kopi\nCerdas', style: dsp(context, 34, h: 1.05)),
       Text('Pesan dari gerobak kopi terdekat, ambil tanpa antre.', style: mut(context, 15)),
     ]);
   }

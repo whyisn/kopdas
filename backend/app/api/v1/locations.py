@@ -1,14 +1,17 @@
 import uuid
 import datetime
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
+from app.api.deps import require_seller_or_owner
 from app.models import Location, Transaction, ExternalObservation, User
 from app.schemas import (
-    LocationResponse, LocationCreateRequest, LocationUpdateRequest, LocationTelemetryRequest
+    LocationResponse, LocationCreateRequest, LocationUpdateRequest, LocationTelemetryRequest,
+    SellerLocationSaveRequest, SellerLocationUpdateRequest, CrowdResponse
 )
 from app.ai_engine.location_scoring import location_scorer
+from app.ai_engine.crowd_density import get_crowd_report
 
 router = APIRouter(prefix="/locations", tags=["Locations & Maps"])
 
@@ -164,3 +167,90 @@ def update_location_telemetry(
         "longitude": loc.longitude,
         "updated_at": datetime.datetime.utcnow().isoformat()
     }
+
+# ===========================================================================
+# FITUR LOKASI SELLER — peta interaktif, keramaian, dan lokasi milik sendiri
+# Endpoint di bawah wajib auth; seller hanya dapat mengelola lokasinya sendiri.
+# ===========================================================================
+
+@router.get("/crowd", response_model=CrowdResponse)
+def get_crowd_density(
+    lat: float = Query(..., ge=-90, le=90, description="Latitude titik pusat"),
+    lng: float = Query(..., ge=-180, le=180, description="Longitude titik pusat"),
+    radius_m: int = Query(700, ge=200, le=2000, description="Radius area heatmap (meter)"),
+    hour: Optional[int] = Query(None, ge=0, le=23, description="Pratinjau jam WIB (default: jam sekarang)"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_seller_or_owner),
+):
+    """
+    Estimasi keramaian di sekitar titik. Mengembalikan data REAL bila ada
+    observasi FOOTFALL_ESTIMATE terbaru; jika tidak, simulasi deterministik
+    yang diberi label SIMULASI (bukan data real-time).
+    """
+    return get_crowd_report(db, lat, lng, radius_m, hour)
+
+@router.get("/mine", response_model=List[LocationResponse])
+def get_my_locations(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_seller_or_owner),
+):
+    """Daftar lokasi jualan milik user yang sedang login (dari token, bukan query param)."""
+    locs = db.query(Location).filter(Location.seller_id == current_user.id).all()
+    return [_format_location(l, db) for l in locs]
+
+@router.post("/mine", response_model=LocationResponse, status_code=status.HTTP_201_CREATED)
+def create_my_location(
+    req: SellerLocationSaveRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_seller_or_owner),
+):
+    """
+    Simpan titik jualan baru milik seller yang login.
+    seller_id selalu diambil dari token sehingga tidak bisa dipalsukan.
+    """
+    new_loc = Location(
+        id=f"loc-{uuid.uuid4().hex[:6]}",
+        seller_id=current_user.id,
+        name=req.name.strip(),
+        latitude=req.latitude,
+        longitude=req.longitude,
+        address=req.address.strip() if req.address else None,
+        source_type="ACTIVE_POINT",
+        is_active=True,
+    )
+    db.add(new_loc)
+    db.commit()
+    db.refresh(new_loc)
+    return _format_location(new_loc, db)
+
+@router.patch("/mine/{location_id}", response_model=LocationResponse)
+def update_my_location(
+    location_id: str,
+    req: SellerLocationUpdateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_seller_or_owner),
+):
+    """Perbarui lokasi jualan. Hanya pemilik lokasi yang boleh mengubah (403 selain itu)."""
+    loc = db.query(Location).filter(Location.id == location_id).first()
+    if not loc:
+        raise HTTPException(status_code=404, detail="Lokasi tidak ditemukan")
+    if loc.seller_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Anda hanya dapat mengelola lokasi jualan milik sendiri",
+        )
+
+    if req.name is not None:
+        loc.name = req.name.strip()
+    if req.latitude is not None:
+        loc.latitude = req.latitude
+    if req.longitude is not None:
+        loc.longitude = req.longitude
+    if req.address is not None:
+        loc.address = req.address.strip()
+    if req.is_active is not None:
+        loc.is_active = req.is_active
+
+    db.commit()
+    db.refresh(loc)
+    return _format_location(loc, db)

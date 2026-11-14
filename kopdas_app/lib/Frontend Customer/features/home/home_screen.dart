@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                 builder: (ctx) => AlertDialog(
                   title: const Text('Akun Pelanggan'),
                   content: Text(
-                    'Halo $name!\nAnda login di jaringan KopiCerdas Padang.\n\nApakah Anda ingin keluar?',
+                    'Halo $name!\nAnda login di jaringan Kopi Cerdas Padang.\n\nApakah Anda ingin keluar?',
                   ),
                   actions: [
                     TextButton(

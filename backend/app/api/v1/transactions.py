@@ -1,6 +1,7 @@
 import datetime
+import json
 import uuid
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
@@ -70,8 +71,11 @@ def create_transaction(
             # Kurangi stok fisik tepat 1x
             seller_inv.quantity -= item.quantity
 
+            # Harga varian divalidasi & dihitung backend (tidak percaya frontend)
+            unit_price, variant_label = _resolve_variant(prod, item.option_ids)
+
             # Subtotal dihitung backend
-            subtotal = prod.price * item.quantity
+            subtotal = unit_price * item.quantity
             total_amount += subtotal
 
             # Item transaksi
@@ -80,8 +84,9 @@ def create_transaction(
                 transaction_id=tx_id,
                 product_id=prod.id,
                 quantity=item.quantity,
-                unit_price=prod.price,
-                subtotal=subtotal
+                unit_price=unit_price,
+                subtotal=subtotal,
+                variant_label=variant_label
             )
             txi.product = prod
             tx_items.append(txi)
@@ -146,6 +151,37 @@ def get_transactions(
     txs = query.order_by(Transaction.created_at.desc()).limit(limit).all()
     return [_format_tx(t) for t in txs]
 
+def _resolve_variant(prod: Product, option_ids: Optional[List[str]]) -> Tuple[int, Optional[str]]:
+    """Validasi opsi varian terhadap katalog produk & hitung harga satuan di server."""
+    if not option_ids:
+        return prod.price, None
+
+    groups = json.loads(prod.options) if prod.options else []
+    choices = {}
+    for g in groups:
+        for c in g.get("choices", []):
+            choices[c["id"]] = (g, c)
+
+    seen = set()
+    single_used = set()
+    unit_price = prod.price
+    labels = []
+    for oid in option_ids:
+        if oid not in choices:
+            raise HTTPException(status_code=400, detail=f"Opsi '{oid}' tidak tersedia untuk produk '{prod.name}'")
+        if oid in seen:
+            raise HTTPException(status_code=400, detail=f"Opsi '{oid}' dipilih lebih dari sekali")
+        group, choice = choices[oid]
+        if not group.get("multi", False):
+            if group["id"] in single_used:
+                raise HTTPException(status_code=400, detail=f"Pilihan '{group['name']}' hanya boleh satu opsi")
+            single_used.add(group["id"])
+        seen.add(oid)
+        unit_price += int(choice.get("price_delta", 0))
+        labels.append(choice["name"])
+
+    return unit_price, " · ".join(labels)
+
 def _format_tx(tx: Transaction) -> TransactionResponse:
     items = []
     for it in tx.items:
@@ -155,7 +191,8 @@ def _format_tx(tx: Transaction) -> TransactionResponse:
             product_name=it.product.name if it.product else it.product_id,
             quantity=it.quantity,
             unit_price=it.unit_price,
-            subtotal=it.subtotal
+            subtotal=it.subtotal,
+            variant_label=it.variant_label
         ))
     return TransactionResponse(
         id=tx.id,

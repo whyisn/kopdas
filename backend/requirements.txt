@@ -1,5 +1,5 @@
 # ========================================================
-# KopiCerdas AI (KopDas) - Backend & AI Dependencies
+# Kopi Cerdas (KopDas) - Backend & AI Dependencies
 # Versi terkunci (pinned) untuk mencegah dependency conflict
 # ========================================================
 
