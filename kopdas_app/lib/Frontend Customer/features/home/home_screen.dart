@@ -1,3 +1,4 @@
+import '../../../../services/auth_service.dart';
 import '../../core/core.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -37,12 +38,43 @@ class HomeScreen extends StatelessWidget {
             Text('${greeting()},', style: mut(context, 13)),
             Text(name, style: dsp(context, 28)),
           ]),
-          Container(
-            width: 44,
-            height: 44,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(color: p.sun, shape: BoxShape.circle),
-            child: Text(greetingInitial(name), style: dsp(context, 18, color: p.onSun)),
+          InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Akun Pelanggan'),
+                  content: Text(
+                    'Halo $name!\nAnda login di jaringan KopiCerdas Padang.\n\nApakah Anda ingin keluar?',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Batal'),
+                    ),
+                    FilledButton(
+                      style: FilledButton.styleFrom(backgroundColor: p.bad),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        sessionController.logout();
+                      },
+                      child: const Text('Keluar Akun'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(22),
+            child: Tooltip(
+              message: 'Profil & Keluar',
+              child: Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: p.sun, shape: BoxShape.circle),
+                child: Text(greetingInitial(name), style: dsp(context, 18, color: p.onSun)),
+              ),
+            ),
           ),
         ]),
         const SizedBox(height: 16),

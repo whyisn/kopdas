@@ -1,3 +1,5 @@
+import '../../../../services/api_client.dart';
+import '../../../../services/auth_service.dart';
 import '../../core/core.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -20,7 +22,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ]),
         ),
-        Text('Ini prototipe. Akun apa pun diterima dan tidak disimpan.',
+        Text('Pesan kopi berkualitas tanpa antre langsung di barista gerobak terdekat.',
             textAlign: TextAlign.center, style: mut(context, 12)),
       ]),
     );
@@ -38,6 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _email = TextEditingController();
   final _pass = TextEditingController();
   String _err = '';
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -47,12 +50,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _submit() {
-    final err = context.read<AuthProvider>().register(_name.text, _email.text, _pass.text);
-    if (err != null) {
-      setState(() => _err = err);
-    } else {
-      context.replace(Routes.login);
+  Future<void> _submit() async {
+    final name = _name.text.trim();
+    final username = _email.text.trim();
+    final pass = _pass.text;
+
+    if (name.isEmpty) {
+      setState(() => _err = 'Isi nama panggilanmu.');
+      return;
+    }
+    if (username.isEmpty) {
+      setState(() => _err = 'Isi username atau email.');
+      return;
+    }
+    if (pass.length < 6) {
+      setState(() => _err = 'Kata sandi minimal 6 karakter.');
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+      _err = '';
+    });
+
+    try {
+      await sessionController.register(username, name, pass);
+      if (mounted) {
+        context.read<AuthProvider>().setUserName(name);
+        context.resetTo(Routes.home);
+      }
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _err = e.message);
+    } catch (e) {
+      if (mounted) setState(() => _err = 'Gagal membuat akun. Silakan coba lagi.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -63,18 +95,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       back: true,
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 14, children: [
         const SizedBox(height: 8),
-        Text('Isi data singkat ini. Setelah itu kamu langsung masuk.', style: mut(context, 15)),
-        AppField(label: 'Nama panggilan', controller: _name, hint: 'Contoh: Rani'),
+        Text('Isi data singkat ini untuk membuat akun baru pelanggan.', style: mut(context, 15)),
+        AppField(label: 'Nama panggilan', controller: _name, hint: 'Contoh: Maya'),
         AppField(
-          label: 'Email atau nomor HP',
+          label: 'Username atau email',
           controller: _email,
-          hint: 'rani@contoh.id',
+          hint: 'maya atau maya@mail.com',
           keyboardType: TextInputType.emailAddress,
         ),
         AppField(label: 'Kata sandi', controller: _pass, hint: 'Minimal 6 karakter', obscure: true),
         if (_err.isNotEmpty)
           Text(_err, style: body(context, size: 13, w: FontWeight.w600, color: context.pal.bad)),
-        AppButton(label: 'Buat akun', onPressed: _submit),
+        AppButton(
+          label: _loading ? 'Mendaftarkan…' : 'Buat akun',
+          onPressed: _loading ? null : _submit,
+        ),
       ]),
     );
   }
@@ -90,6 +125,7 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
   final _email = TextEditingController();
   final _pass = TextEditingController();
   String _err = '';
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -98,12 +134,37 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
-    final err = context.read<AuthProvider>().signIn(_email.text, _pass.text);
-    if (err != null) {
-      setState(() => _err = err);
-    } else {
-      context.resetTo(Routes.home);
+  Future<void> _submit() async {
+    final username = _email.text.trim();
+    final pass = _pass.text;
+
+    if (username.isEmpty) {
+      setState(() => _err = 'Isi username atau email.');
+      return;
+    }
+    if (pass.isEmpty) {
+      setState(() => _err = 'Isi kata sandi.');
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+      _err = '';
+    });
+
+    try {
+      await sessionController.login(username, pass);
+      if (mounted) {
+        final loggedName = sessionController.name ?? username;
+        context.read<AuthProvider>().setUserName(loggedName);
+        context.resetTo(Routes.home);
+      }
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _err = e.message);
+    } catch (_) {
+      if (mounted) setState(() => _err = 'Gagal masuk. Periksa koneksi backend.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -118,16 +179,31 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
         const SizedBox(height: 8),
         flash.isNotEmpty
             ? Text(flash, style: body(context, size: 13, w: FontWeight.w600, color: p.ok))
-            : Text('Masuk untuk mulai mencari gerobak.', style: mut(context, 15)),
+            : Text('Masuk untuk mulai memesan di gerobak terdekat.', style: mut(context, 15)),
         AppField(
-          label: 'Email atau nomor HP',
+          label: 'Username atau email',
           controller: _email,
+          hint: 'customer',
           keyboardType: TextInputType.emailAddress,
         ),
-        AppField(label: 'Kata sandi', controller: _pass, obscure: true),
+        AppField(
+          label: 'Kata sandi',
+          controller: _pass,
+          hint: 'kopi123',
+          obscure: true,
+        ),
         if (_err.isNotEmpty)
           Text(_err, style: body(context, size: 13, w: FontWeight.w600, color: p.bad)),
-        AppButton(label: 'Masuk', onPressed: _submit),
+        AppButton(
+          label: _loading ? 'Memproses…' : 'Masuk',
+          onPressed: _loading ? null : _submit,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Akun demo: customer / kopi123',
+          textAlign: TextAlign.center,
+          style: mut(context, 12),
+        ),
       ]),
     );
   }

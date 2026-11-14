@@ -41,6 +41,25 @@ class SessionController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> register(String username, String displayName, String password) async {
+    final data = await _api.post(
+      '/auth/register',
+      body: {
+        'username': username,
+        'name': displayName,
+        'password': password,
+        'role': 'CUSTOMER',
+      },
+    ) as Map<String, dynamic>;
+
+    token = data['access_token'] as String;
+    userId = data['user_id'] as String;
+    role = data['role'] as String;
+    name = data['name'] as String?;
+    _api.token = token;
+    notifyListeners();
+  }
+
   void logout() {
     token = null;
     userId = null;

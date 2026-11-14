@@ -195,8 +195,8 @@ class _BillScreenState extends State<BillScreen> {
               child: AppButton(
                 label: 'Pembayaran masuk',
                 small: true,
-                onPressed: () {
-                  o.markPaid();
+                onPressed: () async {
+                  await o.triggerRealPayment();
                   _payCheck();
                 },
               ),

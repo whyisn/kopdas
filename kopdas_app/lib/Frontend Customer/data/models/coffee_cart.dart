@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CoffeeCart {
   final String id, name, spot, hours, tag;
+  final String sellerId;
   final int baseDistance, reviews, waitMinutes;
   final double rating;
   final bool online;
@@ -14,6 +15,7 @@ class CoffeeCart {
     required this.name,
     required this.spot,
     required this.hours,
+    this.sellerId = 'usr-seller-01',
     required this.baseDistance,
     required this.rating,
     required this.reviews,

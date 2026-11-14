@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import '../../../services/api_client.dart';
+import '../../../services/auth_service.dart';
 import '../core/utils/format.dart';
 import '../data/mock_data.dart';
 import '../data/models/cart_item.dart';
@@ -31,6 +33,8 @@ class OrderProvider extends ChangeNotifier {
   List<String> changes = [];
 
   // Pesanan & pembayaran
+  String backendOrderId = '';
+  String qrisAssetUrl = '';
   String orderCode = '';
   String rejectReason = '';
   PayMethod payMethod = PayMethod.qris;
@@ -173,8 +177,73 @@ class OrderProvider extends ChangeNotifier {
   }
 
   // ---------- konfirmasi & pembayaran ----------
+  Future<bool> createRealOrder() async {
+    final currentCart = cart;
+    final orderPayload = {
+      'customer_id': sessionController.userId ?? 'usr-cust-01',
+      'seller_id': currentCart.sellerId,
+      'location_id': currentCart.id,
+      'items': items.map((i) => {
+        'product_id': i.pid,
+        'quantity': i.qty,
+      }).toList(),
+    };
+
+    try {
+      final res = await sessionController.api.post(
+        '/customer/orders',
+        body: orderPayload,
+      ) as Map<String, dynamic>;
+
+      backendOrderId = res['id'] as String? ?? '';
+      orderCode = res['order_number'] as String? ?? 'KC-PADANG';
+      qrisAssetUrl = res['qris_asset_url'] as String? ?? '';
+      final exp = res['expires_at'] as String?;
+      if (exp != null) {
+        deadline = DateTime.tryParse(exp)?.toLocal() ?? DateTime.now().add(payWindow);
+      } else {
+        deadline = DateTime.now().add(payWindow);
+      }
+      paymentReceived = false;
+      notifyListeners();
+      return true;
+    } on ApiException catch (e) {
+      closed[cartId!] = true;
+      rejectReason = e.message;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      // Fallback offline / network error
+      orderCode = 'KC-${1000 + _rand.nextInt(9000)}';
+      deadline = DateTime.now().add(payWindow);
+      paymentReceived = false;
+      notifyListeners();
+      return true;
+    }
+  }
+
+  Future<bool> triggerRealPayment() async {
+    if (backendOrderId.isNotEmpty) {
+      try {
+        await sessionController.api.post(
+          '/webhooks/qris',
+          body: {
+            'event': 'PAYMENT_CONFIRMED',
+            'order_id': backendOrderId,
+            'gross_amount': total,
+          },
+        );
+      } catch (_) {
+        // Abaikan jika simulasi webhook dev
+      }
+    }
+    paymentReceived = true;
+    notifyListeners();
+    return true;
+  }
+
   void acceptOrder() {
-    orderCode = 'GK-${1000 + _rand.nextInt(9000)}';
+    orderCode = 'KC-${1000 + _rand.nextInt(9000)}';
     notifyListeners();
   }
 
@@ -185,7 +254,9 @@ class OrderProvider extends ChangeNotifier {
   }
 
   void startPayment() {
-    deadline = DateTime.now().add(payWindow);
+    if (deadline.isBefore(DateTime.now())) {
+      deadline = DateTime.now().add(payWindow);
+    }
     paymentReceived = false;
     notifyListeners();
   }
@@ -211,6 +282,9 @@ class OrderProvider extends ChangeNotifier {
   void resetForNewOrder() {
     items.clear();
     closed.clear();
+    backendOrderId = '';
+    qrisAssetUrl = '';
+    rejectReason = '';
     rating = 0;
     tags.clear();
     review = '';

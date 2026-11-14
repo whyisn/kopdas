@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Frontend owner/owner_dashboard_view.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   runApp(const KopiCerdasApp());
@@ -11,8 +11,8 @@ class KopiCerdasApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'KopiCerdas AI - Portal Owner',
+    return MaterialApp.router(
+      title: 'KopiCerdas AI',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -25,7 +25,7 @@ class KopiCerdasApp extends StatelessWidget {
         fontFamily: 'Segoe UI',
         scaffoldBackgroundColor: const Color(0xFFF9FAFB),
       ),
-      home: const OwnerDashboardView(),
+      routerConfig: appRouter,
     );
   }
 }

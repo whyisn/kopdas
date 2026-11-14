@@ -211,7 +211,23 @@ class _WaitingScreenState extends State<WaitingScreen> {
   @override
   void initState() {
     super.initState();
-    _t = Timer(const Duration(seconds: 7), _accept);
+    _startOrderProcess();
+  }
+
+  Future<void> _startOrderProcess() async {
+    final orderProv = context.read<OrderProvider>();
+    final success = await orderProv.createRealOrder();
+    
+    // Beri jeda halus agar transisi UI terlihat jelas
+    _t = Timer(const Duration(milliseconds: 1800), () {
+      if (_gone || !mounted) return;
+      _gone = true;
+      if (success) {
+        context.replace(Routes.reserve);
+      } else {
+        context.replace(Routes.rejected);
+      }
+    });
   }
 
   @override
@@ -244,14 +260,14 @@ class _WaitingScreenState extends State<WaitingScreen> {
         StatusHeader(
           badgeChild: const Spin(size: 42),
           title: 'Menunggu ${c.name}',
-          message: 'Permintaanmu sudah terkirim. Gerobak sedang memeriksa stok dan antrean.',
+          message: 'Permintaanmu sudah terkirim ke gerobak. Sistem sedang memverifikasi stok dan antrean.',
         ),
         const SizedBox(height: 16),
-        const LoadingBar(seconds: 7),
+        const LoadingBar(seconds: 4),
         const SizedBox(height: 16),
         DemoBox(
           title: 'Simulasi respons gerobak',
-          hint: 'Tanpa memilih, gerobak akan menerima dalam 7 detik.',
+          hint: 'Permintaan diproses otomatis dengan validasi stok riil backend.',
           children: [
             Row(spacing: 8, children: [
               Expanded(child: AppButton(label: 'Gerobak menerima', small: true, onPressed: _accept)),

@@ -7,6 +7,20 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider({String initialUserName = ''}) : userName = initialUserName;
 
+  void setUserName(String name) {
+    if (name.trim().isNotEmpty) {
+      userName = name.trim();
+      notifyListeners();
+    }
+  }
+
+  void reset() {
+    userName = 'Sobat Kopi';
+    flash = '';
+    _regName = '';
+    notifyListeners();
+  }
+
   /// Mengembalikan pesan error, atau null jika sukses.
   String? register(String name, String email, String pass) {
     if (name.trim().isEmpty) return 'Isi nama panggilanmu.';
