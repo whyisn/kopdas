@@ -185,10 +185,10 @@ class CartListScreen extends StatelessWidget {
         ]),
         const SizedBox(height: 12),
         ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           child: Container(
             height: 184,
-            decoration: BoxDecoration(border: Border.all(color: p.line), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(border: Border.all(color: p.line), borderRadius: BorderRadius.circular(12)),
             child: MapView(pins: list, onPick: pick),
           ),
         ),
@@ -201,7 +201,7 @@ class CartListScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: p.surface,
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: p.line),
                 ),
                 child: Row(crossAxisAlignment: CrossAxisAlignment.start, spacing: 12, children: [

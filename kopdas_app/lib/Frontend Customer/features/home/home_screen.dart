@@ -80,14 +80,14 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(color: p.accent, borderRadius: BorderRadius.circular(24)),
+          decoration: BoxDecoration(color: p.accent, borderRadius: BorderRadius.circular(16)),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 14, children: [
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 230),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text('Kopi dari gerobak, tanpa antre.',
-                    style: dsp(context, 26, color: p.onAccent)),
+                    style: dsp(context, 24, color: p.onAccent)),
               ),
             ),
             const Align(alignment: Alignment.centerRight, child: GerobakArt(width: 110)),
@@ -115,7 +115,7 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: p.surface,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: p.line),
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 8, children: [
@@ -124,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                       height: 76,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color: p.surface2, borderRadius: BorderRadius.circular(16)),
+                          color: p.surface2, borderRadius: BorderRadius.circular(8)),
                       child: f.isDrink ? CupArt(f.color, size: 44) : SnackArt(f.color, size: 44),
                     ),
                     Text(f.name,

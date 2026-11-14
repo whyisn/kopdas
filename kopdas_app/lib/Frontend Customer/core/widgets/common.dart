@@ -40,8 +40,13 @@ class AppScaffold extends StatelessWidget {
         body: SafeArea(
           child: Column(children: [
             if (title != null)
-              Padding(
+              Container(
+                width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                decoration: BoxDecoration(
+                  color: p.surface,
+                  border: Border(bottom: BorderSide(color: p.line)),
+                ),
                 child: SizedBox(
                   height: 44,
                   child: Row(children: [
@@ -51,13 +56,13 @@ class AppScaffold extends StatelessWidget {
                         label: 'Kembali',
                         onTap: () => Navigator.of(context).maybePop(),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                     ],
                     Expanded(
                       child: Text(title!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: dsp(context, 20, w: FontWeight.w700)),
+                          style: dsp(context, 18, w: FontWeight.w800, color: p.ink)),
                     ),
                     ?action,
                   ]),
@@ -169,7 +174,7 @@ class AppButton extends StatelessWidget {
           side: side,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
@@ -280,11 +285,15 @@ class Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
-        color: ok ? p.ok.withValues(alpha: .16) : p.surface2,
+        color: ok ? const Color(0xFFECFDF5) : p.surface2,
         borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: ok ? const Color(0xFFA7F3D0) : p.line),
       ),
       child: Text(text,
-          style: body(context, size: 12, w: FontWeight.w700, color: ok ? p.ok : p.muted)),
+          style: body(context,
+              size: 11.5,
+              w: FontWeight.w700,
+              color: ok ? const Color(0xFF065F46) : p.muted)),
     );
   }
 }
@@ -302,7 +311,7 @@ class AppCard extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: p.surface,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: p.line),
       ),
       child: child,
@@ -694,7 +703,8 @@ class ProductThumb extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: context.pal.surface2,
-          borderRadius: BorderRadius.circular(box > 70 ? 22 : 16),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: context.pal.line),
         ),
         child: product.isDrink
             ? CupArt(product.color, size: icon)
@@ -848,9 +858,9 @@ class NotifCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: p.surface,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: p.line),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: .12), blurRadius: 24, offset: const Offset(0, 10))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: .06), blurRadius: 16, offset: const Offset(0, 4))],
         ),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
