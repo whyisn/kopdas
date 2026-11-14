@@ -20,6 +20,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // Search filter
   String _searchFilter = '';
 
+  // Warehouse filter
+  String _warehouseCategoryFilter = 'Semua';
+
   // Sidebar Collapse State (3S.NET style)
   bool _isSidebarCollapsed = false;
 
@@ -3550,75 +3553,572 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: GUDANG & STOK
+  // SUB-PAGES: GUDANG & STOK (ENTERPRISE INVENTORY MANAGEMENT)
   // ===========================================================================
   Widget _buildWarehouseManagementView() {
+    final int totalCentralStock = _warehouseStock.fold<int>(0, (sum, item) => sum + (item['central_stock'] as int));
+    final num totalAssetValue = _warehouseStock.fold<num>(0, (sum, item) => sum + ((item['central_stock'] as int) * (item['cost'] as num)));
+    final int totalInCarts = _warehouseStock.fold<int>(0, (sum, item) => sum + ((item['held_by_cart'] ?? 0) as int));
+    final int criticalItems = _warehouseStock.where((item) => item['status'] == 'Stok Menipis' || (item['central_stock'] as int) < 200).length;
+
+    final categories = ['Semua', 'Signature', 'Espresso', 'Non-Coffee', 'Artisan Brew', 'Bites'];
+    final filteredStock = _warehouseStock.where((item) {
+      final matchCat = _warehouseCategoryFilter == 'Semua' || item['category'] == _warehouseCategoryFilter;
+      return matchCat;
+    }).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. PAGE HEADER & QUICK ACTIONS
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Katalog Persediaan Gudang Pusat', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: _showAddStockDialog,
-                  child: const Text('+ Input Stok Masuk'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Gudang Pusat & Manajemen Persediaan Stok',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Color(0xFF111827), letterSpacing: -0.3),
                 ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
-                  onPressed: _showDistributeStockDialog,
-                  child: const Text('Bagi ke Gerobak'),
+                SizedBox(height: 3),
+                Text(
+                  'Monitoring persediaan bahan baku hub utama, batas stok aman minimum, valuasi aset HPP, dan distribusi armada',
+                  style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
-            )
+            ),
+            Row(
+              children: [
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3932),
+                    side: const BorderSide(color: Color(0xFF1E3932)),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: _showAddStockDialog,
+                  icon: const Icon(Icons.add_box_outlined, size: 16),
+                  label: const Text('Input Stok Masuk', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3932),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: _showDistributeStockDialog,
+                  icon: const Icon(Icons.local_shipping_outlined, size: 16),
+                  label: const Text('Alokasi ke Gerobak', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
-        _tableContainer(
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.2),
-              1: FlexColumnWidth(2.5),
-              2: FlexColumnWidth(1.5),
-              3: FlexColumnWidth(1.4),
-              4: FlexColumnWidth(1.4),
-              5: FlexColumnWidth(1.4),
-              6: FlexColumnWidth(1.2),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(color: Color(0xFFFAFAFA), border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0)))),
-                children: [
-                  _cleanTh('SKU'),
-                  _cleanTh('Menu Kopi / Bahan'),
-                  _cleanTh('Kategori'),
-                  _cleanTh('Stok Pusat'),
-                  _cleanTh('Harga Modal'),
-                  _cleanTh('Harga Jual'),
-                  _cleanTh('Status'),
-                ],
-              ),
-              for (final w in _warehouseStock)
-                TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
-                  children: [
-                    _cleanTd(w['sku']),
-                    _cleanTd(w['name'], bold: true),
-                    _cleanTd(w['category']),
-                    _cleanTd('${w['central_stock']} Porsi', bold: true),
-                    _cleanTd(_formatRupiah(w['cost'] as num)),
-                    _cleanTd(_formatRupiah(w['price'] as num)),
-                    _cleanStatusPill(w['status'] == 'Aman' ? 'Aman' : 'Menipis', w['status'] == 'Aman'),
+        // 2. CONSOLIDATED KPI SUMMARY BAR (3S.NET STANDARDS)
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Total Stok Gudang Pusat',
+                    '$totalCentralStock Porsi',
+                    'Kapasitas Ruang Penyimpanan 85%',
+                    const Color(0xFF059669),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Valuasi Aset Persediaan',
+                    _formatRupiah(totalAssetValue),
+                    'Akumulasi Nilai Modal HPP Bahan',
+                    const Color(0xFF1E3932),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Stok Terbawa Gerobak',
+                    '$totalInCarts Porsi',
+                    'Teralokasi Aktif di Lapangan',
+                    const Color(0xFFD97706),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Peringatan Stok Minimum',
+                    criticalItems == 0 ? 'Semua Aman' : '$criticalItems SKU Menipis',
+                    criticalItems == 0 ? 'Persediaan di atas batas aman' : 'Roti Bakar (< 150 porsi)',
+                    criticalItems == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 3. LOW STOCK WARNING BANNER (CONDITIONAL)
+        if (criticalItems > 0) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFBEB),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFFDE68A)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: const [
+                    Icon(Icons.warning_amber_rounded, color: Color(0xFFD97706), size: 20),
+                    SizedBox(width: 10),
+                    Text(
+                      'Peringatan Stok: Terdapat 1 SKU (Roti Bakar Kaya Butter) dengan sisa 140 porsi di bawah batas aman (150 porsi). Segera jadwalkan pembelian bahan baku.',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF92400E)),
+                    ),
                   ],
                 ),
+                InkWell(
+                  onTap: _showAddStockDialog,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD97706),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Text(
+                      'Restock Sekarang',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+
+        // 4. MAIN WAREHOUSE STOCK TABLE CONTAINER
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Table Toolbar: Title + Category Filter Chips
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(7),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E3932).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Icon(Icons.inventory_2_outlined, color: Color(0xFF1E3932), size: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Katalog Persediaan Bahan Baku & Stok Siap Jual',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                            ),
+                            Text(
+                              'Menampilkan ${filteredStock.length} dari ${_warehouseStock.length} SKU terdaftar di Gudang Pusat Bendungan Hilir',
+                              style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    // Filter category pills
+                    Row(
+                      children: categories.map((cat) {
+                        final isSel = _warehouseCategoryFilter == cat;
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: InkWell(
+                            onTap: () => setState(() => _warehouseCategoryFilter = cat),
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: isSel ? const Color(0xFF1E3932) : const Color(0xFFF3F4F6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                cat,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
+                                  color: isSel ? Colors.white : const Color(0xFF4B5563),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+
+              // Enhanced Data Table
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(1.2),
+                  1: FlexColumnWidth(2.6),
+                  2: FlexColumnWidth(1.4),
+                  3: FlexColumnWidth(2.0),
+                  4: FlexColumnWidth(1.4),
+                  5: FlexColumnWidth(1.4),
+                  6: FlexColumnWidth(1.4),
+                  7: FlexColumnWidth(1.2),
+                  8: FlexColumnWidth(1.4),
+                  9: FlexColumnWidth(1.8),
+                },
+                children: [
+                  TableRow(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF9FAFB),
+                      border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+                    ),
+                    children: [
+                      _cleanTh('SKU'),
+                      _cleanTh('Menu Kopi / Bahan'),
+                      _cleanTh('Kategori'),
+                      _cleanTh('Stok Pusat'),
+                      _cleanTh('Di Gerobak'),
+                      _cleanTh('HPP Modal'),
+                      _cleanTh('Harga Jual'),
+                      _cleanTh('Margin'),
+                      _cleanTh('Status'),
+                      _cleanTh('Aksi Cepat'),
+                    ],
+                  ),
+                  for (final w in filteredStock)
+                    TableRow(
+                      decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
+                      ),
+                      children: [
+                        // SKU
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF3F4F6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                w['sku'].toString(),
+                                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Menu Kopi / Bahan
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                w['name'].toString(),
+                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'Bahan standar racikan KopiCerdas',
+                                style: TextStyle(fontSize: 10.5, color: Color(0xFF9CA3AF)),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Kategori
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF0FDF4),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: const Color(0xFFBBF7D0)),
+                              ),
+                              child: Text(
+                                w['category'].toString(),
+                                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF166534)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Stok Pusat & Progress Indicator
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${w['central_stock']}',
+                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const Text('Porsi', style: TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(2),
+                                child: LinearProgressIndicator(
+                                  value: ((w['central_stock'] as int) / 1000).clamp(0.0, 1.0),
+                                  minHeight: 5,
+                                  backgroundColor: const Color(0xFFE5E7EB),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    (w['central_stock'] as int) < 200 ? const Color(0xFFDC2626) : const Color(0xFF059669),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Di Gerobak
+                        _cleanTd('${w['held_by_cart'] ?? 0} Porsi', bold: true, color: const Color(0xFFD97706)),
+
+                        // HPP Modal
+                        _cleanTd(_formatRupiah(w['cost'] as num)),
+
+                        // Harga Jual
+                        _cleanTd(_formatRupiah(w['price'] as num), bold: true),
+
+                        // Margin
+                        _cleanTd(
+                          '${(((w['price'] as num) - (w['cost'] as num)) / (w['price'] as num) * 100).toStringAsFixed(1)}%',
+                          bold: true,
+                          color: const Color(0xFF059669),
+                        ),
+
+                        // Status Badge
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: w['status'] == 'Aman' ? const Color(0xFFECFDF5) : const Color(0xFFFEF2F2),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: w['status'] == 'Aman' ? const Color(0xFFA7F3D0) : const Color(0xFFFECACA),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: w['status'] == 'Aman' ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    w['status'] == 'Aman' ? 'Aman' : 'Menipis',
+                                    style: TextStyle(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: w['status'] == 'Aman' ? const Color(0xFF065F46) : const Color(0xFF991B1B),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Aksi Cepat
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InkWell(
+                                onTap: _showAddStockDialog,
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1E3932).withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.add, size: 12, color: Color(0xFF1E3932)),
+                                      SizedBox(width: 2),
+                                      Text(
+                                        'Restock',
+                                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              InkWell(
+                                onTap: _showDistributeStockDialog,
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3F4F6),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text(
+                                    'Kirim',
+                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF374151)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // 5. OPERATIONAL WAREHOUSE FACILITY & LOGISTICS INFO CARD
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Col 1: Facility Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.warehouse_outlined, size: 16, color: Color(0xFF1E3932)),
+                        SizedBox(width: 6),
+                        Text(
+                          'Fasilitas Hub Gudang Pusat',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildWarehouseDetailRow('Lokasi Hub', 'Jl. Bendungan Hilir No. 42, Jakarta Pusat'),
+                    _buildWarehouseDetailRow('Kapasitas Total', '10.000 Porsi Minuman & Kemasan'),
+                    _buildWarehouseDetailRow('Suhu Cold Storage', '3°C - 5°C (Chiller Susu & Espresso)'),
+                    _buildWarehouseDetailRow('Jam Distribusi', '05:00 - 07:00 WIB (Shift Pagi)'),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 20),
+              Container(width: 1, height: 95, color: const Color(0xFFE5E7EB)),
+              const SizedBox(width: 20),
+
+              // Col 2: Standard Operating Procedure
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.rule_outlined, size: 16, color: Color(0xFF1E3932)),
+                        SizedBox(width: 6),
+                        Text(
+                          'SOP Alokasi & Rekonsiliasi Gudang',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildWarehouseDetailRow('Alokasi Pagi', 'Wajib diinput sebelum jam 06:30 WIB'),
+                    _buildWarehouseDetailRow('Stok Cadangan', 'Penambahan stok darurat diverifikasi via GPS'),
+                    _buildWarehouseDetailRow('Retur Sisa Box', 'Cup fisik pulang direkonsiliasi tutup shift'),
+                    _buildWarehouseDetailRow('Audit Fisik', 'Stock opname menyeluruh setiap hari Minggu'),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildWarehouseDetailRow(String label, String val) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 120,
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              val,
+              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
