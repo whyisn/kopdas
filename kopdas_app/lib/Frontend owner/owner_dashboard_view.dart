@@ -180,7 +180,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     {'id': 'ORD-9039', 'time': '13:35', 'customer': 'Clarissa Olivia', 'seller': 'Doni (Taplau)', 'items': '2x Lemon Tea', 'total': 16000, 'status': 'Menunggu Bayar', 'pay': 'PENDING'},
   ];
 
+  // ignore: unused_field
   bool _isLoadingLive = false;
+  // ignore: unused_field
   Map<String, dynamic>? _liveAnalytics;
 
   @override
