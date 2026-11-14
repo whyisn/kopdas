@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'core/constants.dart';
 import 'models/product.dart';
 import 'Frontend owner/owner_dashboard_view.dart';
+import 'Frontend Customer/customer_root_view.dart';
 
 void main() {
   runApp(const KopiCerdasApp());
@@ -386,105 +387,33 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   }
 
   Widget _buildCustomerView() {
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 480),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Temukan KopiCerdas Terdekat',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Pilih seller keliling untuk pembelian langsung atau pesan pre-order.',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Colors.brown,
-                  child: Icon(Icons.coffee, color: Colors.white),
-                ),
-                title: const Text(
-                  'Gerobak 01 - Stasiun Sudirman',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: const Text(
-                  'Pintu Barat • 150 meter dari Anda\nStok: 42 Cup Tersedia',
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Pesan'),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Colors.brown,
-                  child: Icon(Icons.coffee, color: Colors.white),
-                ),
-                title: const Text(
-                  'Gerobak 02 - Kampus Salemba UI',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: const Text(
-                  'Depan Gedung Rektorat • 1.2 km\nStok: 30 Cup Tersedia',
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Pesan'),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(16),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 520;
+        if (isWide) {
+          return Center(
+            child: Container(
+              width: 440,
+              margin: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
-                color: Colors.amber.shade50,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.amber.shade200),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.qr_code_2, color: Colors.brown),
-                      SizedBox(width: 8),
-                      Text(
-                        'Alur Pre-Order QRIS Statis',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    '1. Pilih menu & buat pesanan pre-order.\n2. Scan QRIS Statis merchant & masukkan nominal tepat.\n3. Konfirmasi otomatis diterima dari PJP/Acquirer (tanpa verifikasi manual).',
-                    style: TextStyle(fontSize: 12, height: 1.5),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.black12, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
+              clipBehavior: Clip.antiAlias,
+              child: const CustomerRootView(),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+        return const CustomerRootView();
+      },
     );
   }
 }
