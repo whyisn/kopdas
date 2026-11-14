@@ -1,6 +1,6 @@
 """
 PERCOBAAN OPERASIONAL SUNGGUHAN (REAL OPERATIONAL TEST SUITE)
-KopiCerdas AI - Smart Coffee Network
+Kopi Cerdas - Smart Coffee Network
 
 Pengujian ini bukan lagi simulasi dummy, melainkan percobaan alur bisnis riil
 dari hulu ke hilir (End-to-End Real Operations) menggunakan:

@@ -55,9 +55,21 @@ class ProductBase(BaseModel):
     status: str = "ACTIVE"
     image_url: Optional[str] = None
 
+class ProductOptionChoice(BaseModel):
+    id: str
+    name: str
+    price_delta: int = 0
+
+class ProductOptionGroup(BaseModel):
+    id: str
+    name: str
+    multi: bool = False
+    choices: List[ProductOptionChoice]
+
 class ProductResponse(ProductBase):
     id: str
     category_name: Optional[str] = None
+    options: Optional[List[ProductOptionGroup]] = None
     class Config:
         from_attributes = True
 
@@ -104,6 +116,7 @@ class StockMovementResponse(BaseModel):
 class TransactionItemRequest(BaseModel):
     product_id: str
     quantity: int = Field(..., gt=0, description="Kuantitas transaksi harus positif")
+    option_ids: Optional[List[str]] = Field(None, description="ID varian terpilih (ukuran/penyajian/tambahan); harga dihitung backend")
 
 class TransactionCreateRequest(BaseModel):
     seller_id: str
@@ -119,6 +132,7 @@ class TransactionItemResponse(BaseModel):
     quantity: int
     unit_price: int
     subtotal: int
+    variant_label: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -238,6 +252,48 @@ class LocationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# --- Seller-owned Locations (_fitur Lokasi Seller) ---
+class SellerLocationSaveRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    latitude: float = Field(..., ge=-90, le=90)
+    longitude: float = Field(..., ge=-180, le=180)
+    address: Optional[str] = Field(None, max_length=255)
+
+class SellerLocationUpdateRequest(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    latitude: Optional[float] = Field(None, ge=-90, le=90)
+    longitude: Optional[float] = Field(None, ge=-180, le=180)
+    address: Optional[str] = Field(None, max_length=255)
+    is_active: Optional[bool] = None
+
+# --- Crowd Density (estimasi keramaian) ---
+class CrowdGridPoint(BaseModel):
+    lat: float
+    lng: float
+    intensity: float = Field(..., ge=0, le=1)
+
+class CrowdPointInfo(BaseModel):
+    level: str                       # SEPI, SEDANG, RAMAI, SANGAT_RAMAI
+    level_code: int                  # 1..4
+    intensity: float
+    estimated_people: Optional[int] = None
+    potential_score: int
+    potential_label: str
+    factors: List[str] = []
+    observed_at: datetime.datetime
+
+class CrowdResponse(BaseModel):
+    data_label: str                  # SIMULASI atau REAL
+    source: str
+    disclaimer: str
+    generated_at: datetime.datetime
+    hour_used: int                   # jam WIB yang dipakai (0..23)
+    radius_m: int
+    center_lat: float
+    center_lng: float
+    grid: List[CrowdGridPoint]
+    point: CrowdPointInfo
 
 # --- AI & Optimization ---
 class AIForecastRequest(BaseModel):

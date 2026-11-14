@@ -1,3 +1,4 @@
+import json
 import uuid
 from typing import List, Optional
 import datetime
@@ -32,7 +33,8 @@ def get_products(category_id: str = None, db: Session = Depends(get_db)):
             cost_price=p.cost_price,
             status=p.status,
             image_url=p.image_url,
-            category_name=p.category.name if p.category else None
+            category_name=p.category.name if p.category else None,
+            options=json.loads(p.options) if p.options else None
         ))
     return results
 

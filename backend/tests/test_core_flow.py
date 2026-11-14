@@ -1,5 +1,5 @@
 """
-Test Suite QA End-to-End KopiCerdas AI (Skenario T01 - T12)
+Test Suite QA End-to-End Kopi Cerdas (Skenario T01 - T12)
 Acuan: Dokumen Induk Bab 15 & Manual Book Bab 10
 """
 import pytest

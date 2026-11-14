@@ -1,5 +1,5 @@
 """
-KopiCerdas AI - mesin rekomendasi.
+Kopi Cerdas - mesin rekomendasi.
 
 1) Forecast permintaan per lokasi x kategori x tanggal
    - Model: HistGradientBoostingRegressor (loss Poisson) dengan fitur hari, akhir pekan,

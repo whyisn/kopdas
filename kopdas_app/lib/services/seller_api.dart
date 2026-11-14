@@ -1,4 +1,5 @@
 import '../models/category.dart';
+import '../models/crowd.dart';
 import '../models/inventory.dart';
 import '../models/location.dart';
 import '../models/order.dart';
@@ -51,13 +52,69 @@ class SellerApi {
         .toList();
   }
 
-  // Backend GET /locations mengembalikan semua lokasi; filter milik seller di klien.
+  // Lokasi milik seller yang login; backend memfilter berdasarkan token (bukan query param).
   Future<List<LocationModel>> myLocations(String sellerId) async {
-    final data = await _api.get('/locations') as List<dynamic>;
+    final data = await _api.get('/locations/mine') as List<dynamic>;
     return data
         .map((e) => LocationModel.fromJson(e as Map<String, dynamic>))
-        .where((l) => l.sellerId == sellerId)
         .toList();
+  }
+
+  Future<LocationModel> saveMyLocation({
+    required String name,
+    required double latitude,
+    required double longitude,
+    String? address,
+  }) async {
+    final data = await _api.post(
+      '/locations/mine',
+      body: {
+        'name': name,
+        'latitude': latitude,
+        'longitude': longitude,
+        if (address != null && address.isNotEmpty) 'address': address,
+      },
+    ) as Map<String, dynamic>;
+    return LocationModel.fromJson(data);
+  }
+
+  Future<LocationModel> updateMyLocation(
+    String locationId, {
+    String? name,
+    double? latitude,
+    double? longitude,
+    String? address,
+    bool? isActive,
+  }) async {
+    final data = await _api.patch(
+      '/locations/mine/$locationId',
+      body: {
+        'name': ?name,
+        'latitude': ?latitude,
+        'longitude': ?longitude,
+        'address': ?address,
+        'is_active': ?isActive,
+      },
+    ) as Map<String, dynamic>;
+    return LocationModel.fromJson(data);
+  }
+
+  Future<CrowdReport> crowdDensity({
+    required double latitude,
+    required double longitude,
+    int radiusM = 700,
+    int? hour,
+  }) async {
+    final data = await _api.get(
+      '/locations/crowd',
+      query: {
+        'lat': latitude.toStringAsFixed(6),
+        'lng': longitude.toStringAsFixed(6),
+        'radius_m': '$radiusM',
+        if (hour != null) 'hour': '$hour',
+      },
+    ) as Map<String, dynamic>;
+    return CrowdReport.fromJson(data);
   }
 
   Future<List<OrderModel>> myOrders(
