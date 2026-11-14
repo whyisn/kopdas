@@ -63,6 +63,11 @@ venv.bak/
 htmlcov/
 coverage.xml
 
+# Generated AI Experiment Outputs (Local Runs)
+/data/
+results.json
+chart_backtest.png
+
 # --- Flutter / Frontend ---
 kopdas_app/.dart_tool/
 kopdas_app/.flutter-plugins
