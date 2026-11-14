@@ -1,0 +1,169 @@
+{
+  "periode_uji": [
+    "2026-10-12",
+    "2026-11-01"
+  ],
+  "akurasi_forecast": {
+    "Hari sama minggu lalu": {
+      "MAE": 6.29,
+      "WAPE_%": 33.5,
+      "bias": -2.71
+    },
+    "Rata-rata 4 hari sama": {
+      "MAE": 5.59,
+      "WAPE_%": 29.8,
+      "bias": -2.94
+    },
+    "Model ML": {
+      "MAE": 5.42,
+      "WAPE_%": 28.9,
+      "bias": 0.06
+    }
+  },
+  "kebijakan": {
+    "Manual": {
+      "laba_rp": 13259200,
+      "terjual": 3201,
+      "sisa_cup": 1251,
+      "hilang_cup": 344,
+      "stok_dibawa": 4452,
+      "sisa_%": 28.1
+    },
+    "Rumus (+10%)": {
+      "laba_rp": 14447875,
+      "terjual": 2884,
+      "sisa_cup": 540,
+      "hilang_cup": 661,
+      "stok_dibawa": 3424,
+      "sisa_%": 15.8
+    },
+    "AI (forecast + MILP)": {
+      "laba_rp": 17526550,
+      "terjual": 3473,
+      "sisa_cup": 710,
+      "hilang_cup": 561,
+      "stok_dibawa": 4183,
+      "sisa_%": 17.0
+    }
+  },
+  "contoh_rekomendasi_sabtu": {
+    "tanggal": "2026-10-17",
+    "rencana": [
+      {
+        "lokasi": "Kampus UNP Air Tawar",
+        "kategori": "Coffee",
+        "buka": true,
+        "stok_rekomendasi": 12,
+        "forecast": 11.2,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Kampus UNP Air Tawar",
+        "kategori": "Non-Coffee",
+        "buka": true,
+        "stok_rekomendasi": 8,
+        "forecast": 7.9,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Kampus UNP Air Tawar",
+        "kategori": "Tea",
+        "buka": true,
+        "stok_rekomendasi": 9,
+        "forecast": 7.5,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Perkantoran Khatib Sulaiman",
+        "kategori": "Coffee",
+        "buka": false,
+        "stok_rekomendasi": 0,
+        "forecast": 8.2,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Perkantoran Khatib Sulaiman",
+        "kategori": "Non-Coffee",
+        "buka": false,
+        "stok_rekomendasi": 0,
+        "forecast": 4.1,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Perkantoran Khatib Sulaiman",
+        "kategori": "Tea",
+        "buka": false,
+        "stok_rekomendasi": 0,
+        "forecast": 4.0,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Pasar Raya Padang",
+        "kategori": "Coffee",
+        "buka": true,
+        "stok_rekomendasi": 24,
+        "forecast": 22.7,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Pasar Raya Padang",
+        "kategori": "Non-Coffee",
+        "buka": true,
+        "stok_rekomendasi": 19,
+        "forecast": 18.4,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Pasar Raya Padang",
+        "kategori": "Tea",
+        "buka": true,
+        "stok_rekomendasi": 23,
+        "forecast": 20.6,
+        "confidence": "sedang",
+        "n_histori": 18
+      },
+      {
+        "lokasi": "Pantai Padang (Taplau)",
+        "kategori": "Coffee",
+        "buka": true,
+        "stok_rekomendasi": 20,
+        "forecast": 18.5,
+        "confidence": "sedang",
+        "n_histori": 9
+      },
+      {
+        "lokasi": "Pantai Padang (Taplau)",
+        "kategori": "Non-Coffee",
+        "buka": true,
+        "stok_rekomendasi": 21,
+        "forecast": 20.4,
+        "confidence": "sedang",
+        "n_histori": 9
+      },
+      {
+        "lokasi": "Pantai Padang (Taplau)",
+        "kategori": "Tea",
+        "buka": true,
+        "stok_rekomendasi": 25,
+        "forecast": 23.0,
+        "confidence": "sedang",
+        "n_histori": 9
+      }
+    ],
+    "alasan": [
+      "BUKA Kampus UNP Air Tawar: perkiraan 27 cup (hujan, akhir pekan); bawa Coffee 12, Non-Coffee 8, Tea 9. Confidence sedang.",
+      "LEWATI Perkantoran Khatib Sulaiman: perkiraan hanya 16 cup (hujan, akhir pekan); laba harapan kalah dari lokasi lain. Confidence sedang.",
+      "BUKA Pasar Raya Padang: perkiraan 62 cup (hujan, akhir pekan); bawa Coffee 24, Non-Coffee 19, Tea 23. Confidence sedang.",
+      "BUKA Pantai Padang (Taplau): perkiraan 62 cup (hujan, akhir pekan); bawa Coffee 20, Non-Coffee 21, Tea 25. Confidence sedang."
+    ]
+  },
+  "catatan": "SEMUA DATA SIMULASI"
+}
