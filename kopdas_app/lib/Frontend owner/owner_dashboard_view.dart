@@ -69,11 +69,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> with SingleTick
           _centralInventory = invRes.map((i) => InventoryModel.fromJson(i)).toList();
         }
       } catch (_) {
+        final now = DateTime.now().toIso8601String();
         _centralInventory = [
-          InventoryModel(id: 'inv-c-01', productId: 'prd-01', productName: 'Kopi Susu Gula Aren', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 450, reservedQuantity: 0, availableQuantity: 450),
-          InventoryModel(id: 'inv-c-02', productId: 'prd-02', productName: 'Americano Dingin', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 320, reservedQuantity: 0, availableQuantity: 320),
-          InventoryModel(id: 'inv-c-03', productId: 'prd-03', productName: 'Matcha Latte', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 280, reservedQuantity: 0, availableQuantity: 280),
-          InventoryModel(id: 'inv-c-04', productId: 'prd-04', productName: 'Kopi Cerdas Signature', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 500, reservedQuantity: 0, availableQuantity: 500),
+          InventoryModel(id: 'inv-c-01', productId: 'prd-01', productName: 'Kopi Susu Gula Aren', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 450, reservedQuantity: 0, availableQuantity: 450, updatedAt: now),
+          InventoryModel(id: 'inv-c-02', productId: 'prd-02', productName: 'Americano Dingin', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 320, reservedQuantity: 0, availableQuantity: 320, updatedAt: now),
+          InventoryModel(id: 'inv-c-03', productId: 'prd-03', productName: 'Matcha Latte', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 280, reservedQuantity: 0, availableQuantity: 280, updatedAt: now),
+          InventoryModel(id: 'inv-c-04', productId: 'prd-04', productName: 'Kopi Cerdas Signature', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 500, reservedQuantity: 0, availableQuantity: 500, updatedAt: now),
         ];
       }
 
@@ -690,3 +691,4 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> with SingleTick
     );
   }
 }
+
