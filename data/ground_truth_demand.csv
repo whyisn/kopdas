@@ -1,0 +1,2017 @@
+tanggal,lokasi,produk,kategori,permintaan_asli
+2026-08-10,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,28
+2026-08-10,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-08-10,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-08-10,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,13
+2026-08-10,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-08-10,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-08-10,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,22
+2026-08-10,Perkantoran Khatib Sulaiman,Americano,Coffee,14
+2026-08-10,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,13
+2026-08-10,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-08-10,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-08-10,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-08-10,Pasar Raya Padang,Kopi Susu Aren,Coffee,12
+2026-08-10,Pasar Raya Padang,Americano,Coffee,11
+2026-08-10,Pasar Raya Padang,Coklat,Non-Coffee,4
+2026-08-10,Pasar Raya Padang,Red Velvet,Non-Coffee,2
+2026-08-10,Pasar Raya Padang,Thai Tea,Tea,6
+2026-08-10,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-08-10,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,12
+2026-08-10,Pantai Padang (Taplau),Americano,Coffee,3
+2026-08-10,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-08-10,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-08-10,Pantai Padang (Taplau),Thai Tea,Tea,12
+2026-08-10,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-08-11,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,36
+2026-08-11,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-08-11,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-08-11,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-08-11,Kampus UNP Air Tawar,Thai Tea,Tea,29
+2026-08-11,Kampus UNP Air Tawar,Lemon Tea,Tea,16
+2026-08-11,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,14
+2026-08-11,Perkantoran Khatib Sulaiman,Americano,Coffee,8
+2026-08-11,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,10
+2026-08-11,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-08-11,Perkantoran Khatib Sulaiman,Thai Tea,Tea,9
+2026-08-11,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-08-11,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-08-11,Pasar Raya Padang,Americano,Coffee,17
+2026-08-11,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-08-11,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-08-11,Pasar Raya Padang,Thai Tea,Tea,0
+2026-08-11,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-08-11,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-08-11,Pantai Padang (Taplau),Americano,Coffee,3
+2026-08-11,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-08-11,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-08-11,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-08-11,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-08-12,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,7
+2026-08-12,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-08-12,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-08-12,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,14
+2026-08-12,Kampus UNP Air Tawar,Thai Tea,Tea,13
+2026-08-12,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-08-12,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,29
+2026-08-12,Perkantoran Khatib Sulaiman,Americano,Coffee,5
+2026-08-12,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,9
+2026-08-12,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-08-12,Perkantoran Khatib Sulaiman,Thai Tea,Tea,2
+2026-08-12,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,11
+2026-08-12,Pasar Raya Padang,Kopi Susu Aren,Coffee,7
+2026-08-12,Pasar Raya Padang,Americano,Coffee,5
+2026-08-12,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-08-12,Pasar Raya Padang,Red Velvet,Non-Coffee,13
+2026-08-12,Pasar Raya Padang,Thai Tea,Tea,17
+2026-08-12,Pasar Raya Padang,Lemon Tea,Tea,14
+2026-08-12,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,0
+2026-08-12,Pantai Padang (Taplau),Americano,Coffee,1
+2026-08-12,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-08-12,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-08-12,Pantai Padang (Taplau),Thai Tea,Tea,2
+2026-08-12,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-08-13,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,32
+2026-08-13,Kampus UNP Air Tawar,Americano,Coffee,18
+2026-08-13,Kampus UNP Air Tawar,Coklat,Non-Coffee,14
+2026-08-13,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,10
+2026-08-13,Kampus UNP Air Tawar,Thai Tea,Tea,6
+2026-08-13,Kampus UNP Air Tawar,Lemon Tea,Tea,12
+2026-08-13,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,19
+2026-08-13,Perkantoran Khatib Sulaiman,Americano,Coffee,35
+2026-08-13,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-08-13,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-08-13,Perkantoran Khatib Sulaiman,Thai Tea,Tea,8
+2026-08-13,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-08-13,Pasar Raya Padang,Kopi Susu Aren,Coffee,4
+2026-08-13,Pasar Raya Padang,Americano,Coffee,10
+2026-08-13,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-08-13,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-13,Pasar Raya Padang,Thai Tea,Tea,14
+2026-08-13,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-08-13,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-08-13,Pantai Padang (Taplau),Americano,Coffee,0
+2026-08-13,Pantai Padang (Taplau),Coklat,Non-Coffee,0
+2026-08-13,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-08-13,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-08-13,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-08-14,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,23
+2026-08-14,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-08-14,Kampus UNP Air Tawar,Coklat,Non-Coffee,22
+2026-08-14,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,9
+2026-08-14,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-08-14,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-08-14,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,20
+2026-08-14,Perkantoran Khatib Sulaiman,Americano,Coffee,9
+2026-08-14,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,6
+2026-08-14,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-08-14,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-08-14,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-08-14,Pasar Raya Padang,Kopi Susu Aren,Coffee,17
+2026-08-14,Pasar Raya Padang,Americano,Coffee,2
+2026-08-14,Pasar Raya Padang,Coklat,Non-Coffee,9
+2026-08-14,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-08-14,Pasar Raya Padang,Thai Tea,Tea,12
+2026-08-14,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-08-14,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,6
+2026-08-14,Pantai Padang (Taplau),Americano,Coffee,6
+2026-08-14,Pantai Padang (Taplau),Coklat,Non-Coffee,10
+2026-08-14,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-08-14,Pantai Padang (Taplau),Thai Tea,Tea,16
+2026-08-14,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-08-15,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,9
+2026-08-15,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-08-15,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-08-15,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-08-15,Kampus UNP Air Tawar,Thai Tea,Tea,2
+2026-08-15,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-08-15,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,8
+2026-08-15,Perkantoran Khatib Sulaiman,Americano,Coffee,3
+2026-08-15,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-08-15,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-08-15,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-08-15,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-08-15,Pasar Raya Padang,Kopi Susu Aren,Coffee,14
+2026-08-15,Pasar Raya Padang,Americano,Coffee,13
+2026-08-15,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-08-15,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-08-15,Pasar Raya Padang,Thai Tea,Tea,20
+2026-08-15,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-08-15,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,45
+2026-08-15,Pantai Padang (Taplau),Americano,Coffee,23
+2026-08-15,Pantai Padang (Taplau),Coklat,Non-Coffee,16
+2026-08-15,Pantai Padang (Taplau),Red Velvet,Non-Coffee,26
+2026-08-15,Pantai Padang (Taplau),Thai Tea,Tea,26
+2026-08-15,Pantai Padang (Taplau),Lemon Tea,Tea,11
+2026-08-16,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,7
+2026-08-16,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-08-16,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-08-16,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,0
+2026-08-16,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-08-16,Kampus UNP Air Tawar,Lemon Tea,Tea,2
+2026-08-16,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,1
+2026-08-16,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-08-16,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-08-16,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-08-16,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-08-16,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-08-16,Pasar Raya Padang,Kopi Susu Aren,Coffee,31
+2026-08-16,Pasar Raya Padang,Americano,Coffee,19
+2026-08-16,Pasar Raya Padang,Coklat,Non-Coffee,19
+2026-08-16,Pasar Raya Padang,Red Velvet,Non-Coffee,16
+2026-08-16,Pasar Raya Padang,Thai Tea,Tea,18
+2026-08-16,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-08-16,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,34
+2026-08-16,Pantai Padang (Taplau),Americano,Coffee,17
+2026-08-16,Pantai Padang (Taplau),Coklat,Non-Coffee,9
+2026-08-16,Pantai Padang (Taplau),Red Velvet,Non-Coffee,15
+2026-08-16,Pantai Padang (Taplau),Thai Tea,Tea,17
+2026-08-16,Pantai Padang (Taplau),Lemon Tea,Tea,12
+2026-08-17,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,10
+2026-08-17,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-08-17,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-08-17,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-08-17,Kampus UNP Air Tawar,Thai Tea,Tea,2
+2026-08-17,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-08-17,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,5
+2026-08-17,Perkantoran Khatib Sulaiman,Americano,Coffee,8
+2026-08-17,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-08-17,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-08-17,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-08-17,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-08-17,Pasar Raya Padang,Kopi Susu Aren,Coffee,25
+2026-08-17,Pasar Raya Padang,Americano,Coffee,13
+2026-08-17,Pasar Raya Padang,Coklat,Non-Coffee,19
+2026-08-17,Pasar Raya Padang,Red Velvet,Non-Coffee,2
+2026-08-17,Pasar Raya Padang,Thai Tea,Tea,17
+2026-08-17,Pasar Raya Padang,Lemon Tea,Tea,5
+2026-08-17,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,13
+2026-08-17,Pantai Padang (Taplau),Americano,Coffee,2
+2026-08-17,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-08-17,Pantai Padang (Taplau),Red Velvet,Non-Coffee,11
+2026-08-17,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-08-17,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-08-18,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,14
+2026-08-18,Kampus UNP Air Tawar,Americano,Coffee,20
+2026-08-18,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-08-18,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-08-18,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-08-18,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-08-18,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,18
+2026-08-18,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-08-18,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,12
+2026-08-18,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-08-18,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-08-18,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,8
+2026-08-18,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-08-18,Pasar Raya Padang,Americano,Coffee,6
+2026-08-18,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-08-18,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-18,Pasar Raya Padang,Thai Tea,Tea,20
+2026-08-18,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-08-18,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-08-18,Pantai Padang (Taplau),Americano,Coffee,4
+2026-08-18,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-08-18,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-08-18,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-08-18,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-08-19,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,29
+2026-08-19,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-08-19,Kampus UNP Air Tawar,Coklat,Non-Coffee,17
+2026-08-19,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-08-19,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-08-19,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-08-19,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,18
+2026-08-19,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-08-19,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-08-19,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-08-19,Perkantoran Khatib Sulaiman,Thai Tea,Tea,11
+2026-08-19,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-08-19,Pasar Raya Padang,Kopi Susu Aren,Coffee,25
+2026-08-19,Pasar Raya Padang,Americano,Coffee,15
+2026-08-19,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-08-19,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-08-19,Pasar Raya Padang,Thai Tea,Tea,19
+2026-08-19,Pasar Raya Padang,Lemon Tea,Tea,13
+2026-08-19,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,8
+2026-08-19,Pantai Padang (Taplau),Americano,Coffee,4
+2026-08-19,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-08-19,Pantai Padang (Taplau),Red Velvet,Non-Coffee,1
+2026-08-19,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-08-19,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-08-20,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,13
+2026-08-20,Kampus UNP Air Tawar,Americano,Coffee,7
+2026-08-20,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-08-20,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-08-20,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-08-20,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-08-20,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,38
+2026-08-20,Perkantoran Khatib Sulaiman,Americano,Coffee,13
+2026-08-20,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-08-20,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-08-20,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-08-20,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-08-20,Pasar Raya Padang,Kopi Susu Aren,Coffee,6
+2026-08-20,Pasar Raya Padang,Americano,Coffee,9
+2026-08-20,Pasar Raya Padang,Coklat,Non-Coffee,3
+2026-08-20,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-20,Pasar Raya Padang,Thai Tea,Tea,8
+2026-08-20,Pasar Raya Padang,Lemon Tea,Tea,14
+2026-08-20,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-08-20,Pantai Padang (Taplau),Americano,Coffee,5
+2026-08-20,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-08-20,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-08-20,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-08-20,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-08-21,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,30
+2026-08-21,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-08-21,Kampus UNP Air Tawar,Coklat,Non-Coffee,13
+2026-08-21,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,12
+2026-08-21,Kampus UNP Air Tawar,Thai Tea,Tea,9
+2026-08-21,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-08-21,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,26
+2026-08-21,Perkantoran Khatib Sulaiman,Americano,Coffee,22
+2026-08-21,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-08-21,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-08-21,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-08-21,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,8
+2026-08-21,Pasar Raya Padang,Kopi Susu Aren,Coffee,27
+2026-08-21,Pasar Raya Padang,Americano,Coffee,16
+2026-08-21,Pasar Raya Padang,Coklat,Non-Coffee,14
+2026-08-21,Pasar Raya Padang,Red Velvet,Non-Coffee,15
+2026-08-21,Pasar Raya Padang,Thai Tea,Tea,20
+2026-08-21,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-08-21,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,15
+2026-08-21,Pantai Padang (Taplau),Americano,Coffee,6
+2026-08-21,Pantai Padang (Taplau),Coklat,Non-Coffee,12
+2026-08-21,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-08-21,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-08-21,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-08-22,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,5
+2026-08-22,Kampus UNP Air Tawar,Americano,Coffee,5
+2026-08-22,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-08-22,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,4
+2026-08-22,Kampus UNP Air Tawar,Thai Tea,Tea,0
+2026-08-22,Kampus UNP Air Tawar,Lemon Tea,Tea,2
+2026-08-22,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,7
+2026-08-22,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-08-22,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-08-22,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-08-22,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-08-22,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-08-22,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-08-22,Pasar Raya Padang,Americano,Coffee,15
+2026-08-22,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-08-22,Pasar Raya Padang,Red Velvet,Non-Coffee,12
+2026-08-22,Pasar Raya Padang,Thai Tea,Tea,2
+2026-08-22,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-08-22,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,12
+2026-08-22,Pantai Padang (Taplau),Americano,Coffee,8
+2026-08-22,Pantai Padang (Taplau),Coklat,Non-Coffee,16
+2026-08-22,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-08-22,Pantai Padang (Taplau),Thai Tea,Tea,6
+2026-08-22,Pantai Padang (Taplau),Lemon Tea,Tea,13
+2026-08-23,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,6
+2026-08-23,Kampus UNP Air Tawar,Americano,Coffee,1
+2026-08-23,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-08-23,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,0
+2026-08-23,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-08-23,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-08-23,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,2
+2026-08-23,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-08-23,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-08-23,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-08-23,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-08-23,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-08-23,Pasar Raya Padang,Kopi Susu Aren,Coffee,26
+2026-08-23,Pasar Raya Padang,Americano,Coffee,7
+2026-08-23,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-08-23,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-23,Pasar Raya Padang,Thai Tea,Tea,15
+2026-08-23,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-08-23,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,8
+2026-08-23,Pantai Padang (Taplau),Americano,Coffee,12
+2026-08-23,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-08-23,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-08-23,Pantai Padang (Taplau),Thai Tea,Tea,12
+2026-08-23,Pantai Padang (Taplau),Lemon Tea,Tea,7
+2026-08-24,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,34
+2026-08-24,Kampus UNP Air Tawar,Americano,Coffee,16
+2026-08-24,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-08-24,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,8
+2026-08-24,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-08-24,Kampus UNP Air Tawar,Lemon Tea,Tea,10
+2026-08-24,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,17
+2026-08-24,Perkantoran Khatib Sulaiman,Americano,Coffee,9
+2026-08-24,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-08-24,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-08-24,Perkantoran Khatib Sulaiman,Thai Tea,Tea,11
+2026-08-24,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-08-24,Pasar Raya Padang,Kopi Susu Aren,Coffee,8
+2026-08-24,Pasar Raya Padang,Americano,Coffee,10
+2026-08-24,Pasar Raya Padang,Coklat,Non-Coffee,4
+2026-08-24,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-08-24,Pasar Raya Padang,Thai Tea,Tea,5
+2026-08-24,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-08-24,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-08-24,Pantai Padang (Taplau),Americano,Coffee,1
+2026-08-24,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-08-24,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-08-24,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-08-24,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-08-25,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,12
+2026-08-25,Kampus UNP Air Tawar,Americano,Coffee,13
+2026-08-25,Kampus UNP Air Tawar,Coklat,Non-Coffee,19
+2026-08-25,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,10
+2026-08-25,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-08-25,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-08-25,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,26
+2026-08-25,Perkantoran Khatib Sulaiman,Americano,Coffee,15
+2026-08-25,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-08-25,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-08-25,Perkantoran Khatib Sulaiman,Thai Tea,Tea,9
+2026-08-25,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-08-25,Pasar Raya Padang,Kopi Susu Aren,Coffee,10
+2026-08-25,Pasar Raya Padang,Americano,Coffee,6
+2026-08-25,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-08-25,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-25,Pasar Raya Padang,Thai Tea,Tea,18
+2026-08-25,Pasar Raya Padang,Lemon Tea,Tea,5
+2026-08-25,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,11
+2026-08-25,Pantai Padang (Taplau),Americano,Coffee,2
+2026-08-25,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-08-25,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-08-25,Pantai Padang (Taplau),Thai Tea,Tea,2
+2026-08-25,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-08-26,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,19
+2026-08-26,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-08-26,Kampus UNP Air Tawar,Coklat,Non-Coffee,15
+2026-08-26,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,18
+2026-08-26,Kampus UNP Air Tawar,Thai Tea,Tea,11
+2026-08-26,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-08-26,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,25
+2026-08-26,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-08-26,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-08-26,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,13
+2026-08-26,Perkantoran Khatib Sulaiman,Thai Tea,Tea,11
+2026-08-26,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,6
+2026-08-26,Pasar Raya Padang,Kopi Susu Aren,Coffee,8
+2026-08-26,Pasar Raya Padang,Americano,Coffee,4
+2026-08-26,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-08-26,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-08-26,Pasar Raya Padang,Thai Tea,Tea,16
+2026-08-26,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-08-26,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-08-26,Pantai Padang (Taplau),Americano,Coffee,11
+2026-08-26,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-08-26,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-08-26,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-08-26,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-08-27,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,21
+2026-08-27,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-08-27,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-08-27,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-08-27,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-08-27,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-08-27,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,24
+2026-08-27,Perkantoran Khatib Sulaiman,Americano,Coffee,9
+2026-08-27,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-08-27,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-08-27,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-08-27,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-08-27,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-08-27,Pasar Raya Padang,Americano,Coffee,3
+2026-08-27,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-08-27,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-08-27,Pasar Raya Padang,Thai Tea,Tea,3
+2026-08-27,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-08-27,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-08-27,Pantai Padang (Taplau),Americano,Coffee,1
+2026-08-27,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-08-27,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-08-27,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-08-27,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-08-28,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,11
+2026-08-28,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-08-28,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-08-28,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,1
+2026-08-28,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-08-28,Kampus UNP Air Tawar,Lemon Tea,Tea,13
+2026-08-28,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,26
+2026-08-28,Perkantoran Khatib Sulaiman,Americano,Coffee,10
+2026-08-28,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-08-28,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,14
+2026-08-28,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-08-28,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-08-28,Pasar Raya Padang,Kopi Susu Aren,Coffee,7
+2026-08-28,Pasar Raya Padang,Americano,Coffee,3
+2026-08-28,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-08-28,Pasar Raya Padang,Red Velvet,Non-Coffee,4
+2026-08-28,Pasar Raya Padang,Thai Tea,Tea,24
+2026-08-28,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-08-28,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-08-28,Pantai Padang (Taplau),Americano,Coffee,5
+2026-08-28,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-08-28,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-08-28,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-08-28,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-08-29,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,7
+2026-08-29,Kampus UNP Air Tawar,Americano,Coffee,7
+2026-08-29,Kampus UNP Air Tawar,Coklat,Non-Coffee,4
+2026-08-29,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-08-29,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-08-29,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-08-29,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,8
+2026-08-29,Perkantoran Khatib Sulaiman,Americano,Coffee,0
+2026-08-29,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-08-29,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-08-29,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-08-29,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-08-29,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-08-29,Pasar Raya Padang,Americano,Coffee,8
+2026-08-29,Pasar Raya Padang,Coklat,Non-Coffee,9
+2026-08-29,Pasar Raya Padang,Red Velvet,Non-Coffee,11
+2026-08-29,Pasar Raya Padang,Thai Tea,Tea,17
+2026-08-29,Pasar Raya Padang,Lemon Tea,Tea,14
+2026-08-29,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,23
+2026-08-29,Pantai Padang (Taplau),Americano,Coffee,16
+2026-08-29,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-08-29,Pantai Padang (Taplau),Red Velvet,Non-Coffee,10
+2026-08-29,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-08-29,Pantai Padang (Taplau),Lemon Tea,Tea,13
+2026-08-30,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,8
+2026-08-30,Kampus UNP Air Tawar,Americano,Coffee,0
+2026-08-30,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-08-30,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,4
+2026-08-30,Kampus UNP Air Tawar,Thai Tea,Tea,0
+2026-08-30,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-08-30,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-08-30,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-08-30,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-08-30,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-08-30,Perkantoran Khatib Sulaiman,Thai Tea,Tea,2
+2026-08-30,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-08-30,Pasar Raya Padang,Kopi Susu Aren,Coffee,23
+2026-08-30,Pasar Raya Padang,Americano,Coffee,6
+2026-08-30,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-08-30,Pasar Raya Padang,Red Velvet,Non-Coffee,14
+2026-08-30,Pasar Raya Padang,Thai Tea,Tea,28
+2026-08-30,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-08-30,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,30
+2026-08-30,Pantai Padang (Taplau),Americano,Coffee,12
+2026-08-30,Pantai Padang (Taplau),Coklat,Non-Coffee,42
+2026-08-30,Pantai Padang (Taplau),Red Velvet,Non-Coffee,9
+2026-08-30,Pantai Padang (Taplau),Thai Tea,Tea,33
+2026-08-30,Pantai Padang (Taplau),Lemon Tea,Tea,16
+2026-08-31,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,18
+2026-08-31,Kampus UNP Air Tawar,Americano,Coffee,0
+2026-08-31,Kampus UNP Air Tawar,Coklat,Non-Coffee,26
+2026-08-31,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,13
+2026-08-31,Kampus UNP Air Tawar,Thai Tea,Tea,7
+2026-08-31,Kampus UNP Air Tawar,Lemon Tea,Tea,13
+2026-08-31,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,14
+2026-08-31,Perkantoran Khatib Sulaiman,Americano,Coffee,13
+2026-08-31,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-08-31,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-08-31,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-08-31,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-08-31,Pasar Raya Padang,Kopi Susu Aren,Coffee,21
+2026-08-31,Pasar Raya Padang,Americano,Coffee,2
+2026-08-31,Pasar Raya Padang,Coklat,Non-Coffee,13
+2026-08-31,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-08-31,Pasar Raya Padang,Thai Tea,Tea,15
+2026-08-31,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-08-31,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-08-31,Pantai Padang (Taplau),Americano,Coffee,3
+2026-08-31,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-08-31,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-08-31,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-08-31,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-09-01,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,24
+2026-09-01,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-09-01,Kampus UNP Air Tawar,Coklat,Non-Coffee,29
+2026-09-01,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,17
+2026-09-01,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-09-01,Kampus UNP Air Tawar,Lemon Tea,Tea,10
+2026-09-01,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,29
+2026-09-01,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-09-01,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-09-01,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,15
+2026-09-01,Perkantoran Khatib Sulaiman,Thai Tea,Tea,12
+2026-09-01,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-09-01,Pasar Raya Padang,Kopi Susu Aren,Coffee,14
+2026-09-01,Pasar Raya Padang,Americano,Coffee,6
+2026-09-01,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-09-01,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-09-01,Pasar Raya Padang,Thai Tea,Tea,10
+2026-09-01,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-09-01,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,10
+2026-09-01,Pantai Padang (Taplau),Americano,Coffee,6
+2026-09-01,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-09-01,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-09-01,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-09-01,Pantai Padang (Taplau),Lemon Tea,Tea,10
+2026-09-02,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,33
+2026-09-02,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-09-02,Kampus UNP Air Tawar,Coklat,Non-Coffee,13
+2026-09-02,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,4
+2026-09-02,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-09-02,Kampus UNP Air Tawar,Lemon Tea,Tea,8
+2026-09-02,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,19
+2026-09-02,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-09-02,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-09-02,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,15
+2026-09-02,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-09-02,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-02,Pasar Raya Padang,Kopi Susu Aren,Coffee,13
+2026-09-02,Pasar Raya Padang,Americano,Coffee,5
+2026-09-02,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-09-02,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-02,Pasar Raya Padang,Thai Tea,Tea,10
+2026-09-02,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-09-02,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-09-02,Pantai Padang (Taplau),Americano,Coffee,4
+2026-09-02,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-09-02,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-02,Pantai Padang (Taplau),Thai Tea,Tea,9
+2026-09-02,Pantai Padang (Taplau),Lemon Tea,Tea,7
+2026-09-03,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,29
+2026-09-03,Kampus UNP Air Tawar,Americano,Coffee,21
+2026-09-03,Kampus UNP Air Tawar,Coklat,Non-Coffee,14
+2026-09-03,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-09-03,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-09-03,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-09-03,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,12
+2026-09-03,Perkantoran Khatib Sulaiman,Americano,Coffee,19
+2026-09-03,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-09-03,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-09-03,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-09-03,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-09-03,Pasar Raya Padang,Kopi Susu Aren,Coffee,8
+2026-09-03,Pasar Raya Padang,Americano,Coffee,6
+2026-09-03,Pasar Raya Padang,Coklat,Non-Coffee,13
+2026-09-03,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-09-03,Pasar Raya Padang,Thai Tea,Tea,8
+2026-09-03,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-09-03,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,16
+2026-09-03,Pantai Padang (Taplau),Americano,Coffee,7
+2026-09-03,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-09-03,Pantai Padang (Taplau),Red Velvet,Non-Coffee,12
+2026-09-03,Pantai Padang (Taplau),Thai Tea,Tea,12
+2026-09-03,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-09-04,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,24
+2026-09-04,Kampus UNP Air Tawar,Americano,Coffee,18
+2026-09-04,Kampus UNP Air Tawar,Coklat,Non-Coffee,12
+2026-09-04,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-09-04,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-09-04,Kampus UNP Air Tawar,Lemon Tea,Tea,9
+2026-09-04,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,21
+2026-09-04,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-09-04,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,12
+2026-09-04,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-09-04,Perkantoran Khatib Sulaiman,Thai Tea,Tea,12
+2026-09-04,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-04,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-09-04,Pasar Raya Padang,Americano,Coffee,5
+2026-09-04,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-09-04,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-09-04,Pasar Raya Padang,Thai Tea,Tea,9
+2026-09-04,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-09-04,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-09-04,Pantai Padang (Taplau),Americano,Coffee,2
+2026-09-04,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-09-04,Pantai Padang (Taplau),Red Velvet,Non-Coffee,8
+2026-09-04,Pantai Padang (Taplau),Thai Tea,Tea,7
+2026-09-04,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-09-05,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,12
+2026-09-05,Kampus UNP Air Tawar,Americano,Coffee,6
+2026-09-05,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-09-05,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-09-05,Kampus UNP Air Tawar,Thai Tea,Tea,2
+2026-09-05,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-09-05,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,4
+2026-09-05,Perkantoran Khatib Sulaiman,Americano,Coffee,5
+2026-09-05,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-09-05,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-09-05,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-09-05,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-05,Pasar Raya Padang,Kopi Susu Aren,Coffee,21
+2026-09-05,Pasar Raya Padang,Americano,Coffee,12
+2026-09-05,Pasar Raya Padang,Coklat,Non-Coffee,16
+2026-09-05,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-05,Pasar Raya Padang,Thai Tea,Tea,11
+2026-09-05,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-09-05,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,24
+2026-09-05,Pantai Padang (Taplau),Americano,Coffee,14
+2026-09-05,Pantai Padang (Taplau),Coklat,Non-Coffee,30
+2026-09-05,Pantai Padang (Taplau),Red Velvet,Non-Coffee,25
+2026-09-05,Pantai Padang (Taplau),Thai Tea,Tea,27
+2026-09-05,Pantai Padang (Taplau),Lemon Tea,Tea,12
+2026-09-06,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,5
+2026-09-06,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-09-06,Kampus UNP Air Tawar,Coklat,Non-Coffee,2
+2026-09-06,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,0
+2026-09-06,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-09-06,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-09-06,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,0
+2026-09-06,Perkantoran Khatib Sulaiman,Americano,Coffee,2
+2026-09-06,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-09-06,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-09-06,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-09-06,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-09-06,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-09-06,Pasar Raya Padang,Americano,Coffee,4
+2026-09-06,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-09-06,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-06,Pasar Raya Padang,Thai Tea,Tea,5
+2026-09-06,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-09-06,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-09-06,Pantai Padang (Taplau),Americano,Coffee,8
+2026-09-06,Pantai Padang (Taplau),Coklat,Non-Coffee,11
+2026-09-06,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-09-06,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-09-06,Pantai Padang (Taplau),Lemon Tea,Tea,8
+2026-09-07,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,44
+2026-09-07,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-09-07,Kampus UNP Air Tawar,Coklat,Non-Coffee,18
+2026-09-07,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,13
+2026-09-07,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-09-07,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-09-07,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,29
+2026-09-07,Perkantoran Khatib Sulaiman,Americano,Coffee,14
+2026-09-07,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,6
+2026-09-07,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,15
+2026-09-07,Perkantoran Khatib Sulaiman,Thai Tea,Tea,14
+2026-09-07,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-09-07,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-09-07,Pasar Raya Padang,Americano,Coffee,3
+2026-09-07,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-09-07,Pasar Raya Padang,Red Velvet,Non-Coffee,4
+2026-09-07,Pasar Raya Padang,Thai Tea,Tea,7
+2026-09-07,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-09-07,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,9
+2026-09-07,Pantai Padang (Taplau),Americano,Coffee,0
+2026-09-07,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-09-07,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-09-07,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-09-07,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-09-08,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,32
+2026-09-08,Kampus UNP Air Tawar,Americano,Coffee,18
+2026-09-08,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-09-08,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,13
+2026-09-08,Kampus UNP Air Tawar,Thai Tea,Tea,7
+2026-09-08,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-09-08,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,13
+2026-09-08,Perkantoran Khatib Sulaiman,Americano,Coffee,27
+2026-09-08,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,6
+2026-09-08,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,9
+2026-09-08,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-09-08,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-09-08,Pasar Raya Padang,Kopi Susu Aren,Coffee,20
+2026-09-08,Pasar Raya Padang,Americano,Coffee,8
+2026-09-08,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-09-08,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-09-08,Pasar Raya Padang,Thai Tea,Tea,12
+2026-09-08,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-09-08,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,6
+2026-09-08,Pantai Padang (Taplau),Americano,Coffee,3
+2026-09-08,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-09-08,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-08,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-09-08,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-09-09,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,15
+2026-09-09,Kampus UNP Air Tawar,Americano,Coffee,14
+2026-09-09,Kampus UNP Air Tawar,Coklat,Non-Coffee,8
+2026-09-09,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-09-09,Kampus UNP Air Tawar,Thai Tea,Tea,6
+2026-09-09,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-09-09,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,27
+2026-09-09,Perkantoran Khatib Sulaiman,Americano,Coffee,25
+2026-09-09,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-09,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-09-09,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-09-09,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-09-09,Pasar Raya Padang,Kopi Susu Aren,Coffee,32
+2026-09-09,Pasar Raya Padang,Americano,Coffee,4
+2026-09-09,Pasar Raya Padang,Coklat,Non-Coffee,2
+2026-09-09,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-09-09,Pasar Raya Padang,Thai Tea,Tea,8
+2026-09-09,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-09-09,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,9
+2026-09-09,Pantai Padang (Taplau),Americano,Coffee,0
+2026-09-09,Pantai Padang (Taplau),Coklat,Non-Coffee,8
+2026-09-09,Pantai Padang (Taplau),Red Velvet,Non-Coffee,7
+2026-09-09,Pantai Padang (Taplau),Thai Tea,Tea,7
+2026-09-09,Pantai Padang (Taplau),Lemon Tea,Tea,7
+2026-09-10,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,20
+2026-09-10,Kampus UNP Air Tawar,Americano,Coffee,17
+2026-09-10,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-09-10,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,12
+2026-09-10,Kampus UNP Air Tawar,Thai Tea,Tea,20
+2026-09-10,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-09-10,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,29
+2026-09-10,Perkantoran Khatib Sulaiman,Americano,Coffee,7
+2026-09-10,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,12
+2026-09-10,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-09-10,Perkantoran Khatib Sulaiman,Thai Tea,Tea,2
+2026-09-10,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,6
+2026-09-10,Pasar Raya Padang,Kopi Susu Aren,Coffee,20
+2026-09-10,Pasar Raya Padang,Americano,Coffee,3
+2026-09-10,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-09-10,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-10,Pasar Raya Padang,Thai Tea,Tea,11
+2026-09-10,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-09-10,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,6
+2026-09-10,Pantai Padang (Taplau),Americano,Coffee,2
+2026-09-10,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-09-10,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-09-10,Pantai Padang (Taplau),Thai Tea,Tea,1
+2026-09-10,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-09-11,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,15
+2026-09-11,Kampus UNP Air Tawar,Americano,Coffee,12
+2026-09-11,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-09-11,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-09-11,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-09-11,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-09-11,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,28
+2026-09-11,Perkantoran Khatib Sulaiman,Americano,Coffee,19
+2026-09-11,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-09-11,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-09-11,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-09-11,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-09-11,Pasar Raya Padang,Kopi Susu Aren,Coffee,13
+2026-09-11,Pasar Raya Padang,Americano,Coffee,3
+2026-09-11,Pasar Raya Padang,Coklat,Non-Coffee,14
+2026-09-11,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-09-11,Pasar Raya Padang,Thai Tea,Tea,10
+2026-09-11,Pasar Raya Padang,Lemon Tea,Tea,13
+2026-09-11,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-09-11,Pantai Padang (Taplau),Americano,Coffee,3
+2026-09-11,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-09-11,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-11,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-09-11,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-09-12,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,13
+2026-09-12,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-09-12,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-09-12,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,1
+2026-09-12,Kampus UNP Air Tawar,Thai Tea,Tea,2
+2026-09-12,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-09-12,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,2
+2026-09-12,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-09-12,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-09-12,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-09-12,Perkantoran Khatib Sulaiman,Thai Tea,Tea,2
+2026-09-12,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-12,Pasar Raya Padang,Kopi Susu Aren,Coffee,9
+2026-09-12,Pasar Raya Padang,Americano,Coffee,11
+2026-09-12,Pasar Raya Padang,Coklat,Non-Coffee,9
+2026-09-12,Pasar Raya Padang,Red Velvet,Non-Coffee,14
+2026-09-12,Pasar Raya Padang,Thai Tea,Tea,17
+2026-09-12,Pasar Raya Padang,Lemon Tea,Tea,16
+2026-09-12,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,12
+2026-09-12,Pantai Padang (Taplau),Americano,Coffee,6
+2026-09-12,Pantai Padang (Taplau),Coklat,Non-Coffee,33
+2026-09-12,Pantai Padang (Taplau),Red Velvet,Non-Coffee,22
+2026-09-12,Pantai Padang (Taplau),Thai Tea,Tea,28
+2026-09-12,Pantai Padang (Taplau),Lemon Tea,Tea,10
+2026-09-13,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,7
+2026-09-13,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-09-13,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-09-13,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,0
+2026-09-13,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-09-13,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-09-13,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,0
+2026-09-13,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-09-13,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-09-13,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-09-13,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-09-13,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-09-13,Pasar Raya Padang,Kopi Susu Aren,Coffee,12
+2026-09-13,Pasar Raya Padang,Americano,Coffee,6
+2026-09-13,Pasar Raya Padang,Coklat,Non-Coffee,11
+2026-09-13,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-09-13,Pasar Raya Padang,Thai Tea,Tea,20
+2026-09-13,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-09-13,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-09-13,Pantai Padang (Taplau),Americano,Coffee,5
+2026-09-13,Pantai Padang (Taplau),Coklat,Non-Coffee,12
+2026-09-13,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-13,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-09-13,Pantai Padang (Taplau),Lemon Tea,Tea,16
+2026-09-14,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,29
+2026-09-14,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-09-14,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-09-14,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-09-14,Kampus UNP Air Tawar,Thai Tea,Tea,11
+2026-09-14,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-09-14,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,38
+2026-09-14,Perkantoran Khatib Sulaiman,Americano,Coffee,25
+2026-09-14,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-14,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,11
+2026-09-14,Perkantoran Khatib Sulaiman,Thai Tea,Tea,14
+2026-09-14,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-09-14,Pasar Raya Padang,Kopi Susu Aren,Coffee,12
+2026-09-14,Pasar Raya Padang,Americano,Coffee,1
+2026-09-14,Pasar Raya Padang,Coklat,Non-Coffee,4
+2026-09-14,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-09-14,Pasar Raya Padang,Thai Tea,Tea,4
+2026-09-14,Pasar Raya Padang,Lemon Tea,Tea,3
+2026-09-14,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-09-14,Pantai Padang (Taplau),Americano,Coffee,1
+2026-09-14,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-09-14,Pantai Padang (Taplau),Red Velvet,Non-Coffee,1
+2026-09-14,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-09-14,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-09-15,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,11
+2026-09-15,Kampus UNP Air Tawar,Americano,Coffee,16
+2026-09-15,Kampus UNP Air Tawar,Coklat,Non-Coffee,21
+2026-09-15,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-09-15,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-09-15,Kampus UNP Air Tawar,Lemon Tea,Tea,8
+2026-09-15,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,16
+2026-09-15,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-09-15,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,10
+2026-09-15,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-09-15,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-09-15,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,9
+2026-09-15,Pasar Raya Padang,Kopi Susu Aren,Coffee,4
+2026-09-15,Pasar Raya Padang,Americano,Coffee,1
+2026-09-15,Pasar Raya Padang,Coklat,Non-Coffee,15
+2026-09-15,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-15,Pasar Raya Padang,Thai Tea,Tea,20
+2026-09-15,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-09-15,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-09-15,Pantai Padang (Taplau),Americano,Coffee,2
+2026-09-15,Pantai Padang (Taplau),Coklat,Non-Coffee,4
+2026-09-15,Pantai Padang (Taplau),Red Velvet,Non-Coffee,1
+2026-09-15,Pantai Padang (Taplau),Thai Tea,Tea,2
+2026-09-15,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-09-16,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,8
+2026-09-16,Kampus UNP Air Tawar,Americano,Coffee,21
+2026-09-16,Kampus UNP Air Tawar,Coklat,Non-Coffee,18
+2026-09-16,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,9
+2026-09-16,Kampus UNP Air Tawar,Thai Tea,Tea,6
+2026-09-16,Kampus UNP Air Tawar,Lemon Tea,Tea,15
+2026-09-16,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,20
+2026-09-16,Perkantoran Khatib Sulaiman,Americano,Coffee,17
+2026-09-16,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-09-16,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,12
+2026-09-16,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-09-16,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-09-16,Pasar Raya Padang,Kopi Susu Aren,Coffee,22
+2026-09-16,Pasar Raya Padang,Americano,Coffee,15
+2026-09-16,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-09-16,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-09-16,Pasar Raya Padang,Thai Tea,Tea,10
+2026-09-16,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-09-16,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,12
+2026-09-16,Pantai Padang (Taplau),Americano,Coffee,4
+2026-09-16,Pantai Padang (Taplau),Coklat,Non-Coffee,12
+2026-09-16,Pantai Padang (Taplau),Red Velvet,Non-Coffee,10
+2026-09-16,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-09-16,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-09-17,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,32
+2026-09-17,Kampus UNP Air Tawar,Americano,Coffee,4
+2026-09-17,Kampus UNP Air Tawar,Coklat,Non-Coffee,8
+2026-09-17,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,16
+2026-09-17,Kampus UNP Air Tawar,Thai Tea,Tea,25
+2026-09-17,Kampus UNP Air Tawar,Lemon Tea,Tea,12
+2026-09-17,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,20
+2026-09-17,Perkantoran Khatib Sulaiman,Americano,Coffee,10
+2026-09-17,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-17,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-09-17,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-09-17,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,8
+2026-09-17,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-09-17,Pasar Raya Padang,Americano,Coffee,7
+2026-09-17,Pasar Raya Padang,Coklat,Non-Coffee,18
+2026-09-17,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-09-17,Pasar Raya Padang,Thai Tea,Tea,8
+2026-09-17,Pasar Raya Padang,Lemon Tea,Tea,1
+2026-09-17,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,0
+2026-09-17,Pantai Padang (Taplau),Americano,Coffee,1
+2026-09-17,Pantai Padang (Taplau),Coklat,Non-Coffee,0
+2026-09-17,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-17,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-09-17,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-09-18,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,14
+2026-09-18,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-09-18,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-09-18,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,8
+2026-09-18,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-09-18,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-09-18,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,15
+2026-09-18,Perkantoran Khatib Sulaiman,Americano,Coffee,10
+2026-09-18,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-09-18,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-09-18,Perkantoran Khatib Sulaiman,Thai Tea,Tea,9
+2026-09-18,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-18,Pasar Raya Padang,Kopi Susu Aren,Coffee,7
+2026-09-18,Pasar Raya Padang,Americano,Coffee,5
+2026-09-18,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-09-18,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-09-18,Pasar Raya Padang,Thai Tea,Tea,20
+2026-09-18,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-09-18,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-09-18,Pantai Padang (Taplau),Americano,Coffee,3
+2026-09-18,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-09-18,Pantai Padang (Taplau),Red Velvet,Non-Coffee,1
+2026-09-18,Pantai Padang (Taplau),Thai Tea,Tea,6
+2026-09-18,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-09-19,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,8
+2026-09-19,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-09-19,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-09-19,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,8
+2026-09-19,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-09-19,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-09-19,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,8
+2026-09-19,Perkantoran Khatib Sulaiman,Americano,Coffee,5
+2026-09-19,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-09-19,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-09-19,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-09-19,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-09-19,Pasar Raya Padang,Kopi Susu Aren,Coffee,26
+2026-09-19,Pasar Raya Padang,Americano,Coffee,8
+2026-09-19,Pasar Raya Padang,Coklat,Non-Coffee,14
+2026-09-19,Pasar Raya Padang,Red Velvet,Non-Coffee,16
+2026-09-19,Pasar Raya Padang,Thai Tea,Tea,18
+2026-09-19,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-09-19,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,11
+2026-09-19,Pantai Padang (Taplau),Americano,Coffee,10
+2026-09-19,Pantai Padang (Taplau),Coklat,Non-Coffee,29
+2026-09-19,Pantai Padang (Taplau),Red Velvet,Non-Coffee,19
+2026-09-19,Pantai Padang (Taplau),Thai Tea,Tea,18
+2026-09-19,Pantai Padang (Taplau),Lemon Tea,Tea,11
+2026-09-20,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,2
+2026-09-20,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-09-20,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-09-20,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,1
+2026-09-20,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-09-20,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-09-20,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,2
+2026-09-20,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-09-20,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-09-20,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-09-20,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-09-20,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-09-20,Pasar Raya Padang,Kopi Susu Aren,Coffee,33
+2026-09-20,Pasar Raya Padang,Americano,Coffee,8
+2026-09-20,Pasar Raya Padang,Coklat,Non-Coffee,19
+2026-09-20,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-09-20,Pasar Raya Padang,Thai Tea,Tea,11
+2026-09-20,Pasar Raya Padang,Lemon Tea,Tea,16
+2026-09-20,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,19
+2026-09-20,Pantai Padang (Taplau),Americano,Coffee,13
+2026-09-20,Pantai Padang (Taplau),Coklat,Non-Coffee,11
+2026-09-20,Pantai Padang (Taplau),Red Velvet,Non-Coffee,18
+2026-09-20,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-09-20,Pantai Padang (Taplau),Lemon Tea,Tea,13
+2026-09-21,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,11
+2026-09-21,Kampus UNP Air Tawar,Americano,Coffee,12
+2026-09-21,Kampus UNP Air Tawar,Coklat,Non-Coffee,12
+2026-09-21,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-09-21,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-09-21,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-09-21,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,21
+2026-09-21,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-09-21,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-21,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-09-21,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-09-21,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-09-21,Pasar Raya Padang,Kopi Susu Aren,Coffee,22
+2026-09-21,Pasar Raya Padang,Americano,Coffee,7
+2026-09-21,Pasar Raya Padang,Coklat,Non-Coffee,3
+2026-09-21,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-09-21,Pasar Raya Padang,Thai Tea,Tea,5
+2026-09-21,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-09-21,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-09-21,Pantai Padang (Taplau),Americano,Coffee,4
+2026-09-21,Pantai Padang (Taplau),Coklat,Non-Coffee,8
+2026-09-21,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-09-21,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-09-21,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-09-22,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,13
+2026-09-22,Kampus UNP Air Tawar,Americano,Coffee,19
+2026-09-22,Kampus UNP Air Tawar,Coklat,Non-Coffee,12
+2026-09-22,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-09-22,Kampus UNP Air Tawar,Thai Tea,Tea,16
+2026-09-22,Kampus UNP Air Tawar,Lemon Tea,Tea,9
+2026-09-22,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,19
+2026-09-22,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-09-22,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-22,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-09-22,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-09-22,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-09-22,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-09-22,Pasar Raya Padang,Americano,Coffee,5
+2026-09-22,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-09-22,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-09-22,Pasar Raya Padang,Thai Tea,Tea,9
+2026-09-22,Pasar Raya Padang,Lemon Tea,Tea,3
+2026-09-22,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-09-22,Pantai Padang (Taplau),Americano,Coffee,5
+2026-09-22,Pantai Padang (Taplau),Coklat,Non-Coffee,0
+2026-09-22,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-09-22,Pantai Padang (Taplau),Thai Tea,Tea,7
+2026-09-22,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-09-23,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,25
+2026-09-23,Kampus UNP Air Tawar,Americano,Coffee,17
+2026-09-23,Kampus UNP Air Tawar,Coklat,Non-Coffee,7
+2026-09-23,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,4
+2026-09-23,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-09-23,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-09-23,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,19
+2026-09-23,Perkantoran Khatib Sulaiman,Americano,Coffee,19
+2026-09-23,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-09-23,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,6
+2026-09-23,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-09-23,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-09-23,Pasar Raya Padang,Kopi Susu Aren,Coffee,5
+2026-09-23,Pasar Raya Padang,Americano,Coffee,3
+2026-09-23,Pasar Raya Padang,Coklat,Non-Coffee,2
+2026-09-23,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-09-23,Pasar Raya Padang,Thai Tea,Tea,9
+2026-09-23,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-09-23,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,0
+2026-09-23,Pantai Padang (Taplau),Americano,Coffee,0
+2026-09-23,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-09-23,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-09-23,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-09-23,Pantai Padang (Taplau),Lemon Tea,Tea,0
+2026-09-24,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,16
+2026-09-24,Kampus UNP Air Tawar,Americano,Coffee,14
+2026-09-24,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-09-24,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,13
+2026-09-24,Kampus UNP Air Tawar,Thai Tea,Tea,6
+2026-09-24,Kampus UNP Air Tawar,Lemon Tea,Tea,15
+2026-09-24,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,18
+2026-09-24,Perkantoran Khatib Sulaiman,Americano,Coffee,8
+2026-09-24,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-09-24,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-09-24,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-09-24,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-09-24,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-09-24,Pasar Raya Padang,Americano,Coffee,4
+2026-09-24,Pasar Raya Padang,Coklat,Non-Coffee,4
+2026-09-24,Pasar Raya Padang,Red Velvet,Non-Coffee,11
+2026-09-24,Pasar Raya Padang,Thai Tea,Tea,18
+2026-09-24,Pasar Raya Padang,Lemon Tea,Tea,5
+2026-09-24,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-09-24,Pantai Padang (Taplau),Americano,Coffee,2
+2026-09-24,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-09-24,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-09-24,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-09-24,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-09-25,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,21
+2026-09-25,Kampus UNP Air Tawar,Americano,Coffee,18
+2026-09-25,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-09-25,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,9
+2026-09-25,Kampus UNP Air Tawar,Thai Tea,Tea,4
+2026-09-25,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-09-25,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,32
+2026-09-25,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-09-25,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,6
+2026-09-25,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-09-25,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-09-25,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-09-25,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-09-25,Pasar Raya Padang,Americano,Coffee,12
+2026-09-25,Pasar Raya Padang,Coklat,Non-Coffee,9
+2026-09-25,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-09-25,Pasar Raya Padang,Thai Tea,Tea,9
+2026-09-25,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-09-25,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,21
+2026-09-25,Pantai Padang (Taplau),Americano,Coffee,12
+2026-09-25,Pantai Padang (Taplau),Coklat,Non-Coffee,12
+2026-09-25,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-09-25,Pantai Padang (Taplau),Thai Tea,Tea,19
+2026-09-25,Pantai Padang (Taplau),Lemon Tea,Tea,11
+2026-09-26,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,9
+2026-09-26,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-09-26,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-09-26,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-09-26,Kampus UNP Air Tawar,Thai Tea,Tea,4
+2026-09-26,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-09-26,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-09-26,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-09-26,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-09-26,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-09-26,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-09-26,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-09-26,Pasar Raya Padang,Kopi Susu Aren,Coffee,34
+2026-09-26,Pasar Raya Padang,Americano,Coffee,9
+2026-09-26,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-09-26,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-09-26,Pasar Raya Padang,Thai Tea,Tea,13
+2026-09-26,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-09-26,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,20
+2026-09-26,Pantai Padang (Taplau),Americano,Coffee,3
+2026-09-26,Pantai Padang (Taplau),Coklat,Non-Coffee,21
+2026-09-26,Pantai Padang (Taplau),Red Velvet,Non-Coffee,24
+2026-09-26,Pantai Padang (Taplau),Thai Tea,Tea,21
+2026-09-26,Pantai Padang (Taplau),Lemon Tea,Tea,19
+2026-09-27,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,7
+2026-09-27,Kampus UNP Air Tawar,Americano,Coffee,5
+2026-09-27,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-09-27,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-09-27,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-09-27,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-09-27,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-09-27,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-09-27,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-09-27,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-09-27,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-09-27,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-09-27,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-09-27,Pasar Raya Padang,Americano,Coffee,12
+2026-09-27,Pasar Raya Padang,Coklat,Non-Coffee,17
+2026-09-27,Pasar Raya Padang,Red Velvet,Non-Coffee,15
+2026-09-27,Pasar Raya Padang,Thai Tea,Tea,14
+2026-09-27,Pasar Raya Padang,Lemon Tea,Tea,12
+2026-09-27,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,32
+2026-09-27,Pantai Padang (Taplau),Americano,Coffee,13
+2026-09-27,Pantai Padang (Taplau),Coklat,Non-Coffee,34
+2026-09-27,Pantai Padang (Taplau),Red Velvet,Non-Coffee,10
+2026-09-27,Pantai Padang (Taplau),Thai Tea,Tea,17
+2026-09-27,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-09-28,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,39
+2026-09-28,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-09-28,Kampus UNP Air Tawar,Coklat,Non-Coffee,13
+2026-09-28,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,8
+2026-09-28,Kampus UNP Air Tawar,Thai Tea,Tea,11
+2026-09-28,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-09-28,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,25
+2026-09-28,Perkantoran Khatib Sulaiman,Americano,Coffee,26
+2026-09-28,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,7
+2026-09-28,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,6
+2026-09-28,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-09-28,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-09-28,Pasar Raya Padang,Kopi Susu Aren,Coffee,23
+2026-09-28,Pasar Raya Padang,Americano,Coffee,13
+2026-09-28,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-09-28,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-09-28,Pasar Raya Padang,Thai Tea,Tea,9
+2026-09-28,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-09-28,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,6
+2026-09-28,Pantai Padang (Taplau),Americano,Coffee,4
+2026-09-28,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-09-28,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-09-28,Pantai Padang (Taplau),Thai Tea,Tea,2
+2026-09-28,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-09-29,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,14
+2026-09-29,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-09-29,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-09-29,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,10
+2026-09-29,Kampus UNP Air Tawar,Thai Tea,Tea,14
+2026-09-29,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-09-29,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,23
+2026-09-29,Perkantoran Khatib Sulaiman,Americano,Coffee,7
+2026-09-29,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-09-29,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,9
+2026-09-29,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-09-29,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-09-29,Pasar Raya Padang,Kopi Susu Aren,Coffee,6
+2026-09-29,Pasar Raya Padang,Americano,Coffee,8
+2026-09-29,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-09-29,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-09-29,Pasar Raya Padang,Thai Tea,Tea,6
+2026-09-29,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-09-29,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,8
+2026-09-29,Pantai Padang (Taplau),Americano,Coffee,3
+2026-09-29,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-09-29,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-09-29,Pantai Padang (Taplau),Thai Tea,Tea,12
+2026-09-29,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-09-30,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,33
+2026-09-30,Kampus UNP Air Tawar,Americano,Coffee,19
+2026-09-30,Kampus UNP Air Tawar,Coklat,Non-Coffee,25
+2026-09-30,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-09-30,Kampus UNP Air Tawar,Thai Tea,Tea,9
+2026-09-30,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-09-30,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,28
+2026-09-30,Perkantoran Khatib Sulaiman,Americano,Coffee,15
+2026-09-30,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-09-30,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,14
+2026-09-30,Perkantoran Khatib Sulaiman,Thai Tea,Tea,11
+2026-09-30,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,8
+2026-09-30,Pasar Raya Padang,Kopi Susu Aren,Coffee,15
+2026-09-30,Pasar Raya Padang,Americano,Coffee,6
+2026-09-30,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-09-30,Pasar Raya Padang,Red Velvet,Non-Coffee,13
+2026-09-30,Pasar Raya Padang,Thai Tea,Tea,11
+2026-09-30,Pasar Raya Padang,Lemon Tea,Tea,5
+2026-09-30,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-09-30,Pantai Padang (Taplau),Americano,Coffee,4
+2026-09-30,Pantai Padang (Taplau),Coklat,Non-Coffee,9
+2026-09-30,Pantai Padang (Taplau),Red Velvet,Non-Coffee,11
+2026-09-30,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-09-30,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-10-01,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,15
+2026-10-01,Kampus UNP Air Tawar,Americano,Coffee,15
+2026-10-01,Kampus UNP Air Tawar,Coklat,Non-Coffee,8
+2026-10-01,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-10-01,Kampus UNP Air Tawar,Thai Tea,Tea,5
+2026-10-01,Kampus UNP Air Tawar,Lemon Tea,Tea,10
+2026-10-01,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,22
+2026-10-01,Perkantoran Khatib Sulaiman,Americano,Coffee,8
+2026-10-01,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-10-01,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,2
+2026-10-01,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-10-01,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-10-01,Pasar Raya Padang,Kopi Susu Aren,Coffee,4
+2026-10-01,Pasar Raya Padang,Americano,Coffee,6
+2026-10-01,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-10-01,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-10-01,Pasar Raya Padang,Thai Tea,Tea,9
+2026-10-01,Pasar Raya Padang,Lemon Tea,Tea,13
+2026-10-01,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-10-01,Pantai Padang (Taplau),Americano,Coffee,1
+2026-10-01,Pantai Padang (Taplau),Coklat,Non-Coffee,0
+2026-10-01,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-10-01,Pantai Padang (Taplau),Thai Tea,Tea,1
+2026-10-01,Pantai Padang (Taplau),Lemon Tea,Tea,0
+2026-10-02,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,20
+2026-10-02,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-10-02,Kampus UNP Air Tawar,Coklat,Non-Coffee,19
+2026-10-02,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-10-02,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-10-02,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-10-02,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,17
+2026-10-02,Perkantoran Khatib Sulaiman,Americano,Coffee,6
+2026-10-02,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-10-02,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,11
+2026-10-02,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-02,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,10
+2026-10-02,Pasar Raya Padang,Kopi Susu Aren,Coffee,14
+2026-10-02,Pasar Raya Padang,Americano,Coffee,11
+2026-10-02,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-10-02,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-10-02,Pasar Raya Padang,Thai Tea,Tea,11
+2026-10-02,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-10-02,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-10-02,Pantai Padang (Taplau),Americano,Coffee,7
+2026-10-02,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-10-02,Pantai Padang (Taplau),Red Velvet,Non-Coffee,9
+2026-10-02,Pantai Padang (Taplau),Thai Tea,Tea,12
+2026-10-02,Pantai Padang (Taplau),Lemon Tea,Tea,6
+2026-10-03,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,3
+2026-10-03,Kampus UNP Air Tawar,Americano,Coffee,5
+2026-10-03,Kampus UNP Air Tawar,Coklat,Non-Coffee,3
+2026-10-03,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-10-03,Kampus UNP Air Tawar,Thai Tea,Tea,0
+2026-10-03,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-10-03,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,5
+2026-10-03,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-10-03,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-10-03,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-03,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-10-03,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-10-03,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-10-03,Pasar Raya Padang,Americano,Coffee,12
+2026-10-03,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-10-03,Pasar Raya Padang,Red Velvet,Non-Coffee,11
+2026-10-03,Pasar Raya Padang,Thai Tea,Tea,11
+2026-10-03,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-10-03,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,14
+2026-10-03,Pantai Padang (Taplau),Americano,Coffee,6
+2026-10-03,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-10-03,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-10-03,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-10-03,Pantai Padang (Taplau),Lemon Tea,Tea,8
+2026-10-04,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,2
+2026-10-04,Kampus UNP Air Tawar,Americano,Coffee,4
+2026-10-04,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-10-04,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-10-04,Kampus UNP Air Tawar,Thai Tea,Tea,3
+2026-10-04,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-10-04,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,1
+2026-10-04,Perkantoran Khatib Sulaiman,Americano,Coffee,2
+2026-10-04,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-10-04,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-04,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-04,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-04,Pasar Raya Padang,Kopi Susu Aren,Coffee,15
+2026-10-04,Pasar Raya Padang,Americano,Coffee,5
+2026-10-04,Pasar Raya Padang,Coklat,Non-Coffee,13
+2026-10-04,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-10-04,Pasar Raya Padang,Thai Tea,Tea,17
+2026-10-04,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-10-04,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,9
+2026-10-04,Pantai Padang (Taplau),Americano,Coffee,7
+2026-10-04,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-10-04,Pantai Padang (Taplau),Red Velvet,Non-Coffee,8
+2026-10-04,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-10-04,Pantai Padang (Taplau),Lemon Tea,Tea,11
+2026-10-05,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,16
+2026-10-05,Kampus UNP Air Tawar,Americano,Coffee,7
+2026-10-05,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-10-05,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-10-05,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-10-05,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-10-05,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,28
+2026-10-05,Perkantoran Khatib Sulaiman,Americano,Coffee,22
+2026-10-05,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,7
+2026-10-05,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-10-05,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-10-05,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-10-05,Pasar Raya Padang,Kopi Susu Aren,Coffee,11
+2026-10-05,Pasar Raya Padang,Americano,Coffee,4
+2026-10-05,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-10-05,Pasar Raya Padang,Red Velvet,Non-Coffee,0
+2026-10-05,Pasar Raya Padang,Thai Tea,Tea,12
+2026-10-05,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-10-05,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-10-05,Pantai Padang (Taplau),Americano,Coffee,2
+2026-10-05,Pantai Padang (Taplau),Coklat,Non-Coffee,4
+2026-10-05,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-10-05,Pantai Padang (Taplau),Thai Tea,Tea,1
+2026-10-05,Pantai Padang (Taplau),Lemon Tea,Tea,0
+2026-10-06,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,27
+2026-10-06,Kampus UNP Air Tawar,Americano,Coffee,20
+2026-10-06,Kampus UNP Air Tawar,Coklat,Non-Coffee,17
+2026-10-06,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,20
+2026-10-06,Kampus UNP Air Tawar,Thai Tea,Tea,9
+2026-10-06,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-10-06,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,18
+2026-10-06,Perkantoran Khatib Sulaiman,Americano,Coffee,19
+2026-10-06,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-10-06,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,6
+2026-10-06,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-10-06,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-10-06,Pasar Raya Padang,Kopi Susu Aren,Coffee,23
+2026-10-06,Pasar Raya Padang,Americano,Coffee,7
+2026-10-06,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-06,Pasar Raya Padang,Red Velvet,Non-Coffee,4
+2026-10-06,Pasar Raya Padang,Thai Tea,Tea,14
+2026-10-06,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-10-06,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-10-06,Pantai Padang (Taplau),Americano,Coffee,3
+2026-10-06,Pantai Padang (Taplau),Coklat,Non-Coffee,4
+2026-10-06,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-10-06,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-10-06,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-10-07,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,11
+2026-10-07,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-10-07,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-10-07,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-07,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-10-07,Kampus UNP Air Tawar,Lemon Tea,Tea,9
+2026-10-07,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,21
+2026-10-07,Perkantoran Khatib Sulaiman,Americano,Coffee,15
+2026-10-07,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,7
+2026-10-07,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-10-07,Perkantoran Khatib Sulaiman,Thai Tea,Tea,8
+2026-10-07,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-10-07,Pasar Raya Padang,Kopi Susu Aren,Coffee,17
+2026-10-07,Pasar Raya Padang,Americano,Coffee,7
+2026-10-07,Pasar Raya Padang,Coklat,Non-Coffee,15
+2026-10-07,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-10-07,Pasar Raya Padang,Thai Tea,Tea,12
+2026-10-07,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-10-07,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-10-07,Pantai Padang (Taplau),Americano,Coffee,8
+2026-10-07,Pantai Padang (Taplau),Coklat,Non-Coffee,5
+2026-10-07,Pantai Padang (Taplau),Red Velvet,Non-Coffee,13
+2026-10-07,Pantai Padang (Taplau),Thai Tea,Tea,10
+2026-10-07,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-08,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,29
+2026-10-08,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-10-08,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-10-08,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,4
+2026-10-08,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-10-08,Kampus UNP Air Tawar,Lemon Tea,Tea,4
+2026-10-08,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,9
+2026-10-08,Perkantoran Khatib Sulaiman,Americano,Coffee,5
+2026-10-08,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-10-08,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-10-08,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-10-08,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-10-08,Pasar Raya Padang,Kopi Susu Aren,Coffee,5
+2026-10-08,Pasar Raya Padang,Americano,Coffee,3
+2026-10-08,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-08,Pasar Raya Padang,Red Velvet,Non-Coffee,1
+2026-10-08,Pasar Raya Padang,Thai Tea,Tea,13
+2026-10-08,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-10-08,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-10-08,Pantai Padang (Taplau),Americano,Coffee,4
+2026-10-08,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-10-08,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-10-08,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-10-08,Pantai Padang (Taplau),Lemon Tea,Tea,0
+2026-10-09,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,23
+2026-10-09,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-10-09,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-10-09,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,10
+2026-10-09,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-10-09,Kampus UNP Air Tawar,Lemon Tea,Tea,15
+2026-10-09,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,14
+2026-10-09,Perkantoran Khatib Sulaiman,Americano,Coffee,9
+2026-10-09,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-10-09,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,7
+2026-10-09,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-10-09,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-10-09,Pasar Raya Padang,Kopi Susu Aren,Coffee,13
+2026-10-09,Pasar Raya Padang,Americano,Coffee,8
+2026-10-09,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-09,Pasar Raya Padang,Red Velvet,Non-Coffee,14
+2026-10-09,Pasar Raya Padang,Thai Tea,Tea,18
+2026-10-09,Pasar Raya Padang,Lemon Tea,Tea,16
+2026-10-09,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-10-09,Pantai Padang (Taplau),Americano,Coffee,1
+2026-10-09,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-10-09,Pantai Padang (Taplau),Red Velvet,Non-Coffee,1
+2026-10-09,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-10-09,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-10-10,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,16
+2026-10-10,Kampus UNP Air Tawar,Americano,Coffee,6
+2026-10-10,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-10-10,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-10,Kampus UNP Air Tawar,Thai Tea,Tea,2
+2026-10-10,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-10-10,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,8
+2026-10-10,Perkantoran Khatib Sulaiman,Americano,Coffee,2
+2026-10-10,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-10-10,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-10-10,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-10,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-10-10,Pasar Raya Padang,Kopi Susu Aren,Coffee,36
+2026-10-10,Pasar Raya Padang,Americano,Coffee,21
+2026-10-10,Pasar Raya Padang,Coklat,Non-Coffee,6
+2026-10-10,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-10-10,Pasar Raya Padang,Thai Tea,Tea,29
+2026-10-10,Pasar Raya Padang,Lemon Tea,Tea,1
+2026-10-10,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,11
+2026-10-10,Pantai Padang (Taplau),Americano,Coffee,13
+2026-10-10,Pantai Padang (Taplau),Coklat,Non-Coffee,23
+2026-10-10,Pantai Padang (Taplau),Red Velvet,Non-Coffee,13
+2026-10-10,Pantai Padang (Taplau),Thai Tea,Tea,27
+2026-10-10,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-11,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,5
+2026-10-11,Kampus UNP Air Tawar,Americano,Coffee,4
+2026-10-11,Kampus UNP Air Tawar,Coklat,Non-Coffee,2
+2026-10-11,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-10-11,Kampus UNP Air Tawar,Thai Tea,Tea,4
+2026-10-11,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-10-11,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-10-11,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-10-11,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-10-11,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-10-11,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-11,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-11,Pasar Raya Padang,Kopi Susu Aren,Coffee,22
+2026-10-11,Pasar Raya Padang,Americano,Coffee,10
+2026-10-11,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-11,Pasar Raya Padang,Red Velvet,Non-Coffee,13
+2026-10-11,Pasar Raya Padang,Thai Tea,Tea,15
+2026-10-11,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-10-11,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,25
+2026-10-11,Pantai Padang (Taplau),Americano,Coffee,19
+2026-10-11,Pantai Padang (Taplau),Coklat,Non-Coffee,35
+2026-10-11,Pantai Padang (Taplau),Red Velvet,Non-Coffee,9
+2026-10-11,Pantai Padang (Taplau),Thai Tea,Tea,17
+2026-10-11,Pantai Padang (Taplau),Lemon Tea,Tea,10
+2026-10-12,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,35
+2026-10-12,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-10-12,Kampus UNP Air Tawar,Coklat,Non-Coffee,17
+2026-10-12,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,6
+2026-10-12,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-10-12,Kampus UNP Air Tawar,Lemon Tea,Tea,8
+2026-10-12,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,22
+2026-10-12,Perkantoran Khatib Sulaiman,Americano,Coffee,6
+2026-10-12,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-10-12,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-12,Perkantoran Khatib Sulaiman,Thai Tea,Tea,9
+2026-10-12,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-10-12,Pasar Raya Padang,Kopi Susu Aren,Coffee,13
+2026-10-12,Pasar Raya Padang,Americano,Coffee,8
+2026-10-12,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-10-12,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-10-12,Pasar Raya Padang,Thai Tea,Tea,13
+2026-10-12,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-10-12,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,9
+2026-10-12,Pantai Padang (Taplau),Americano,Coffee,3
+2026-10-12,Pantai Padang (Taplau),Coklat,Non-Coffee,6
+2026-10-12,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-10-12,Pantai Padang (Taplau),Thai Tea,Tea,6
+2026-10-12,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-10-13,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,36
+2026-10-13,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-10-13,Kampus UNP Air Tawar,Coklat,Non-Coffee,14
+2026-10-13,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-13,Kampus UNP Air Tawar,Thai Tea,Tea,24
+2026-10-13,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-10-13,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,31
+2026-10-13,Perkantoran Khatib Sulaiman,Americano,Coffee,21
+2026-10-13,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,11
+2026-10-13,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-10-13,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-10-13,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,7
+2026-10-13,Pasar Raya Padang,Kopi Susu Aren,Coffee,3
+2026-10-13,Pasar Raya Padang,Americano,Coffee,8
+2026-10-13,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-10-13,Pasar Raya Padang,Red Velvet,Non-Coffee,11
+2026-10-13,Pasar Raya Padang,Thai Tea,Tea,10
+2026-10-13,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-10-13,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,9
+2026-10-13,Pantai Padang (Taplau),Americano,Coffee,6
+2026-10-13,Pantai Padang (Taplau),Coklat,Non-Coffee,18
+2026-10-13,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-10-13,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-10-13,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-14,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,27
+2026-10-14,Kampus UNP Air Tawar,Americano,Coffee,8
+2026-10-14,Kampus UNP Air Tawar,Coklat,Non-Coffee,16
+2026-10-14,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,17
+2026-10-14,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-10-14,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-10-14,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,24
+2026-10-14,Perkantoran Khatib Sulaiman,Americano,Coffee,11
+2026-10-14,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-10-14,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-10-14,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-10-14,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-10-14,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-10-14,Pasar Raya Padang,Americano,Coffee,1
+2026-10-14,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-10-14,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-10-14,Pasar Raya Padang,Thai Tea,Tea,9
+2026-10-14,Pasar Raya Padang,Lemon Tea,Tea,2
+2026-10-14,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,5
+2026-10-14,Pantai Padang (Taplau),Americano,Coffee,2
+2026-10-14,Pantai Padang (Taplau),Coklat,Non-Coffee,8
+2026-10-14,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-10-14,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-10-14,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-10-15,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,19
+2026-10-15,Kampus UNP Air Tawar,Americano,Coffee,20
+2026-10-15,Kampus UNP Air Tawar,Coklat,Non-Coffee,11
+2026-10-15,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-10-15,Kampus UNP Air Tawar,Thai Tea,Tea,20
+2026-10-15,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-10-15,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,17
+2026-10-15,Perkantoran Khatib Sulaiman,Americano,Coffee,17
+2026-10-15,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-10-15,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-10-15,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-10-15,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-10-15,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-10-15,Pasar Raya Padang,Americano,Coffee,5
+2026-10-15,Pasar Raya Padang,Coklat,Non-Coffee,14
+2026-10-15,Pasar Raya Padang,Red Velvet,Non-Coffee,4
+2026-10-15,Pasar Raya Padang,Thai Tea,Tea,10
+2026-10-15,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-10-15,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,3
+2026-10-15,Pantai Padang (Taplau),Americano,Coffee,3
+2026-10-15,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-10-15,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-10-15,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-10-15,Pantai Padang (Taplau),Lemon Tea,Tea,2
+2026-10-16,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,24
+2026-10-16,Kampus UNP Air Tawar,Americano,Coffee,20
+2026-10-16,Kampus UNP Air Tawar,Coklat,Non-Coffee,13
+2026-10-16,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,12
+2026-10-16,Kampus UNP Air Tawar,Thai Tea,Tea,7
+2026-10-16,Kampus UNP Air Tawar,Lemon Tea,Tea,12
+2026-10-16,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,24
+2026-10-16,Perkantoran Khatib Sulaiman,Americano,Coffee,13
+2026-10-16,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-10-16,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-10-16,Perkantoran Khatib Sulaiman,Thai Tea,Tea,5
+2026-10-16,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-10-16,Pasar Raya Padang,Kopi Susu Aren,Coffee,26
+2026-10-16,Pasar Raya Padang,Americano,Coffee,5
+2026-10-16,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-10-16,Pasar Raya Padang,Red Velvet,Non-Coffee,2
+2026-10-16,Pasar Raya Padang,Thai Tea,Tea,24
+2026-10-16,Pasar Raya Padang,Lemon Tea,Tea,10
+2026-10-16,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,10
+2026-10-16,Pantai Padang (Taplau),Americano,Coffee,10
+2026-10-16,Pantai Padang (Taplau),Coklat,Non-Coffee,4
+2026-10-16,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-10-16,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-10-16,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-10-17,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,5
+2026-10-17,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-10-17,Kampus UNP Air Tawar,Coklat,Non-Coffee,7
+2026-10-17,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-17,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-10-17,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-10-17,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-10-17,Perkantoran Khatib Sulaiman,Americano,Coffee,3
+2026-10-17,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-10-17,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-17,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-10-17,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-17,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-10-17,Pasar Raya Padang,Americano,Coffee,8
+2026-10-17,Pasar Raya Padang,Coklat,Non-Coffee,2
+2026-10-17,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-10-17,Pasar Raya Padang,Thai Tea,Tea,20
+2026-10-17,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-10-17,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-10-17,Pantai Padang (Taplau),Americano,Coffee,8
+2026-10-17,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-10-17,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-10-17,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-10-17,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-18,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,6
+2026-10-18,Kampus UNP Air Tawar,Americano,Coffee,1
+2026-10-18,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-10-18,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-10-18,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-10-18,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-10-18,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,1
+2026-10-18,Perkantoran Khatib Sulaiman,Americano,Coffee,0
+2026-10-18,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,0
+2026-10-18,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,0
+2026-10-18,Perkantoran Khatib Sulaiman,Thai Tea,Tea,0
+2026-10-18,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-18,Pasar Raya Padang,Kopi Susu Aren,Coffee,25
+2026-10-18,Pasar Raya Padang,Americano,Coffee,6
+2026-10-18,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-10-18,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-10-18,Pasar Raya Padang,Thai Tea,Tea,14
+2026-10-18,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-10-18,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,33
+2026-10-18,Pantai Padang (Taplau),Americano,Coffee,18
+2026-10-18,Pantai Padang (Taplau),Coklat,Non-Coffee,12
+2026-10-18,Pantai Padang (Taplau),Red Velvet,Non-Coffee,15
+2026-10-18,Pantai Padang (Taplau),Thai Tea,Tea,25
+2026-10-18,Pantai Padang (Taplau),Lemon Tea,Tea,15
+2026-10-19,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,17
+2026-10-19,Kampus UNP Air Tawar,Americano,Coffee,23
+2026-10-19,Kampus UNP Air Tawar,Coklat,Non-Coffee,4
+2026-10-19,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,15
+2026-10-19,Kampus UNP Air Tawar,Thai Tea,Tea,10
+2026-10-19,Kampus UNP Air Tawar,Lemon Tea,Tea,8
+2026-10-19,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,26
+2026-10-19,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-10-19,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-10-19,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,10
+2026-10-19,Perkantoran Khatib Sulaiman,Thai Tea,Tea,11
+2026-10-19,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,6
+2026-10-19,Pasar Raya Padang,Kopi Susu Aren,Coffee,6
+2026-10-19,Pasar Raya Padang,Americano,Coffee,7
+2026-10-19,Pasar Raya Padang,Coklat,Non-Coffee,3
+2026-10-19,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-10-19,Pasar Raya Padang,Thai Tea,Tea,14
+2026-10-19,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-10-19,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,2
+2026-10-19,Pantai Padang (Taplau),Americano,Coffee,1
+2026-10-19,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-10-19,Pantai Padang (Taplau),Red Velvet,Non-Coffee,0
+2026-10-19,Pantai Padang (Taplau),Thai Tea,Tea,5
+2026-10-19,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-20,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,11
+2026-10-20,Kampus UNP Air Tawar,Americano,Coffee,7
+2026-10-20,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-10-20,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-10-20,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-10-20,Kampus UNP Air Tawar,Lemon Tea,Tea,10
+2026-10-20,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,23
+2026-10-20,Perkantoran Khatib Sulaiman,Americano,Coffee,16
+2026-10-20,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,4
+2026-10-20,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-10-20,Perkantoran Khatib Sulaiman,Thai Tea,Tea,8
+2026-10-20,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,12
+2026-10-20,Pasar Raya Padang,Kopi Susu Aren,Coffee,16
+2026-10-20,Pasar Raya Padang,Americano,Coffee,6
+2026-10-20,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-10-20,Pasar Raya Padang,Red Velvet,Non-Coffee,7
+2026-10-20,Pasar Raya Padang,Thai Tea,Tea,7
+2026-10-20,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-10-20,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,1
+2026-10-20,Pantai Padang (Taplau),Americano,Coffee,1
+2026-10-20,Pantai Padang (Taplau),Coklat,Non-Coffee,4
+2026-10-20,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-10-20,Pantai Padang (Taplau),Thai Tea,Tea,1
+2026-10-20,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-10-21,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,44
+2026-10-21,Kampus UNP Air Tawar,Americano,Coffee,16
+2026-10-21,Kampus UNP Air Tawar,Coklat,Non-Coffee,23
+2026-10-21,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,15
+2026-10-21,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-10-21,Kampus UNP Air Tawar,Lemon Tea,Tea,10
+2026-10-21,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,20
+2026-10-21,Perkantoran Khatib Sulaiman,Americano,Coffee,14
+2026-10-21,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,12
+2026-10-21,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,5
+2026-10-21,Perkantoran Khatib Sulaiman,Thai Tea,Tea,9
+2026-10-21,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-10-21,Pasar Raya Padang,Kopi Susu Aren,Coffee,15
+2026-10-21,Pasar Raya Padang,Americano,Coffee,5
+2026-10-21,Pasar Raya Padang,Coklat,Non-Coffee,5
+2026-10-21,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-10-21,Pasar Raya Padang,Thai Tea,Tea,11
+2026-10-21,Pasar Raya Padang,Lemon Tea,Tea,2
+2026-10-21,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-10-21,Pantai Padang (Taplau),Americano,Coffee,3
+2026-10-21,Pantai Padang (Taplau),Coklat,Non-Coffee,9
+2026-10-21,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-10-21,Pantai Padang (Taplau),Thai Tea,Tea,11
+2026-10-21,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-10-22,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,31
+2026-10-22,Kampus UNP Air Tawar,Americano,Coffee,19
+2026-10-22,Kampus UNP Air Tawar,Coklat,Non-Coffee,5
+2026-10-22,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,15
+2026-10-22,Kampus UNP Air Tawar,Thai Tea,Tea,9
+2026-10-22,Kampus UNP Air Tawar,Lemon Tea,Tea,11
+2026-10-22,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,24
+2026-10-22,Perkantoran Khatib Sulaiman,Americano,Coffee,12
+2026-10-22,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,9
+2026-10-22,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,10
+2026-10-22,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-22,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-10-22,Pasar Raya Padang,Kopi Susu Aren,Coffee,6
+2026-10-22,Pasar Raya Padang,Americano,Coffee,8
+2026-10-22,Pasar Raya Padang,Coklat,Non-Coffee,9
+2026-10-22,Pasar Raya Padang,Red Velvet,Non-Coffee,8
+2026-10-22,Pasar Raya Padang,Thai Tea,Tea,15
+2026-10-22,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-10-22,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-10-22,Pantai Padang (Taplau),Americano,Coffee,5
+2026-10-22,Pantai Padang (Taplau),Coklat,Non-Coffee,3
+2026-10-22,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-10-22,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-10-22,Pantai Padang (Taplau),Lemon Tea,Tea,4
+2026-10-23,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,15
+2026-10-23,Kampus UNP Air Tawar,Americano,Coffee,2
+2026-10-23,Kampus UNP Air Tawar,Coklat,Non-Coffee,13
+2026-10-23,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-23,Kampus UNP Air Tawar,Thai Tea,Tea,9
+2026-10-23,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-10-23,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,13
+2026-10-23,Perkantoran Khatib Sulaiman,Americano,Coffee,19
+2026-10-23,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,7
+2026-10-23,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,10
+2026-10-23,Perkantoran Khatib Sulaiman,Thai Tea,Tea,14
+2026-10-23,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-10-23,Pasar Raya Padang,Kopi Susu Aren,Coffee,14
+2026-10-23,Pasar Raya Padang,Americano,Coffee,3
+2026-10-23,Pasar Raya Padang,Coklat,Non-Coffee,8
+2026-10-23,Pasar Raya Padang,Red Velvet,Non-Coffee,9
+2026-10-23,Pasar Raya Padang,Thai Tea,Tea,11
+2026-10-23,Pasar Raya Padang,Lemon Tea,Tea,2
+2026-10-23,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,12
+2026-10-23,Pantai Padang (Taplau),Americano,Coffee,7
+2026-10-23,Pantai Padang (Taplau),Coklat,Non-Coffee,9
+2026-10-23,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-10-23,Pantai Padang (Taplau),Thai Tea,Tea,14
+2026-10-23,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-10-24,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,12
+2026-10-24,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-10-24,Kampus UNP Air Tawar,Coklat,Non-Coffee,4
+2026-10-24,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,0
+2026-10-24,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-10-24,Kampus UNP Air Tawar,Lemon Tea,Tea,3
+2026-10-24,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,5
+2026-10-24,Perkantoran Khatib Sulaiman,Americano,Coffee,5
+2026-10-24,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,2
+2026-10-24,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-24,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-24,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,1
+2026-10-24,Pasar Raya Padang,Kopi Susu Aren,Coffee,27
+2026-10-24,Pasar Raya Padang,Americano,Coffee,21
+2026-10-24,Pasar Raya Padang,Coklat,Non-Coffee,11
+2026-10-24,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-10-24,Pasar Raya Padang,Thai Tea,Tea,17
+2026-10-24,Pasar Raya Padang,Lemon Tea,Tea,6
+2026-10-24,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,42
+2026-10-24,Pantai Padang (Taplau),Americano,Coffee,9
+2026-10-24,Pantai Padang (Taplau),Coklat,Non-Coffee,20
+2026-10-24,Pantai Padang (Taplau),Red Velvet,Non-Coffee,12
+2026-10-24,Pantai Padang (Taplau),Thai Tea,Tea,23
+2026-10-24,Pantai Padang (Taplau),Lemon Tea,Tea,13
+2026-10-25,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,3
+2026-10-25,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-10-25,Kampus UNP Air Tawar,Coklat,Non-Coffee,1
+2026-10-25,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,2
+2026-10-25,Kampus UNP Air Tawar,Thai Tea,Tea,4
+2026-10-25,Kampus UNP Air Tawar,Lemon Tea,Tea,0
+2026-10-25,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,4
+2026-10-25,Perkantoran Khatib Sulaiman,Americano,Coffee,3
+2026-10-25,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-10-25,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-25,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-10-25,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-25,Pasar Raya Padang,Kopi Susu Aren,Coffee,28
+2026-10-25,Pasar Raya Padang,Americano,Coffee,17
+2026-10-25,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-10-25,Pasar Raya Padang,Red Velvet,Non-Coffee,12
+2026-10-25,Pasar Raya Padang,Thai Tea,Tea,19
+2026-10-25,Pasar Raya Padang,Lemon Tea,Tea,4
+2026-10-25,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,25
+2026-10-25,Pantai Padang (Taplau),Americano,Coffee,13
+2026-10-25,Pantai Padang (Taplau),Coklat,Non-Coffee,31
+2026-10-25,Pantai Padang (Taplau),Red Velvet,Non-Coffee,16
+2026-10-25,Pantai Padang (Taplau),Thai Tea,Tea,43
+2026-10-25,Pantai Padang (Taplau),Lemon Tea,Tea,14
+2026-10-26,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,16
+2026-10-26,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-10-26,Kampus UNP Air Tawar,Coklat,Non-Coffee,18
+2026-10-26,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-10-26,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-10-26,Kampus UNP Air Tawar,Lemon Tea,Tea,6
+2026-10-26,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,38
+2026-10-26,Perkantoran Khatib Sulaiman,Americano,Coffee,6
+2026-10-26,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-10-26,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,4
+2026-10-26,Perkantoran Khatib Sulaiman,Thai Tea,Tea,10
+2026-10-26,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-10-26,Pasar Raya Padang,Kopi Susu Aren,Coffee,10
+2026-10-26,Pasar Raya Padang,Americano,Coffee,11
+2026-10-26,Pasar Raya Padang,Coklat,Non-Coffee,16
+2026-10-26,Pasar Raya Padang,Red Velvet,Non-Coffee,2
+2026-10-26,Pasar Raya Padang,Thai Tea,Tea,5
+2026-10-26,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-10-26,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,0
+2026-10-26,Pantai Padang (Taplau),Americano,Coffee,5
+2026-10-26,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-10-26,Pantai Padang (Taplau),Red Velvet,Non-Coffee,2
+2026-10-26,Pantai Padang (Taplau),Thai Tea,Tea,2
+2026-10-26,Pantai Padang (Taplau),Lemon Tea,Tea,0
+2026-10-27,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,8
+2026-10-27,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-10-27,Kampus UNP Air Tawar,Coklat,Non-Coffee,9
+2026-10-27,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,11
+2026-10-27,Kampus UNP Air Tawar,Thai Tea,Tea,15
+2026-10-27,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-10-27,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,32
+2026-10-27,Perkantoran Khatib Sulaiman,Americano,Coffee,4
+2026-10-27,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,8
+2026-10-27,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,3
+2026-10-27,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-10-27,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,5
+2026-10-27,Pasar Raya Padang,Kopi Susu Aren,Coffee,17
+2026-10-27,Pasar Raya Padang,Americano,Coffee,0
+2026-10-27,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-27,Pasar Raya Padang,Red Velvet,Non-Coffee,5
+2026-10-27,Pasar Raya Padang,Thai Tea,Tea,6
+2026-10-27,Pasar Raya Padang,Lemon Tea,Tea,8
+2026-10-27,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,8
+2026-10-27,Pantai Padang (Taplau),Americano,Coffee,4
+2026-10-27,Pantai Padang (Taplau),Coklat,Non-Coffee,1
+2026-10-27,Pantai Padang (Taplau),Red Velvet,Non-Coffee,5
+2026-10-27,Pantai Padang (Taplau),Thai Tea,Tea,4
+2026-10-27,Pantai Padang (Taplau),Lemon Tea,Tea,1
+2026-10-28,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,15
+2026-10-28,Kampus UNP Air Tawar,Americano,Coffee,9
+2026-10-28,Kampus UNP Air Tawar,Coklat,Non-Coffee,24
+2026-10-28,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,10
+2026-10-28,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-10-28,Kampus UNP Air Tawar,Lemon Tea,Tea,5
+2026-10-28,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,19
+2026-10-28,Perkantoran Khatib Sulaiman,Americano,Coffee,10
+2026-10-28,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,6
+2026-10-28,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,6
+2026-10-28,Perkantoran Khatib Sulaiman,Thai Tea,Tea,4
+2026-10-28,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,4
+2026-10-28,Pasar Raya Padang,Kopi Susu Aren,Coffee,25
+2026-10-28,Pasar Raya Padang,Americano,Coffee,6
+2026-10-28,Pasar Raya Padang,Coklat,Non-Coffee,7
+2026-10-28,Pasar Raya Padang,Red Velvet,Non-Coffee,3
+2026-10-28,Pasar Raya Padang,Thai Tea,Tea,11
+2026-10-28,Pasar Raya Padang,Lemon Tea,Tea,3
+2026-10-28,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,4
+2026-10-28,Pantai Padang (Taplau),Americano,Coffee,6
+2026-10-28,Pantai Padang (Taplau),Coklat,Non-Coffee,10
+2026-10-28,Pantai Padang (Taplau),Red Velvet,Non-Coffee,6
+2026-10-28,Pantai Padang (Taplau),Thai Tea,Tea,7
+2026-10-28,Pantai Padang (Taplau),Lemon Tea,Tea,3
+2026-10-29,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,14
+2026-10-29,Kampus UNP Air Tawar,Americano,Coffee,10
+2026-10-29,Kampus UNP Air Tawar,Coklat,Non-Coffee,14
+2026-10-29,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,9
+2026-10-29,Kampus UNP Air Tawar,Thai Tea,Tea,8
+2026-10-29,Kampus UNP Air Tawar,Lemon Tea,Tea,7
+2026-10-29,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,13
+2026-10-29,Perkantoran Khatib Sulaiman,Americano,Coffee,14
+2026-10-29,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,7
+2026-10-29,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-10-29,Perkantoran Khatib Sulaiman,Thai Tea,Tea,6
+2026-10-29,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,3
+2026-10-29,Pasar Raya Padang,Kopi Susu Aren,Coffee,12
+2026-10-29,Pasar Raya Padang,Americano,Coffee,14
+2026-10-29,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-10-29,Pasar Raya Padang,Red Velvet,Non-Coffee,6
+2026-10-29,Pasar Raya Padang,Thai Tea,Tea,10
+2026-10-29,Pasar Raya Padang,Lemon Tea,Tea,7
+2026-10-29,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,7
+2026-10-29,Pantai Padang (Taplau),Americano,Coffee,4
+2026-10-29,Pantai Padang (Taplau),Coklat,Non-Coffee,7
+2026-10-29,Pantai Padang (Taplau),Red Velvet,Non-Coffee,4
+2026-10-29,Pantai Padang (Taplau),Thai Tea,Tea,8
+2026-10-29,Pantai Padang (Taplau),Lemon Tea,Tea,7
+2026-10-30,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,57
+2026-10-30,Kampus UNP Air Tawar,Americano,Coffee,11
+2026-10-30,Kampus UNP Air Tawar,Coklat,Non-Coffee,10
+2026-10-30,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,7
+2026-10-30,Kampus UNP Air Tawar,Thai Tea,Tea,12
+2026-10-30,Kampus UNP Air Tawar,Lemon Tea,Tea,8
+2026-10-30,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,14
+2026-10-30,Perkantoran Khatib Sulaiman,Americano,Coffee,10
+2026-10-30,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,5
+2026-10-30,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,8
+2026-10-30,Perkantoran Khatib Sulaiman,Thai Tea,Tea,7
+2026-10-30,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,8
+2026-10-30,Pasar Raya Padang,Kopi Susu Aren,Coffee,15
+2026-10-30,Pasar Raya Padang,Americano,Coffee,12
+2026-10-30,Pasar Raya Padang,Coklat,Non-Coffee,10
+2026-10-30,Pasar Raya Padang,Red Velvet,Non-Coffee,4
+2026-10-30,Pasar Raya Padang,Thai Tea,Tea,9
+2026-10-30,Pasar Raya Padang,Lemon Tea,Tea,11
+2026-10-30,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,21
+2026-10-30,Pantai Padang (Taplau),Americano,Coffee,3
+2026-10-30,Pantai Padang (Taplau),Coklat,Non-Coffee,8
+2026-10-30,Pantai Padang (Taplau),Red Velvet,Non-Coffee,7
+2026-10-30,Pantai Padang (Taplau),Thai Tea,Tea,9
+2026-10-30,Pantai Padang (Taplau),Lemon Tea,Tea,5
+2026-10-31,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,2
+2026-10-31,Kampus UNP Air Tawar,Americano,Coffee,3
+2026-10-31,Kampus UNP Air Tawar,Coklat,Non-Coffee,6
+2026-10-31,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,5
+2026-10-31,Kampus UNP Air Tawar,Thai Tea,Tea,7
+2026-10-31,Kampus UNP Air Tawar,Lemon Tea,Tea,2
+2026-10-31,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,3
+2026-10-31,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-10-31,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,3
+2026-10-31,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-10-31,Perkantoran Khatib Sulaiman,Thai Tea,Tea,3
+2026-10-31,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,0
+2026-10-31,Pasar Raya Padang,Kopi Susu Aren,Coffee,36
+2026-10-31,Pasar Raya Padang,Americano,Coffee,8
+2026-10-31,Pasar Raya Padang,Coklat,Non-Coffee,15
+2026-10-31,Pasar Raya Padang,Red Velvet,Non-Coffee,10
+2026-10-31,Pasar Raya Padang,Thai Tea,Tea,8
+2026-10-31,Pasar Raya Padang,Lemon Tea,Tea,9
+2026-10-31,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,10
+2026-10-31,Pantai Padang (Taplau),Americano,Coffee,1
+2026-10-31,Pantai Padang (Taplau),Coklat,Non-Coffee,2
+2026-10-31,Pantai Padang (Taplau),Red Velvet,Non-Coffee,3
+2026-10-31,Pantai Padang (Taplau),Thai Tea,Tea,3
+2026-10-31,Pantai Padang (Taplau),Lemon Tea,Tea,10
+2026-11-01,Kampus UNP Air Tawar,Kopi Susu Aren,Coffee,5
+2026-11-01,Kampus UNP Air Tawar,Americano,Coffee,4
+2026-11-01,Kampus UNP Air Tawar,Coklat,Non-Coffee,7
+2026-11-01,Kampus UNP Air Tawar,Red Velvet,Non-Coffee,3
+2026-11-01,Kampus UNP Air Tawar,Thai Tea,Tea,1
+2026-11-01,Kampus UNP Air Tawar,Lemon Tea,Tea,1
+2026-11-01,Perkantoran Khatib Sulaiman,Kopi Susu Aren,Coffee,1
+2026-11-01,Perkantoran Khatib Sulaiman,Americano,Coffee,1
+2026-11-01,Perkantoran Khatib Sulaiman,Coklat,Non-Coffee,1
+2026-11-01,Perkantoran Khatib Sulaiman,Red Velvet,Non-Coffee,1
+2026-11-01,Perkantoran Khatib Sulaiman,Thai Tea,Tea,1
+2026-11-01,Perkantoran Khatib Sulaiman,Lemon Tea,Tea,2
+2026-11-01,Pasar Raya Padang,Kopi Susu Aren,Coffee,22
+2026-11-01,Pasar Raya Padang,Americano,Coffee,2
+2026-11-01,Pasar Raya Padang,Coklat,Non-Coffee,12
+2026-11-01,Pasar Raya Padang,Red Velvet,Non-Coffee,23
+2026-11-01,Pasar Raya Padang,Thai Tea,Tea,12
+2026-11-01,Pasar Raya Padang,Lemon Tea,Tea,5
+2026-11-01,Pantai Padang (Taplau),Kopi Susu Aren,Coffee,28
+2026-11-01,Pantai Padang (Taplau),Americano,Coffee,3
+2026-11-01,Pantai Padang (Taplau),Coklat,Non-Coffee,18
+2026-11-01,Pantai Padang (Taplau),Red Velvet,Non-Coffee,32
+2026-11-01,Pantai Padang (Taplau),Thai Tea,Tea,18
+2026-11-01,Pantai Padang (Taplau),Lemon Tea,Tea,8
