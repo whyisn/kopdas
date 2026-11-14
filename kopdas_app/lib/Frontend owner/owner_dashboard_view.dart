@@ -183,7 +183,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   final List<Map<String, dynamic>> _recentTransactions = [
     {'id': 'TRX-1089', 'time': '13:42', 'seller': 'Budi (Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'method': 'QRIS', 'pjp': 'BCA Settlement'},
-    {'id': 'TRX-1088', 'time': '13:38', 'seller': 'Hendra (Juanda)', 'items': '1x Americano Double Shot', 'total': 15000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
+    {'id': 'TRX-1088', 'time': '13:38', 'seller': 'Hendra (Juanda)', 'items': '1x Americano', 'total': 15000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
     {'id': 'TRX-1087', 'time': '13:25', 'seller': 'Ahmad (Suropati)', 'items': '1x Matcha + 1x Roti Bakar', 'total': 37000, 'method': 'QRIS', 'pjp': 'GoPay Webhook'},
     {'id': 'TRX-1086', 'time': '13:14', 'seller': 'Siti (Senen)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'method': 'TUNAI', 'pjp': 'Kasir Fisik'},
   ];
@@ -194,6 +194,24 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     {'id': 'ORD-9040', 'time': '13:10', 'customer': 'Bagus Prasetyo', 'seller': 'Hendra (Juanda)', 'items': '1x Americano Dingin', 'total': 15000, 'status': 'Selesai', 'pay': 'LUNAS (QRIS)'},
     {'id': 'ORD-9039', 'time': '13:35', 'customer': 'Clarissa Olivia', 'seller': 'Siti (Senen)', 'items': '2x Matcha Latte', 'total': 44000, 'status': 'Menunggu Bayar', 'pay': 'PENDING'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _resetWarehouseStock();
+  }
+
+  void _resetWarehouseStock() {
+    _warehouseStock.clear();
+    _warehouseStock.addAll([
+      {'sku': 'KPS-01', 'name': 'Kopi Susu Soft', 'category': 'Kopi Susu', 'central_stock': 850, 'allocated': 160, 'held_by_cart': 110, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+      {'sku': 'KPS-02', 'name': 'Kopi Susu Strong', 'category': 'Kopi Susu', 'central_stock': 750, 'allocated': 140, 'held_by_cart': 95, 'min_stock': 150, 'price': 18000, 'cost': 7500, 'status': 'Aman'},
+      {'sku': 'KPS-03', 'name': 'Kopi Susu Butter', 'category': 'Kopi Susu', 'central_stock': 620, 'allocated': 120, 'held_by_cart': 80, 'min_stock': 120, 'price': 20000, 'cost': 8000, 'status': 'Aman'},
+      {'sku': 'COF-01', 'name': 'Americano', 'category': 'Classic Coffee', 'central_stock': 540, 'allocated': 90, 'held_by_cart': 65, 'min_stock': 100, 'price': 15000, 'cost': 4500, 'status': 'Aman'},
+      {'sku': 'NCF-01', 'name': 'Coklat', 'category': 'Non-Coffee', 'central_stock': 480, 'allocated': 80, 'held_by_cart': 50, 'min_stock': 100, 'price': 18000, 'cost': 7000, 'status': 'Aman'},
+      {'sku': 'NCF-02', 'name': 'Matcha', 'category': 'Non-Coffee', 'central_stock': 410, 'allocated': 70, 'held_by_cart': 45, 'min_stock': 100, 'price': 20000, 'cost': 8500, 'status': 'Aman'},
+    ]);
+  }
 
   // ===========================================================================
   // INTERACTIVE MODALS
@@ -1692,11 +1710,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 22.0, 'amber': 30.0, 'label': '19:00'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Gula Aren', 'sold': '172 cup (50%)', 'omzet': 3096000, 'stock': '950 cup'},
-            {'name': 'Americano Double Shot', 'sold': '80 cup (23%)', 'omzet': 1200000, 'stock': '650 cup'},
-            {'name': 'Matcha Uji Latte Creamy', 'sold': '48 cup (14%)', 'omzet': 1056000, 'stock': '430 cup'},
-            {'name': 'Cafe Latte Steam Velvet', 'sold': '31 cup (9%)', 'omzet': 620000, 'stock': '520 cup'},
-            {'name': 'Cold Brew Citrus Refresh', 'sold': '10 cup (3%)', 'omzet': 220000, 'stock': '310 cup'},
+            {'name': 'Kopi Susu Soft', 'sold': '172 cup (50%)', 'omzet': 3096000, 'stock': '850 cup'},
+            {'name': 'Kopi Susu Strong', 'sold': '80 cup (23%)', 'omzet': 1440000, 'stock': '750 cup'},
+            {'name': 'Kopi Susu Butter', 'sold': '48 cup (14%)', 'omzet': 960000, 'stock': '620 cup'},
+            {'name': 'Americano', 'sold': '31 cup (9%)', 'omzet': 465000, 'stock': '540 cup'},
+            {'name': 'Coklat', 'sold': '10 cup (3%)', 'omzet': 180000, 'stock': '480 cup'},
           ],
           'speed_label': '+12.3% vs hari sebelumnya',
           'speed_rows': [
@@ -1735,11 +1753,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 55.0, 'amber': 75.0, 'label': 'Sab'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Gula Aren', 'sold': '1.350 cup (51%)', 'omzet': 24300000, 'stock': '950 cup'},
-            {'name': 'Americano Double Shot', 'sold': '615 cup (23%)', 'omzet': 9225000, 'stock': '650 cup'},
-            {'name': 'Matcha Uji Latte Creamy', 'sold': '395 cup (15%)', 'omzet': 8690000, 'stock': '430 cup'},
-            {'name': 'Cafe Latte Steam Velvet', 'sold': '215 cup (8%)', 'omzet': 4300000, 'stock': '520 cup'},
-            {'name': 'Cold Brew Citrus Refresh', 'sold': '75 cup (3%)', 'omzet': 1650000, 'stock': '310 cup'},
+            {'name': 'Kopi Susu Soft', 'sold': '1.350 cup (51%)', 'omzet': 24300000, 'stock': '850 cup'},
+            {'name': 'Kopi Susu Strong', 'sold': '615 cup (23%)', 'omzet': 11070000, 'stock': '750 cup'},
+            {'name': 'Kopi Susu Butter', 'sold': '395 cup (15%)', 'omzet': 7900000, 'stock': '620 cup'},
+            {'name': 'Americano', 'sold': '215 cup (8%)', 'omzet': 3225000, 'stock': '540 cup'},
+            {'name': 'Coklat', 'sold': '75 cup (3%)', 'omzet': 1350000, 'stock': '480 cup'},
           ],
           'speed_label': '+18.7% vs minggu lalu',
           'speed_rows': [
@@ -1776,11 +1794,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 55.0, 'amber': 72.0, 'label': 'Mgg 4'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Gula Aren', 'sold': '5.940 cup (51%)', 'omzet': 106920000, 'stock': '950 cup'},
-            {'name': 'Americano Double Shot', 'sold': '2.680 cup (23%)', 'omzet': 40200000, 'stock': '650 cup'},
-            {'name': 'Matcha Uji Latte Creamy', 'sold': '1.740 cup (15%)', 'omzet': 38280000, 'stock': '430 cup'},
-            {'name': 'Cafe Latte Steam Velvet', 'sold': '940 cup (8%)', 'omzet': 18800000, 'stock': '520 cup'},
-            {'name': 'Cold Brew Citrus Refresh', 'sold': '340 cup (3%)', 'omzet': 7480000, 'stock': '310 cup'},
+            {'name': 'Kopi Susu Soft', 'sold': '5.940 cup (51%)', 'omzet': 106920000, 'stock': '850 cup'},
+            {'name': 'Kopi Susu Strong', 'sold': '2.680 cup (23%)', 'omzet': 48240000, 'stock': '750 cup'},
+            {'name': 'Kopi Susu Butter', 'sold': '1.740 cup (15%)', 'omzet': 34800000, 'stock': '620 cup'},
+            {'name': 'Americano', 'sold': '940 cup (8%)', 'omzet': 14100000, 'stock': '540 cup'},
+            {'name': 'Coklat', 'sold': '340 cup (3%)', 'omzet': 6120000, 'stock': '480 cup'},
           ],
           'speed_label': '+31.4% vs bulan sebelumnya',
           'speed_rows': [
@@ -1825,11 +1843,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             {'yellow': 28.0, 'amber': 38.0, 'label': '19:00'},
           ],
           'top_products': [
-            {'name': 'Kopi Susu Gula Aren', 'sold': '215 cup (51%)', 'omzet': 3870000, 'stock': '950 cup'},
-            {'name': 'Americano Double Shot', 'sold': '98 cup (23%)', 'omzet': 1470000, 'stock': '650 cup'},
-            {'name': 'Matcha Uji Latte Creamy', 'sold': '62 cup (15%)', 'omzet': 1364000, 'stock': '430 cup'},
-            {'name': 'Cafe Latte Steam Velvet', 'sold': '36 cup (8%)', 'omzet': 720000, 'stock': '520 cup'},
-            {'name': 'Cold Brew Citrus Refresh', 'sold': '12 cup (3%)', 'omzet': 264000, 'stock': '310 cup'},
+            {'name': 'Kopi Susu Soft', 'sold': '215 cup (51%)', 'omzet': 3870000, 'stock': '850 cup'},
+            {'name': 'Kopi Susu Strong', 'sold': '98 cup (23%)', 'omzet': 1764000, 'stock': '750 cup'},
+            {'name': 'Kopi Susu Butter', 'sold': '62 cup (15%)', 'omzet': 1240000, 'stock': '620 cup'},
+            {'name': 'Americano', 'sold': '36 cup (8%)', 'omzet': 540000, 'stock': '540 cup'},
+            {'name': 'Coklat', 'sold': '12 cup (3%)', 'omzet': 216000, 'stock': '480 cup'},
           ],
           'speed_label': '+24% vs kemarin',
           'speed_rows': [
@@ -2195,13 +2213,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopProductTile('1', 'Kopi Susu Gula Aren', '215 Cup • 50.8%', 'Rp 3.870.000 • Gudang: 950 cup', '+28%'),
+                    _buildTopProductTile('1', 'Kopi Susu Soft', '215 Cup • 50.8%', 'Rp 3.870.000 • Gudang: 850 porsi', '+28%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('2', 'Americano Double Shot', '98 Cup • 23.2%', 'Rp 1.470.000 • Gudang: 650 cup', '+15%'),
+                    _buildTopProductTile('2', 'Kopi Susu Strong', '98 Cup • 23.2%', 'Rp 1.764.000 • Gudang: 750 porsi', '+15%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('3', 'Matcha Uji Latte Creamy', '62 Cup • 14.6%', 'Rp 1.364.000 • Gudang: 430 cup', '+9%'),
+                    _buildTopProductTile('3', 'Kopi Susu Butter', '62 Cup • 14.6%', 'Rp 1.240.000 • Gudang: 620 porsi', '+9%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('4', 'Cafe Latte Steam Velvet', '36 Cup • 8.5%', 'Rp 720.000 • Gudang: 520 cup', '+5%'),
+                    _buildTopProductTile('4', 'Americano', '36 Cup • 8.5%', 'Rp 540.000 • Gudang: 540 porsi', '+5%'),
                   ],
                 ),
               ),
@@ -3556,6 +3574,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // SUB-PAGES: GUDANG & STOK (FOKUS MONITORING STOK 6 MENU UTAMA)
   // ===========================================================================
   Widget _buildWarehouseManagementView() {
+    if (_warehouseStock.isEmpty || _warehouseStock.any((w) => w['sku'].toString().startsWith('PRD') || w['name'] == 'Kopi Susu Gula Aren')) {
+      _resetWarehouseStock();
+    }
+
     final int totalCentralStock = _warehouseStock.fold<int>(0, (sum, item) => sum + (item['central_stock'] as int));
     final int totalInCarts = _warehouseStock.fold<int>(0, (sum, item) => sum + ((item['held_by_cart'] ?? 0) as int));
     final int grandTotalStock = totalCentralStock + totalInCarts;
@@ -3841,7 +3863,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                               Row(
                                 children: [
                                   Text(
-                                    '',
+                                    '${w['central_stock']}',
                                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
                                   ),
                                   const SizedBox(width: 4),
