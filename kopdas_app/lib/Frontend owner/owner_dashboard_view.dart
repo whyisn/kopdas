@@ -5580,6 +5580,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Saat hujan angin, posisikan gerobak di bawah koridor kanopi stasiun & selasar kampus; hindari area terbuka.',
+          'kenapa_bawa_segitu': 'Saat cuaca hujan deras, mahasiswa dan komuter berteduh di selasar gedung. Kuota dipangkas ke 145 porsi untuk mengamankan margin dan mencegah sisa es batu yang mencair.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5623,6 +5624,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Cuaca terik pesisir! Stok es batu harus penuh saat transit ke Lapak Siang & Sore (peningkatan +20% demand es).',
+          'kenapa_bawa_segitu': 'Suhu pesisir 32°C meningkatkan dahaga mahasiswa dan warga GOR secara signifikan. Kuota 215 porsi (+20%) dipersiapkan dengan varian es dingin melimpah guna memenuhi lonjakan pembelian antar pergantian kelas.',
         };
       } else {
         return {
@@ -5666,6 +5668,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Pindah lapak pukul 14:45 WIB dari kampus ke GOR Agus Salim untuk menangkap puncak traffic olahraga sore.',
+          'kenapa_bawa_segitu': 'Kepadatan koridor kampus UNP pagi mencapai 1.400 mahasiswa kuliah awal & komuter KA Air Tawar. Bawaan 80 porsi pagi terserap cepat dengan rasio kopi tinggi (55 Aren + 35 Americano) karena kebutuhan kafein sebelum kelas. Siang 60 porsi di Rektorat/RS Hermina saat makan siang, dan sore 40 porsi di GOR Agus Salim saat olahraga. Total 180 porsi adalah batas optimal: jika bawa >190 porsi es mencair sebelum sore, jika <170 porsi memicu potensi lost-sales Rp 180.000 saat pergantian jam kuliah.',
         };
       }
     } else if (staffId == 'usr-seller-02') {
@@ -5712,6 +5715,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Ambil posisi di bawah shelter kanopi gedung perkantoran; sediakan kantong take-away ganda untuk melindungi cup dari hujan.',
+          'kenapa_bawa_segitu': 'Hujan deras mengurangi pergerakan pegawai antar gedung di Jl. Khatib Sulaiman. Alokasi 80 porsi aman mencegah pemborosan stok dengan fokus take-away langsung ke lobi kantor.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5755,6 +5759,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Karyawan banyak pesan es kopi via antar langsung ke lobi kantor. Koordinasikan pesanan cepat 07:45 - 08:30 WIB.',
+          'kenapa_bawa_segitu': 'Cuaca terik pesisir mendorong lonjakan pesanan es kopi saat jam istirahat kantor. Kuota 125 porsi (+25%) menyerap kebutuhan kafein siang pegawai instansi di sekitar Raden Saleh.',
         };
       } else {
         return {
@@ -5798,6 +5803,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Manfaatkan jendela 07:45 - 08:30 WIB di Bank Nagari untuk take-away cepat; rotasi ke Raden Saleh pukul 10:45 WIB.',
+          'kenapa_bawa_segitu': 'Konsumen koridor Khatib Sulaiman didominasi ASN kementerian, perbankan, dan BUMN dengan jadwal masuk kantor serentak 07:30 - 08:30 WIB. Jendela emas pagi di Bank Nagari & GKN menyerap 45 porsi take-away cepat. Siang terserap 35 porsi saat istirahat makan di Sp. Raden Saleh, dan sore 20 porsi di Simpang Transmart. Pola konsumsi kantor terfokus pada dua jendela waktu ini; membawa >110 porsi berisiko retur sisa bahan, sedangkan 100 porsi menjamin turnover bahan 92% habis sebelum maghrib.',
         };
       }
     } else if (staffId == 'usr-seller-03') {
@@ -5844,6 +5850,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Aktivitas transaksi pasar pagi tetap tinggi di lorong tertutup. Sajikan kopi panas/hangat dengan cepat.',
+          'kenapa_bawa_segitu': 'Lorong tertutup pasar basah tetap ramai saat hujan. Kuota 95 porsi dengan varian kopi hangat menjamin perputaran cepat di kalangan pedagang pasar subuh.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5887,6 +5894,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Pedagang grosir & kuli butuh minuman dingin pelepas dahaga; rotasi ke Pondok pukul 09:45 WIB tepat saat toko-toko mulai ramai.',
+          'kenapa_bawa_segitu': 'Aktivitas bongkar muat pasar di bawah terik niaga membutuhkan asupan dingin tinggi. Kuota 145 porsi (+20%) dialokasikan untuk pedagang dan ruko grosir di Pondok.',
         };
       } else {
         return {
@@ -5930,6 +5938,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Mulai seduh pukul 05:45 WIB di Pintu Barat untuk pedagang pasar, lalu geser ke Pondok pukul 09:45 WIB saat pertokoan buka.',
+          'kenapa_bawa_segitu': 'Pasar Raya memiliki ritme kerja paling pagi di Kota Padang (mulai 05:30 WIB). Pedagang grosir sayur/ikan, supir angkot, dan kuli bongkar muat membutuhkan stamina kopi subuh (55 porsi terserap sebelum 09:30). Pukul 10:00 WIB gerobak bergeser ke kawasan ruko niaga Pondok saat toko-toko mulai buka (40 porsi). Sore 25 porsi di Batang Arau / Jembatan Siti Nurbaya. Kuota 120 porsi adalah kapasitas ideal gerobak pasar tanpa membebani kelincahan seller di lorong sempit.',
         };
       }
     } else if (staffId == 'usr-seller-04') {
@@ -5976,6 +5985,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Angin laut kencang saat hujan. Alihkan armada ke area beratap di Muaro Lasak dan amankan bahan baku.',
+          'kenapa_bawa_segitu': 'Pengunjung pantai berkurang drastis saat hujan pesisir. Kuota ditekan menjadi 70 porsi untuk mencegah kerugian es batu dan sisa bahan baku.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -6019,6 +6029,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Puncak keramaian liburan pesisir! Stok cup dan es batu harus siap ekstra di Lapak Sore Taplau (lonjakan +30%).',
+          'kenapa_bawa_segitu': 'Hari cerah akhir pekan di Pantai Padang didatangi ribuan wisatawan. Kuota 185 porsi (+30%) dimaksimalkan pada varian teh dan minuman segar dingin untuk sesi sunset Taplau.',
         };
       } else {
         return {
@@ -6062,6 +6073,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             },
           ],
           'tactical_note': 'Amankan pasokan es batu & cup ekstra untuk Lapak C sebelum jam 15:30 WIB. Titik sunset Taplau menyumbang 46% penjualan harian.',
+          'kenapa_bawa_segitu': 'Kawasan pesisir Pantai Padang (Taplau) memiliki kurva penjualan sore tertinggi: pagi 35 porsi untuk pesepeda/senam di Tugu IORA, siang 45 porsi wisatawan di Danau Cimpago, dan puncaknya 70 porsi (46% omzet) terjadi saat golden hour sunset pukul 15:30 - 18:30 WIB. Wisatawan dan warga jogging sangat haus di bibir pantai sehingga 65% pesanan adalah varian dingin es teh & es non-kopi. Kuota 150 porsi disiapkan dengan termos es batu penuh untuk mengamankan lonjakan pengunjung sunset.',
         };
       }
     } else {
@@ -6097,6 +6109,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           },
         ],
         'tactical_note': 'Standby unit dapat dikerahkan ke titik lonjakan jika armada reguler membutuhkan pasokan darurat.',
+        'kenapa_bawa_segitu': 'Armada cadangan disiagakan untuk mengantisipasi lonjakan permintaan tak terduga pada jam makan siang dan sore hari di titik-titik padat Kota Padang.',
       };
     }
   }
@@ -6159,22 +6172,27 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  Widget _buildAiMenuBadge(String name, int qty, Color bg, Color textColor) {
+  Widget _buildAiMenuBadge(String name, int qty) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: bg,
+        color: const Color(0xFFF3F4F6),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: textColor.withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
-      child: Text(
-        '$qty $name',
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: textColor),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(fontSize: 10.5, color: Color(0xFF1F2937)),
+          children: [
+            TextSpan(text: '$qty ', style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF111827))),
+            TextSpan(text: name, style: const TextStyle(fontWeight: FontWeight.w500, color: Color(0xFF4B5563))),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildAiActionCard(String title, String body, IconData icon, Color color) {
+  Widget _buildAiActionCard(String title, String body, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -6190,10 +6208,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
+                  color: const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Icon(icon, size: 16, color: color),
+                child: Icon(icon, size: 16, color: const Color(0xFF1E3932)),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -6209,7 +6227,185 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           const SizedBox(height: 8),
           Text(
             body,
-            style: const TextStyle(fontSize: 11, color: Color(0xFF4B5563), height: 1.4),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF4B5563), height: 1.45),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCleanMetricItem(String label, String value, String sub) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF6B7280)),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 16.5, fontWeight: FontWeight.w900, color: Color(0xFF111827), letterSpacing: -0.3),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            sub,
+            style: const TextStyle(fontSize: 10.5, color: Color(0xFF4B5563)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExecutiveAiBriefingCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Briefing
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3932).withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Icon(Icons.insights, size: 18, color: Color(0xFF1E3932)),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Analisis Penjualan & Disposisi Operasional AI Hari Ini — Kota Padang',
+                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: Color(0xFF111827)),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Prakiraan cuaca lapangan, profil kepadatan komuter, dan arahan taktis alokasi stok per armada',
+                          style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.wb_sunny_outlined, size: 12, color: Color(0xFF1E3932)),
+                      SizedBox(width: 5),
+                      Text(
+                        '28°C Cerah Berawan • BMKG Padang',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Narrative Prose
+          Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF9FAFB),
+                    borderRadius: BorderRadius.circular(6),
+                    border: const Border(
+                      left: BorderSide(color: Color(0xFF1E3932), width: 3.5),
+                      top: BorderSide(color: Color(0xFFE5E7EB)),
+                      right: BorderSide(color: Color(0xFFE5E7EB)),
+                      bottom: BorderSide(color: Color(0xFFE5E7EB)),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Ringkasan Intelijen Lapangan:',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        'Analisa penjualan hari ini di Kota Padang: Prakiraan cuaca berada pada kondisi normal (28°C cerah berawan, kelembapan 78%, kecepatan angin 11 km/jam Barat Daya). Tingkat kepadatan komuter terpantau normal seperti biasa tanpa potensi anomali cuaca ekstrem.\n\n'
+                        'Berdasarkan analisa lokasi tingkat keramaian setiap hari nya di koridor pendidikan UNP, sentra kantor Khatib Sulaiman, niaga Pasar Raya, dan wisata Pantai Padang (Taplau), total potensi serapan diproyeksikan sebesar 550 porsi dengan estimasi omzet Rp 9.940.000 (margin kotor rata-rata 62.4%) dan efisiensi reduksi limbah (waste) mencapai 39.5%.\n\n'
+                        'Berikut kami sarankan analisanya secara menyeluruh: data armada, tim yang bertugas, pergerakan lokasi per jam, alokasi stok bawaan per menu, serta alasan mendalam (kenapa membawa kuota tersebut) pada setiap armada di bawah ini:',
+                        style: TextStyle(fontSize: 12, color: Color(0xFF374151), height: 1.55),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                // 4 Integrated Metric Items (Clean & Neutral, No Alay Colors)
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isWide = constraints.maxWidth > 800;
+                    final metrics = [
+                      _buildCleanMetricItem('Total Proyeksi Permintaan', '550 Porsi', 'Terserap rata-rata 94.8%'),
+                      _buildCleanMetricItem('Estimasi Omzet Harian', 'Rp 9.940.000', 'Margin kotor rata-rata 62.4%'),
+                      _buildCleanMetricItem('Prakiraan Cuaca Lapangan', '28°C Cerah Berawan', 'BMKG Padang • Normal kondusif'),
+                      _buildCleanMetricItem('Akurasi Model Prediksi', '96.4%', 'Poisson EM Solver • Waste -39.5%'),
+                    ];
+
+                    if (isWide) {
+                      return Row(
+                        children: [
+                          Expanded(child: metrics[0]),
+                          const SizedBox(width: 12),
+                          Expanded(child: metrics[1]),
+                          const SizedBox(width: 12),
+                          Expanded(child: metrics[2]),
+                          const SizedBox(width: 12),
+                          Expanded(child: metrics[3]),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          Row(children: [Expanded(child: metrics[0]), const SizedBox(width: 12), Expanded(child: metrics[1])]),
+                          const SizedBox(height: 12),
+                          Row(children: [Expanded(child: metrics[2]), const SizedBox(width: 12), Expanded(child: metrics[3])]),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -6219,27 +6415,28 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   Widget _buildAiArmadaRouteCard(Map<String, dynamic> staff, Map<String, dynamic> breakdown) {
     final routes = (breakdown['routes'] as List<Map<String, dynamic>>?) ?? [];
     final tacticalNote = breakdown['tactical_note']?.toString() ?? '';
+    final kenapaBawaSegitu = breakdown['kenapa_bawa_segitu']?.toString() ?? '';
     final staffName = staff['name'].toString();
     final totalAlloc = breakdown['total'] as int? ?? 0;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFAFAFA),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Card
+          // 1. Header Card
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   CircleAvatar(
-                    radius: 16,
+                    radius: 17,
                     backgroundColor: const Color(0xFF1E3932),
                     child: Text(
                       staffName.isNotEmpty ? staffName[0] : 'S',
@@ -6252,10 +6449,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     children: [
                       Text(
                         staffName,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF111827)),
+                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                       ),
                       Text(
-                        '${staff['cart_id']} • Total Alokasi: $totalAlloc Porsi',
+                        '${staff['cart_id']} • ${staff['location']}',
                         style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                       ),
                     ],
@@ -6263,18 +6460,18 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                 decoration: BoxDecoration(
-                  color: (breakdown['status_color'] as Color? ?? const Color(0xFF059669)).withOpacity(0.12),
+                  color: const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: (breakdown['status_color'] as Color? ?? const Color(0xFF059669)).withOpacity(0.3)),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
                 child: Text(
-                  breakdown['status'].toString(),
-                  style: TextStyle(
+                  '${breakdown['status']} (${breakdown['rate']}% serapan)',
+                  style: const TextStyle(
                     fontSize: 10.5,
                     fontWeight: FontWeight.bold,
-                    color: breakdown['status_color'] as Color? ?? const Color(0xFF059669),
+                    color: Color(0xFF1E3932),
                   ),
                 ),
               ),
@@ -6284,12 +6481,78 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           const Divider(height: 1, color: Color(0xFFE5E7EB)),
           const SizedBox(height: 12),
 
-          // Waypoints Step List
+          // 2. Alokasi 6 Menu Resmi
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Alokasi 6 Menu Resmi:',
+                style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+              ),
+              Text(
+                'Total: $totalAlloc Porsi',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 5,
+            children: [
+              _buildAiMenuBadge('Aren', breakdown['aren'] as int? ?? 0),
+              _buildAiMenuBadge('Amr', breakdown['americano'] as int? ?? 0),
+              _buildAiMenuBadge('Coklat', breakdown['coklat'] as int? ?? 0),
+              _buildAiMenuBadge('Red Velvet', breakdown['red_velvet'] as int? ?? 0),
+              _buildAiMenuBadge('Thai Tea', breakdown['thai_tea'] as int? ?? 0),
+              _buildAiMenuBadge('Lemon Tea', breakdown['lemon_tea'] as int? ?? 0),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // 3. Analisis Mendalam: "Kenapa Bawa Segitu?"
+          if (kenapaBawaSegitu.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.all(11),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(Icons.psychology_outlined, size: 14, color: Color(0xFF1E3932)),
+                      SizedBox(width: 6),
+                      Text(
+                        'Kenapa Bawa Segitu? — Analisis Kepadatan & Pola Permintaan:',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF111827)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    kenapaBawaSegitu,
+                    style: const TextStyle(fontSize: 11, color: Color(0xFF374151), height: 1.45),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+
+          // 4. Jadwal Rute Bergerak per Jam (Pagi - Siang - Sore)
+          const Text(
+            'Jadwal Rute & Titik Lapak Bergerak:',
+            style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+          ),
+          const SizedBox(height: 8),
           for (int i = 0; i < routes.length; i++) ...[
             () {
               final r = routes[i];
               final isLast = i == routes.length - 1;
-              final Color stepColor = r['color'] as Color? ?? const Color(0xFF1E3932);
 
               return IntrinsicHeight(
                 child: Row(
@@ -6298,24 +6561,24 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Column(
                       children: [
                         Container(
-                          width: 22,
-                          height: 22,
+                          width: 20,
+                          height: 20,
                           decoration: BoxDecoration(
-                            color: stepColor.withOpacity(0.12),
-                            border: Border.all(color: stepColor, width: 1.5),
+                            color: const Color(0xFFF3F4F6),
+                            border: Border.all(color: const Color(0xFF1E3932), width: 1.5),
                             shape: BoxShape.circle,
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             '${i + 1}',
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: stepColor),
+                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
                           ),
                         ),
                         if (!isLast)
                           Expanded(
                             child: Container(
                               width: 1.5,
-                              color: const Color(0xFFD1D5DB),
+                              color: const Color(0xFFE5E7EB),
                               margin: const EdgeInsets.symmetric(vertical: 2),
                             ),
                           ),
@@ -6324,58 +6587,46 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: isLast ? 0 : 10),
+                        padding: EdgeInsets.only(bottom: isLast ? 0 : 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                                  decoration: BoxDecoration(
-                                    color: stepColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    r['session'].toString(),
-                                    style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: stepColor),
-                                  ),
+                                Text(
+                                  r['session'].toString(),
+                                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   r['time'].toString(),
-                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5, color: Color(0xFF111827)),
+                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11, color: Color(0xFF111827)),
                                 ),
                                 const Spacer(),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFECFDF5),
+                                    color: const Color(0xFFF3F4F6),
                                     borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: const Color(0xFFA7F3D0)),
+                                    border: Border.all(color: const Color(0xFFE5E7EB)),
                                   ),
                                   child: Text(
                                     '${r['target']} Porsi',
-                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 2),
                             Text(
                               r['location'].toString(),
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3932)),
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5, color: Color(0xFF111827)),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               '🎯 Fokus: ${r['focus']}',
-                              style: const TextStyle(fontSize: 10.5, color: Color(0xFF4B5563), fontWeight: FontWeight.w500),
+                              style: const TextStyle(fontSize: 10.5, color: Color(0xFF4B5563)),
                             ),
-                            if (r['serapan'] != null)
-                              Text(
-                                '📈 Serapan: ${r['serapan']}',
-                                style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280), fontStyle: FontStyle.italic),
-                              ),
                           ],
                         ),
                       ),
@@ -6386,27 +6637,27 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             }(),
           ],
 
-          // Tactical Callout Box
+          // Tactical Instruction
           if (tacticalNote.isNotEmpty) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFBEB),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: const Color(0xFFFDE68A)),
+                color: const Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.assistant_direction_outlined, size: 14, color: Color(0xFFB45309)),
-                  const SizedBox(width: 7),
+                  const Icon(Icons.assistant_direction_outlined, size: 13, color: Color(0xFF1E3932)),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        style: const TextStyle(fontSize: 10.5, color: Color(0xFF92400E), height: 1.35),
+                        style: const TextStyle(fontSize: 10.5, color: Color(0xFF374151), height: 1.35),
                         children: [
-                          const TextSpan(text: 'Instruksi Manuver AI: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                          const TextSpan(text: 'Instruksi Manuver AI: ', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF111827))),
                           TextSpan(text: tacticalNote),
                         ],
                       ),
@@ -6421,11 +6672,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           // Action Button
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF1E3932),
-                side: const BorderSide(color: Color(0xFF1E3932)),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1E3932),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(vertical: 9),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
               onPressed: () {
@@ -6442,8 +6694,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   },
                 );
               },
-              icon: const Icon(Icons.send_rounded, size: 13),
-              label: Text('Kirim Jadwal Rute Jam ke $staffName', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.check, size: 14),
+              label: Text('Terapkan Disposisi ke $staffName', style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -6476,7 +6728,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E3932).withOpacity(0.1),
+                        color: const Color(0xFF1E3932).withOpacity(0.08),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Icon(Icons.alt_route, size: 18, color: Color(0xFF1E3932)),
@@ -6486,12 +6738,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
                         Text(
-                          'Jadwal & Disposisi Rute Bergerak Armada (Dynamic Time-Block Routing AI)',
+                          'Analisis Rinci per Tim & Rencana Disposisi Armada',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF111827)),
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Arahan cerdas perpindahan armada antar titik lapak per jam untuk memaksimalkan tangkapan arus komuter',
+                          'Data alokasi per petugas, jadwal jam pergerakan lapak, dan analisis rasional mendalam ("kenapa bawa segitu")',
                           style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                         ),
                       ],
@@ -6499,21 +6751,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEFF6FF),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: const Color(0xFFBFDBFE)),
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.auto_awesome, size: 13, color: Color(0xFF2563EB)),
-                      SizedBox(width: 5),
-                      Text(
-                        '+26% Omzet vs Lapak Statis',
-                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
-                      ),
-                    ],
+                  child: const Text(
+                    '+26% Proyeksi Omzet vs Lapak Statis',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
                   ),
                 ),
               ],
@@ -6566,10 +6812,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   Widget _buildAiDemandAnalysisView() {
-    const int totalDemandCups = 550;
-    const String omzetEst = 'Rp 9.940.000';
-    const String avgAbsorption = '94.8%';
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -6591,13 +6833,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFA7F3D0)),
+                        color: const Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
                       ),
                       child: const Text(
-                        'Akurasi 96.4% • Poisson EM + MILP',
-                        style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                        'Poisson EM + MILP Model • 96.4% Akurasi',
+                        style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
                       ),
                     ),
                   ],
@@ -6637,6 +6879,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E3932),
                     foregroundColor: Colors.white,
+                    elevation: 0,
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                   ),
@@ -6650,143 +6893,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 14),
 
-        // 2. INFORMASI CUACA HARI INI (KOTA PADANG)
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.wb_sunny_outlined, size: 16, color: Color(0xFF1E3932)),
-                      SizedBox(width: 8),
-                      Text(
-                        'Informasi Cuaca Lapangan Hari Ini:',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827)),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    'Prakiraan BMKG Kota Padang • Live Telemetri',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAFB),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.wb_sunny, size: 18, color: Color(0xFFD97706)),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          '⛅ Cuaca Normal (28°C)',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
-                        ),
-                        Text(
-                          'Baseline tren transaksi reguler Kota Padang (Kelembapan 78% • Angin 11 km/j)',
-                          style: TextStyle(fontSize: 10, color: Color(0xFF6B7280)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0FDF4),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: const Color(0xFFBBF7D0)),
-                ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.verified_outlined, size: 18, color: Color(0xFF15803D)),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Analisis Logika Normal (28°C): Alokasi optimal 550 porsi terdistribusi seimbang pada 4 armada aktif KopiCerdas Padang. Arus mahasiswa & kantor terserap rata-rata 94.8% sesuai baseline transaksi historis.',
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF166534),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // 3. 4 AI KPI METRIC CARDS
-        Row(
-          children: [
-            Expanded(
-              child: _buildWarehouseKpiCard(
-                'Total Estimasi Permintaan',
-                '$totalDemandCups Porsi',
-                'Terserap rata-rata $avgAbsorption',
-                Icons.analytics_outlined,
-                const Color(0xFF2563EB),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: _buildWarehouseKpiCard(
-                'Akurasi Prediksi Model',
-                '96.4%',
-                'WAPE 28.9% • Poisson EM Solver',
-                Icons.psychology_outlined,
-                const Color(0xFF059669),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: _buildWarehouseKpiCard(
-                'Estimasi Omzet Harian',
-                omzetEst,
-                'Margin kotor rata-rata 62.4%',
-                Icons.trending_up_outlined,
-                const Color(0xFF10B981),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: _buildWarehouseKpiCard(
-                'Reduksi Limbah (Waste)',
-                '39.5%',
-                'Pencegahan overstock & es basi',
-                Icons.eco_outlined,
-                const Color(0xFFD97706),
-              ),
-            ),
-          ],
-        ),
+        // 2. ANALISIS AI PALING ATAS (EXECUTIVE AI BRIEFING KOTA PADANG)
+        _buildExecutiveAiBriefingCard(),
         const SizedBox(height: 18),
 
-        // 4. CORE AI 6 MENU ALLOCATION MATRIX TABLE
+        // 3. ANALISIS RINCI PER TIM & OPERASIONAL DISPOSISI (DATA, TIM, LOKASI, STOK, KENAPA BAWA SEGITU)
+        _buildAiDynamicRoutingSection(),
+        const SizedBox(height: 18),
+
+        // 4. MATRIKS RINGKASAN DISPOSISI ARMADA (TABEL EKSEKUTIF BERSIH & MONOKROMATIK)
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -6803,17 +6918,17 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   children: [
                     Row(
                       children: const [
-                        Icon(Icons.grid_view_outlined, size: 16, color: Color(0xFF1E3932)),
+                        Icon(Icons.table_chart_outlined, size: 16, color: Color(0xFF1E3932)),
                         SizedBox(width: 8),
                         Text(
-                          'Matriks Rekomendasi Alokasi 6 Menu Resmi KopiCerdas per Armada',
+                          'Matriks Ringkasan Disposisi 6 Menu Resmi per Armada',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF111827)),
                         ),
                       ],
                     ),
                     const Text(
                       'Porsi Bawaan Siap Disposisi',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF059669)),
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF1E3932)),
                     ),
                   ],
                 ),
@@ -6893,13 +7008,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                             margin: const EdgeInsets.only(top: 2.5),
                                             padding: const EdgeInsets.all(2),
                                             decoration: BoxDecoration(
-                                              color: (r['color'] as Color? ?? const Color(0xFF1E3932)).withOpacity(0.12),
+                                              color: const Color(0xFFF3F4F6),
                                               shape: BoxShape.circle,
+                                              border: Border.all(color: const Color(0xFFE5E7EB)),
                                             ),
-                                            child: Icon(
-                                              r['icon'] as IconData? ?? Icons.location_on_outlined,
+                                            child: const Icon(
+                                              Icons.location_on_outlined,
                                               size: 9.5,
-                                              color: r['color'] as Color? ?? const Color(0xFF1E3932),
+                                              color: Color(0xFF1E3932),
                                             ),
                                           ),
                                           const SizedBox(width: 5),
@@ -6918,7 +7034,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                                   ),
                                                   TextSpan(
                                                     text: '(${r['target']} cup)',
-                                                    style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF059669)),
+                                                    style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF111827)),
                                                   ),
                                                 ],
                                               ),
@@ -6932,19 +7048,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFFFFBEB),
+                                      color: const Color(0xFFF9FAFB),
                                       borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(color: const Color(0xFFFDE68A)),
+                                      border: Border.all(color: const Color(0xFFE5E7EB)),
                                     ),
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(Icons.assistant_direction_outlined, size: 11, color: Color(0xFFB45309)),
+                                        const Icon(Icons.assistant_direction_outlined, size: 11, color: Color(0xFF1E3932)),
                                         const SizedBox(width: 4),
                                         Expanded(
                                           child: Text(
                                             breakdown['tactical_note'].toString(),
-                                            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w500, color: Color(0xFF92400E)),
+                                            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
                                           ),
                                         ),
                                       ],
@@ -6965,12 +7081,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   spacing: 6,
                                   runSpacing: 4,
                                   children: [
-                                    _buildAiMenuBadge('Aren', breakdown['aren'] as int, const Color(0xFFFDF2E9), const Color(0xFFC05621)),
-                                    _buildAiMenuBadge('Amr', breakdown['americano'] as int, const Color(0xFFEFF6FF), const Color(0xFF1D4ED8)),
-                                    _buildAiMenuBadge('Coklat', breakdown['coklat'] as int, const Color(0xFFF5EBE6), const Color(0xFF5E3A1C)),
-                                    _buildAiMenuBadge('Red Velvet', breakdown['red_velvet'] as int, const Color(0xFFFDF2F8), const Color(0xFF9D174D)),
-                                    _buildAiMenuBadge('Thai Tea', breakdown['thai_tea'] as int, const Color(0xFFFEF3C7), const Color(0xFF92400E)),
-                                    _buildAiMenuBadge('Lemon Tea', breakdown['lemon_tea'] as int, const Color(0xFFECFDF5), const Color(0xFF065F46)),
+                                    _buildAiMenuBadge('Aren', breakdown['aren'] as int),
+                                    _buildAiMenuBadge('Amr', breakdown['americano'] as int),
+                                    _buildAiMenuBadge('Coklat', breakdown['coklat'] as int),
+                                    _buildAiMenuBadge('Red Velvet', breakdown['red_velvet'] as int),
+                                    _buildAiMenuBadge('Thai Tea', breakdown['thai_tea'] as int),
+                                    _buildAiMenuBadge('Lemon Tea', breakdown['lemon_tea'] as int),
                                   ],
                                 ),
                                 const SizedBox(height: 5),
@@ -7001,9 +7117,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${breakdown['absorbed']} Cup', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF059669))),
+                                Text('${breakdown['absorbed']} Cup', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
                                 const SizedBox(height: 2),
-                                Text('${breakdown['rate']}% serapan', style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF047857))),
+                                Text('${breakdown['rate']}% serapan', style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF1E3932))),
                               ],
                             ),
                           ),
@@ -7016,16 +7132,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: (breakdown['status_color'] as Color).withOpacity(0.12),
+                                  color: const Color(0xFFF3F4F6),
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: (breakdown['status_color'] as Color).withOpacity(0.35)),
+                                  border: Border.all(color: const Color(0xFFE5E7EB)),
                                 ),
                                 child: Text(
                                   breakdown['status'].toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
-                                    color: breakdown['status_color'] as Color,
+                                    color: Color(0xFF1E3932),
                                   ),
                                 ),
                               ),
@@ -7069,11 +7185,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 18),
 
-        // 5. JADWAL & DISPOSISI RUTE BERGERAK ARMADA (DYNAMIC TIME-BLOCK ROUTING ENGINE)
-        _buildAiDynamicRoutingSection(),
-        const SizedBox(height: 18),
-
-        // 6. AI OPERATIONAL ACTION FEED (3 INSIGHT CARDS)
+        // 5. AI OPERATIONAL ACTION FEED (3 INSIGHT CARDS)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -7082,7 +7194,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 'Jam Puncak Mahasiswa & Kantor (UNP & Khatib Sulaiman)',
                 'Arus mahasiswa UNP dan pekerja kantor Khatib Sulaiman terkonsentrasi pukul 07:30 - 10:00 WIB. Permintaan Kopi Susu Aren dan Americano melonjak tajam. Siapkan cup take-away lebih awal.',
                 Icons.school_outlined,
-                const Color(0xFF2563EB),
               ),
             ),
             const SizedBox(width: 14),
@@ -7091,7 +7202,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 'Puncak Sore Hari Kawasan Wisata (Pantai Padang Taplau)',
                 'Pantai Taplau memiliki siklus keramaian sore pukul 16:00 - 18:30 WIB (wisatawan & sunset). Permintaan didominasi Thai Tea dan Lemon Tea dingin (+45%). Pertahankan stok buffer sore.',
                 Icons.beach_access_outlined,
-                const Color(0xFF059669),
               ),
             ),
             const SizedBox(width: 14),
@@ -7100,7 +7210,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 'Kesiapan Gudang Pusat (Hub Padang)',
                 'Kebutuhan alokasi hari ini menyerap sebagian kapasitas gudang pusat (6.000 porsi). Seluruh bahan baku 6 menu berstatus AMAN tanpa risiko kelangkaan stok.',
                 Icons.warehouse_outlined,
-                const Color(0xFFD97706),
               ),
             ),
           ],
