@@ -28,7 +28,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   double _liveMapLng = 106.8227;
   int _liveMapZoom = 15;
   String _focusedStaffId = 'USR-01';
-  bool _isMapDetailOpen = true;
 
   // ===========================================================================
   // DATA OPERASIONAL TERINTEGRASI (SINGLE SOURCE OF TRUTH)
@@ -3266,7 +3265,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Monitoring seluruh armada gerobak live di peta Jakarta. Klik pin atau nama tim untuk melihat detail lengkap.',
+                  'Peta interaktif pelacakan telemetri GPS armada gerobak. Pin bergerak mengikuti peta, klik pin untuk melihat detail.',
                   style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
@@ -3303,6 +3302,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   icon: const Icon(Icons.refresh, size: 15),
                   label: const Text('Refresh', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                   onPressed: () {
+                    setState(() {});
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(duration: Duration(seconds: 1), content: Text('Koordinat GPS telemetri seluruh armada diperbarui.')),
                     );
@@ -3312,11 +3312,129 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
-        // 2. Full Map Container (Full Width & Height 680px)
+        // 2. Bar Selektor Titik Tim Cepat (Diletakkan di atas peta agar tidak bentrok klik)
         Container(
-          height: 680,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6, offset: const Offset(0, 2)),
+            ],
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E3932).withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.near_me, size: 14, color: Color(0xFF1E3932)),
+                    SizedBox(width: 4),
+                    Text(
+                      'Pilih Titik Tim:',
+                      style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: _staffList.map((s) {
+                      final isSelected = s['id'] == _focusedStaffId;
+                      final isSelling = s['operational_status'] == 'ACTIVE_SELLING';
+                      final isLowStock = isSelling && (s['current_stock'] as int) < 20;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _focusedStaffId = s['id'] as String;
+                              _liveMapLat = (s['lat'] as num).toDouble();
+                              _liveMapLng = (s['lng'] as num).toDouble();
+                              _liveMapZoom = 16;
+                            });
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFF1E3932) : Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected
+                                    ? const Color(0xFF1E3932)
+                                    : (isLowStock ? const Color(0xFFF87171) : const Color(0xFFD1D5DB)),
+                                width: isSelected ? 1.5 : 1.0,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 7,
+                                  height: 7,
+                                  decoration: BoxDecoration(
+                                    color: isSelling ? (isLowStock ? Colors.amber : const Color(0xFF10B981)) : Colors.grey,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  '${(s['cart_id'] as String).split(' ')[0]} • ${s['name']}',
+                                  style: TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                                    color: isSelected ? Colors.white : const Color(0xFF1F2937),
+                                  ),
+                                ),
+                                if (isLowStock) ...[
+                                  const SizedBox(width: 5),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: isSelected ? Colors.red.shade700 : const Color(0xFFFEE2E2),
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    child: Text(
+                                      '${s['current_stock']} cup',
+                                      style: TextStyle(
+                                        fontSize: 9.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: isSelected ? Colors.white : const Color(0xFFDC2626),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // 3. Peta Interaktif Penuh (Leaflet Map dengan Marker Asli Terintegrasi)
+        Container(
+          height: 600,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -3331,457 +3449,183 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ],
           ),
           clipBehavior: Clip.antiAlias,
-          child: Stack(
-            children: [
-              // LAYER 1: Full Google Maps View
-              Positioned.fill(
-                child: RealLiveGoogleMap(
-                  latitude: _liveMapLat,
-                  longitude: _liveMapLng,
-                  zoom: _liveMapZoom,
-                ),
-              ),
+          child: RealLiveGoogleMap(
+            latitude: _liveMapLat,
+            longitude: _liveMapLng,
+            zoom: _liveMapZoom,
+            staffList: _staffList,
+            focusedStaffId: _focusedStaffId,
+            onStaffSelected: (staffId) {
+              setState(() {
+                _focusedStaffId = staffId;
+                final st = _staffList.firstWhere((s) => s['id'] == staffId, orElse: () => _staffList.first);
+                _liveMapLat = (st['lat'] as num).toDouble();
+                _liveMapLng = (st['lng'] as num).toDouble();
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 14),
 
-              // LAYER 2: Floating Top Team Quick Selector Chips
-              Positioned(
-                top: 14,
-                left: 14,
-                right: 14,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.95),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 8, offset: const Offset(0, 2)),
+        // 4. Panel Informasi & Telemetri Lengkap Tim Terpilih
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2)),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 18,
+                        backgroundColor: const Color(0xFF1E3932),
+                        child: Text(
+                          (focusedStaff['name'] as String).split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join(),
+                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            focusedStaff['name'] as String,
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                          ),
+                          Text(
+                            '${focusedStaff['role']} • ${focusedStaff['cart_id']}',
+                            style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                          ),
+                        ],
+                      ),
                     ],
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
-                  child: Row(
+                  Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E3932).withOpacity(0.1),
+                          color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
+                              ? const Color(0xFFECFDF5)
+                              : const Color(0xFFF3F4F6),
                           borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.near_me, size: 14, color: Color(0xFF1E3932)),
-                            SizedBox(width: 4),
-                            Text(
-                              'Titik Tim:',
-                              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: _staffList.map((s) {
-                              final isSelected = s['id'] == _focusedStaffId && _isMapDetailOpen;
-                              final isSelling = s['operational_status'] == 'ACTIVE_SELLING';
-                              final isLowStock = isSelling && (s['current_stock'] as int) < 20;
-
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _focusedStaffId = s['id'] as String;
-                                      _liveMapLat = (s['lat'] as num).toDouble();
-                                      _liveMapLng = (s['lng'] as num).toDouble();
-                                      _liveMapZoom = 17;
-                                      _isMapDetailOpen = true;
-                                    });
-                                  },
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? const Color(0xFF1E3932) : Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? const Color(0xFF1E3932)
-                                            : (isLowStock ? const Color(0xFFF87171) : const Color(0xFFD1D5DB)),
-                                        width: isSelected ? 1.5 : 1.0,
-                                      ),
-                                      boxShadow: isSelected
-                                          ? [BoxShadow(color: const Color(0xFF1E3932).withOpacity(0.25), blurRadius: 4, offset: const Offset(0, 2))]
-                                          : null,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          width: 7,
-                                          height: 7,
-                                          decoration: BoxDecoration(
-                                            color: isSelling ? (isLowStock ? Colors.amber : const Color(0xFF10B981)) : Colors.grey,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          '${(s['cart_id'] as String).split(' ')[0]} • ${s['name']}',
-                                          style: TextStyle(
-                                            fontSize: 11.5,
-                                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                                            color: isSelected ? Colors.white : const Color(0xFF1F2937),
-                                          ),
-                                        ),
-                                        if (isLowStock) ...[
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            '${s['current_stock']} cup',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: isSelected ? const Color(0xFFFCA5A5) : const Color(0xFFDC2626),
-                                            ),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                          border: Border.all(
+                            color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
+                                ? const Color(0xFFA7F3D0)
+                                : const Color(0xFFE5E7EB),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // LAYER 3: Interactive Marker Pins on Map Canvas
-              // USR-01: Sudirman (Halte Dukuh Atas)
-              _buildInteractiveMapPin(
-                staff: _staffList[0],
-                left: 220,
-                top: 260,
-              ),
-              // USR-02: Menteng (Taman Suropati)
-              _buildInteractiveMapPin(
-                staff: _staffList[1],
-                left: 360,
-                top: 230,
-              ),
-              // USR-03: Senen (Pasar Senen)
-              _buildInteractiveMapPin(
-                staff: _staffList[2],
-                left: 480,
-                top: 150,
-              ),
-              // USR-04: Juanda (Pintu Timur Stasiun)
-              _buildInteractiveMapPin(
-                staff: _staffList[3],
-                left: 310,
-                top: 100,
-              ),
-              // USR-05: Kuningan (Standby Gudang)
-              _buildInteractiveMapPin(
-                staff: _staffList[4],
-                left: 200,
-                top: 400,
-              ),
-
-              // LAYER 4: Bottom-Left Map Zoom & Center Controls
-              Positioned(
-                bottom: 16,
-                left: 16,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.95),
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 6, offset: const Offset(0, 2)),
-                    ],
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (_liveMapZoom < 19) _liveMapZoom++;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(4)),
-                          child: const Icon(Icons.add, size: 16, color: Color(0xFF111827)),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (_liveMapZoom > 10) _liveMapZoom--;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(4)),
-                          child: const Icon(Icons.remove, size: 16, color: Color(0xFF111827)),
+                        child: Text(
+                          focusedStaff['operational_status'] == 'ACTIVE_SELLING' ? 'Jualan Aktif' : 'Standby Gudang',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
+                                ? const Color(0xFF065F46)
+                                : const Color(0xFF6B7280),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _liveMapLat = -6.1950;
-                            _liveMapLng = 106.8300;
-                            _liveMapZoom = 14;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(color: const Color(0xFF1E3932), borderRadius: BorderRadius.circular(4)),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.center_focus_strong, size: 13, color: Colors.white),
-                              SizedBox(width: 4),
-                              Text('Pusat Jakarta', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-                            ],
-                          ),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          side: const BorderSide(color: Color(0xFFD1D5DB)),
+                          foregroundColor: const Color(0xFF374151),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                         ),
+                        onPressed: () => _showRelocateStaffDialog(focusedStaff),
+                        child: const Text('Relokasi Lapak', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1E3932),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                        ),
+                        onPressed: () => _showAddStockToStaffDialog(focusedStaff),
+                        child: const Text('+ Tambah Stok', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
+              const SizedBox(height: 12),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+              const SizedBox(height: 12),
 
-              // LAYER 5: Floating Detail Card on the Map (Jika Tim di Klik -> Menampilkan Detailnya)
-              if (_isMapDetailOpen)
-                Positioned(
-                  bottom: 16,
-                  right: 16,
-                  child: Container(
-                    width: 380,
-                    constraints: const BoxConstraints(maxHeight: 580),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.18), blurRadius: 16, offset: const Offset(0, 4)),
-                      ],
-                      border: Border.all(color: const Color(0xFFE5E7EB)),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Card Header
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF1E3932), // 3S.NET Forest Green
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    'DETAIL TIM & TELEMETRI GPS',
-                                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 0.5),
-                                  ),
-                                ],
-                              ),
-                              InkWell(
-                                onTap: () => setState(() => _isMapDetailOpen = false),
-                                borderRadius: BorderRadius.circular(4),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(4)),
-                                  child: const Icon(Icons.close, color: Colors.white, size: 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildMapDetailColumn('Titik Lapak Jualan', focusedStaff['location'] as String, isHighlight: true),
+                  ),
+                  Expanded(
+                    child: _buildMapDetailColumn('Koordinat GPS Telemetri', '${focusedStaff['lat']}, ${focusedStaff['lng']} (${focusedStaff['gps_status']})'),
+                  ),
+                  Expanded(
+                    child: _buildMapDetailColumn('Jam Mulai Shift', focusedStaff['clock_in'] as String),
+                  ),
+                  Expanded(
+                    child: _buildMapDetailColumn('Kontak Telepon Seller', focusedStaff['phone'] as String),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
 
-                        // Card Body
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Petugas Info Row
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: const Color(0xFF1E3932),
-                                    child: Text(
-                                      (focusedStaff['name'] as String).split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join(),
-                                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          focusedStaff['name'] as String,
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                                        ),
-                                        Text(
-                                          '${focusedStaff['role']} • ${(focusedStaff['cart_id'] as String).split(' ')[0]}',
-                                          style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
-                                          ? const Color(0xFFECFDF5)
-                                          : const Color(0xFFF3F4F6),
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                        color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
-                                            ? const Color(0xFFA7F3D0)
-                                            : const Color(0xFFE5E7EB),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      focusedStaff['operational_status'] == 'ACTIVE_SELLING' ? 'Jualan Aktif' : 'Standby Gudang',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: focusedStaff['operational_status'] == 'ACTIVE_SELLING'
-                                            ? const Color(0xFF065F46)
-                                            : const Color(0xFF6B7280),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 14),
-                              const Divider(height: 1, color: Color(0xFFE5E7EB)),
-                              const SizedBox(height: 12),
-
-                              // Key details grid
-                              _buildMapDetailRow('Titik Lapak', focusedStaff['location'] as String, isHighlight: true),
-                              _buildMapDetailRow('Koordinat GPS', '${focusedStaff['lat']}, ${focusedStaff['lng']} (${focusedStaff['gps_status']})'),
-                              _buildMapDetailRow('Jam Mulai Shift', focusedStaff['clock_in'] as String),
-                              _buildMapDetailRow('Kontak Telepon', focusedStaff['phone'] as String),
-
-                              const SizedBox(height: 8),
-                              const Divider(height: 1, color: Color(0xFFE5E7EB)),
-                              const SizedBox(height: 8),
-
-                              // Stock & Financial Stats Row
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildMapStatBox(
-                                      'Sisa Stok',
-                                      '${focusedStaff['current_stock']} Cup',
-                                      sub: 'Bawaan: ${focusedStaff['morning_stock']}',
-                                      color: (focusedStaff['current_stock'] as int) < 20 && focusedStaff['operational_status'] == 'ACTIVE_SELLING'
-                                          ? const Color(0xFFDC2626)
-                                          : const Color(0xFF1E3932),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: _buildMapStatBox(
-                                      'Terjual',
-                                      '${focusedStaff['cups_sold']} Cup',
-                                      sub: 'Kanal Lapak',
-                                      color: const Color(0xFF059669),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: _buildMapStatBox(
-                                      'Kas Fisik',
-                                      _formatRupiah(focusedStaff['cash'] as num),
-                                      sub: 'QRIS: ${_formatRupiah(focusedStaff['qris'] as num)}',
-                                      color: const Color(0xFFD97706),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 14),
-
-                              // Action Buttons
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(vertical: 9),
-                                        side: const BorderSide(color: Color(0xFFD1D5DB)),
-                                        foregroundColor: const Color(0xFF374151),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      ),
-                                      onPressed: () => _showSellerRealtimeLocationDialog(focusedStaff),
-                                      child: const Text('Dialog Lengkap', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(vertical: 9),
-                                        side: const BorderSide(color: Color(0xFFD1D5DB)),
-                                        foregroundColor: const Color(0xFF374151),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      ),
-                                      onPressed: () => _showRelocateStaffDialog(focusedStaff),
-                                      child: const Text('Relokasi', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF1E3932),
-                                        foregroundColor: Colors.white,
-                                        elevation: 0,
-                                        padding: const EdgeInsets.symmetric(vertical: 9),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      ),
-                                      onPressed: () => _showAddStockToStaffDialog(focusedStaff),
-                                      child: const Text('+ Stok', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildMapStatBox(
+                      'Sisa Stok di Box',
+                      '${focusedStaff['current_stock']} Cup',
+                      sub: 'Bawaan: ${focusedStaff['morning_stock']} Cup',
+                      color: (focusedStaff['current_stock'] as int) < 20 && focusedStaff['operational_status'] == 'ACTIVE_SELLING'
+                          ? const Color(0xFFDC2626)
+                          : const Color(0xFF1E3932),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildMapStatBox(
+                      'Total Terjual Hari Ini',
+                      '${focusedStaff['cups_sold']} Cup',
+                      sub: 'Kanal Offline Lapak',
+                      color: const Color(0xFF059669),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildMapStatBox(
+                      'Penerimaan Kas Fisik',
+                      _formatRupiah(focusedStaff['cash'] as num),
+                      sub: 'Penerimaan QRIS: ${_formatRupiah(focusedStaff['qris'] as num)}',
+                      color: const Color(0xFFD97706),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildMapStatBox(
+                      'Status Rekonsiliasi Kas',
+                      focusedStaff['cash_status'] as String,
+                      sub: 'Audit Kas Lapangan',
+                      color: focusedStaff['cash_status'] == 'BALANCE' ? const Color(0xFF065F46) : const Color(0xFFDC2626),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -3789,129 +3633,21 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  Widget _buildInteractiveMapPin({
-    required Map<String, dynamic> staff,
-    required double left,
-    required double top,
-  }) {
-    final isSelected = staff['id'] == _focusedStaffId && _isMapDetailOpen;
-    final isSelling = staff['operational_status'] == 'ACTIVE_SELLING';
-    final isLowStock = isSelling && (staff['current_stock'] as int) < 20;
-
-    return Positioned(
-      left: left,
-      top: top,
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _focusedStaffId = staff['id'] as String;
-            _liveMapLat = (staff['lat'] as num).toDouble();
-            _liveMapLng = (staff['lng'] as num).toDouble();
-            _liveMapZoom = 17;
-            _isMapDetailOpen = true;
-          });
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Pin Tag / Label
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF1E3932) : Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF1E3932)
-                      : (isLowStock ? const Color(0xFFEF4444) : const Color(0xFFCBD5E1)),
-                  width: isSelected ? 1.5 : 1.0,
-                ),
-                boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 4, offset: const Offset(0, 2)),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: isSelling ? (isLowStock ? Colors.amber : const Color(0xFF10B981)) : Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    (staff['cart_id'] as String).split(' ')[0],
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.white : const Color(0xFF111827),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    staff['name'] as String,
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      color: isSelected ? Colors.white70 : const Color(0xFF4B5563),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 2),
-            // Pin Marker Icon
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xFF1E3932)
-                    : (isSelling
-                        ? (isLowStock ? const Color(0xFFDC2626) : const Color(0xFF059669))
-                        : const Color(0xFF6B7280)),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.storefront, color: Colors.white, size: 16),
-            ),
-          ],
+  Widget _buildMapDetailColumn(String label, String value, {bool isHighlight = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+        const SizedBox(height: 3),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isHighlight ? FontWeight.bold : FontWeight.w600,
+            color: isHighlight ? const Color(0xFF1E3932) : const Color(0xFF111827),
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildMapDetailRow(String label, String value, {bool isHighlight = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 100,
-            child: Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: isHighlight ? FontWeight.bold : FontWeight.w600,
-                color: isHighlight ? const Color(0xFF1E3932) : const Color(0xFF1F2937),
-              ),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
