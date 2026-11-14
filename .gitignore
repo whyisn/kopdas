@@ -1,47 +1,41 @@
 # ========================================================
 # KopiCerdas AI (KopDas) - .gitignore
-# Prinsip: Hanya mengecualikan file build/ephemeral Flutter 
-# dan file lokal/cache yang bisa merusak kerja tim di mesin lain.
+# Aturan: Hanya file build bawaan Flutter dan file lokal mesin
+# yang mengganggu kinerja tim yang dikecualikan.
+# Database (*.db) dan aset proyek diizinkan di-push.
 # ========================================================
 
-# --- 1. File Lokal & Rahasia Lingkungan ---
-.env
-.env.local
-.env.*.local
-
-# --- 2. Database Runtime Lokal (Agar tidak menimpa data anggota lain) ---
-*.db
-*.sqlite
-*.sqlite3
+# --- 1. File Runtime Lock SQLite (Hanya lock & journal sementara) ---
 *.db-journal
 *.db-wal
 *.db-shm
 
-# --- 3. Python Virtual Environment & Cache Lokal ---
+# --- 2. Environment Rahasia Lokal ---
+.env
+.env.local
+.env.*.local
+
+# --- 3. Python Virtual Environment & Cache Mesin ---
 .venv/
 env/
 venv/
 __pycache__/
 *.py[cod]
+.pytest_cache/
 
 # --- 4. File Build & Ephemeral Bawaan Flutter ---
-# Folder cache dart & compile artifacts (otomatis dibuat saat run)
 kopdas_app/.dart_tool/
 kopdas_app/build/
 kopdas_app/.flutter-plugins
 kopdas_app/.flutter-plugins-dependencies
 kopdas_app/.pub-cache/
-
-# Path SDK lokal laptop (akan merusak build Android anggota lain jika ter-push)
 kopdas_app/android/local.properties
-
-# File C++/wrapper sementara yang di-generate engine Flutter
 kopdas_app/windows/flutter/ephemeral/
 kopdas_app/linux/flutter/ephemeral/
 kopdas_app/macos/Flutter/ephemeral/
 kopdas_app/ios/Flutter/ephemeral/
 
-# --- 5. File Sampah OS & Editor Lokal ---
+# --- 5. Sampah OS & Konfigurasi Editor Personal ---
 .DS_Store
 Thumbs.db
 .idea/
