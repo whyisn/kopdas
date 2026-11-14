@@ -55,13 +55,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'account_status': 'ACTIVE',
       'operational_status': 'ACTIVE_SELLING',
       'clock_in': '06:15 WIB',
-      'morning_stock': 120,
+      'morning_stock': 184,
       'current_stock': 42,
       'cups_sold': 142,
       'cash': 900000,
       'qris': 1940000,
       'cash_submitted': 900000,
       'cash_status': 'BALANCE',
+      'is_cash_verified': false,
       'gps_status': 'Live (4m akurasi)',
       'lat_long': '-0.8960, 100.3500',
       'lat': -0.8960,
@@ -87,6 +88,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 900000,
       'cash_submitted': 520000,
       'cash_status': 'BALANCE',
+      'is_cash_verified': false,
       'gps_status': 'Live (6m akurasi)',
       'lat_long': '-0.9040, 100.3530',
       'lat': -0.9040,
@@ -112,6 +114,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 1340000,
       'cash_submitted': 640000,
       'cash_status': 'BALANCE',
+      'is_cash_verified': false,
       'gps_status': 'Live (5m akurasi)',
       'lat_long': '-0.9510, 100.3600',
       'lat': -0.9510,
@@ -137,6 +140,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 1670000,
       'cash_submitted': 780000,
       'cash_status': 'BALANCE',
+      'is_cash_verified': false,
       'gps_status': 'Live (3m akurasi)',
       'lat_long': '-0.9450, 100.3540',
       'lat': -0.9450,
@@ -599,8 +603,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       for (var s in _staffList) {
         s['morning_stock'] = 0;
         s['current_stock'] = 0;
+        s['cups_sold'] = 0;
         s['operational_status'] = 'NOT_STARTED';
         s['clock_in'] = 'Belum Mulai';
+        s['is_cash_verified'] = false;
+        s['cash_submitted'] = 0;
       }
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -676,29 +683,24 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    // Preset Disposisi Cepat (Wrap agar tidak overflow)
+                    // Preset Disposisi Cepat (Wrap responsif & tanpa +15 sesuai SOP)
                     Wrap(
                       spacing: 8,
                       runSpacing: 6,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         const Text('Preset Cepat:', style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280))),
-                        _buildPresetChip('Kosongkan', () {
+                        _buildPresetChip('Kosongkan (0)', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 0);
                           });
                         }),
-                        _buildPresetChip('+10 Tiap Menu', () {
+                        _buildPresetChip('+10 Tiap Menu (Total 60)', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 10);
                           });
                         }),
-                        _buildPresetChip('+15 Tiap Menu', () {
-                          setModalState(() {
-                            allocationMap.updateAll((key, val) => 15);
-                          });
-                        }),
-                        _buildPresetChip('+20 Tiap Menu', () {
+                        _buildPresetChip('+20 Tiap Menu (Total 120)', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 20);
                           });
@@ -1188,13 +1190,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     s['cash_status'] = isBalance ? 'BALANCE' : (isShort ? 'DEFICIT' : 'SURPLUS');
                     s['cash_submitted'] = parsedCash;
                     s['operational_status'] = 'CLOSED_SHIFT';
+                    s['is_cash_verified'] = true;
                   });
                   Navigator.pop(ctx);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Tutup shift unit ${s['cart_id']} diverifikasi. Status: ${isBalance ? "BALANCE" : "SELISIH ${_formatRupiah(variance)}"}.',
+                        'Tutup shift unit ${s['cart_id']} diverifikasi. Kas disetor ${_formatRupiah(parsedCash)} tercatat resmi. Status: ${isBalance ? "BALANCE" : "SELISIH ${_formatRupiah(variance)}"}.',
                       ),
+                      backgroundColor: const Color(0xFF059669),
                     ),
                   );
                 },
@@ -5037,7 +5041,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                         border: Border.all(color: const Color(0xFFBFDBFE)),
                                       ),
                                       child: Text(
-                                        '${teamPct.toStringAsFixed(1)}% Tim',
+                                        '${teamPct.toStringAsFixed(1)}% Tim Sebulan',
                                         style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
                                       ),
                                     ),
@@ -5055,7 +5059,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Akumulasi sebulan (Total tim: $totalMonthlyAllTeams Cup)',
+                                  'Porsi kontribusi tim sebulan ($totalMonthlyAllTeams Cup)',
                                   style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280)),
                                 ),
                               ],
@@ -5075,7 +5079,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text('$mStock Porsi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
+                                      Text('$mStock Porsi Pagi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
                                       const SizedBox(width: 6),
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
@@ -5262,6 +5266,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     final int totalCups = (d['cups'] as num).toInt();
     final String periodLabel = d['period_label'] as String;
 
+    final activeStaffWithStock = _staffList.where((st) => ((st['morning_stock'] ?? 0) as int) > 0).toList();
+    final unverifiedStaff = activeStaffWithStock.where((s) {
+      return s['is_cash_verified'] != true && s['operational_status'] != 'CLOSED_SHIFT';
+    }).toList();
+    final num totalUnsubmittedCash = unverifiedStaff.fold<num>(
+      0, (sum, s) => sum + ((s['cash'] ?? 0) as num),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -5284,16 +5296,49 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
               ],
             ),
-            OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF374151),
-                side: const BorderSide(color: Color(0xFFD1D5DB)),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              ),
-              onPressed: () => setState(() {}),
-              icon: const Icon(Icons.refresh, size: 16),
-              label: const Text('Refresh Data', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            Row(
+              children: [
+                if (unverifiedStaff.isNotEmpty) ...[
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF059669),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        for (var s in unverifiedStaff) {
+                          s['is_cash_verified'] = true;
+                          s['operational_status'] = 'CLOSED_SHIFT';
+                          s['cash_submitted'] = s['cash'];
+                          s['cash_status'] = 'BALANCE';
+                        }
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Semua kas shift gerobak berhasil diverifikasi BALANCE & selesai disetor!'),
+                          backgroundColor: Color(0xFF059669),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.done_all, size: 16),
+                    label: const Text('Verifikasi Semua Kas Shift', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF374151),
+                    side: const BorderSide(color: Color(0xFFD1D5DB)),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: () => setState(() {}),
+                  icon: const Icon(Icons.refresh, size: 16),
+                  label: const Text('Refresh Data', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                ),
+              ],
             ),
           ],
         ),
@@ -5322,8 +5367,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   child: _buildConsolidatedColumn(
                     'Penerimaan Kas Tunai',
                     _formatRupiah(totalCash),
-                    'Kas Fisik Petugas Gerobak',
-                    const Color(0xFFD97706),
+                    totalUnsubmittedCash == 0
+                        ? 'Semua Kas Selesai Disetor & Diverifikasi'
+                        : 'Belum Disetor: ${_formatRupiah(totalUnsubmittedCash)}',
+                    totalUnsubmittedCash == 0 ? const Color(0xFF059669) : const Color(0xFFD97706),
                   ),
                 ),
                 const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
@@ -5391,18 +5438,46 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFA7F3D0)),
+                    if (totalUnsubmittedCash == 0)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFECFDF5),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFA7F3D0)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(Icons.check_circle, size: 14, color: Color(0xFF059669)),
+                            SizedBox(width: 6),
+                            Text(
+                              'Seluruh Kas Shift Selesai Diverifikasi (Rp 0 Belum Disetor)',
+                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFFDE68A)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.pending_actions, size: 14, color: Color(0xFFD97706)),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Total Kas Belum Disetor: ${_formatRupiah(totalUnsubmittedCash)} (${unverifiedStaff.length} Unit Menunggu)',
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFB45309)),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Text(
-                        'Total Kas Tunai Belum Disetor: ${_formatRupiah(totalCash)}',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -5418,7 +5493,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   5: FlexColumnWidth(1.8),
                   6: FlexColumnWidth(1.8),
                   7: FlexColumnWidth(1.5),
-                  8: FlexColumnWidth(1.6),
+                  8: FlexColumnWidth(1.7),
                   9: FlexColumnWidth(2.0),
                 },
                 children: [
@@ -5437,40 +5512,84 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       _cleanTh('Aksi Verifikasi'),
                     ],
                   ),
-                  for (final s in _staffList.where((st) => (st['morning_stock'] as int) > 0))
-                    TableRow(
-                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6)))),
-                      children: [
-                        _cleanTd('${s['name']}\n${s['cart_id']}', bold: true),
-                        _cleanTd('${s['morning_stock']} cup'),
-                        _cleanTd('${s['current_stock']} cup', bold: true, color: const Color(0xFFD97706)),
-                        _cleanTd('${s['cups_sold']} cup', bold: true, color: const Color(0xFF059669)),
-                        _cleanTd(_formatRupiah(s['qris'] as num)),
-                        _cleanTd(_formatRupiah(s['cash'] as num), bold: true),
-                        _cleanTd(_formatRupiah((s['cash_submitted'] ?? s['cash']) as num)),
-                        _cleanTd(
-                          ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0
-                              ? 'Rp 0'
-                              : _formatRupiah((((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num)).abs()),
-                          color: ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
-                          bold: true,
+                  for (final s in activeStaffWithStock)
+                    () {
+                      final bool isVerified = s['is_cash_verified'] == true || s['operational_status'] == 'CLOSED_SHIFT';
+                      final num expected = s['cash'] as num;
+                      final num submitted = (s['cash_submitted'] ?? (isVerified ? expected : 0)) as num;
+                      final num diff = submitted - expected;
+
+                      return TableRow(
+                        decoration: BoxDecoration(
+                          color: isVerified ? const Color(0xFFF9FAFB) : Colors.white,
+                          border: const Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
                         ),
-                        _cleanCashStatusBadge(s['cash_status'] ?? 'BALANCE'),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1E3932),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                            ),
-                            onPressed: () => _showCashSettlementDialog(s),
-                            child: const Text('Verifikasi Shift', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                        children: [
+                          _cleanTd('${s['name']}\n${s['cart_id']}', bold: true),
+                          _cleanTd('${s['morning_stock']} cup'),
+                          _cleanTd('${s['current_stock']} cup', bold: true, color: const Color(0xFFD97706)),
+                          _cleanTd('${s['cups_sold']} cup', bold: true, color: const Color(0xFF059669)),
+                          _cleanTd(_formatRupiah(s['qris'] as num)),
+                          _cleanTd(_formatRupiah(expected), bold: true),
+                          _cleanTd(
+                            isVerified ? _formatRupiah(submitted) : 'Rp 0 (Belum Setor)',
+                            bold: isVerified,
+                            color: isVerified ? const Color(0xFF111827) : const Color(0xFF9CA3AF),
                           ),
-                        ),
-                      ],
-                    ),
+                          _cleanTd(
+                            isVerified
+                                ? (diff == 0 ? 'Rp 0' : _formatRupiah(diff.abs()))
+                                : 'Menunggu Setor',
+                            color: isVerified
+                                ? (diff == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626))
+                                : const Color(0xFFD97706),
+                            bold: isVerified,
+                          ),
+                          isVerified
+                              ? _cleanCashStatusBadge(s['cash_status'] ?? 'BALANCE')
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                  margin: const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFBEB),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: const Color(0xFFFDE68A)),
+                                  ),
+                                  child: const Text(
+                                    'BELUM VERIFIKASI',
+                                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFB45309)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: isVerified
+                                ? OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: const Color(0xFF059669),
+                                      side: const BorderSide(color: Color(0xFFA7F3D0)),
+                                      backgroundColor: const Color(0xFFF0FDF4),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                    ),
+                                    onPressed: () => _showCashSettlementDialog(s),
+                                    icon: const Icon(Icons.check_circle, size: 13, color: Color(0xFF059669)),
+                                    label: const Text('Terverifikasi', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                                  )
+                                : ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF1E3932),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                    ),
+                                    onPressed: () => _showCashSettlementDialog(s),
+                                    child: const Text('Verifikasi Shift', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                                  ),
+                          ),
+                        ],
+                      );
+                    }(),
                 ],
               ),
             ],
