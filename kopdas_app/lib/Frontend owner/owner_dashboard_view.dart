@@ -623,7 +623,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // 3. TAMPILAN DASHBOARD UTAMA (SEDERHANA, CLEAN, ELEGAN)
+  // 3. TAMPILAN DASHBOARD UTAMA (DETAIL OPERASIONAL, LENGKAP & ELEGAN)
   // ===========================================================================
   Widget _buildDashboardView() {
     final num totalCash = _staffList.fold(0, (acc, s) => acc + (s['cash'] as num));
@@ -637,30 +637,69 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 4 KPI Stat Tiles (Sederhana, Minimalis, Tipografi Jelas)
+        // 4 KPI Stat Tiles Utama (Dengan Pertumbuhan Persentase)
         Row(
           children: [
-            Expanded(child: _cleanStatTile('Total Penjualan', _formatRupiah(totalOmzet), 'QRIS ${_formatRupiah(totalQris)} • Tunai ${_formatRupiah(totalCash)}')),
+            Expanded(
+              child: _cleanStatTile(
+                'Total Penjualan',
+                _formatRupiah(totalOmzet),
+                'QRIS ${_formatRupiah(totalQris)} • Tunai ${_formatRupiah(totalCash)}',
+                growth: '+24.5%',
+                isPositive: true,
+              ),
+            ),
             const SizedBox(width: 14),
-            Expanded(child: _cleanStatTile('Kopi Terjual', '$totalCups Cup', 'Rata-rata 105 cup/gerobak')),
+            Expanded(
+              child: _cleanStatTile(
+                'Total Kopi Terjual',
+                '$totalCups Cup',
+                'Online: 168 Cup (40%) • Lokasi: 255 Cup (60%)',
+                growth: '+18.2%',
+                isPositive: true,
+              ),
+            ),
             const SizedBox(width: 14),
-            Expanded(child: _cleanStatTile('Petugas Berjualan', '$activeStaff dari ${_staffList.length} Gerobak', '1 Gerobak Belum Mulai')),
+            Expanded(
+              child: _cleanStatTile(
+                'Petugas Berjualan',
+                '$activeStaff dari ${_staffList.length} Gerobak',
+                '1 Gerobak Standby (Siap Rotasi Sore)',
+                growth: '4 Aktif',
+                isPositive: true,
+              ),
+            ),
             const SizedBox(width: 14),
-            Expanded(child: _cleanStatTile('Laba Bersih Riil', _formatRupiah(netProfit), 'Komisi Tim: ${_formatRupiah(totalCommission)}')),
+            Expanded(
+              child: _cleanStatTile(
+                'Estimasi Laba Bersih',
+                _formatRupiah(netProfit),
+                'Komisi Petugas: ${_formatRupiah(totalCommission)}',
+                growth: 'Margin 58%',
+                isPositive: true,
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
-        // Inline Warning Chip (Hanya muncul jika stok tipis, tidak heboh)
+        // Inline Warning Chip (Stok Menipis Menjelang Peak Sore)
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: BoxDecoration(color: const Color(0xFFFFFBEB), borderRadius: BorderRadius.circular(8), border: Border.all(color: const Color(0xFFFDE68A))),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFBEB),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFFDE68A)),
+          ),
           child: Row(
             children: [
               const Icon(Icons.info_outline, size: 16, color: Color(0xFFD97706)),
               const SizedBox(width: 10),
               const Expanded(
-                child: Text('Stok Menipis: Hendra Wijaya (GRB-04 • Stasiun Juanda) tersisa 15 Cup.', style: TextStyle(fontSize: 12, color: Color(0xFF92400E), fontWeight: FontWeight.w500)),
+                child: Text(
+                  'Peringatan Stok Menipis: Hendra Wijaya (GRB-04 • Stasiun Juanda) tersisa 15 Cup. Peak komuter pulang kerja diprediksi pukul 16:30 WIB.',
+                  style: TextStyle(fontSize: 12, color: Color(0xFF92400E), fontWeight: FontWeight.w500),
+                ),
               ),
               InkWell(
                 onTap: _showDistributeStockDialog,
@@ -669,9 +708,35 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
-        // TABEL TUNGGAL KONTROL PETUGAS LAPANGAN (Semua data penting dalam 1 pandangan)
+        // 1. KOMPARASI KANAL PESANAN: ONLINE DISCOVERY VS DI LOKASI (WALK-IN)
+        _buildChannelComparisonCard(),
+        const SizedBox(height: 16),
+
+        // 2. DUA KOLOM: TOP PENJUALAN PETUGAS & TOP MENU TERLARIS
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _buildTopSellersCard()),
+            const SizedBox(width: 16),
+            Expanded(child: _buildTopProductsCard()),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // 3. DUA KOLOM: RADAR LOKASI RAMAI (OPPORTUNITY) & POLA JAM KE JAM
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _buildOpportunityRadarCard()),
+            const SizedBox(width: 16),
+            Expanded(child: _buildHourlyVelocityCard()),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // 4. TABEL TUNGGAL KONTROL OPERASIONAL SELURUH GEROBAK
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -686,7 +751,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Status Operasional Seluruh Gerobak', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A))),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text('Status Operasional Seluruh Gerobak Lapangan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A))),
+                        SizedBox(height: 2),
+                        Text('Pantau ketersediaan box, kas kasir, QRIS masuk, dan status toko live.', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                      ],
+                    ),
                     Row(
                       children: [
                         OutlinedButton(
@@ -787,6 +859,488 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           ),
         ),
       ],
+    );
+  }
+
+  // ===========================================================================
+  // DASHBOARD WIDGETS DETAIL
+  // ===========================================================================
+  Widget _buildChannelComparisonCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text('Kanal Pesanan: Online Discovery vs Transaksi Di Lokasi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+                  SizedBox(height: 2),
+                  Text('Komparasi volume pre-order aplikasi pelanggan vs transaksi pejalan kaki langsung di gerobak.', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(6)),
+                child: const Text('Rasio: 40% Online • 60% On-the-spot', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Visual Ratio Bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: SizedBox(
+              height: 8,
+              child: Row(
+                children: [
+                  Expanded(flex: 40, child: Container(color: const Color(0xFF2563EB))),
+                  const SizedBox(width: 2),
+                  Expanded(flex: 60, child: Container(color: const Color(0xFF0F172A))),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Two Breakdown Columns
+          Row(
+            children: [
+              // Online Discovery Card
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF2563EB), shape: BoxShape.circle)),
+                          const SizedBox(width: 6),
+                          const Text('Pesanan Online (Discovery / Pre-Order)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A))),
+                          const Spacer(),
+                          const Text('39.7%', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF2563EB))),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text('168 Cup • Rp 3.420.000', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Color(0xFF0F172A))),
+                      const SizedBox(height: 4),
+                      const Text('Antrean Aktif: 4 Pesanan (2 Diproses, 1 Siap Diambil, 1 Menunggu Bayar)', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                      const SizedBox(height: 4),
+                      const Text('Waktu Siap: Rata-rata 3.2 menit • 100% QRIS Non-Tunai Otomatis', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () => setState(() => _selectedNavIndex = 8),
+                        child: const Text('Buka Monitor Pesanan Online ➔', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF2563EB))),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+
+              // On the spot Card
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF0F172A), shape: BoxShape.circle)),
+                          const SizedBox(width: 6),
+                          const Text('Pesanan Ke Lokasi (Walk-in Gerobak)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A))),
+                          const Spacer(),
+                          const Text('60.3%', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A))),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text('255 Cup • Rp 5.270.000', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Color(0xFF0F172A))),
+                      const SizedBox(height: 4),
+                      const Text('Jam Paling Ramai: 07:15 (KRL Pagi) & 12:30 (Makan Siang)', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                      const SizedBox(height: 4),
+                      const Text('Metode Pembayaran: 67% QRIS Dinamis • 33% Kas Tunai Fisik', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () => setState(() => _selectedNavIndex = 7),
+                        child: const Text('Buka Log Transaksi POS Lapangan ➔', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopSellersCard() {
+    // Sort staff by cups_sold descending
+    final sortedStaff = List<Map<String, dynamic>>.from(_staffList)
+      ..sort((a, b) => (b['cups_sold'] as int).compareTo(a['cups_sold'] as int));
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Top Penjualan Petugas Hari Ini', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+              Text('Target Harian: 100-120 Cup', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          for (int i = 0; i < sortedStaff.length; i++) ...[
+            Builder(
+              builder: (ctx) {
+                final s = sortedStaff[i];
+                final target = s['morning_stock'] > 0 ? (s['morning_stock'] as int) : 100;
+                final sold = s['cups_sold'] as int;
+                final pct = (sold / target).clamp(0.0, 1.5);
+                final pctLabel = '${(pct * 100).toInt()}%';
+                final isDone = sold >= target;
+                final isLow = s['operational_status'] == 'ACTIVE_SELLING' && (s['current_stock'] as int) < 20;
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 18,
+                            height: 18,
+                            decoration: BoxDecoration(
+                              color: i == 0 ? Colors.amber.shade100 : const Color(0xFFF1F5F9),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text('${i + 1}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: i == 0 ? Colors.amber.shade900 : const Color(0xFF475569))),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              '${s['name']} (${s['cart_id'].toString().split(' ')[0]})',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF0F172A)),
+                            ),
+                          ),
+                          Text(
+                            '$sold / $target Cup ($pctLabel)',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: isDone ? Colors.green.shade700 : const Color(0xFF475569)),
+                          ),
+                          if (isLow) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                              decoration: BoxDecoration(color: const Color(0xFFFEE2E2), borderRadius: BorderRadius.circular(3)),
+                              child: const Text('Sisa 15!', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.red)),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(3),
+                        child: LinearProgressIndicator(
+                          value: (pct > 1.0 ? 1.0 : pct).toDouble(),
+                          backgroundColor: const Color(0xFFF1F5F9),
+                          valueColor: AlwaysStoppedAnimation<Color>(isDone ? const Color(0xFF10B981) : (isLow ? Colors.amber : const Color(0xFF0F172A))),
+                          minHeight: 5,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopProductsCard() {
+    final topProducts = [
+      {'name': 'Kopi Susu Gula Aren', 'sold': 215, 'share': '50.8%', 'omzet': 3870000, 'growth': '+28%', 'stock': '950 Cup (Aman)'},
+      {'name': 'Americano Double Shot', 'sold': 98, 'share': '23.2%', 'omzet': 1470000, 'growth': '+15%', 'stock': '650 Cup (Aman)'},
+      {'name': 'Matcha Uji Latte Creamy', 'sold': 62, 'share': '14.6%', 'omzet': 1364000, 'growth': '+8%', 'stock': '430 Cup (Aman)'},
+      {'name': 'Cafe Latte Steam Velvet', 'sold': 36, 'share': '8.5%', 'omzet': 720000, 'growth': '+5%', 'stock': '520 Cup (Aman)'},
+      {'name': 'Cold Brew Citrus Refresh', 'sold': 12, 'share': '2.8%', 'omzet': 264000, 'growth': '+2%', 'stock': '310 Cup (Aman)'},
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Top Menu & Produk Paling Laris', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+              Text('Total: 423 Cup Hari Ini', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          for (final p in topProducts) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          p['name'] as String,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF0F172A)),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                        decoration: BoxDecoration(color: const Color(0xFFDCFCE7), borderRadius: BorderRadius.circular(3)),
+                        child: Text(p['growth'] as String, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF166534))),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${p['sold']} Cup (${p['share']})',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(_formatRupiah(p['omzet'] as num), style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                      const Spacer(),
+                      Text('Gudang: ${p['stock']}', style: const TextStyle(fontSize: 10, color: Color(0xFF94A3B8))),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOpportunityRadarCard() {
+    final spots = [
+      {
+        'name': 'Pintu Timur Stasiun Juanda',
+        'score': 96.4,
+        'rush': '16:30 - 18:45 WIB (Komuter Sore)',
+        'footfall': '1.980 org/jam',
+        'status': 'Stok Hendra sisa 15 Cup (Kritis! Kirim suplai)',
+        'alert': true,
+      },
+      {
+        'name': 'Halte Dukuh Atas Sudirman',
+        'score': 94.8,
+        'rush': '17:00 - 19:30 WIB (Transit MRT/LRT)',
+        'footfall': '1.850 org/jam',
+        'status': 'Gerobak Budi beroperasi • Stok 42 Cup (Aman)',
+        'alert': false,
+      },
+      {
+        'name': 'Kawasan Kuningan Madya (Rasuna)',
+        'score': 89.2,
+        'rush': '16:00 - 18:30 WIB (Pulang Kantor)',
+        'footfall': '640 org/jam',
+        'status': 'Lapak Kosong • Rekomendasi: Tugaskan GRB-05',
+        'alert': false,
+      },
+      {
+        'name': 'Taman Suropati & Menteng',
+        'score': 82.5,
+        'rush': '18:00 - 21:00 WIB (Kumpul Santai Malam)',
+        'footfall': '480 org/jam',
+        'status': 'Gerobak Ahmad beroperasi • Stok 28 Cup',
+        'alert': false,
+      },
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Radar Titik Ramai & Peluang Lokasi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+              Text('Location Intelligence AI', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          for (final sp in spots) ...[
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: (sp['alert'] as bool) ? const Color(0xFFFFFBEB) : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: (sp['alert'] as bool) ? const Color(0xFFFDE68A) : const Color(0xFFE2E8F0)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.place, size: 14, color: (sp['alert'] as bool) ? const Color(0xFFD97706) : const Color(0xFF2563EB)),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          sp['name'] as String,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF0F172A)),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF0F172A),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text('${sp['score']}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text('Jam Ramai: ${sp['rush']} • Pejalan Kaki: ${sp['footfall']}', style: const TextStyle(fontSize: 10, color: Color(0xFF475569))),
+                  const SizedBox(height: 2),
+                  Text(
+                    sp['status'] as String,
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: (sp['alert'] as bool) ? const Color(0xFFB45309) : const Color(0xFF64748B)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHourlyVelocityCard() {
+    final hours = [
+      {'label': '06:00 - 08:30 (Pagi Komuter)', 'cups': 95, 'pct': 0.65, 'growth': '+20% vs rata-rata'},
+      {'label': '08:30 - 11:30 (Masuk Jam Kantor)', 'cups': 75, 'pct': 0.52, 'growth': '+12% vs rata-rata'},
+      {'label': '11:30 - 13:30 (Makan Siang - Peak 1)', 'cups': 145, 'pct': 1.0, 'growth': '+35% vs rata-rata'},
+      {'label': '13:30 - 15:30 (Afternoon Boost)', 'cups': 108, 'pct': 0.74, 'growth': 'Sedang Berjalan'},
+      {'label': '16:30 - 19:00 (Pulang Kerja - Peak 2)', 'cups': 150, 'pct': 0.95, 'growth': 'Prediksi AI'},
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text('Laju Penjualan Per Jam & Pertumbuhan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
+              Text('Tren Harian (Asia/Jakarta)', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          for (final h in hours) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(h['label'] as String, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                      Text('${h['cups']} Cup (${h['growth']})', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(3),
+                    child: LinearProgressIndicator(
+                      value: (h['pct'] as double),
+                      backgroundColor: const Color(0xFFF1F5F9),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        h['label'].toString().contains('Peak') ? const Color(0xFF2563EB) : const Color(0xFF0F172A),
+                      ),
+                      minHeight: 5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFFE2E8F0))),
+            child: Row(
+              children: const [
+                Icon(Icons.insights, size: 14, color: Color(0xFF2563EB)),
+                SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Ringkasan: Pertumbuhan volume penjualan total +24.5% vs kemarin. Lonjakan berikutnya diperkirakan pukul 16:30 WIB.',
+                    style: TextStyle(fontSize: 10.5, color: Color(0xFF475569)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -2010,7 +2564,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // ===========================================================================
   // SUB WIDGET & HELPERS
   // ===========================================================================
-  Widget _cleanStatTile(String label, String value, String subtext) {
+  Widget _cleanStatTile(String label, String value, String subtext, {String? growth, bool isPositive = true}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -2021,7 +2575,31 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+              if (growth != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isPositive ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(isPositive ? Icons.trending_up : Icons.trending_down, size: 11, color: isPositive ? const Color(0xFF166534) : const Color(0xFF991B1B)),
+                      const SizedBox(width: 3),
+                      Text(
+                        growth,
+                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isPositive ? const Color(0xFF166534) : const Color(0xFF991B1B)),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: 6),
           Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Color(0xFF0F172A), letterSpacing: -0.5)),
           const SizedBox(height: 3),
