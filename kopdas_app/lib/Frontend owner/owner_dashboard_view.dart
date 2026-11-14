@@ -1268,7 +1268,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     _navItem(0, Icons.dashboard_outlined, 'Dashboard'),
                     _navItem(1, Icons.people_outline, 'Data Pelanggan & Tim'),
                     _navItem(3, Icons.map_outlined, 'Peta Live & GPS'),
-                    _navItem(4, Icons.place_outlined, 'Titik Lapak Jualan'),
                     _navItem(2, Icons.access_time, 'Absensi Shift'),
 
                     _sidebarCategoryHeader('LOGISTIK & KEUANGAN'),
