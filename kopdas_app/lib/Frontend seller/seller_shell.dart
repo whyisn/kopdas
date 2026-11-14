@@ -10,18 +10,42 @@ class SellerShell extends StatelessWidget {
   const SellerShell({super.key, required this.state, required this.child});
 
   static const List<_SellerDestination> _destinations = [
-    _SellerDestination('/seller', 'Dashboard', Icons.dashboard_outlined,
-        Icons.dashboard),
-    _SellerDestination('/seller/location', 'Lokasi', Icons.location_on_outlined,
-        Icons.location_on),
-    _SellerDestination('/seller/stock', 'Stok', Icons.inventory_2_outlined,
-        Icons.inventory_2),
-    _SellerDestination('/seller/pos', 'Kasir', Icons.point_of_sale_outlined,
-        Icons.point_of_sale),
-    _SellerDestination('/seller/orders', 'Order', Icons.receipt_long_outlined,
-        Icons.receipt_long),
-    _SellerDestination('/seller/history', 'Riwayat', Icons.history_outlined,
-        Icons.history),
+    _SellerDestination(
+      '/seller',
+      'Dashboard',
+      Icons.dashboard_outlined,
+      Icons.dashboard,
+    ),
+    _SellerDestination(
+      '/seller/location',
+      'Lokasi',
+      Icons.location_on_outlined,
+      Icons.location_on,
+    ),
+    _SellerDestination(
+      '/seller/stock',
+      'Stok',
+      Icons.inventory_2_outlined,
+      Icons.inventory_2,
+    ),
+    _SellerDestination(
+      '/seller/pos',
+      'Kasir',
+      Icons.point_of_sale_outlined,
+      Icons.point_of_sale,
+    ),
+    _SellerDestination(
+      '/seller/orders',
+      'Order',
+      Icons.receipt_long_outlined,
+      Icons.receipt_long,
+    ),
+    _SellerDestination(
+      '/seller/history',
+      'Riwayat',
+      Icons.history_outlined,
+      Icons.history,
+    ),
   ];
 
   int get _selectedIndex {
@@ -59,88 +83,106 @@ class SellerShell extends StatelessWidget {
             child: const Icon(Icons.coffee, color: Colors.white, size: 18),
           ),
           const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'KopiCerdas',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFECFDF5),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: const Color(0xFFA7F3D0)),
-                    ),
-                    child: const Text(
-                      'SELLER PORTAL',
-                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Text(
-                    'Gerobak Lapangan Padang',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-      actions: [
-        Center(
-          child: Container(
-            margin: const EdgeInsets.only(right: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE5E7EB)),
-            ),
-            child: Row(
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(
-                  radius: 12,
-                  backgroundColor: const Color(0xFF1E3932),
-                  child: Text(
-                    (session.name?.isNotEmpty == true ? session.name![0] : 'S').toUpperCase(),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
+                const Text(
+                  'KopiCerdas',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
                 ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      session.name ?? 'Seller',
-                      style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECFDF5),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: const Color(0xFFA7F3D0)),
+                      ),
+                      child: const Text(
+                        'SELLER PORTAL',
+                        style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                      ),
                     ),
-                    const Text(
-                      'Petugas Lapangan',
-                      style: TextStyle(fontSize: 9.5, color: Color(0xFF6B7280)),
-                    ),
+                    if (isWide) ...[
+                      const SizedBox(width: 6),
+                      const Text(
+                        'Gerobak Lapangan Padang',
+                        style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                      ),
+                    ],
                   ],
-                ),
-                const SizedBox(width: 6),
-                Container(
-                  width: 7,
-                  height: 7,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF10B981),
-                    shape: BoxShape.circle,
-                  ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
+      ),
+      actions: [
+        if (isWide)
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 12,
+                    backgroundColor: const Color(0xFF1E3932),
+                    child: Text(
+                      (session.name?.isNotEmpty == true ? session.name![0] : 'S').toUpperCase(),
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        session.name ?? 'Seller',
+                        style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                      ),
+                      const Text(
+                        'Petugas Lapangan',
+                        style: TextStyle(fontSize: 9.5, color: Color(0xFF6B7280)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 6),
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF10B981),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: const Color(0xFF1E3932),
+              child: Text(
+                (session.name?.isNotEmpty == true ? session.name![0] : 'S').toUpperCase(),
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
+          ),
         IconButton(
           tooltip: 'Keluar',
           icon: const Icon(Icons.logout, size: 20, color: Color(0xFF6B7280)),
@@ -160,10 +202,15 @@ class SellerShell extends StatelessWidget {
               width: 220,
               decoration: const BoxDecoration(
                 color: Colors.white,
-                border: Border(right: BorderSide(color: Color(0xFFE5E7EB), width: 1)),
+                border: Border(
+                  right: BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                ),
               ),
               child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 10,
+                ),
                 children: [
                   const Padding(
                     padding: EdgeInsets.fromLTRB(10, 6, 10, 10),
@@ -213,7 +260,11 @@ class SellerShell extends StatelessWidget {
             for (final d in _destinations)
               NavigationDestination(
                 icon: Icon(d.icon, color: const Color(0xFF6B7280), size: 22),
-                selectedIcon: Icon(d.selectedIcon, color: const Color(0xFF1E3932), size: 22),
+                selectedIcon: Icon(
+                  d.selectedIcon,
+                  color: const Color(0xFF1E3932),
+                  size: 22,
+                ),
                 label: d.label,
               ),
           ],

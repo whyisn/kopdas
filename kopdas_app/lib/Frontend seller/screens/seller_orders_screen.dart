@@ -197,7 +197,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                     },
                     backgroundColor: Colors.white,
                     selectedColor: const Color(0xFF1E3932),
-                    checkmarkColor: Colors.white,
+                    showCheckmark: false,
                     side: BorderSide(
                       color: isSelected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
                     ),

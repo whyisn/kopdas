@@ -175,7 +175,7 @@ class _SellerStockScreenState extends State<SellerStockScreen> {
         onSelected: (_) => onTap(),
         backgroundColor: Colors.white,
         selectedColor: const Color(0xFF1E3932),
-        checkmarkColor: Colors.white,
+        showCheckmark: false,
         side: BorderSide(
           color: selected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
         ),

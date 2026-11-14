@@ -278,7 +278,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
 
     if (isWide) {
       return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: productsArea),
           SizedBox(
@@ -345,7 +345,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                   gridDelegate:
                       const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,
-                    childAspectRatio: 0.82,
+                    childAspectRatio: 0.75,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
@@ -366,7 +366,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
         onSelected: (_) => onTap(),
         backgroundColor: Colors.white,
         selectedColor: const Color(0xFF1E3932),
-        checkmarkColor: Colors.white,
+        showCheckmark: false,
         side: BorderSide(
           color: selected ? const Color(0xFF1E3932) : const Color(0xFFE5E7EB),
         ),
@@ -526,18 +526,15 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.4,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (_, scrollController) => StatefulBuilder(
+      builder: (ctx) => FractionallySizedBox(
+        heightFactor: 0.85,
+        child: StatefulBuilder(
           builder: (ctx2, setModalState) => Container(
             decoration: const BoxDecoration(
               color: AppConstants.surfaceColor,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            child: _buildCartPanel(setModalState, scrollController),
+            child: _buildCartPanel(setModalState),
           ),
         ),
       ),
