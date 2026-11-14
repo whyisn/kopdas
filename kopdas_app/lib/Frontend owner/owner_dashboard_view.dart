@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'real_web_map.dart';
+import 'web_download_helper.dart';
 
 class OwnerDashboardView extends StatefulWidget {
   const OwnerDashboardView({super.key});
@@ -754,17 +756,25 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // MODAL 3: Tax Report Official CSV Export Dialog (Requirement 8)
   void _showTaxReportExportDialog() {
-    const String csvData = '''No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Penerimaan_Cash_IDR,Penerimaan_QRIS_IDR,Total_Omzet_IDR,DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan
-INV-20261114-001,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,Tunai,900000,0,900000,900000,0.5%,4500,411128-420,Penjualan 45 Cup Walk-in Tunai
-INV-20261114-002,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,QRIS,0,1940000,1940000,1940000,0.5%,9700,411128-420,Penjualan 97 Cup QRIS Statis
-INV-20261114-003,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,Tunai,520000,0,520000,520000,0.5%,2600,411128-420,Penjualan 26 Cup Walk-in Tunai
-INV-20261114-004,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,QRIS,0,900000,900000,900000,0.5%,4500,411128-420,Penjualan 42 Cup QRIS Statis
-INV-20261114-005,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,Tunai,640000,0,640000,640000,0.5%,3200,411128-420,Penjualan 32 Cup Walk-in Tunai
-INV-20261114-006,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,QRIS,0,1340000,1340000,1340000,0.5%,6700,411128-420,Penjualan 63 Cup QRIS Statis
-INV-20261114-007,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,Tunai,780000,0,780000,780000,0.5%,3900,411128-420,Penjualan 39 Cup Walk-in Tunai
-INV-20261114-008,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,QRIS,0,1580000,1580000,1580000,0.5%,7900,411128-420,Penjualan 79 Cup QRIS Statis
-INV-20261114-009,14/11/2026,Pre-Order App Discovery (Semua Gerobak),Online App,QRIS Dinamis,0,3420000,3420000,3420000,0.5%,17100,411128-420,Pre-Order Online 168 Cup QRIS Dinamis
-TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0.5%,43450,411128-420,Total Penerimaan: Cash Rp 2.84M | QRIS Rp 5.85M | PPh Final 0.5% PP 55/2022''';
+    final List<Map<String, dynamic>> records = [
+      {'no': 'INV-20261114-001', 'tgl': '14/11/2026', 'sumber': 'GRB-01 (Sudirman)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 900000, 'qris': 0, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-002', 'tgl': '14/11/2026', 'sumber': 'GRB-01 (Sudirman)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1940000, 'dpp': 1940000, 'pph': 9700, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-003', 'tgl': '14/11/2026', 'sumber': 'GRB-02 (Suropati)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 520000, 'qris': 0, 'dpp': 520000, 'pph': 2600, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-004', 'tgl': '14/11/2026', 'sumber': 'GRB-02 (Suropati)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 900000, 'dpp': 900000, 'pph': 4500, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-005', 'tgl': '14/11/2026', 'sumber': 'GRB-03 (Senen)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 640000, 'qris': 0, 'dpp': 640000, 'pph': 3200, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-006', 'tgl': '14/11/2026', 'sumber': 'GRB-03 (Senen)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1340000, 'dpp': 1340000, 'pph': 6700, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-007', 'tgl': '14/11/2026', 'sumber': 'GRB-04 (Juanda)', 'kanal': 'Walk-in', 'metode': 'Tunai', 'cash': 780000, 'qris': 0, 'dpp': 780000, 'pph': 3900, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-008', 'tgl': '14/11/2026', 'sumber': 'GRB-04 (Juanda)', 'kanal': 'Walk-in', 'metode': 'QRIS', 'cash': 0, 'qris': 1580000, 'dpp': 1580000, 'pph': 7900, 'kjs': '411128-420'},
+      {'no': 'INV-20261114-009', 'tgl': '14/11/2026', 'sumber': 'Discovery App Pre-Order', 'kanal': 'Online App', 'metode': 'QRIS Dinamis', 'cash': 0, 'qris': 3420000, 'dpp': 3420000, 'pph': 17100, 'kjs': '411128-420'},
+    ];
+
+    final csvBuffer = StringBuffer();
+    csvBuffer.writeln('No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Penerimaan_Cash_IDR,Penerimaan_QRIS_IDR,Total_Omzet_DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan');
+    for (final r in records) {
+      csvBuffer.writeln('${r['no']},${r['tgl']},"${r['sumber']}",${r['kanal']},${r['metode']},${r['cash']},${r['qris']},${r['dpp']},0.5%,${r['pph']},${r['kjs']},"Penjualan KopiCerdas Lapangan"');
+    }
+    csvBuffer.writeln('TOTAL,14/11/2026,"Konsolidasi Seluruh Kanal",Semua,Cash+QRIS,2840000,5850000,8690000,0.5%,43450,411128-420,"Total Omzet & PPh Final UMKM PP 55/2022"');
+    final String csvData = csvBuffer.toString();
 
     showDialog(
       context: context,
@@ -772,31 +782,39 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
-          width: 820,
+          width: 960,
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header Modal
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(9),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1E3932).withOpacity(0.12),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.receipt_long, color: Color(0xFF1E3932), size: 22),
+                        child: const Icon(Icons.table_view_rounded, color: Color(0xFF1E3932), size: 24),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 14),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Laporan Keuangan & Pelaporan Pajak Resmi (Cash vs QRIS)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF111827))),
-                          Text('Format Standar e-Bupot / SPT Masa DJP Online (Format CSV/Excel — Tanpa Potongan Komisi)', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+                          Text(
+                            'Rekapitulasi Keuangan Cash vs QRIS & Pelaporan Pajak Resmi',
+                            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Format Standar SPT Masa / e-Bupot DJP Online • Tarif PPh Final UMKM 0.5% (PP 55/2022)',
+                            style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                          ),
                         ],
                       ),
                     ],
@@ -806,12 +824,12 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
               ),
               const SizedBox(height: 16),
 
-              // Tax Summary Metric Cards (Cash, QRIS, Total DPP, PPh Final)
+              // 4 Stat Metric Cards (Cash, QRIS, DPP, PPh Final)
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFBEB),
                         borderRadius: BorderRadius.circular(8),
@@ -822,9 +840,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                         children: const [
                           Text('Penerimaan Cash (Tunai)', style: TextStyle(fontSize: 11, color: Color(0xFF92400E), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 2.840.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF78350F))),
+                          Text('Rp 2.840.000', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF78350F))),
                           SizedBox(height: 2),
-                          Text('32.7% Omzet • Kas Gerobak', style: TextStyle(fontSize: 10, color: Color(0xFFB45309))),
+                          Text('32.7% Omzet • Kas Gerobak', style: TextStyle(fontSize: 10.5, color: Color(0xFFB45309))),
                         ],
                       ),
                     ),
@@ -832,7 +850,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(8),
@@ -843,9 +861,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                         children: const [
                           Text('Penerimaan QRIS (Non-Tunai)', style: TextStyle(fontSize: 11, color: Color(0xFF1E40AF), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 5.850.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A))),
+                          Text('Rp 5.850.000', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1E3A8A))),
                           SizedBox(height: 2),
-                          Text('67.3% Omzet • Rekening Bank', style: TextStyle(fontSize: 10, color: Color(0xFF2563EB))),
+                          Text('67.3% Omzet • Rekening Bank H+0', style: TextStyle(fontSize: 10.5, color: Color(0xFF2563EB))),
                         ],
                       ),
                     ),
@@ -853,7 +871,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF9FAFB),
                         borderRadius: BorderRadius.circular(8),
@@ -864,9 +882,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                         children: const [
                           Text('Dasar Pengenaan Pajak (DPP)', style: TextStyle(fontSize: 11, color: Color(0xFF4B5563), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 8.690.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                          Text('Rp 8.690.000', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
                           SizedBox(height: 2),
-                          Text('Omzet Bruto Konsolidasi', style: TextStyle(fontSize: 10, color: Color(0xFF059669))),
+                          Text('Total Omzet Bruto Konsolidasi', style: TextStyle(fontSize: 10.5, color: Color(0xFF059669))),
                         ],
                       ),
                     ),
@@ -874,7 +892,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFECFDF5),
                         borderRadius: BorderRadius.circular(8),
@@ -885,9 +903,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                         children: const [
                           Text('PPh Final UMKM (0.5%)', style: TextStyle(fontSize: 11, color: Color(0xFF065F46), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 43.450', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
+                          Text('Rp 43.450', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF065F46))),
                           SizedBox(height: 2),
-                          Text('PP 55/2022 (KAP 411128-420)', style: TextStyle(fontSize: 10, color: Color(0xFF047857))),
+                          Text('PP 55/2022 (KAP 411128-420)', style: TextStyle(fontSize: 10.5, color: Color(0xFF047857))),
                         ],
                       ),
                     ),
@@ -895,49 +913,194 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0
                 ],
               ),
               const SizedBox(height: 16),
-              const Text('Pratinjau Data CSV (Format Standar Impor SPT Masa):', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+
+              // Spreadsheet Preview Label
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text('Pratinjau Lembar Kerja Spreadsheet (Data Siap Ekspor):', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Color(0xFF1F2937))),
+                  Text('9 Transaksi Konsolidasi • 1 Baris Total', style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280))),
+                ],
+              ),
               const SizedBox(height: 8),
+
+              // Clean, Gorgeous Spreadsheet Data Table (Replacing the ugly dark terminal box!)
               Container(
-                height: 180,
-                padding: const EdgeInsets.all(12),
+                height: 240,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
-                child: SingleChildScrollView(
-                  child: SelectableText(
-                    csvData,
-                    style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Color(0xFFE2E8F0), height: 1.5),
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        headingRowHeight: 36,
+                        dataRowMinHeight: 32,
+                        dataRowMaxHeight: 34,
+                        horizontalMargin: 14,
+                        columnSpacing: 18,
+                        headingRowColor: WidgetStateProperty.all(const Color(0xFFF8FAFC)),
+                        border: const TableBorder(
+                          horizontalInside: BorderSide(color: Color(0xFFF1F5F9), width: 1),
+                        ),
+                        columns: const [
+                          DataColumn(label: Text('No. Bukti', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF475569)))),
+                          DataColumn(label: Text('Tanggal', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF475569)))),
+                          DataColumn(label: Text('Sumber & Unit Lapak', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF475569)))),
+                          DataColumn(label: Text('Metode', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF475569)))),
+                          DataColumn(numeric: true, label: Text('Cash (Rp)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF92400E)))),
+                          DataColumn(numeric: true, label: Text('QRIS (Rp)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF1E40AF)))),
+                          DataColumn(numeric: true, label: Text('DPP Omzet (Rp)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF111827)))),
+                          DataColumn(numeric: true, label: Text('PPh Final 0.5%', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF047857)))),
+                          DataColumn(label: Text('KAP/KJS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF64748B)))),
+                        ],
+                        rows: [
+                          for (final r in records)
+                            DataRow(
+                              cells: [
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(4)),
+                                    child: Text(r['no'] as String, style: const TextStyle(fontSize: 10, fontFamily: 'monospace', fontWeight: FontWeight.bold, color: Color(0xFF334155))),
+                                  ),
+                                ),
+                                DataCell(Text(r['tgl'] as String, style: const TextStyle(fontSize: 11))),
+                                DataCell(Text(r['sumber'] as String, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500))),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: (r['metode'] as String).contains('Tunai') ? const Color(0xFFFEF3C7) : const Color(0xFFDBEAFE),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      r['metode'] as String,
+                                      style: TextStyle(
+                                        fontSize: 9.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: (r['metode'] as String).contains('Tunai') ? const Color(0xFF92400E) : const Color(0xFF1E40AF),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(Text(
+                                  r['cash'] == 0 ? '-' : _formatRupiah(r['cash'] as num),
+                                  style: TextStyle(fontSize: 11, fontWeight: r['cash'] > 0 ? FontWeight.w600 : FontWeight.normal, color: r['cash'] > 0 ? const Color(0xFF92400E) : const Color(0xFF94A3B8)),
+                                )),
+                                DataCell(Text(
+                                  r['qris'] == 0 ? '-' : _formatRupiah(r['qris'] as num),
+                                  style: TextStyle(fontSize: 11, fontWeight: r['qris'] > 0 ? FontWeight.w600 : FontWeight.normal, color: r['qris'] > 0 ? const Color(0xFF1E40AF) : const Color(0xFF94A3B8)),
+                                )),
+                                DataCell(Text(_formatRupiah(r['dpp'] as num), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF111827)))),
+                                DataCell(Text(_formatRupiah(r['pph'] as num), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF047857)))),
+                                DataCell(Text(r['kjs'] as String, style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)))),
+                              ],
+                            ),
+                          // TOTAL ROW
+                          DataRow(
+                            color: WidgetStateProperty.all(const Color(0xFFECFDF5)),
+                            cells: const [
+                              DataCell(Text('TOTAL', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: Color(0xFF065F46)))),
+                              DataCell(Text('14/11/2026', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF065F46)))),
+                              DataCell(Text('Konsolidasi Seluruh Kanal', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF065F46)))),
+                              DataCell(Text('Cash + QRIS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Color(0xFF065F46)))),
+                              DataCell(Text('Rp 2.840.000', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: Color(0xFF92400E)))),
+                              DataCell(Text('Rp 5.850.000', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: Color(0xFF1E40AF)))),
+                              DataCell(Text('Rp 8.690.000', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5, color: Color(0xFF111827)))),
+                              DataCell(Text('Rp 43.450', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5, color: Color(0xFF047857)))),
+                              DataCell(Text('411128-420', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10.5, color: Color(0xFF065F46)))),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 18),
+
+              // Modal Footer: Info note + Real Working Download Button
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Data CSV pelaporan pajak berhasil disalin ke clipboard!')),
-                      );
-                    },
-                    icon: const Icon(Icons.copy, size: 16),
-                    label: const Text('Salin Teks CSV'),
+                  Row(
+                    children: const [
+                      Icon(Icons.info_outline, size: 15, color: Color(0xFF059669)),
+                      SizedBox(width: 6),
+                      Text(
+                        'Format CSV dilengkapi UTF-8 BOM — Dapat langsung dibuka di Microsoft Excel, Google Sheets, & Portal DJP.',
+                        style: TextStyle(fontSize: 11, color: Color(0xFF065F46), fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E3932),
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('File: Laporan_Pajak_KopiCerdas_14Nov2026.csv berhasil diunduh.')),
-                      );
-                    },
-                    icon: const Icon(Icons.download, size: 16),
-                    label: const Text('Unduh File .CSV Pajak'),
+                  Row(
+                    children: [
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          side: const BorderSide(color: Color(0xFFD1D5DB)),
+                          foregroundColor: const Color(0xFF374151),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                        ),
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: csvData));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              duration: Duration(seconds: 2),
+                              content: Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.white, size: 18),
+                                  SizedBox(width: 8),
+                                  Text('Teks CSV pelaporan pajak berhasil disalin ke clipboard!'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.copy, size: 15),
+                        label: const Text('Salin Teks CSV', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1E3932), // 3S.NET Forest Green
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                        ),
+                        onPressed: () {
+                          // Real Browser File Download!
+                          downloadWebFile(csvData, 'Laporan_Pajak_KopiCerdas_14Nov2026.csv');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Color(0xFF065F46),
+                              duration: Duration(seconds: 3),
+                              content: Row(
+                                children: [
+                                  Icon(Icons.download_done, color: Colors.white, size: 20),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'File "Laporan_Pajak_KopiCerdas_14Nov2026.csv" berhasil diunduh ke folder Downloads!',
+                                      style: TextStyle(fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.download, size: 16),
+                        label: const Text('Unduh File .CSV (Excel)', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
                   ),
                 ],
               ),
