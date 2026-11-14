@@ -4,8 +4,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.models import Inventory, StockMovement, Product
+from app.models import Inventory, StockMovement, Product, User
 from app.schemas import InventoryResponse, DistributionRequest, StockMovementResponse
+from app.api.deps import get_optional_current_user
 
 router = APIRouter(prefix="/inventory", tags=["Inventory & Distribution"])
 
@@ -13,8 +14,19 @@ router = APIRouter(prefix="/inventory", tags=["Inventory & Distribution"])
 def get_inventory(
     scope_type: Optional[str] = Query(None, description="WAREHOUSE atau SELLER"),
     scope_id: Optional[str] = Query(None, description="central atau seller user_id"),
+    current_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db)
 ):
+    # Enforce isolation: Seller hanya dapat melihat stok miliknya sendiri
+    if current_user and current_user.role == "SELLER":
+        if scope_id and scope_id != current_user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="Akses ditolak: Seller hanya dapat mengakses inventory miliknya sendiri"
+            )
+        scope_type = "SELLER"
+        scope_id = current_user.id
+
     query = db.query(Inventory)
     if scope_type:
         query = query.filter(Inventory.scope_type == scope_type)
@@ -38,11 +50,25 @@ def get_inventory(
     return results
 
 @router.post("/distributions")
-def distribute_stock(req: DistributionRequest, actor_id: str = "usr-owner-01", db: Session = Depends(get_db)):
+def distribute_stock(
+    req: DistributionRequest,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    actor_id: str = "usr-owner-01",
+    db: Session = Depends(get_db)
+):
     """
     Distribusi stok: stok gudang pusat berkurang dan stok seller bertambah
     dalam SATU transaksi database atomik.
+    Memeriksa otorisasi OWNER jika terautentikasi.
     """
+    if current_user:
+        if current_user.role != "OWNER":
+            raise HTTPException(
+                status_code=403,
+                detail=f"Akses ditolak: role '{current_user.role}' tidak berwenang mendistribusikan stok gudang. Diperlukan role: OWNER"
+            )
+        actor_id = current_user.id
+
     if not req.items:
         raise HTTPException(status_code=400, detail="Item distribusi tidak boleh kosong")
 

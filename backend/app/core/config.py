@@ -1,6 +1,10 @@
 import os
+from pathlib import Path
 from typing import List
 from pydantic_settings import BaseSettings
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DEFAULT_DB_PATH = (BASE_DIR / "kopicerdas.db").resolve().as_posix()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "KopiCerdas AI API"
@@ -17,7 +21,7 @@ class Settings(BaseSettings):
         "*"
     ]
     
-    DATABASE_URL: str = "sqlite:///./kopicerdas.db"
+    DATABASE_URL: str = f"sqlite:///{DEFAULT_DB_PATH}"
     
     SECRET_KEY: str = "kopicerdas-hackathon-24h-insecure-dev-secret-key"
     ALGORITHM: str = "HS256"

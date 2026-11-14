@@ -24,6 +24,18 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class UserCreateRequest(BaseModel):
+    username: str
+    name: str
+    password: str
+    role: str = "SELLER"
+
+class UserUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    is_active: Optional[bool] = None
+    password: Optional[str] = None
+
 # --- Products & Categories ---
 class CategoryBase(BaseModel):
     name: str
@@ -38,8 +50,8 @@ class ProductBase(BaseModel):
     category_id: str
     name: str
     description: Optional[str] = None
-    price: int
-    cost_price: int = 0
+    price: int = Field(..., ge=0, description="Harga jual tidak boleh negatif")
+    cost_price: int = Field(0, ge=0, description="HPP tidak boleh negatif")
     status: str = "ACTIVE"
     image_url: Optional[str] = None
 
@@ -66,11 +78,11 @@ class InventoryResponse(BaseModel):
 
 class DistributionItem(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas distribusi harus positif")
 
 class DistributionRequest(BaseModel):
     seller_id: str
-    items: List[DistributionItem]
+    items: List[DistributionItem] = Field(..., min_length=1, description="Daftar item tidak boleh kosong")
     notes: Optional[str] = "Distribusi stok dari gudang pusat"
 
 class StockMovementResponse(BaseModel):
@@ -91,14 +103,14 @@ class StockMovementResponse(BaseModel):
 # --- Walk-in Transactions ---
 class TransactionItemRequest(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas transaksi harus positif")
 
 class TransactionCreateRequest(BaseModel):
     seller_id: str
     location_id: str
-    payment_method: str = "CASH" # CASH or QRIS_STATIC
+    payment_method: str = Field("CASH", pattern="^(CASH|QRIS_STATIC)$", description="Hanya CASH atau QRIS_STATIC")
     idempotency_key: Optional[str] = None
-    items: List[TransactionItemRequest]
+    items: List[TransactionItemRequest] = Field(..., min_length=1, description="Daftar item transaksi tidak boleh kosong")
 
 class TransactionItemResponse(BaseModel):
     id: str
@@ -116,6 +128,7 @@ class TransactionResponse(BaseModel):
     seller_id: str
     location_id: str
     total_amount: int
+    total: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     payment_method: str
     payment_status: str
     created_at: datetime.datetime
@@ -127,21 +140,34 @@ class TransactionResponse(BaseModel):
 # --- Pre-orders & QRIS Payments ---
 class OrderItemRequest(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas order harus positif")
 
 class OrderCreateRequest(BaseModel):
     customer_id: Optional[str] = "guest-customer"
     seller_id: str
     location_id: str
-    items: List[OrderItemRequest]
+    items: List[OrderItemRequest] = Field(..., min_length=1, description="Daftar item order tidak boleh kosong")
+
+class OrderItemResponse(BaseModel):
+    id: str
+    product_id: str
+    product_name: Optional[str] = None
+    quantity: int
+    unit_price: int
+    subtotal: int
+
+    class Config:
+        from_attributes = True
 
 class OrderResponse(BaseModel):
     id: str
     order_number: str
     customer_id: Optional[str]
+    customer_name: Optional[str] = None  # Kompatibilitas UI Customer/Owner
     seller_id: str
     location_id: str
     total_amount: int
+    total: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     order_status: str
     payment_method: str
     payment_status: str
@@ -149,9 +175,13 @@ class OrderResponse(BaseModel):
     created_at: datetime.datetime
     expires_at: Optional[datetime.datetime]
     data_label: str = "REAL"
+    items: Optional[List[OrderItemResponse]] = None
 
     class Config:
         from_attributes = True
+
+class OrderStatusUpdateRequest(BaseModel):
+    status: str = Field(..., description="Status baru pesanan: PREPARING, READY_FOR_PICKUP, COMPLETED, CANCELLED")
 
 class QRISWebhookRequest(BaseModel):
     provider_tx_id: str
@@ -162,9 +192,35 @@ class QRISWebhookRequest(BaseModel):
     signature: Optional[str] = None
 
 # --- Locations ---
+class LocationCreateRequest(BaseModel):
+    name: str
+    latitude: float
+    longitude: float
+    address: Optional[str] = None
+    seller_id: Optional[str] = None
+    source_type: str = "ACTIVE_POINT"
+    is_active: bool = True
+
+class LocationUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    address: Optional[str] = None
+    seller_id: Optional[str] = None
+    source_type: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class LocationTelemetryRequest(BaseModel):
+    latitude: float
+    longitude: float
+    accuracy_m: Optional[float] = None
+    battery_pct: Optional[int] = None
+    status: Optional[str] = "ACTIVE_SELLING"
+
 class LocationResponse(BaseModel):
     id: str
     seller_id: Optional[str] = None
+    seller_name: Optional[str] = None  # Kompatibilitas UI Owner Dashboard
     name: str
     latitude: float
     longitude: float
@@ -172,6 +228,8 @@ class LocationResponse(BaseModel):
     source_type: str
     is_active: bool
     score: Optional[float] = None
+    factors: Optional[List[str]] = None
+    confidence: Optional[float] = None
     data_label: str = "REAL"
 
     class Config:
@@ -182,7 +240,7 @@ class AIForecastRequest(BaseModel):
     target_period_days: int = 7
     location_ids: Optional[List[str]] = None
     product_ids: Optional[List[str]] = None
-    data_label: str = "SIMULASI"
+    data_label: str = "REAL"
 
 class AIRecommendationItem(BaseModel):
     model_config = {"protected_namespaces": ()}
@@ -194,12 +252,13 @@ class AIRecommendationItem(BaseModel):
     product_name: str
     predicted_demand: int
     recommended_stock: int
+    recommended_quantity: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     confidence: float
     data_quality: str
     rationale: List[str]
     model_version: str
     solver_status: str
-    data_label: str
+    data_label: str = "REAL"
 
 class AIOptimizeResponse(BaseModel):
     recommendations: List[AIRecommendationItem]
@@ -207,4 +266,15 @@ class AIOptimizeResponse(BaseModel):
     estimated_margin: int
     solver_status: str
     processing_time_ms: float
-    data_label: str = "SIMULASI"
+    data_label: str = "REAL"
+
+class AIMetricsResponse(BaseModel):
+    model_config = {"protected_namespaces": ()}
+    model_version: str
+    trained_records_count: int
+    profit_lift_pct: float
+    wape: float
+    rmse: float
+    waste_reduction_pct: float
+    benchmark_comparison: dict
+    data_label: str = "REAL"

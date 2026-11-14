@@ -154,6 +154,7 @@ class OrderItem(Base):
     subtotal = Column(Integer, nullable=False)
 
     order = relationship("Order", back_populates="items")
+    product = relationship("Product")
 
 class PaymentEvent(Base):
     __tablename__ = "payment_events"

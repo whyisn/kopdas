@@ -16,7 +16,7 @@ class LocationScorer:
         historical_sales_count: int = 0,
         poi_count: int = 0,
         has_weather_signal: bool = False,
-        data_label: str = "SIMULASI"
+        data_label: str = "REAL"
     ) -> Dict[str, Any]:
         """
         Menghasilkan skor kelayakan titik gerobak (0-100) beserta faktor penjelas transparan.

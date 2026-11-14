@@ -21,6 +21,8 @@ class DemandForecaster:
         self.model_version = model_version
         self.stockout_uplift = 1.15
         self.phi = 1.5  # dispersi
+        self.loc_cats: Dict[str, int] = {}
+        self.prod_cats: Dict[str, int] = {}
 
     def _train_poisson_em(
         self,
@@ -39,11 +41,11 @@ class DemandForecaster:
             if "weekend" not in df.columns:
                 df["weekend"] = (df["dow"] >= 5).astype(int)
 
-            loc_cats = {loc: i for i, loc in enumerate(df["location_id"].unique())}
-            prod_cats = {p: i for i, p in enumerate(df["product_id"].unique())}
+            self.loc_cats = {loc: i for i, loc in enumerate(df["location_id"].unique())}
+            self.prod_cats = {p: i for i, p in enumerate(df["product_id"].unique())}
 
-            df["loc_feat"] = df["location_id"].map(loc_cats).fillna(0).astype(int)
-            df["prod_feat"] = df["product_id"].map(prod_cats).fillna(0).astype(int)
+            df["loc_feat"] = df["location_id"].map(self.loc_cats).fillna(0).astype(int)
+            df["prod_feat"] = df["product_id"].map(self.prod_cats).fillna(0).astype(int)
 
             features = ["loc_feat", "prod_feat", "dow", "weekend"]
             X = df[features]
@@ -83,7 +85,7 @@ class DemandForecaster:
         self,
         sales_history: List[Dict[str, Any]],
         target_days: int = 7,
-        data_label: str = "SIMULASI"
+        data_label: str = "REAL"
     ) -> List[Dict[str, Any]]:
         """
         Menghasilkan prediksi demand per produk dan lokasi untuk target_days ke depan.
@@ -128,8 +130,8 @@ class DemandForecaster:
             elif ml_model is not None and count >= 5:
                 # Menggunakan prediksi GBDT Poisson
                 try:
-                    loc_idx = 0
-                    prod_idx = 0
+                    loc_idx = self.loc_cats.get(loc_id, 0)
+                    prod_idx = self.prod_cats.get(prod_id, 0)
                     # Rata-rata prediksi untuk target days
                     dow_vals = [(now.weekday() + 1 + d) % 7 for d in range(target_days)]
                     pred_sum = 0
