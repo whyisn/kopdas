@@ -168,11 +168,11 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading && _orders.isEmpty) {
-      return const AppLoadingState(message: 'Memuat pesanan masuk...');
+      return const LoadingView(message: 'Memuat pesanan masuk...');
     }
 
     if (_error != null && _orders.isEmpty) {
-      return AppErrorState(message: _error!, onRetry: _loadOrders);
+      return ErrorView(message: _error!, onRetry: _loadOrders);
     }
 
     return RefreshIndicator(
@@ -198,7 +198,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                     selectedColor: AppConstants.primaryColor.withValues(alpha: 0.15),
                     checkmarkColor: AppConstants.primaryColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? AppConstants.primaryColor : Colors.black800,
+                      color: isSelected ? AppConstants.primaryColor : Colors.black87,
                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                       fontSize: 13,
                     ),
@@ -271,15 +271,13 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                       const SizedBox(width: 8),
                       StatusBadge(
                         label: order.dataLabel,
-                        backgroundColor: Colors.teal.shade50,
-                        textColor: Colors.teal.shade800,
-                        borderColor: Colors.teal.shade200,
+                        color: Colors.teal,
                       ),
                     ],
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    formatDateTime(order.createdAt),
+                    formatWib(order.createdAt),
                     style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],

@@ -19,6 +19,7 @@ class AppConstants {
   static const Color statusSuccess = Color(0xFF2A9D8F);
   static const Color statusWarning = Color(0xFFE76F51);
   static const Color statusPending = Color(0xFFF4A261);
+  static const Color statusDanger = Color(0xFFE63946);
 
   // Data Labels
   static const String labelReal = 'REAL';
