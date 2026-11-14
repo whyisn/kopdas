@@ -5537,7 +5537,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // ===========================================================================
   Map<String, dynamic> _getStaffAiBreakdown(String staffId, String weatherMode) {
     if (staffId == 'usr-seller-01') {
-      // Ahmad Fauzi - loc-01 UNP Air Tawar (Area Kampus & Mahasiswa)
+      // Ahmad Fauzi - loc-01 UNP Air Tawar (Area Kampus, Kereta Api & GOR)
       if (weatherMode == 'RAIN') {
         return {
           'total': 145,
@@ -5546,7 +5546,40 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'peak': '07:30 - 10:00 WIB',
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
-          'rationale': 'Arus mahasiswa berteduh di selasar gedung. Demand Kopi Susu Aren & Coklat hangat mendominasi.',
+          'rationale': 'Arus mahasiswa berteduh di koridor gedung kampus. Demand Kopi Susu Aren & Coklat hangat mendominasi.',
+          'routes': [
+            {
+              'time': '07:00 - 10:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Selasar Gedung Kuliah Bersama UNP Air Tawar',
+              'target': 65,
+              'focus': 'Kopi Susu Aren & Coklat Panas (Mahasiswa Berteduh)',
+              'serapan': 'Titik kumpul ratusan mahasiswa berteduh antar pergantian jam kelas',
+              'icon': Icons.school_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '11:00 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Pujasera Tertutup Mahasiswa & Lab Terpadu UNP',
+              'target': 50,
+              'focus': 'Es Kopi Susu Aren & Americano (Makan Siang Dalam Ruang)',
+              'serapan': 'Arus makan siang civitas akademika di area kantin beratap',
+              'icon': Icons.restaurant_outlined,
+              'color': const Color(0xFF1D4ED8),
+            },
+            {
+              'time': '15:00 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Halte Kanopi Stasiun KA Air Tawar',
+              'target': 30,
+              'focus': 'Thai Tea & Lemon Tea Hangat (Komuter Kereta Sore)',
+              'serapan': 'Penumpang kereta api komuter berteduh menunggu kedatangan KA',
+              'icon': Icons.train_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Saat hujan angin, posisikan gerobak di bawah koridor kanopi stasiun & selasar kampus; hindari area terbuka.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5557,6 +5590,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '⚡ Dahaga Tinggi (+20%)',
           'status_color': const Color(0xFFD97706),
           'rationale': 'Panas pesisir memicu lonjakan es Kopi Susu Aren & Americano dingin antar jadwal kuliah.',
+          'routes': [
+            {
+              'time': '06:30 - 10:00 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Gerbang Utama UNP & Stasiun KA Air Tawar',
+              'target': 95,
+              'focus': 'Es Kopi Susu Aren & Americano Dingin (Rush Masuk Kampus)',
+              'serapan': 'Puncak serbuan mahasiswa pagi & pekerja komuter kereta api bandara',
+              'icon': Icons.school_outlined,
+              'color': const Color(0xFFD97706),
+            },
+            {
+              'time': '10:30 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Rektorat UNP & RS Hermina Khatib Sulaiman',
+              'target': 75,
+              'focus': 'Es Kopi Aren, Es Coklat & Thai Tea (Pelepas Dahaga Panas)',
+              'serapan': 'Suhu 32°C memicu lonjakan take-away minuman es staf kampus & RS',
+              'icon': Icons.wb_sunny_outlined,
+              'color': const Color(0xFFB45309),
+            },
+            {
+              'time': '15:00 - 18:30 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'GOR H. Agus Salim (Pintu Timur Rimbo Kaluang)',
+              'target': 45,
+              'focus': 'Es Lemon Tea & Thai Tea Dingin (Warga Olahraga Sore)',
+              'serapan': 'Komunitas jogging, basket, dan warga rekreasi sore hari di GOR',
+              'icon': Icons.fitness_center_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Cuaca terik pesisir! Stok es batu harus penuh saat transit ke Lapak Siang & Sore (peningkatan +20% demand es).',
         };
       } else {
         return {
@@ -5567,10 +5633,43 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
           'rationale': 'Baseline pergerakan mahasiswa UNP Air Tawar. Varian kopi dan teh terserap stabil.',
+          'routes': [
+            {
+              'time': '06:30 - 10:00 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Gerbang Utama UNP & Stasiun KA Air Tawar',
+              'target': 80,
+              'focus': 'Kopi Aren & Americano (Rush Komuter & Kuliah Pagi)',
+              'serapan': 'Arus mahasiswa rush kuliah pagi & komuter kereta api komuter',
+              'icon': Icons.school_outlined,
+              'color': const Color(0xFF1E3932),
+            },
+            {
+              'time': '10:30 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Rektorat UNP & RS Hermina Khatib Sulaiman',
+              'target': 60,
+              'focus': 'Es Kopi, Coklat & Thai Tea (Makan Siang & Istirahat)',
+              'serapan': 'Istirahat makan siang civitas akademika, staf RS Hermina & pengunjung',
+              'icon': Icons.restaurant_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '15:00 - 18:30 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'GOR H. Agus Salim (Pintu Timur Rimbo Kaluang)',
+              'target': 40,
+              'focus': 'Lemon Tea & Thai Tea Dingin (Warga Olahraga & Santai)',
+              'serapan': 'Warga olahraga sore (jogging, senam, futsal) & nongkrong santai',
+              'icon': Icons.fitness_center_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Pindah lapak pukul 14:45 WIB dari kampus ke GOR Agus Salim untuk menangkap puncak traffic olahraga sore.',
         };
       }
     } else if (staffId == 'usr-seller-02') {
-      // Rian Syahputra - loc-02 Khatib Sulaiman (Perkantoran & Bisnis)
+      // Rian Syahputra - loc-02 Khatib Sulaiman (Perkantoran Protokol, Bank & Masjid Raya)
       if (weatherMode == 'RAIN') {
         return {
           'total': 80,
@@ -5580,6 +5679,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
           'rationale': 'Karyawan kantor jarang keluar saat hujan deras. Alokasi 80 cup aman mencegah sisa bahan.',
+          'routes': [
+            {
+              'time': '07:30 - 10:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Lobi Drop-off Gedung Keuangan Negara Khatib Sulaiman',
+              'target': 40,
+              'focus': 'Kopi Aren & Americano Hangat (Pekerja Datang Kantor)',
+              'serapan': 'ASN & pegawai kementerian berteduh saat turun dari taksi/kendaraan',
+              'icon': Icons.business_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '11:00 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Koridor Kanopi Bank Nagari Kantor Pusat',
+              'target': 25,
+              'focus': 'Kopi Susu Aren & Coklat (Karyawan Bank & Nasabah)',
+              'serapan': 'Arus transaksi perbankan siang & pegawai enggan keluar jauh',
+              'icon': Icons.account_balance_outlined,
+              'color': const Color(0xFF1D4ED8),
+            },
+            {
+              'time': '15:00 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Lobi Utama Menara BRI Khatib Sulaiman',
+              'target': 15,
+              'focus': 'Thai Tea & Lemon Tea Hangat (Pulang Kantor)',
+              'serapan': 'Karyawan lembur & staf kantor bersiap pulang',
+              'icon': Icons.corporate_fare_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Ambil posisi di bawah shelter kanopi gedung perkantoran; sediakan kantong take-away ganda untuk melindungi cup dari hujan.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5590,6 +5722,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '⚡ Puncak Istirahat (+25%)',
           'status_color': const Color(0xFFD97706),
           'rationale': 'Karyawan instansi berburu minuman segar saat istirahat makan siang Khatib Sulaiman.',
+          'routes': [
+            {
+              'time': '07:00 - 10:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Depan Gedung Keuangan & Bank Nagari Pusat',
+              'target': 55,
+              'focus': 'Es Kopi Aren & Iced Americano (Masuk Jam Kantor)',
+              'serapan': 'Mobilisasi ribuan ASN, perbankan & pekerja BUMN Khatib Sulaiman',
+              'icon': Icons.business_outlined,
+              'color': const Color(0xFFD97706),
+            },
+            {
+              'time': '11:00 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Kuliner Simpang Raden Saleh & Masjid Raya Sumbar',
+              'target': 45,
+              'focus': 'Es Kopi Susu, Thai Tea & Es Lemon Tea (Makan Siang Terik)',
+              'serapan': 'Puncak makan siang ribuan karyawan kantor & jemaah zuhur',
+              'icon': Icons.restaurant_outlined,
+              'color': const Color(0xFFB45309),
+            },
+            {
+              'time': '15:00 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Simpang Transmart Padang / Kantor Pajak Pratama',
+              'target': 25,
+              'focus': 'Thai Tea & Es Coklat (Arus Komuter Pulang Kerja)',
+              'serapan': 'Antrean kendaraan lampu merah & pejalan kaki arah bypass/kota',
+              'icon': Icons.directions_car_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Karyawan banyak pesan es kopi via antar langsung ke lobi kantor. Koordinasikan pesanan cepat 07:45 - 08:30 WIB.',
         };
       } else {
         return {
@@ -5600,10 +5765,43 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
           'rationale': 'Profil perkantoran Khatib Sulaiman. Kebutuhan kafein kerja terserap optimal.',
+          'routes': [
+            {
+              'time': '07:00 - 10:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Sentra Kantor Khatib Sulaiman (Depan Gedung Keuangan & Bank Nagari)',
+              'target': 45,
+              'focus': 'Kopi Aren & Americano (Peak Masuk Kantor ASN & BUMN)',
+              'serapan': 'Pekerja kantor butuh kafein pagi cepat; jam emas pukul 07:45 - 08:30 WIB',
+              'icon': Icons.business_outlined,
+              'color': const Color(0xFF1E3932),
+            },
+            {
+              'time': '11:00 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Pusat Kuliner Simpang Raden Saleh & Masjid Raya Sumbar',
+              'target': 35,
+              'focus': 'Es Kopi & Varian Segar (Istirahat Makan Siang Karyawan)',
+              'serapan': 'Perpindahan pegawai kantor untuk makan siang dan jemaah sholat zuhur',
+              'icon': Icons.restaurant_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '15:00 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Simpang Transmart Padang / Kantor Pajak Pratama',
+              'target': 20,
+              'focus': 'Thai Tea & Coklat (Arus Pulang Kerja Menuju Arah Kota)',
+              'serapan': 'Arus pulang kerja & komuter sore jalan protokol menuju pemukiman',
+              'icon': Icons.directions_car_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Manfaatkan jendela 07:45 - 08:30 WIB di Bank Nagari untuk take-away cepat; rotasi ke Raden Saleh pukul 10:45 WIB.',
         };
       }
     } else if (staffId == 'usr-seller-03') {
-      // Fauzan Akbar - loc-03 Pasar Raya (Sentra Niaga)
+      // Fauzan Akbar - loc-03 Pasar Raya (Sentra Niaga Tradisional, Grosir & Pecinan)
       if (weatherMode == 'RAIN') {
         return {
           'total': 95,
@@ -5613,6 +5811,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': 'Pangkas Hujan (-20%)',
           'status_color': const Color(0xFF2563EB),
           'rationale': 'Aktivitas dalam los pasar tetap berjalan lancar. Fokus kopi hangat penambah stamina.',
+          'routes': [
+            {
+              'time': '06:00 - 10:00 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Los Kering Pintu Barat Pasar Raya Padang',
+              'target': 50,
+              'focus': 'Kopi Susu Aren & Americano Hangat (Aktivitas Pedagang Subuh)',
+              'serapan': 'Pedagang los kering & supir angkot butuh minuman penghangat',
+              'icon': Icons.storefront_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '10:30 - 14:00 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Lantai 1 Blok II Pasar Raya (Kawasan Sandang & Kuliner)',
+              'target': 30,
+              'focus': 'Es Kopi Susu & Coklat (Pengunjung Belanja Tertutup)',
+              'serapan': 'Pembeli pakaian dan perlengkapan rumah tangga dalam gedung',
+              'icon': Icons.shopping_bag_outlined,
+              'color': const Color(0xFF1D4ED8),
+            },
+            {
+              'time': '14:30 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Kanopi Terminal Angkot Tarandam',
+              'target': 15,
+              'focus': 'Thai Tea & Lemon Tea Hangat (Penumpang Angkot Sore)',
+              'serapan': 'Penumpang angkutan umum berteduh jelang pulang rumah',
+              'icon': Icons.directions_bus_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Aktivitas transaksi pasar pagi tetap tinggi di lorong tertutup. Sajikan kopi panas/hangat dengan cepat.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5623,6 +5854,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '⚡ Panas Niaga (+20%)',
           'status_color': const Color(0xFFD97706),
           'rationale': 'Pedagang & pembeli grosir butuh minuman dingin penyegar stamina di area pasar.',
+          'routes': [
+            {
+              'time': '05:30 - 09:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Pintu Barat Pasar Raya Padang & Terminal Angkot Goan Hoat',
+              'target': 65,
+              'focus': 'Es Kopi Susu Aren & Americano Dingin (Bongkar Muat Grosir)',
+              'serapan': 'Pedagang sayur subuh, kuli panggul, supir angkot & pembeli pasar',
+              'icon': Icons.storefront_outlined,
+              'color': const Color(0xFFD97706),
+            },
+            {
+              'time': '10:00 - 14:00 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Niaga Pertokoan Pondok & Jalan Niaga',
+              'target': 50,
+              'focus': 'Es Kopi Susu, Es Lemon Tea & Es Thai Tea (Pelepas Terik Niaga)',
+              'serapan': 'Karyawan toko grosir, pembeli ruko & ekspedisi barang di cuaca 31°C',
+              'icon': Icons.shopping_bag_outlined,
+              'color': const Color(0xFFB45309),
+            },
+            {
+              'time': '14:30 - 18:30 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Kawasan Batang Arau & Jembatan Siti Nurbaya',
+              'target': 30,
+              'focus': 'Es Coklat & Red Velvet (Nongkrong Pemuda Kota Tua)',
+              'serapan': 'Wisatawan kuliner sore & anak muda bersantai di pinggir sungai',
+              'icon': Icons.anchor_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Pedagang grosir & kuli butuh minuman dingin pelepas dahaga; rotasi ke Pondok pukul 09:45 WIB tepat saat toko-toko mulai ramai.',
         };
       } else {
         return {
@@ -5633,10 +5897,43 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
           'rationale': 'Arus pedagang Pasar Raya stabil sejak pagi hari. Kopi Susu Aren menjadi menu terfavorit.',
+          'routes': [
+            {
+              'time': '05:30 - 09:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Pintu Barat Pasar Raya Padang & Terminal Angkot Goan Hoat',
+              'target': 55,
+              'focus': 'Kopi Susu Aren & Americano (Aktivitas Pedagang Subuh)',
+              'serapan': 'Pedagang grosir, supir angkot & pembeli pasar subuh penambah stamina',
+              'icon': Icons.storefront_outlined,
+              'color': const Color(0xFF1E3932),
+            },
+            {
+              'time': '10:00 - 14:00 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Niaga Pertokoan Pondok & Jalan Kelenteng',
+              'target': 40,
+              'focus': 'Es Kopi Susu & Lemon Tea (Pertokoan Emas, Ruko & Ekspedisi)',
+              'serapan': 'Pemilik ruko, karyawan toko, kuli panggul ekspedisi & sentra kuliner Pondok',
+              'icon': Icons.shopping_bag_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '14:30 - 18:30 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Kawasan Jembatan Siti Nurbaya & Tepian Batang Arau',
+              'target': 25,
+              'focus': 'Es Coklat & Red Velvet (Nongkrong Pemuda & Turis Kota Tua)',
+              'serapan': 'Titik temu pemuda dan keluarga menikmati pemandangan perahu nelayan Kota Tua',
+              'icon': Icons.anchor_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Mulai seduh pukul 05:45 WIB di Pintu Barat untuk pedagang pasar, lalu geser ke Pondok pukul 09:45 WIB saat pertokoan buka.',
         };
       }
     } else if (staffId == 'usr-seller-04') {
-      // Doni Pratama - loc-04 Taplau (Kawasan Wisata Bahari)
+      // Doni Pratama - loc-04 Taplau (Kawasan Wisata Bahari & Pesisir Pantai Padang)
       if (weatherMode == 'RAIN') {
         return {
           'total': 70,
@@ -5646,6 +5943,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': 'Pangkas Hujan (-30%)',
           'status_color': const Color(0xFF2563EB),
           'rationale': 'Wisatawan pantai surut saat hujan angin laut. Kuota 70 cup menjaga efisiensi operasional.',
+          'routes': [
+            {
+              'time': '07:00 - 10:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Pujasera Beratap Muaro Lasak (Dekat Tugu Perdamaian)',
+              'target': 25,
+              'focus': 'Kopi Aren & Americano Hangat (Warga Teduh Pagi)',
+              'serapan': 'Warga berolahraga yang berteduh di pondok wisata pantai',
+              'icon': Icons.beach_access_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '11:00 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Gazebo Kuliner Danau Cimpago Padang',
+              'target': 25,
+              'focus': 'Es Kopi Susu & Coklat (Pengunjung Transit)',
+              'serapan': 'Wisatawan keluarga berteduh makan siang di pondok kuliner beratap',
+              'icon': Icons.restaurant_outlined,
+              'color': const Color(0xFF1D4ED8),
+            },
+            {
+              'time': '15:00 - 18:00 WIB',
+              'session': 'Lapak Sore (Rotasi 2)',
+              'location': 'Tenda Kuliner Pantai Purus (Seberang SPBU Purus)',
+              'target': 20,
+              'focus': 'Thai Tea & Lemon Tea Hangat (Menikmati Ombak Mendung)',
+              'serapan': 'Penikmat suasana pantai senja mendung',
+              'icon': Icons.wb_twilight_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Angin laut kencang saat hujan. Alihkan armada ke area beratap di Muaro Lasak dan amankan bahan baku.',
         };
       } else if (weatherMode == 'PEAK_SUNNY') {
         return {
@@ -5656,6 +5986,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '⚡ Puncak Wisata (+30%)',
           'status_color': const Color(0xFFDC2626),
           'rationale': 'Sunset Taplau dipadati pengunjung! Lonjakan dahaga varian teh dingin & kopi es.',
+          'routes': [
+            {
+              'time': '06:00 - 09:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Plaza Tugu IORA Pantai Padang & Monumen Merpati Perdamaian',
+              'target': 45,
+              'focus': 'Es Americano & Es Kopi Aren (Pesepeda & Komunitas Senam)',
+              'serapan': 'Ratusan pesepeda pesisir, pelari santai sunrise & warga senam pantai',
+              'icon': Icons.directions_bike_outlined,
+              'color': const Color(0xFFD97706),
+            },
+            {
+              'time': '10:30 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Rest Area Danau Cimpago & Pujasera Pantai Padang',
+              'target': 55,
+              'focus': 'Es Lemon Tea & Thai Tea Dingin (Pelepas Terik Pantai)',
+              'serapan': 'Wisatawan luar kota, keluarga liburan rekreasi di suhu 32°C',
+              'icon': Icons.beach_access_outlined,
+              'color': const Color(0xFFB45309),
+            },
+            {
+              'time': '15:00 - 18:45 WIB',
+              'session': 'Lapak Sore (Rotasi 2 - PEAK UTAMA)',
+              'location': 'Sunset Point Taplau Depan Flamboyan & Hotel My All',
+              'target': 85,
+              'focus': 'Semua Varian Es Dingin (Aren, Thai Tea, Lemon Tea, Red Velvet)',
+              'serapan': 'Ribuan pengunjung memadati bibir pantai menunggu matahari terbenam',
+              'icon': Icons.wb_twilight_outlined,
+              'color': const Color(0xFFDC2626),
+            },
+          ],
+          'tactical_note': 'Puncak keramaian liburan pesisir! Stok cup dan es batu harus siap ekstra di Lapak Sore Taplau (lonjakan +30%).',
         };
       } else {
         return {
@@ -5666,6 +6029,39 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           'status': '• Alokasi Optimal',
           'status_color': const Color(0xFF059669),
           'rationale': 'Sore hari wisatawan & warga jogging meramaikan Taplau. Minuman es terserap maksimal.',
+          'routes': [
+            {
+              'time': '06:00 - 09:30 WIB',
+              'session': 'Lapak Pagi',
+              'location': 'Plaza Tugu IORA Pantai Padang & Monumen Perdamaian',
+              'target': 35,
+              'focus': 'Americano & Kopi Aren (Pesepeda & Komunitas Senam Pagi)',
+              'serapan': 'Pesepeda pagi, warga senam tepi pantai, dan pelari pagi yang rehat sehabis jogging',
+              'icon': Icons.directions_bike_outlined,
+              'color': const Color(0xFF1E3932),
+            },
+            {
+              'time': '10:30 - 14:30 WIB',
+              'session': 'Lapak Siang (Rotasi 1)',
+              'location': 'Sentra Kuliner Danau Cimpago / Rest Area Taman Pantai Muaro Lasak',
+              'target': 45,
+              'focus': 'Es Lemon Tea & Thai Tea (Keluarga Santai & Pelepas Terik Pesisir)',
+              'serapan': 'Wisatawan domestik, keluarga bersantai, dan pengunjung warung makan pesisir',
+              'icon': Icons.beach_access_outlined,
+              'color': const Color(0xFF2563EB),
+            },
+            {
+              'time': '15:00 - 18:45 WIB',
+              'session': 'Lapak Sore (Rotasi 2 - PEAK UTAMA)',
+              'location': 'Sunset Point Taplau Depan Flamboyan & Hotel My All',
+              'target': 70,
+              'focus': 'Semua Varian Es Dingin (Aren, Thai Tea, Lemon Tea, Red Velvet)',
+              'serapan': 'Puncak keramaian turis & warga menikmati sunset; titik serapan 46% penjualan harian',
+              'icon': Icons.wb_twilight_outlined,
+              'color': const Color(0xFF059669),
+            },
+          ],
+          'tactical_note': 'Amankan pasokan es batu & cup ekstra untuk Lapak C sebelum jam 15:30 WIB. Titik sunset Taplau menyumbang 46% penjualan harian.',
         };
       }
     } else {
@@ -5678,6 +6074,29 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         'status': 'Standby Deploy',
         'status_color': const Color(0xFF6B7280),
         'rationale': 'Titik cadangan operasional Kota Padang. Rekomendasi alokasi awal saat penggelaran armada tambahan.',
+        'routes': [
+          {
+            'time': '07:30 - 12:00 WIB',
+            'session': 'Lapak Utama',
+            'location': 'Area Lobi RS M. Djamil / Stasiun Simpang Haru Padang',
+            'target': 35,
+            'focus': 'Kopi Aren & Americano',
+            'serapan': 'Pengunjung rumah sakit & penumpang kereta api antar kota',
+            'icon': Icons.local_hospital_outlined,
+            'color': const Color(0xFF6B7280),
+          },
+          {
+            'time': '13:00 - 18:00 WIB',
+            'session': 'Lapak Cadangan',
+            'location': 'Kawasan Kuliner Rimbo Kaluang / Padang Baru',
+            'target': 25,
+            'focus': 'Es Varian Non-Coffee',
+            'serapan': 'Area kuliner mahasiswa & perumahan Padang Baru',
+            'icon': Icons.fastfood_outlined,
+            'color': const Color(0xFF4B5563),
+          },
+        ],
+        'tactical_note': 'Standby unit dapat dikerahkan ke titik lonjakan jika armada reguler membutuhkan pasokan darurat.',
       };
     }
   }
@@ -5699,10 +6118,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('✓ Disposisi AI berhasil diterapkan: $totalAlloc Porsi dialokasikan ke armada $staffName!'),
+        content: Text('✓ Disposisi Rute & Stok AI Diterapkan: $totalAlloc Porsi & panduan jadwal jam dikirim ke armada $staffName!'),
         backgroundColor: const Color(0xFF1E3932),
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 4),
       ),
     );
   }
@@ -5732,10 +6151,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('✓ Seluruh alokasi rekomendasi AI berhasil diterapkan ke semua gerobak aktif!'),
+        content: Text('✓ Seluruh alokasi stok 6 menu & jadwal rute dinamis per jam berhasil diterapkan ke semua gerobak aktif!'),
         backgroundColor: Color(0xFF1E3932),
         behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 4),
       ),
     );
   }
@@ -5791,6 +6210,355 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           Text(
             body,
             style: const TextStyle(fontSize: 11, color: Color(0xFF4B5563), height: 1.4),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAiArmadaRouteCard(Map<String, dynamic> staff, Map<String, dynamic> breakdown) {
+    final routes = (breakdown['routes'] as List<Map<String, dynamic>>?) ?? [];
+    final tacticalNote = breakdown['tactical_note']?.toString() ?? '';
+    final staffName = staff['name'].toString();
+    final totalAlloc = breakdown['total'] as int? ?? 0;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFAFAFA),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Card
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundColor: const Color(0xFF1E3932),
+                    child: Text(
+                      staffName.isNotEmpty ? staffName[0] : 'S',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        staffName,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF111827)),
+                      ),
+                      Text(
+                        '${staff['cart_id']} • Total Alokasi: $totalAlloc Porsi',
+                        style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: (breakdown['status_color'] as Color? ?? const Color(0xFF059669)).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: (breakdown['status_color'] as Color? ?? const Color(0xFF059669)).withOpacity(0.3)),
+                ),
+                child: Text(
+                  breakdown['status'].toString(),
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.bold,
+                    color: breakdown['status_color'] as Color? ?? const Color(0xFF059669),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+          const SizedBox(height: 12),
+
+          // Waypoints Step List
+          for (int i = 0; i < routes.length; i++) ...[
+            () {
+              final r = routes[i];
+              final isLast = i == routes.length - 1;
+              final Color stepColor = r['color'] as Color? ?? const Color(0xFF1E3932);
+
+              return IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: stepColor.withOpacity(0.12),
+                            border: Border.all(color: stepColor, width: 1.5),
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${i + 1}',
+                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: stepColor),
+                          ),
+                        ),
+                        if (!isLast)
+                          Expanded(
+                            child: Container(
+                              width: 1.5,
+                              color: const Color(0xFFD1D5DB),
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: isLast ? 0 : 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                                  decoration: BoxDecoration(
+                                    color: stepColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    r['session'].toString(),
+                                    style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: stepColor),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  r['time'].toString(),
+                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5, color: Color(0xFF111827)),
+                                ),
+                                const Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFECFDF5),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: const Color(0xFFA7F3D0)),
+                                  ),
+                                  child: Text(
+                                    '${r['target']} Porsi',
+                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              r['location'].toString(),
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3932)),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '🎯 Fokus: ${r['focus']}',
+                              style: const TextStyle(fontSize: 10.5, color: Color(0xFF4B5563), fontWeight: FontWeight.w500),
+                            ),
+                            if (r['serapan'] != null)
+                              Text(
+                                '📈 Serapan: ${r['serapan']}',
+                                style: const TextStyle(fontSize: 10, color: Color(0xFF6B7280), fontStyle: FontStyle.italic),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }(),
+          ],
+
+          // Tactical Callout Box
+          if (tacticalNote.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBEB),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: const Color(0xFFFDE68A)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.assistant_direction_outlined, size: 14, color: Color(0xFFB45309)),
+                  const SizedBox(width: 7),
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(fontSize: 10.5, color: Color(0xFF92400E), height: 1.35),
+                        children: [
+                          const TextSpan(text: 'Instruksi Manuver AI: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: tacticalNote),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 12),
+          // Action Button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF1E3932),
+                side: const BorderSide(color: Color(0xFF1E3932)),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              ),
+              onPressed: () {
+                _applyAiAllocationToStaff(
+                  staff['id'] as String,
+                  totalAlloc,
+                  {
+                    'aren': (breakdown['aren'] as num?)?.toInt() ?? 0,
+                    'americano': (breakdown['americano'] as num?)?.toInt() ?? 0,
+                    'coklat': (breakdown['coklat'] as num?)?.toInt() ?? 0,
+                    'red_velvet': (breakdown['red_velvet'] as num?)?.toInt() ?? 0,
+                    'thai_tea': (breakdown['thai_tea'] as num?)?.toInt() ?? 0,
+                    'lemon_tea': (breakdown['lemon_tea'] as num?)?.toInt() ?? 0,
+                  },
+                );
+              },
+              icon: const Icon(Icons.send_rounded, size: 13),
+              label: Text('Kirim Jadwal Rute Jam ke $staffName', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAiDynamicRoutingSection() {
+    final staffCards = _staffList.map((s) {
+      final breakdown = _getStaffAiBreakdown(s['id'] as String, _aiWeatherMode);
+      return _buildAiArmadaRouteCard(s, breakdown);
+    }).toList();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3932).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Icon(Icons.alt_route, size: 18, color: Color(0xFF1E3932)),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Jadwal & Disposisi Rute Bergerak Armada (Dynamic Time-Block Routing AI)',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF111827)),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Arahan cerdas perpindahan armada antar titik lapak per jam untuk memaksimalkan tangkapan arus komuter',
+                          style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEFF6FF),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFBFDBFE)),
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.auto_awesome, size: 13, color: Color(0xFF2563EB)),
+                      SizedBox(width: 5),
+                      Text(
+                        '+26% Omzet vs Lapak Statis',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1D4ED8)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth > 950;
+                if (isWide && staffCards.length >= 4) {
+                  return Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: staffCards[0]),
+                          const SizedBox(width: 16),
+                          Expanded(child: staffCards[1]),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: staffCards[2]),
+                          const SizedBox(width: 16),
+                          Expanded(child: staffCards[3]),
+                        ],
+                      ),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      for (int i = 0; i < staffCards.length; i++) ...[
+                        staffCards[i],
+                        if (i < staffCards.length - 1) const SizedBox(height: 16),
+                      ],
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -6054,12 +6822,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
               Table(
                 columnWidths: const {
-                  0: FlexColumnWidth(2.6), // Armada & Titik Lapak
-                  1: FlexColumnWidth(4.5), // Breakdown 6 Menu Resmi
-                  2: FlexColumnWidth(1.4), // Total AI
-                  3: FlexColumnWidth(1.5), // Prediksi Laku
-                  4: FlexColumnWidth(1.6), // Status AI
-                  5: FlexColumnWidth(1.8), // Aksi Disposisi
+                  0: FlexColumnWidth(3.4), // Armada & Jadwal Rute Dinamis AI
+                  1: FlexColumnWidth(3.4), // Breakdown 6 Menu Resmi
+                  2: FlexColumnWidth(1.2), // Total AI
+                  3: FlexColumnWidth(1.2), // Prediksi Laku
+                  4: FlexColumnWidth(1.4), // Status AI
+                  5: FlexColumnWidth(1.7), // Aksi Disposisi
                 },
                 children: [
                   TableRow(
@@ -6068,7 +6836,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
                     ),
                     children: [
-                      _cleanTh('Armada & Titik Lapak'),
+                      _cleanTh('Armada & Jadwal Rute Dinamis AI (Per Jam & Titik Lapak)'),
                       _cleanTh('Rekomendasi 6 Menu Resmi (Aren, Amr, Coklat, Red Velvet, Thai Tea, Lemon Tea)'),
                       _cleanTh('Total AI'),
                       _cleanTh('Prediksi Laku'),
@@ -6086,23 +6854,103 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
                         ),
                         children: [
-                          // Col 0: Armada & Titik Lapak
+                          // Col 0: Armada & Jadwal Rute Dinamis AI
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(s['name'].toString(), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Color(0xFF111827))),
-                                const SizedBox(height: 2),
-                                Text('${s['cart_id']} • ${s['location']}', style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
-                                const SizedBox(height: 3),
                                 Row(
                                   children: [
-                                    const Icon(Icons.access_time, size: 11, color: Color(0xFFD97706)),
-                                    const SizedBox(width: 4),
-                                    Text('Peak: ${breakdown['peak']}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFFB45309))),
+                                    Text(
+                                      s['name'].toString(),
+                                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Color(0xFF111827)),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF3F4F6),
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                                      ),
+                                      child: Text(
+                                        s['cart_id'].toString(),
+                                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+                                      ),
+                                    ),
                                   ],
                                 ),
+                                const SizedBox(height: 6),
+                                if (breakdown['routes'] != null)
+                                  for (final r in (breakdown['routes'] as List<Map<String, dynamic>>))
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 3.5),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(top: 2.5),
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: (r['color'] as Color? ?? const Color(0xFF1E3932)).withOpacity(0.12),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Icon(
+                                              r['icon'] as IconData? ?? Icons.location_on_outlined,
+                                              size: 9.5,
+                                              color: r['color'] as Color? ?? const Color(0xFF1E3932),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: RichText(
+                                              text: TextSpan(
+                                                style: const TextStyle(fontSize: 10.5, color: Color(0xFF374151), height: 1.3),
+                                                children: [
+                                                  TextSpan(
+                                                    text: '${r['time']} : ',
+                                                    style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF111827)),
+                                                  ),
+                                                  TextSpan(
+                                                    text: '${r['location']} ',
+                                                    style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1E3932)),
+                                                  ),
+                                                  TextSpan(
+                                                    text: '(${r['target']} cup)',
+                                                    style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF059669)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                if (breakdown['tactical_note'] != null) ...[
+                                  const SizedBox(height: 3),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFFBEB),
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(color: const Color(0xFFFDE68A)),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(Icons.assistant_direction_outlined, size: 11, color: Color(0xFFB45309)),
+                                        const SizedBox(width: 4),
+                                        Expanded(
+                                          child: Text(
+                                            breakdown['tactical_note'].toString(),
+                                            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w500, color: Color(0xFF92400E)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -6221,7 +7069,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         ),
         const SizedBox(height: 18),
 
-        // 5. AI OPERATIONAL ACTION FEED (3 INSIGHT CARDS)
+        // 5. JADWAL & DISPOSISI RUTE BERGERAK ARMADA (DYNAMIC TIME-BLOCK ROUTING ENGINE)
+        _buildAiDynamicRoutingSection(),
+        const SizedBox(height: 18),
+
+        // 6. AI OPERATIONAL ACTION FEED (3 INSIGHT CARDS)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
