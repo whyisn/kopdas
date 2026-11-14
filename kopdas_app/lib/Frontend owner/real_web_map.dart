@@ -192,9 +192,9 @@ class _RealLiveGoogleMapState extends State<RealLiveGoogleMap> {
   <div id="map"></div>
   <script>
     var map = L.map('map', { zoomControl: true }).setView([$centerLat, $centerLng], $zoom);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap, © CARTO'
+      attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     var markers = {};
