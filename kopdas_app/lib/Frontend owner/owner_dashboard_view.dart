@@ -1274,7 +1274,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     _sidebarCategoryHeader('LOGISTIK & KEUANGAN'),
                     _navItem(5, Icons.warehouse_outlined, 'Gudang & Stok'),
                     _navItem(6, Icons.local_shipping_outlined, 'Distribusi Bawaan Pagi'),
-                    _navItem(7, Icons.point_of_sale_outlined, 'Penjualan Lapangan'),
+                    _navItem(7, Icons.point_of_sale_outlined, 'Manage Penghasilan Penjualan'),
                     _navItem(11, Icons.analytics_outlined, 'Laporan Keuangan & Pajak'),
 
                     _sidebarCategoryHeader('SISTEM & INTELIJEN'),
@@ -1647,7 +1647,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       case 4: return 'Daftar Titik Lapak Jualan';
       case 5: return 'Gudang Pusat & Manajemen Stok';
       case 6: return 'Distribusi Stok Bawaan Pagi';
-      case 7: return 'Log Penjualan Lapangan & Kasir';
+      case 7: return 'Manage Penghasilan Penjualan & Verifikasi Kas';
       case 8: return 'Daftar Pesanan Online QRIS';
       case 9: return 'Laporan Keuangan & Pajak';
       case 10: return 'Analisis AI Permintaan & Optimasi Stok';
@@ -1844,7 +1844,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   Widget _buildDashboardView() {
     final d = _getDashboardDataForFilter();
     final num totalCash = d['cash'] as num;
-    final num totalQris = d['qris'] as num;
     final num totalOmzet = d['omzet'] as num;
     final int totalCups = (d['cups'] as num).toInt();
     final int onlineCups = (d['online_cups'] as num).toInt();
@@ -1875,7 +1874,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    'Monitoring penjualan live gerobak, telemetri armada real-time, analisis AI cuaca/keramaian, dan rekonsiliasi kas tutup shift • $periodLabel',
+                    'Monitoring penjualan live gerobak, telemetri armada real-time, status inventori dan lapak aktif • $periodLabel',
                     style: const TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                   ),
                 ],
@@ -2499,318 +2498,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       ],
                     ),
                 ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-
-        // =====================================================================
-        // 7. MANAJEMEN KAS & REKONSILIASI TUTUP SHIFT (REQUIREMENT 7)
-        // =====================================================================
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E3932).withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Icon(Icons.account_balance_wallet_outlined, color: Color(0xFF1E3932), size: 20),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Manajemen Kas & Rekonsiliasi Tutup Shift',
-                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
-                            ),
-                            Text(
-                              'Verifikasi sisa cup fisik pulang, pencocokan dana tunai di tangan seller vs kas seharusnya masuk, dan audit selisih',
-                              style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFA7F3D0)),
-                      ),
-                      child: Text(
-                        'Kas Fisik Belum Setor: ${_formatRupiah(totalCash)}',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1, color: Color(0xFFE5E7EB)),
-
-              Table(
-                columnWidths: const {
-                  0: FlexColumnWidth(2.6),
-                  1: FlexColumnWidth(1.2),
-                  2: FlexColumnWidth(1.2),
-                  3: FlexColumnWidth(1.2),
-                  4: FlexColumnWidth(1.7),
-                  5: FlexColumnWidth(1.8),
-                  6: FlexColumnWidth(1.8),
-                  7: FlexColumnWidth(1.5),
-                  8: FlexColumnWidth(1.6),
-                  9: FlexColumnWidth(2.0),
-                },
-                children: [
-                  TableRow(
-                    decoration: const BoxDecoration(color: Color(0xFFF9FAFB), border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB)))),
-                    children: [
-                      _cleanTh('Petugas & Unit'),
-                      _cleanTh('Bawaan'),
-                      _cleanTh('Sisa Box'),
-                      _cleanTh('Terjual'),
-                      _cleanTh('QRIS Masuk'),
-                      _cleanTh('Kas Seharusnya'),
-                      _cleanTh('Kas Disetor'),
-                      _cleanTh('Selisih'),
-                      _cleanTh('Status Audit'),
-                      _cleanTh('Aksi Verifikasi'),
-                    ],
-                  ),
-                  for (final s in _staffList.where((st) => (st['morning_stock'] as int) > 0))
-                    TableRow(
-                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6)))),
-                      children: [
-                        _cleanTd('${s['name']}\n${s['cart_id']}', bold: true),
-                        _cleanTd('${s['morning_stock']} cup'),
-                        _cleanTd('${s['current_stock']} cup', bold: true, color: const Color(0xFFD97706)),
-                        _cleanTd('${s['cups_sold']} cup', bold: true, color: const Color(0xFF059669)),
-                        _cleanTd(_formatRupiah(s['qris'] as num)),
-                        _cleanTd(_formatRupiah(s['cash'] as num), bold: true),
-                        _cleanTd(_formatRupiah((s['cash_submitted'] ?? s['cash']) as num)),
-                        _cleanTd(
-                          ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0
-                              ? 'Rp 0'
-                              : _formatRupiah((((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num)).abs()),
-                          color: ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
-                          bold: true,
-                        ),
-                        _cleanCashStatusBadge(s['cash_status'] ?? 'BALANCE'),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1E3932),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                            ),
-                            onPressed: () => _showCashSettlementDialog(s),
-                            child: const Text('Verifikasi Shift', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-
-        // =====================================================================
-        // 8. LAPORAN KEUANGAN RINCI & PELAPORAN PAJAK RESMI (REQUIREMENT 8)
-        // =====================================================================
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E3932).withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Icon(Icons.analytics_outlined, color: Color(0xFF1E3932), size: 20),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Laporan Keuangan Rinci: Arus Kas Tunai vs QRIS & Pelaporan Pajak Resmi',
-                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
-                            ),
-                            Text(
-                              'Rincian penerimaan Cash tunai & QRIS digital, breakdown HPP bahan baku, laba bersih (tanpa potongan komisi), dan kepatuhan pajak PPh Final 0.5% (PP 55/2022)',
-                              style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E3932),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                      ),
-                      onPressed: _showTaxReportExportDialog,
-                      icon: const Icon(Icons.download, size: 16),
-                      label: const Text('Ekspor CSV Pelaporan Pajak', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1, color: Color(0xFFE5E7EB)),
-
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Col 1: Penerimaan Uang Tunai / Cash Lapangan
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFFE5E7EB)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('1. Penerimaan Kas Tunai (Cash)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
-                            const SizedBox(height: 10),
-                            _buildFinanceRow('Walk-In Cash POS Gerobak', _formatRupiah(totalCash), '100% Cash'),
-                            _buildFinanceRow('Porsi terhadap Total Omzet', '${((totalCash / (totalOmzet == 0 ? 1 : totalOmzet)) * 100).toStringAsFixed(1)}%', 'Tunai Fisik'),
-                            _buildFinanceRow('Pengeluaran Es & Sanitasi Unit', 'Rp 210.000', 'Beban Tunai'),
-                            const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Kas Bersih Siap Disetor', _formatRupiah(totalCash > 210000 ? totalCash - 210000 : totalCash), 'Fisik Aman', isTotal: true, color: const Color(0xFFD97706)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-
-                    // Col 2: Penerimaan Digital / QRIS
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFFE5E7EB)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('2. Penerimaan Digital (QRIS)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
-                            const SizedBox(height: 10),
-                            _buildFinanceRow('QRIS Statis Lapak POS Gerobak', _formatRupiah((totalQris * 0.415).round()), 'Lapak Offline'),
-                            _buildFinanceRow('QRIS Dinamis App Pre-Order', _formatRupiah((totalQris * 0.585).round()), 'Online Order'),
-                            _buildFinanceRow('Porsi terhadap Total Omzet', '${((totalQris / (totalOmzet == 0 ? 1 : totalOmzet)) * 100).toStringAsFixed(1)}%', 'Non-Tunai'),
-                            const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Total Saldo QRIS Bank', _formatRupiah(totalQris), 'H+0 Otomatis', isTotal: true, color: const Color(0xFF1E3932)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-
-                    // Col 3: HPP Bahan & Laba Bersih (Tanpa Komisi)
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF9FAFB),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFFE5E7EB)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('3. Laba Bersih (Tanpa Komisi)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
-                            const SizedBox(height: 10),
-                            _buildFinanceRow('Total Omzet (Cash + QRIS)', _formatRupiah(totalOmzet), '100% DPP'),
-                            _buildFinanceRow('Harga Pokok Bahan (HPP)', 'Rp 2.804.000', '32.3% Omzet'),
-                            _buildFinanceRow('Biaya Es Batu & Unit Gerobak', 'Rp 210.000', 'Operasional'),
-                            const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Estimasi Laba Bersih', _formatRupiah(totalOmzet - 2804000 - 210000), 'Margin 65.3%', isTotal: true, color: const Color(0xFF059669)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-
-                    // Col 4: Pelaporan Pajak Resmi (Tax Compliance)
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFECFDF5),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFFA7F3D0)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('4. Kepatuhan Pajak Resmi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF065F46))),
-                            const SizedBox(height: 10),
-                            _buildFinanceRow('Dasar Pengenaan Pajak (DPP)', _formatRupiah(totalOmzet), 'Cash + QRIS'),
-                            _buildFinanceRow('Skema: PPh Final UMKM PP 55', 'Tarif: 0.5%', 'KAP 411128'),
-                            _buildFinanceRow('PPh Final Terutang (0.5%)', 'Rp 43.450', 'Disetor SPT', isTotal: true, color: const Color(0xFF065F46)),
-                            const Divider(height: 12, color: Color(0xFFA7F3D0)),
-                            _buildFinanceRow('Opsi Pajak Restoran (PB1 10%)', 'Rp 869.000', 'Jika Ditetapkan Pemda'),
-                            const SizedBox(height: 8),
-                            InkWell(
-                              onTap: _showTaxReportExportDialog,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  Text('Lihat Format SPT & Unduh CSV', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.arrow_forward, size: 13, color: Color(0xFF065F46)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -3995,51 +3682,310 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: PENJUALAN
+  // SUB-PAGES: MANAGE PENGHASILAN PENJUALAN & VERIFIKASI KAS SHIFT
   // ===========================================================================
   Widget _buildSalesMonitoringView() {
+    final d = _getDashboardDataForFilter();
+    final num totalOmzet = d['omzet'] as num;
+    final num totalCash = d['cash'] as num;
+    final num totalQris = d['qris'] as num;
+    final int totalCups = (d['cups'] as num).toInt();
+    final String periodLabel = d['period_label'] as String;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Daftar Transaksi Kasir Masuk', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        const SizedBox(height: 12),
-        _tableContainer(
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.2),
-              1: FlexColumnWidth(1),
-              2: FlexColumnWidth(2),
-              3: FlexColumnWidth(2.5),
-              4: FlexColumnWidth(1.4),
-              5: FlexColumnWidth(1.2),
-              6: FlexColumnWidth(1.6),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(color: Color(0xFFFAFAFA), border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0)))),
-                children: [
-                  _cleanTh('ID Trx'),
-                  _cleanTh('Jam'),
-                  _cleanTh('Petugas'),
-                  _cleanTh('Item Pesanan'),
-                  _cleanTh('Total'),
-                  _cleanTh('Metode'),
-                  _cleanTh('Penyelesaian'),
-                ],
+        // Content Header
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Manage Penghasilan Penjualan & Verifikasi Kas Shift',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Color(0xFF111827), letterSpacing: -0.3),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Verifikasi penerimaan dana tunai fisik seller, audit sisa stok box, dan rekonsiliasi pembayaran QRIS • $periodLabel',
+                  style: const TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
+                ),
+              ],
+            ),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF374151),
+                side: const BorderSide(color: Color(0xFFD1D5DB)),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
-              for (final tx in _recentTransactions)
-                TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
+              onPressed: () => setState(() {}),
+              icon: const Icon(Icons.refresh, size: 16),
+              label: const Text('Refresh Data', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // Consolidated KPI Metrics Bar
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Total Omzet Penjualan',
+                    _formatRupiah(totalOmzet),
+                    'Konsolidasi Cash & QRIS',
+                    const Color(0xFF059669),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Penerimaan Kas Tunai',
+                    _formatRupiah(totalCash),
+                    'Kas Fisik Petugas Gerobak',
+                    const Color(0xFFD97706),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Penerimaan Digital QRIS',
+                    _formatRupiah(totalQris),
+                    'Settlement Rekening Bank',
+                    const Color(0xFF1E3932),
+                  ),
+                ),
+                const VerticalDivider(width: 1, color: Color(0xFFE5E7EB)),
+                Expanded(
+                  child: _buildConsolidatedColumn(
+                    'Total Volume Terjual',
+                    '$totalCups Cup',
+                    'Akumulasi Penjualan Hari Ini',
+                    const Color(0xFF4B5563),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 1. REKONSILIASI KAS & AUDIT TUTUP SHIFT
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _cleanTd(tx['id']),
-                    _cleanTd(tx['time']),
-                    _cleanTd(tx['seller'], bold: true),
-                    _cleanTd(tx['items']),
-                    _cleanTd(_formatRupiah(tx['total'] as num), bold: true),
-                    _cleanTd(tx['method']),
-                    _cleanTd(tx['pjp']),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(7),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E3932).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Icon(Icons.account_balance_wallet_outlined, color: Color(0xFF1E3932), size: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              'Verifikasi Setoran Kas & Tutup Shift',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                            ),
+                            Text(
+                              'Audit sisa cup fisik pulang, pencocokan dana tunai di tangan seller vs kas sistem, dan verifikasi status selisih',
+                              style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECFDF5),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFA7F3D0)),
+                      ),
+                      child: Text(
+                        'Total Kas Tunai Belum Disetor: ${_formatRupiah(totalCash)}',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                      ),
+                    ),
                   ],
                 ),
+              ),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(2.6),
+                  1: FlexColumnWidth(1.2),
+                  2: FlexColumnWidth(1.2),
+                  3: FlexColumnWidth(1.2),
+                  4: FlexColumnWidth(1.7),
+                  5: FlexColumnWidth(1.8),
+                  6: FlexColumnWidth(1.8),
+                  7: FlexColumnWidth(1.5),
+                  8: FlexColumnWidth(1.6),
+                  9: FlexColumnWidth(2.0),
+                },
+                children: [
+                  TableRow(
+                    decoration: const BoxDecoration(color: Color(0xFFF9FAFB), border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB)))),
+                    children: [
+                      _cleanTh('Petugas & Unit'),
+                      _cleanTh('Bawaan'),
+                      _cleanTh('Sisa Box'),
+                      _cleanTh('Terjual'),
+                      _cleanTh('QRIS Masuk'),
+                      _cleanTh('Kas Seharusnya'),
+                      _cleanTh('Kas Disetor'),
+                      _cleanTh('Selisih'),
+                      _cleanTh('Status Audit'),
+                      _cleanTh('Aksi Verifikasi'),
+                    ],
+                  ),
+                  for (final s in _staffList.where((st) => (st['morning_stock'] as int) > 0))
+                    TableRow(
+                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6)))),
+                      children: [
+                        _cleanTd('\n', bold: true),
+                        _cleanTd(' cup'),
+                        _cleanTd(' cup', bold: true, color: const Color(0xFFD97706)),
+                        _cleanTd(' cup', bold: true, color: const Color(0xFF059669)),
+                        _cleanTd(_formatRupiah(s['qris'] as num)),
+                        _cleanTd(_formatRupiah(s['cash'] as num), bold: true),
+                        _cleanTd(_formatRupiah((s['cash_submitted'] ?? s['cash']) as num)),
+                        _cleanTd(
+                          ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0
+                              ? 'Rp 0'
+                              : _formatRupiah((((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num)).abs()),
+                          color: ((s['cash_submitted'] ?? s['cash']) as num) - (s['cash'] as num) == 0 ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                          bold: true,
+                        ),
+                        _cleanCashStatusBadge(s['cash_status'] ?? 'BALANCE'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF1E3932),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                            ),
+                            onPressed: () => _showCashSettlementDialog(s),
+                            child: const Text('Verifikasi Shift', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // 2. LOG TRANSAKSI PENJUALAN MASUK
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E3932).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Icon(Icons.receipt_long_outlined, color: Color(0xFF1E3932), size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Log Transaksi Penjualan Masuk (POS Kasir & Pre-Order)',
+                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                        ),
+                        Text(
+                          'Catatan transaksi live setiap penjualan per cup kopi dari seluruh gerobak operasional',
+                          style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(1.2),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(2),
+                  3: FlexColumnWidth(2.5),
+                  4: FlexColumnWidth(1.4),
+                  5: FlexColumnWidth(1.2),
+                  6: FlexColumnWidth(1.6),
+                },
+                children: [
+                  TableRow(
+                    decoration: const BoxDecoration(color: Color(0xFFF9FAFB), border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB)))),
+                    children: [
+                      _cleanTh('ID Trx'),
+                      _cleanTh('Jam'),
+                      _cleanTh('Petugas'),
+                      _cleanTh('Item Pesanan'),
+                      _cleanTh('Total'),
+                      _cleanTh('Metode'),
+                      _cleanTh('Penyelesaian'),
+                    ],
+                  ),
+                  for (final tx in _recentTransactions)
+                    TableRow(
+                      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
+                      children: [
+                        _cleanTd(tx['id']),
+                        _cleanTd(tx['time']),
+                        _cleanTd(tx['seller'], bold: true),
+                        _cleanTd(tx['items']),
+                        _cleanTd(_formatRupiah(tx['total'] as num), bold: true),
+                        _cleanTd(tx['method']),
+                        _cleanTd(tx['pjp']),
+                      ],
+                    ),
+                ],
+              ),
             ],
           ),
         ),
