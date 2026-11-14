@@ -1870,12 +1870,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Pipeline Calon Pelanggan & Penjualan (Dashboard)',
+                    'Pipeline Calon Pelanggan & Penjualan',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF111827), letterSpacing: -0.4),
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    'Monitoring penjualan live gerobak, telemetri armada real-time, analisis AI cuaca/keramaian, dan rekonsiliasi kas tutup shift ($periodLabel)',
+                    'Monitoring penjualan live gerobak, telemetri armada real-time, analisis AI cuaca/keramaian, dan rekonsiliasi kas tutup shift • $periodLabel',
                     style: const TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                   ),
                 ],
@@ -1984,7 +1984,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       child: _buildConsolidatedColumn(
                         'Total Cup Terjual',
                         '$totalCups Cup',
-                        '$onlineCups Online (40%) • $walkinCups Lapak (60%)',
+                        '$onlineCups Online 40% • $walkinCups Lapak 60%',
                         const Color(0xFF4B5563),
                       ),
                     ),
@@ -2006,7 +2006,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       child: _buildConsolidatedColumn(
                         'Estimasi Laba Bersih',
                         _formatRupiah(netProfit),
-                        'Margin 65.3% Bersih (Omzet - HPP Bahan)',
+                        'Margin 65.3% Bersih setelah HPP Bahan',
                         const Color(0xFF059669),
                       ),
                     ),
@@ -2034,15 +2034,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         // =====================================================================
         Row(
           children: [
-            _build3STab('Semua Tim Lapangan (5)', true),
+            _build3STab('Semua Tim Lapangan', true),
             const SizedBox(width: 6),
             _build3STab('4 Unit Aktif Jualan', false),
             const SizedBox(width: 6),
             _build3STab('1 Standby Gudang', false),
             const SizedBox(width: 6),
-            _build3STab('Rekonsiliasi Kas Siap (4)', false),
+            _build3STab('Rekonsiliasi Kas Siap', false),
             const SizedBox(width: 6),
-            _build3STab('Analisis AI Permintaan (5)', false),
+            _build3STab('Analisis AI Permintaan', false),
           ],
         ),
         const SizedBox(height: 14),
@@ -2061,7 +2061,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               const SizedBox(width: 10),
               const Expanded(
                 child: Text(
-                  'Peringatan Stok Menipis: Hendra Wijaya (GRB-04 • Stasiun Juanda) sisa 15 Cup. Peak komuter pulang kerja KRL 16:30 WIB. Model AI menyarankan restock 20 cup segera.',
+                  'Peringatan Stok Menipis: Hendra Wijaya - GRB-04 Stasiun Juanda sisa 15 Cup. Peak komuter pulang kerja KRL 16:30 WIB. Model AI menyarankan restock 20 cup segera.',
                   style: TextStyle(fontSize: 12, color: Color(0xFF92400E), fontWeight: FontWeight.w600),
                 ),
               ),
@@ -2114,13 +2114,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopSellerRow('1', 'Budi Santoso (GRB-01)', '142 / 120 Cup (118%)', 'Omzet: Rp 2.840.000 • Cash: Rp 900.000 | QRIS: Rp 1.940.000', 1.0, const Color(0xFF059669)),
+                    _buildTopSellerRow('1', 'Budi Santoso - GRB-01', '142 / 120 Cup • 118%', 'Omzet: Rp 2.840.000 • Cash: Rp 900.000 | QRIS: Rp 1.940.000', 1.0, const Color(0xFF059669)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('2', 'Hendra Wijaya (GRB-04)', '118 / 110 Cup (107%)', 'Omzet: Rp 2.360.000 • Cash: Rp 780.000 | QRIS: Rp 1.580.000', 0.95, const Color(0xFF0D9488)),
+                    _buildTopSellerRow('2', 'Hendra Wijaya - GRB-04', '118 / 110 Cup • 107%', 'Omzet: Rp 2.360.000 • Cash: Rp 780.000 | QRIS: Rp 1.580.000', 0.95, const Color(0xFF0D9488)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('3', 'Siti Rahmawati (GRB-03)', '95 / 120 Cup (79%)', 'Omzet: Rp 1.980.000 • Cash: Rp 640.000 | QRIS: Rp 1.340.000', 0.79, const Color(0xFF2563EB)),
+                    _buildTopSellerRow('3', 'Siti Rahmawati - GRB-03', '95 / 120 Cup • 79%', 'Omzet: Rp 1.980.000 • Cash: Rp 640.000 | QRIS: Rp 1.340.000', 0.79, const Color(0xFF2563EB)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('4', 'Ahmad Fauzi (GRB-02)', '68 / 120 Cup (56%)', 'Omzet: Rp 1.420.000 • Cash: Rp 520.000 | QRIS: Rp 900.000', 0.56, const Color(0xFFD97706)),
+                    _buildTopSellerRow('4', 'Ahmad Fauzi - GRB-02', '68 / 120 Cup • 56%', 'Omzet: Rp 1.420.000 • Cash: Rp 520.000 | QRIS: Rp 900.000', 0.56, const Color(0xFFD97706)),
                   ],
                 ),
               ),
@@ -2154,13 +2154,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopAreaTile('1', 'Pintu Timur Stasiun Juanda', '155 Cup terjual', 'Peak: 07:00-09:15 & 16:30-18:30 (KRL) • Arus 14.800/jam', isAlert: true, alertText: 'Sisa 15 cup'),
+                    _buildTopAreaTile('1', 'Pintu Timur Stasiun Juanda', '155 Cup terjual', 'Peak: 07:00-09:15 & 16:30-18:30 KRL • Arus 14.800/jam', isAlert: true, alertText: 'Sisa 15 cup'),
                     const SizedBox(height: 10),
                     _buildTopAreaTile('2', 'Halte Dukuh Atas Sudirman', '142 Cup terjual', 'Peak: 07:30-09:30 & 12:00-13:30 • Arus 12.200/jam', isAlert: false, alertText: 'Aman 42 cup'),
                     const SizedBox(height: 10),
-                    _buildTopAreaTile('3', 'Pojok Blok III Pasar Senen', '95 Cup terjual', 'Peak: 06:00-10:00 (Grosir) • Arus 8.500/jam', isAlert: false, alertText: 'Aman 35 cup'),
+                    _buildTopAreaTile('3', 'Pojok Blok III Pasar Senen', '95 Cup terjual', 'Peak: 06:00-10:00 Grosir • Arus 8.500/jam', isAlert: false, alertText: 'Aman 35 cup'),
                     const SizedBox(height: 10),
-                    _buildTopAreaTile('4', 'Taman Suropati Menteng', '68 Cup terjual', 'Peak: 17:30-21:00 (Santai Malam) • Arus 4.200/jam', isAlert: false, alertText: 'Aman 28 cup'),
+                    _buildTopAreaTile('4', 'Taman Suropati Menteng', '68 Cup terjual', 'Peak: 17:30-21:00 Santai Malam • Arus 4.200/jam', isAlert: false, alertText: 'Aman 28 cup'),
                   ],
                 ),
               ),
@@ -2194,13 +2194,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopProductTile('1', 'Kopi Susu Gula Aren', '215 Cup (50.8%)', 'Rp 3.870.000 • Gudang: 950 cup', '+28%'),
+                    _buildTopProductTile('1', 'Kopi Susu Gula Aren', '215 Cup • 50.8%', 'Rp 3.870.000 • Gudang: 950 cup', '+28%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('2', 'Americano Double Shot', '98 Cup (23.2%)', 'Rp 1.470.000 • Gudang: 650 cup', '+15%'),
+                    _buildTopProductTile('2', 'Americano Double Shot', '98 Cup • 23.2%', 'Rp 1.470.000 • Gudang: 650 cup', '+15%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('3', 'Matcha Uji Latte Creamy', '62 Cup (14.6%)', 'Rp 1.364.000 • Gudang: 430 cup', '+9%'),
+                    _buildTopProductTile('3', 'Matcha Uji Latte Creamy', '62 Cup • 14.6%', 'Rp 1.364.000 • Gudang: 430 cup', '+9%'),
                     const SizedBox(height: 10),
-                    _buildTopProductTile('4', 'Cafe Latte Steam Velvet', '36 Cup (8.5%)', 'Rp 720.000 • Gudang: 520 cup', '+5%'),
+                    _buildTopProductTile('4', 'Cafe Latte Steam Velvet', '36 Cup • 8.5%', 'Rp 720.000 • Gudang: 520 cup', '+5%'),
                   ],
                 ),
               ),
@@ -2241,11 +2241,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              'Analisis AI Prediksi Permintaan Lapangan & Rekomendasi Alokasi Stok (MILP Engine)',
+                              'Analisis AI Prediksi Permintaan Lapangan & Rekomendasi Alokasi Stok',
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
-                              'Optimasi alokasi cup bawaan per gerobak berdasarkan cuaca (temperatur & indeks dingin), sensor arus komuter transit, dan histori penjualan',
+                              'Optimasi alokasi cup bawaan per gerobak berdasarkan cuaca, temperatur, indeks dingin, sensor arus komuter transit, dan histori penjualan',
                               style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                             ),
                           ],
@@ -2300,7 +2300,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     '32°C Cerah Terik',
                     'Indeks Es Kopi +38%',
                     'Sangat Padat',
-                    '14.800 org/jam (Peak 16:30)',
+                    '14.800 org/jam • Peak 16:30',
                     'Stok kritis sisa 15 cup! Segera kirim 20 cup restock dari gudang sebelum jam 16:30.',
                     isWarning: true,
                   ),
@@ -2314,7 +2314,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     '29°C Berawan Tipis',
                     'Demand Kopi Susu Aren stabil',
                     'Tinggi Komuter',
-                    '12.200 org/jam (Kantor Pulang)',
+                    '12.200 org/jam • Kantor Pulang',
                     'Optimal: Target 118% tercapai. Sisa 42 cup aman hingga penutupan shift.',
                     isWarning: false,
                   ),
@@ -2328,7 +2328,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     '31°C Panas Terbuka',
                     'Tinggi Es Kopi Hitam & Aren',
                     'Stabil Ramai',
-                    '8.500 org/jam (Pedagang)',
+                    '8.500 org/jam • Pedagang',
                     'Target 95 cup tercapai. Sisa 35 cup mencukupi closing shift pukul 16:00 WIB.',
                     isWarning: false,
                   ),
@@ -2342,12 +2342,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     '27°C Sejuk Teduh',
                     'Permintaan kopi hangat malam',
                     'Sedang ke Puncak Sore',
-                    '4.200 org/jam (Peak 18:00–21:00)',
+                    '4.200 org/jam • Peak 18:00–21:00',
                     'Demand bergeser ke malam hari. Siapkan varian hangat dan Matcha.',
                     isWarning: false,
                   ),
                   _buildAiAnalysisRow(
-                    'Area E: Kuningan Madya (Standby)',
+                    'Area E: Kuningan Madya Standby',
                     'Koridor Rasuna Said',
                     '70 Cup',
                     'GRB-05 di Gudang',
@@ -2356,7 +2356,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     '30°C Cerah',
                     'Demand komuter kantor',
                     'Padat Kantor',
-                    '10.000 org/jam (16:30–18:30)',
+                    '10.000 org/jam • 16:30–18:30',
                     'Peluang ekspansi: Deploy GRB-05 dengan seller Rizky untuk menangkap arus pulang kerja.',
                     isWarning: false,
                   ),
@@ -2384,7 +2384,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Armada & Gerobak Lapangan (Status Operasional)', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF111827))),
+                    const Text('Armada & Gerobak Lapangan', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF111827))),
                     Row(
                       children: [
                         OutlinedButton(
@@ -2439,7 +2439,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       _cleanTh('Kas Tunai'),
                       _cleanTh('QRIS Masuk'),
                       _cleanTh('Status'),
-                      _cleanTh('Aksi (Lokasi & Shift)'),
+                      _cleanTh('Aksi'),
                     ],
                   ),
                   for (final s in _staffList)
@@ -2537,7 +2537,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              'Manajemen Kas & Rekonsiliasi Tutup Shift (Cash Settlement Audit)',
+                              'Manajemen Kas & Rekonsiliasi Tutup Shift',
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
