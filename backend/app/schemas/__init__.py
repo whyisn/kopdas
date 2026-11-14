@@ -244,6 +244,14 @@ class AIForecastRequest(BaseModel):
     target_period_days: int = 7
     location_ids: Optional[List[str]] = None
     product_ids: Optional[List[str]] = None
+    weather_condition: Optional[str] = "NORMAL"
+    data_label: str = "REAL"
+
+class AIOptimizeRequest(BaseModel):
+    target_period_days: int = 1
+    weather_condition: Optional[str] = "NORMAL"
+    location_ids: Optional[List[str]] = None
+    product_ids: Optional[List[str]] = None
     data_label: str = "REAL"
 
 class AIRecommendationItem(BaseModel):
@@ -259,6 +267,8 @@ class AIRecommendationItem(BaseModel):
     recommended_quantity: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     confidence: float
     data_quality: str
+    weather_condition: Optional[str] = "NORMAL"
+    weather_impact: Optional[str] = None
     rationale: List[str]
     model_version: str
     solver_status: str
@@ -268,6 +278,8 @@ class AIOptimizeResponse(BaseModel):
     recommendations: List[AIRecommendationItem]
     total_recommended_cups: int
     estimated_margin: int
+    weather_condition: Optional[str] = "NORMAL"
+    weather_summary: Optional[str] = None
     solver_status: str
     processing_time_ms: float
     data_label: str = "REAL"

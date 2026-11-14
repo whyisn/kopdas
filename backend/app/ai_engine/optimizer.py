@@ -25,20 +25,32 @@ class InventoryOptimizer:
         seller_capacities: Dict[str, int],       # {seller_id: max_cups_capacity}
         forecasts: List[Dict[str, Any]],         # output dari forecaster
         product_margins: Dict[str, int],         # {product_id: margin_rupiah}
+        weather_condition: str = "NORMAL",
         data_label: str = "REAL"
     ) -> Dict[str, Any]:
         """
-        Menghitung alokasi stok optimal per gerobak penjual menggunakan solver MILP HiGHS.
+        Menghitung alokasi stok optimal per gerobak penjual menggunakan solver MILP HiGHS
+        dengan adaptasi kondisi cuaca lapangan.
         """
         start_time = time.time()
         solver_status = "OPTIMAL_MILP"
         recommendations = []
+
+        cond = (weather_condition or "NORMAL").strip().upper()
+        if cond in ("RAIN", "HUJAN"):
+            weather_summary = "Prakiraan Hujan di Padang: Rekomendasi stok diturunkan (-20% s/d -25%) untuk meminimalkan risiko cup sisa di gerobak outdoor."
+        elif cond in ("PEAK_SUNNY", "SUNNY", "PANAS", "RAMAI", "PEAK"):
+            weather_summary = "Prakiraan Cerah Panas (32°C) / Jam Ramai: Rekomendasi stok dinaikkan (+25%) guna mencegah kehabisan stok (stockout) pada minuman dingin."
+        else:
+            weather_summary = "Kondisi Cuaca Normal: Rekomendasi alokasi menggunakan baseline standar owner berdasarkan tren riil transaksi."
 
         if not forecasts:
             return {
                 "recommendations": [],
                 "total_recommended_cups": 0,
                 "estimated_margin": 0,
+                "weather_condition": cond,
+                "weather_summary": weather_summary,
                 "solver_status": "NO_FORECASTS",
                 "processing_time_ms": 0.0,
                 "data_label": data_label
@@ -120,6 +132,8 @@ class InventoryOptimizer:
                         "recommended_quantity": allocated,  # Kompatibilitas UI Flutter
                         "confidence": float(fc.get("confidence", 0.75)),
                         "data_quality": fc.get("data_quality", "HIGH"),
+                        "weather_condition": fc.get("weather_condition", cond),
+                        "weather_impact": fc.get("weather_impact", "NORMAL (Baseline Standar)"),
                         "rationale": rationale,
                         "model_version": "milp-highs-v1",
                         "solver_status": solver_status,
@@ -127,11 +141,11 @@ class InventoryOptimizer:
                     })
             else:
                 solver_status = "RULE_BASED_FALLBACK"
-                recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label)
+                recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label, cond)
 
         except Exception as e:
             solver_status = "RULE_BASED_FALLBACK"
-            recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label)
+            recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label, cond)
 
         total_cups = sum(r["recommended_stock"] for r in recommendations)
         est_margin = sum(r["recommended_stock"] * product_margins.get(r["product_id"], 5000) for r in recommendations)
@@ -141,6 +155,8 @@ class InventoryOptimizer:
             "recommendations": recommendations,
             "total_recommended_cups": total_cups,
             "estimated_margin": est_margin,
+            "weather_condition": cond,
+            "weather_summary": weather_summary,
             "solver_status": solver_status,
             "processing_time_ms": round(processing_time, 2),
             "data_label": data_label
@@ -152,7 +168,8 @@ class InventoryOptimizer:
         seller_capacities: Dict[str, int],
         forecasts: List[Dict[str, Any]],
         product_margins: Dict[str, int],
-        data_label: str
+        data_label: str,
+        weather_condition: str = "NORMAL"
     ) -> List[Dict[str, Any]]:
         """
         Fallback algoritma proporsional bila MILP solver tidak aktif.
@@ -195,6 +212,8 @@ class InventoryOptimizer:
                 "recommended_quantity": recommended,  # Kompatibilitas UI Flutter
                 "confidence": max(0.5, float(fc.get("confidence", 0.6)) - 0.1),
                 "data_quality": "LIMITED",
+                "weather_condition": fc.get("weather_condition", weather_condition),
+                "weather_impact": fc.get("weather_impact", "NORMAL (Baseline Standar)"),
                 "rationale": rationale,
                 "model_version": "rule-based-fallback-v1",
                 "solver_status": "RULE_BASED_FALLBACK",

@@ -85,10 +85,15 @@ class DemandForecaster:
         self,
         sales_history: List[Dict[str, Any]],
         target_days: int = 7,
+        weather_condition: str = "NORMAL",
         data_label: str = "REAL"
     ) -> List[Dict[str, Any]]:
         """
-        Menghasilkan prediksi demand per produk dan lokasi untuk target_days ke depan.
+        Menghasilkan prediksi demand per produk dan lokasi untuk target_days ke depan,
+        dengan penyesuaian kecerdasan cuaca (Weather Intelligence):
+        - RAIN: Penurunan permintaan outdoor & varian dingin (-20% s/d -25%), varian hangat dipertahankan.
+        - PEAK_SUNNY: Lonjakan permintaan es kopi & cold brew (+25%) guna mencegah stockout di jam ramai.
+        - NORMAL: Baseline standar tren riil penjualan.
         """
         now = datetime.datetime.now()
         start_str = (now + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
@@ -96,6 +101,15 @@ class DemandForecaster:
 
         if not sales_history:
             return []
+
+        # Normalisasi parameter cuaca
+        cond = (weather_condition or "NORMAL").strip().upper()
+        if cond in ("RAIN", "HUJAN"):
+            weather_mode = "RAIN"
+        elif cond in ("PEAK_SUNNY", "SUNNY", "PANAS", "RAMAI", "PEAK"):
+            weather_mode = "PEAK_SUNNY"
+        else:
+            weather_mode = "NORMAL"
 
         df_hist = pd.DataFrame(sales_history)
         if "quantity" not in df_hist.columns and "qty" in df_hist.columns:
@@ -123,7 +137,7 @@ class DemandForecaster:
             used_model = self.model_version
 
             if not history:
-                predicted_daily = 10
+                base_daily = 10
                 confidence = 0.35
                 data_quality = "LIMITED"
                 rationale = ["Tidak ada histori penjualan yang cukup; estimasi awal default diterapkan."]
@@ -132,7 +146,6 @@ class DemandForecaster:
                 try:
                     loc_idx = self.loc_cats.get(loc_id, 0)
                     prod_idx = self.prod_cats.get(prod_id, 0)
-                    # Rata-rata prediksi untuk target days
                     dow_vals = [(now.weekday() + 1 + d) % 7 for d in range(target_days)]
                     pred_sum = 0
                     for dow in dow_vals:
@@ -143,7 +156,7 @@ class DemandForecaster:
                             "weekend": 1 if dow >= 5 else 0
                         }])
                         pred_sum += max(1, float(ml_model.predict(x_sample)[0]))
-                    predicted_daily = max(1, int(round(pred_sum / target_days)))
+                    base_daily = max(1, int(round(pred_sum / target_days)))
                     confidence = min(0.92, 0.65 + (count * 0.03))
                     data_quality = "HIGH" if count >= 10 else "MEDIUM"
                     rationale = [
@@ -154,7 +167,7 @@ class DemandForecaster:
                 except Exception:
                     # Fallback ke WMA
                     weights = [i + 1 for i in range(len(history))]
-                    predicted_daily = max(1, int(round(sum(h * w for h, w in zip(history, weights)) / sum(weights))))
+                    base_daily = max(1, int(round(sum(h * w for h, w in zip(history, weights)) / sum(weights))))
                     confidence = min(0.85, 0.50 + (count * 0.04))
                     data_quality = "MEDIUM" if count >= 7 else "LIMITED"
                     used_model = "baseline-wma-v1"
@@ -166,7 +179,7 @@ class DemandForecaster:
                 # WMA: beri bobot lebih tinggi pada data terbaru
                 weights = [i + 1 for i in range(len(history))]
                 weighted_sum = sum(h * w for h, w in zip(history, weights))
-                predicted_daily = max(1, int(round(weighted_sum / sum(weights))))
+                base_daily = max(1, int(round(weighted_sum / sum(weights))))
                 confidence = min(0.85, 0.50 + (count * 0.04))
                 data_quality = "MEDIUM" if count >= 7 else "LIMITED"
                 used_model = "baseline-wma-v1"
@@ -175,6 +188,45 @@ class DemandForecaster:
                     "Penyesuaian uplift 15% untuk hari berstatus stockout."
                 ]
 
+            # --- PENYESUAIAN KECERDASAN CUACA (WEATHER ADAPTATION) ---
+            # Identifikasi jenis produk (hangat vs dingin)
+            is_warm_drink = prod_id in ("prd-03", "prd-05")  # Teh Talua & Kopi Hitam Klasik Bukittinggi
+            is_iced_cold = prod_id in ("prd-01", "prd-04", "prd-06")  # Kopi Susu, Matcha, Cold Brew Mint
+
+            if weather_mode == "RAIN":
+                if is_warm_drink:
+                    weather_multiplier = 0.95  # Minuman hangat tetap diminati saat hujan (-5%)
+                    weather_impact = "STABIL_-5% (Prakiraan Hujan - Varian Hangat)"
+                    rationale.append("Prakiraan Cuaca Hujan: Permintaan varian hangat tetap stabil (-5%), menyerap konsumen yang mencari kehangatan.")
+                elif is_iced_cold:
+                    weather_multiplier = 0.75  # Minuman dingin turun signifikan saat hujan (-25%)
+                    weather_impact = "TURUN_-25% (Prakiraan Hujan - Varian Dingin)"
+                    rationale.append("Prakiraan Cuaca Hujan: Trafik pejalan kaki gerobak outdoor melandai. Alokasi varian es/dingin dikurangi -25% guna meminimalkan risiko es mencair & cup sisa.")
+                else:
+                    weather_multiplier = 0.80  # Rata-rata penurunan umum (-20%)
+                    weather_impact = "TURUN_-20% (Prakiraan Hujan)"
+                    rationale.append("Prakiraan Cuaca Hujan: Alokasi stok dikurangi -20% untuk menjaga efisiensi modal kerja gerobak.")
+
+            elif weather_mode == "PEAK_SUNNY":
+                if is_iced_cold:
+                    weather_multiplier = 1.25  # Minuman dingin melonjak tinggi saat terik (+25%)
+                    weather_impact = "NAIK_+25% (Prakiraan Cerah Panas / Jam Ramai)"
+                    rationale.append("Prakiraan Cuaca Cerah Terik (32°C) / Jam Ramai: Indeks konsumsi minuman dingin melonjak. Stok disarankan ditambah +25% untuk mencegah stockout.")
+                elif is_warm_drink:
+                    weather_multiplier = 1.05  # Minuman hangat naik moderat (+5%)
+                    weather_impact = "STABIL_+5% (Prakiraan Cerah Panas - Varian Hangat)"
+                    rationale.append("Prakiraan Cuaca Cerah Panas: Permintaan varian hangat cenderung stabil (+5%).")
+                else:
+                    weather_multiplier = 1.20  # Peningkatan umum (+20%)
+                    weather_impact = "NAIK_+20% (Prakiraan Cerah Panas / Jam Ramai)"
+                    rationale.append("Prakiraan Cuaca Cerah Terik: Trafik keramaian komuter tinggi; stok ditambah +20% mengantisipasi lonjakan transaksi.")
+
+            else:  # NORMAL
+                weather_multiplier = 1.00
+                weather_impact = "NORMAL (Baseline Standar)"
+                rationale.append("Kondisi Cuaca Normal: Alokasi stok menggunakan baseline standar owner berdasarkan tren riil penjualan.")
+
+            predicted_daily = max(1, int(round(base_daily * weather_multiplier)))
             total_predicted = predicted_daily * target_days
 
             results.append({
@@ -186,6 +238,8 @@ class DemandForecaster:
                 "predicted_demand": total_predicted,
                 "confidence": round(confidence, 2),
                 "data_quality": data_quality,
+                "weather_condition": weather_mode,
+                "weather_impact": weather_impact,
                 "rationale": rationale,
                 "model_version": used_model,
                 "data_label": data_label

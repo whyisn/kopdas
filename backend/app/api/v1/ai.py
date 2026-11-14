@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.core.database import get_db
 from app.models import Product, Location, Inventory, Transaction, TransactionItem
-from app.schemas import AIForecastRequest, AIOptimizeResponse, AIRecommendationItem, AIMetricsResponse
+from app.schemas import AIForecastRequest, AIOptimizeRequest, AIOptimizeResponse, AIRecommendationItem, AIMetricsResponse
 from app.ai_engine.forecasting import forecaster
 from app.ai_engine.optimizer import optimizer
 
@@ -80,21 +80,44 @@ def generate_forecast(req: AIForecastRequest, db: Session = Depends(get_db)):
     forecast_results = forecaster.forecast_sales(
         sales_history,
         target_days=req.target_period_days,
+        weather_condition=req.weather_condition or "NORMAL",
         data_label=req.data_label
     )
 
     return {
         "target_days": req.target_period_days,
+        "weather_condition": req.weather_condition or "NORMAL",
         "forecasts": forecast_results,
         "data_label": req.data_label
     }
 
 @router.post("/optimize", response_model=AIOptimizeResponse)
-def optimize_stock_allocation(db: Session = Depends(get_db)):
+def optimize_stock_allocation(
+    req: Optional[AIOptimizeRequest] = None,
+    weather_condition: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
     """
     Menghitung rekomendasi alokasi stok per gerobak seller
-    menggunakan solver MILP HiGHS berdasarkan stok gudang pusat aktual & batas fisik gerobak.
+    menggunakan solver MILP HiGHS berdasarkan stok gudang pusat aktual, batas fisik gerobak,
+    serta kecerdasan penyesuaian cuaca lapangan (Weather Intelligence).
     """
+    w_cond = "NORMAL"
+    target_days = 1
+    loc_filter = None
+    prod_filter = None
+    d_label = "REAL"
+
+    if req:
+        if req.weather_condition:
+            w_cond = req.weather_condition
+        target_days = req.target_period_days if req.target_period_days is not None else 1
+        loc_filter = req.location_ids
+        prod_filter = req.product_ids
+        d_label = req.data_label or "REAL"
+    elif weather_condition:
+        w_cond = weather_condition
+
     # 1. Stok gudang pusat aktual
     central_invs = db.query(Inventory).filter(
         Inventory.scope_type == "WAREHOUSE",
@@ -102,18 +125,11 @@ def optimize_stock_allocation(db: Session = Depends(get_db)):
     ).all()
     central_dict = {inv.product_id: inv.quantity for inv in central_invs}
 
-    # 2. Seller and capacities
+    # 2. Seller and capacities (Kapasitas fisik gerobak standar 120 cup per seller)
     sellers = db.query(Location).filter(Location.source_type == "ACTIVE_POINT").all()
     capacities = {}
     for s in sellers:
-        existing_stock = 0
-        if s.seller_id:
-            existing_stock = db.query(func.sum(Inventory.quantity)).filter(
-                Inventory.scope_type == "SELLER",
-                Inventory.scope_id == s.seller_id
-            ).scalar() or 0
-        # Kapasitas gerobak 120 cup dikurangi stok seller yang sudah tersimpan
-        capacities[s.id] = max(20, 120 - int(existing_stock))
+        capacities[s.id] = 120
 
     # 3. Product margins
     products = db.query(Product).all()
@@ -122,7 +138,13 @@ def optimize_stock_allocation(db: Session = Depends(get_db)):
     loc_names = {s.id: s.name for s in sellers}
 
     # 4. Generate forecasts first
-    fc_req = AIForecastRequest(target_period_days=7, data_label="REAL")
+    fc_req = AIForecastRequest(
+        target_period_days=target_days,
+        location_ids=loc_filter,
+        product_ids=prod_filter,
+        weather_condition=w_cond,
+        data_label=d_label
+    )
     fc_data = generate_forecast(fc_req, db)["forecasts"]
 
     # Enrich forecast with names
@@ -136,21 +158,28 @@ def optimize_stock_allocation(db: Session = Depends(get_db)):
         seller_capacities=capacities,
         forecasts=fc_data,
         product_margins=margins,
-        data_label="REAL"
+        weather_condition=w_cond,
+        data_label=d_label
     )
 
     return AIOptimizeResponse(
         recommendations=opt_result["recommendations"],
         total_recommended_cups=opt_result["total_recommended_cups"],
         estimated_margin=opt_result["estimated_margin"],
+        weather_condition=opt_result.get("weather_condition", w_cond),
+        weather_summary=opt_result.get("weather_summary"),
         solver_status=opt_result["solver_status"],
         processing_time_ms=opt_result["processing_time_ms"],
-        data_label="REAL"
+        data_label=d_label
     )
 
-@router.get("/recommendations")
-def get_latest_recommendations(db: Session = Depends(get_db)):
-    return optimize_stock_allocation(db=db)
+@router.get("/recommendations", response_model=AIOptimizeResponse)
+def get_latest_recommendations(
+    weather_condition: Optional[str] = "NORMAL",
+    db: Session = Depends(get_db)
+):
+    req = AIOptimizeRequest(weather_condition=weather_condition)
+    return optimize_stock_allocation(req=req, db=db)
 
 @router.get("/metrics", response_model=AIMetricsResponse)
 def get_ai_metrics(db: Session = Depends(get_db)):

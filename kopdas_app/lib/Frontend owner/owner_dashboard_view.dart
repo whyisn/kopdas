@@ -32,6 +32,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   int _liveMapZoom = 15;
   String _focusedStaffId = 'USR-01';
 
+  // Weather Intelligence Simulation State (AI Recommendation Engine)
+  String _aiWeatherMode = 'NORMAL'; // 'NORMAL', 'RAIN', 'PEAK_SUNNY'
+
   // ===========================================================================
   // DATA OPERASIONAL TERINTEGRASI (SINGLE SOURCE OF TRUTH)
   // ===========================================================================
@@ -2224,45 +2227,112 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E3932).withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Icon(Icons.psychology, color: Color(0xFF1E3932), size: 20),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Analisis AI Prediksi Permintaan Lapangan & Rekomendasi Alokasi Stok',
-                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1E3932).withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Icon(Icons.psychology, color: Color(0xFF1E3932), size: 20),
                             ),
-                            Text(
-                              'Optimasi alokasi cup bawaan per gerobak berdasarkan cuaca, temperatur, indeks dingin, sensor arus komuter transit, dan histori penjualan',
-                              style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Analisis AI Prediksi Permintaan Lapangan & Rekomendasi Alokasi Stok',
+                                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
+                                ),
+                                Text(
+                                  'Optimasi alokasi cup bawaan per gerobak berdasarkan cuaca, temperatur, indeks dingin, sensor arus komuter transit, dan histori penjualan',
+                                  style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFECFDF5),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFFA7F3D0)),
+                          ),
+                          child: const Text(
+                            'Akurasi Model: 96.4% • MILP Engine',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                          ),
+                        ),
                       ],
                     ),
+                    const SizedBox(height: 14),
+                    // SIMULASI KECERDASAN CUACA LAPANGAN (WEATHER INTELLIGENCE)
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const Text(
+                          'Simulasi Cuaca Lapangan:',
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+                        ),
+                        _buildWeatherFilterButton('NORMAL', '⛅ Cuaca Normal', 'Baseline tren riil (28°C)', Icons.cloud, const Color(0xFF1E3932)),
+                        _buildWeatherFilterButton('RAIN', '🌧️ Hujan Padang (-20%)', 'Trafik melandai, pangkas stok', Icons.water_drop, const Color(0xFF2563EB)),
+                        _buildWeatherFilterButton('PEAK_SUNNY', '☀️ Cerah Panas / Ramai (+25%)', '32°C, dongkrak varian dingin', Icons.wb_sunny, const Color(0xFFD97706)),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // RATIONALE SUMMARY BANNER
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFA7F3D0)),
+                        color: _aiWeatherMode == 'RAIN'
+                            ? const Color(0xFFEFF6FF)
+                            : (_aiWeatherMode == 'PEAK_SUNNY' ? const Color(0xFFFFFBEB) : const Color(0xFFF0FDF4)),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: _aiWeatherMode == 'RAIN'
+                              ? const Color(0xFFBFDBFE)
+                              : (_aiWeatherMode == 'PEAK_SUNNY' ? const Color(0xFFFDE68A) : const Color(0xFFBBF7D0)),
+                        ),
                       ),
-                      child: const Text(
-                        'Akurasi Model: 96.4% • MILP Engine',
-                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF065F46)),
+                      child: Row(
+                        children: [
+                          Icon(
+                            _aiWeatherMode == 'RAIN'
+                                ? Icons.umbrella
+                                : (_aiWeatherMode == 'PEAK_SUNNY' ? Icons.local_fire_department : Icons.verified),
+                            size: 18,
+                            color: _aiWeatherMode == 'RAIN'
+                                ? const Color(0xFF1D4ED8)
+                                : (_aiWeatherMode == 'PEAK_SUNNY' ? const Color(0xFFB45309) : const Color(0xFF15803D)),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              _aiWeatherMode == 'RAIN'
+                                  ? 'Prakiraan Hujan di Padang (24°C - BMKG Simulasi): Trafik pejalan kaki gerobak outdoor melandai. AI solver MILP merekomendasikan pemangkasan alokasi varian es (-20% s/d -25%) untuk mencegah es mencair & cup sisa basi, sementara varian hangat (Teh Talua & Kopi Hitam Klasik) dipertahankan stabil.'
+                                  : (_aiWeatherMode == 'PEAK_SUNNY'
+                                      ? 'Prakiraan Cerah Terik (32°C - BMKG Simulasi): Indeks dahaga komuter melonjak. AI solver MILP merekomendasikan penambahan alokasi stok (+25%) khususnya Kopi Susu Aren dingin & Cold Brew Mint guna mencegah kehabisan stok (stockout) pada jam sibuk siang/sore.'
+                                      : 'Kondisi Berawan Normal (28°C - BMKG Simulasi): Alokasi stok menggunakan baseline standar owner berdasarkan tren riil transaksi historis Padang (12.646 riwayat).'),
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w500,
+                                color: _aiWeatherMode == 'RAIN'
+                                    ? const Color(0xFF1E40AF)
+                                    : (_aiWeatherMode == 'PEAK_SUNNY' ? const Color(0xFF92400E) : const Color(0xFF166534)),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -2291,76 +2361,178 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       _cleanTh('Rekomendasi Tindakan AI Realtime'),
                     ],
                   ),
-                  _buildAiAnalysisRow(
-                    'Area A: Pintu Stasiun Juanda',
-                    'Transit Komuter KRL',
-                    '130 Cup',
-                    'Bawa kini: 110 cup',
-                    '125 – 135 Cup',
-                    'Terserap: 118 cup',
-                    '32°C Cerah Terik',
-                    'Indeks Es Kopi +38%',
-                    'Sangat Padat',
-                    '14.800 org/jam • Peak 16:30',
-                    'Stok kritis sisa 15 cup! Segera kirim 20 cup restock dari gudang sebelum jam 16:30.',
-                    isWarning: true,
-                  ),
-                  _buildAiAnalysisRow(
-                    'Area B: Halte Dukuh Atas Sudirman',
-                    'Perkantoran & MRT/TJ',
-                    '150 Cup',
-                    'Bawa kini: 120 cup',
-                    '140 – 150 Cup',
-                    'Terserap: 142 cup',
-                    '29°C Berawan Tipis',
-                    'Demand Kopi Susu Aren stabil',
-                    'Tinggi Komuter',
-                    '12.200 org/jam • Kantor Pulang',
-                    'Optimal: Target 118% tercapai. Sisa 42 cup aman hingga penutupan shift.',
-                    isWarning: false,
-                  ),
-                  _buildAiAnalysisRow(
-                    'Area C: Pojok Pasar Senen',
-                    'Pusat Grosir & Niaga',
-                    '110 Cup',
-                    'Bawa kini: 120 cup',
-                    '95 – 105 Cup',
-                    'Terserap: 95 cup',
-                    '31°C Panas Terbuka',
-                    'Tinggi Es Kopi Hitam & Aren',
-                    'Stabil Ramai',
-                    '8.500 org/jam • Pedagang',
-                    'Target 95 cup tercapai. Sisa 35 cup mencukupi closing shift pukul 16:00 WIB.',
-                    isWarning: false,
-                  ),
-                  _buildAiAnalysisRow(
-                    'Area D: Taman Suropati Menteng',
-                    'Kawasan Santai & Komunitas',
-                    '80 Cup',
-                    'Bawa kini: 100 cup',
-                    '70 – 80 Cup',
-                    'Terserap: 68 cup',
-                    '27°C Sejuk Teduh',
-                    'Permintaan kopi hangat malam',
-                    'Sedang ke Puncak Sore',
-                    '4.200 org/jam • Peak 18:00–21:00',
-                    'Demand bergeser ke malam hari. Siapkan varian hangat dan Matcha.',
-                    isWarning: false,
-                  ),
-                  _buildAiAnalysisRow(
-                    'Area E: Kuningan Madya Standby',
-                    'Koridor Rasuna Said',
-                    '70 Cup',
-                    'GRB-05 di Gudang',
-                    '60 – 70 Cup',
-                    'Peluang jam pulang kantor',
-                    '30°C Cerah',
-                    'Demand komuter kantor',
-                    'Padat Kantor',
-                    '10.000 org/jam • 16:30–18:30',
-                    'Peluang ekspansi: Deploy GRB-05 dengan seller Rizky untuk menangkap arus pulang kerja.',
-                    isWarning: false,
-                  ),
+                  if (_aiWeatherMode == 'RAIN') ...[
+                    _buildAiAnalysisRow(
+                      'Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari Outdoor',
+                      '60 Cup',
+                      'Bawa kini: 85 cup',
+                      '50 – 62 Cup',
+                      'Terserap: 52 cup',
+                      '23°C Hujan Angin Pantai',
+                      'Indeks Es Kopi -25%',
+                      'Lengang Hujan',
+                      '2.100 org/jam • Badai Pesisir',
+                      'Peringatan Cuaca: Pantai Taplau sepi saat hujan angin. Pangkas alokasi ke batas aman 60 cup guna hindari cup sisa & es mencair.',
+                      isWarning: true,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Gedung Kuliah & Selasar UNP',
+                      '76 Cup',
+                      'Bawa kini: 100 cup',
+                      '70 – 80 Cup',
+                      'Terserap: 74 cup',
+                      '25°C Hujan Ringan',
+                      'Varian Hangat Stabil (-5%)',
+                      'Komuter Selasar Kampus',
+                      '7.200 org/jam • Mahasiswa Berteduh',
+                      'Trafik trotoar melandai. Geser gerobak mendekati selasar gedung kuliah dan tonjolkan varian Teh Talua hangat.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Perkantoran Khatib Sulaiman (loc-02)',
+                      'Koridor Instansi & Perbankan',
+                      '72 Cup',
+                      'Bawa kini: 95 cup',
+                      '68 – 75 Cup',
+                      'Terserap: 70 cup',
+                      '25°C Gerimis Mendung',
+                      'Demand Kopi Hangat Naik',
+                      'Padat Jam Pulang Kantor',
+                      '8.500 org/jam • 16:30–18:00',
+                      'Pekerja kantor berteduh. Pangkas stok es -20% ke 72 cup, pertahankan Americano panas & Kopi Hitam Bukittinggi.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Pasar Raya Padang (loc-03)',
+                      'Sentra Perdagangan Tradisional',
+                      '68 Cup',
+                      'Bawa kini: 90 cup',
+                      '60 – 70 Cup',
+                      'Terserap: 62 cup',
+                      '24°C Hujan Becek',
+                      'Alokasi Diturunkan -20%',
+                      'Sedang Los Pasar',
+                      '5.000 org/jam • Pedagang Los',
+                      'Aktivitas pasar berkurang saat hujan lebat. Rekomendasi 68 cup aman menjaga perputaran modal tanpa sisa berlebih.',
+                      isWarning: false,
+                    ),
+                  ] else if (_aiWeatherMode == 'PEAK_SUNNY') ...[
+                    _buildAiAnalysisRow(
+                      'Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari Outdoor',
+                      '115 Cup',
+                      'Bawa kini: 85 cup',
+                      '110 – 120 Cup',
+                      'Terserap: 112 cup',
+                      '33°C Terik Panas Pesisir',
+                      'Indeks Es Kopi +35%',
+                      'Sangat Ramai Turis & Senja',
+                      '13.500 org/jam • Sunset Peak 17:00',
+                      'Stok kritis! Lonjakan dahaga ekstrem wisatawan pantai. Tambah stok maksimal gerobak (115 cup) Cold Brew Mint & Kopi Susu Aren.',
+                      isWarning: true,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Pintu Utama & Pusat Kegiatan Mhs',
+                      '118 Cup',
+                      'Bawa kini: 100 cup',
+                      '110 – 120 Cup',
+                      'Terserap: 114 cup',
+                      '32°C Panas Tropis Padang',
+                      'Demand Es Kopi Aren +25%',
+                      'Sangat Padat Mahasiswa',
+                      '16.200 org/jam • Pergantian Kelas',
+                      'Peluang omzet tinggi! Tambah alokasi stok +25% mendekati batas fisik gerobak (118 cup) guna cegah kehabisan stok jam sibuk.',
+                      isWarning: true,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Perkantoran Khatib Sulaiman (loc-02)',
+                      'Koridor Instansi & Perbankan',
+                      '112 Cup',
+                      'Bawa kini: 95 cup',
+                      '105 – 115 Cup',
+                      'Terserap: 108 cup',
+                      '32°C Panas Terbuka Aspal',
+                      'Indeks Minuman Dingin +25%',
+                      'Padat Komuter & Pegawai',
+                      '12.400 org/jam • Jam Makan & Pulang',
+                      'Pegawai kantor memburu minuman segar. Alokasi 112 cup disetujui, siapkan cadangan cup take-away & es kristal.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Pasar Raya Padang (loc-03)',
+                      'Sentra Perdagangan Tradisional',
+                      '108 Cup',
+                      'Bawa kini: 90 cup',
+                      '100 – 110 Cup',
+                      'Terserap: 102 cup',
+                      '33°C Terik Los Pasar',
+                      'Demand Minuman Segar Naik',
+                      'Ramai Aktivitas Grosir',
+                      '10.800 org/jam • Pedagang & Kuli',
+                      'Kuli panggul & pedagang los butuh es kopi aren penambah stamina. Rekomendasi 108 cup optimal memaksimalkan omzet harian.',
+                      isWarning: false,
+                    ),
+                  ] else ...[
+                    _buildAiAnalysisRow(
+                      'Kampus UNP Air Tawar (loc-01)',
+                      'Pintu Utama & Perpustakaan',
+                      '95 Cup',
+                      'Bawa kini: 100 cup',
+                      '90 – 100 Cup',
+                      'Terserap: 94 cup',
+                      '28°C Berawan Tipis',
+                      'Demand Kopi Susu Aren Normal',
+                      'Ramai Mahasiswa Reguler',
+                      '11.500 org/jam • Jam Kuliah Normal',
+                      'Optimal: Baseline standar 95 cup tercapai 98%. Sisa cup aman hingga penutupan shift sore.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Perkantoran Khatib Sulaiman (loc-02)',
+                      'Koridor Instansi & Perbankan',
+                      '90 Cup',
+                      'Bawa kini: 95 cup',
+                      '85 – 95 Cup',
+                      'Terserap: 88 cup',
+                      '29°C Berawan Normal',
+                      'Permintaan Stabil & Seimbang',
+                      'Stabil Pegawai Kantor',
+                      '9.200 org/jam • Jam Kantor Normal',
+                      'Target 90 cup tercapai. Komposisi seimbang Kopi Susu Aren & Americano Solok Radjo.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Pasar Raya Padang (loc-03)',
+                      'Sentra Perdagangan Tradisional',
+                      '85 Cup',
+                      'Bawa kini: 90 cup',
+                      '80 – 90 Cup',
+                      'Terserap: 84 cup',
+                      '29°C Teduh Normal',
+                      'Baseline Tren Riil Penjualan',
+                      'Stabil Pedagang Niaga',
+                      '7.800 org/jam • Aktivitas Belanja',
+                      'Kondisi operasional normal. Bawaan 85 cup mencukupi perputaran kas harian.',
+                      isWarning: false,
+                    ),
+                    _buildAiAnalysisRow(
+                      'Pantai Padang Taplau (loc-04)',
+                      'Kawasan Wisata Bahari Outdoor',
+                      '80 Cup',
+                      'Bawa kini: 85 cup',
+                      '75 – 85 Cup',
+                      'Terserap: 78 cup',
+                      '28°C Sejuk Pesisir Normal',
+                      'Puncak Ramai Sore Hari',
+                      'Komunitas & Warga Sore',
+                      '6.500 org/jam • Peak 16:30–18:30',
+                      'Demand bergeser jelang matahari terbenam. Siapkan varian Teh Talua & Cold Brew Mint.',
+                      isWarning: false,
+                    ),
+                  ],
                 ],
               ),
             ],
@@ -2666,6 +2838,53 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildWeatherFilterButton(String mode, String label, String sub, IconData icon, Color color) {
+    final bool isSelected = _aiWeatherMode == mode;
+    return InkWell(
+      onTap: () => setState(() => _aiWeatherMode = mode),
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.12) : const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? color : const Color(0xFFE5E7EB),
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: isSelected ? color : const Color(0xFF6B7280)),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    color: isSelected ? color : const Color(0xFF374151),
+                  ),
+                ),
+                Text(
+                  sub,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isSelected ? color.withOpacity(0.85) : const Color(0xFF9CA3AF),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
