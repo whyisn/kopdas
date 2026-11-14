@@ -23,6 +23,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // Warehouse filter
   String _warehouseCategoryFilter = 'Semua';
 
+  // Distribution filter
+  String _distributionFilter = 'Semua';
+
   // Sidebar Collapse State (3S.NET style)
   bool _isSidebarCollapsed = false;
 
@@ -340,73 +343,289 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  void _showDistributeStockDialog() {
-    String selectedSellerId = _staffList.first['id'];
-    String selectedSku = _warehouseStock.first['sku'];
-    final qtyCtrl = TextEditingController(text: '30');
+  void _quickAddEmergencyStock(String staffId, int amount) {
+    setState(() {
+      int remainingToDeduct = amount;
+      for (var w in _warehouseStock) {
+        if (remainingToDeduct <= 0) break;
+        int avail = w['central_stock'] as int;
+        if (avail > 0) {
+          int deduct = avail >= remainingToDeduct ? remainingToDeduct : avail;
+          w['central_stock'] = avail - deduct;
+          remainingToDeduct -= deduct;
+        }
+      }
+
+      for (var s in _staffList) {
+        if (s['id'] == staffId) {
+          s['current_stock'] = (s['current_stock'] as int) + amount;
+          s['morning_stock'] = (s['morning_stock'] as int) + amount;
+          if (s['operational_status'] == 'NOT_STARTED') {
+            s['operational_status'] = 'ACTIVE_SELLING';
+            s['clock_in'] = '06:30 WIB';
+          }
+        }
+      }
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Disposisi darurat +$amount Porsi berhasil dikirim ke gerobak!'),
+        backgroundColor: const Color(0xFF1E3932),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _autoDistributeMorningAll() {
+    setState(() {
+      for (var s in _staffList) {
+        if ((s['morning_stock'] as int) == 0 || s['operational_status'] == 'NOT_STARTED') {
+          int allocated = 60;
+          for (var w in _warehouseStock) {
+            if ((w['central_stock'] as int) >= 10) {
+              w['central_stock'] = (w['central_stock'] as int) - 10;
+            }
+          }
+          s['morning_stock'] = allocated;
+          s['current_stock'] = allocated;
+          s['operational_status'] = 'ACTIVE_SELLING';
+          s['clock_in'] = '06:00 WIB';
+        }
+      }
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Auto-disposisi pagi berhasil! Seluruh armada siap jalan.'),
+        backgroundColor: Color(0xFF059669),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showDistributeStockDialog([String? defaultStaffId]) {
+    String selectedSellerId = defaultStaffId ?? _staffList.first['id'];
+    
+    final Map<String, int> allocationMap = {
+      'KPS-01': 15,
+      'KPS-02': 15,
+      'KPS-03': 10,
+      'COF-01': 10,
+      'NCF-01': 10,
+      'NCF-02': 10,
+    };
 
     showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
-        builder: (context, setModalState) => AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          title: const Text('Distribusi Stok Bawaan Pagi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          content: SizedBox(
-            width: 440,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+        builder: (context, setModalState) {
+          final int totalAlloc = allocationMap.values.fold(0, (sum, val) => sum + val);
+
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DropdownButtonFormField<String>(
-                  initialValue: selectedSellerId,
-                  decoration: const InputDecoration(labelText: 'Petugas Penerima', border: OutlineInputBorder()),
-                  items: _staffList.map((s) => DropdownMenuItem(value: s['id'].toString(), child: Text('${s['name']} (${s['cart_id']})'))).toList(),
-                  onChanged: (val) {
-                    if (val != null) setModalState(() => selectedSellerId = val);
-                  },
+                Row(
+                  children: const [
+                    Icon(Icons.local_shipping_outlined, color: Color(0xFF1E3932), size: 20),
+                    SizedBox(width: 8),
+                    Text('Formulir Disposisi Bawaan Pagi', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827))),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: selectedSku,
-                  decoration: const InputDecoration(labelText: 'Produk Gudang', border: OutlineInputBorder()),
-                  items: _warehouseStock.map((w) => DropdownMenuItem(value: w['sku'].toString(), child: Text('${w['name']} (Sedia: ${w['central_stock']})'))).toList(),
-                  onChanged: (val) {
-                    if (val != null) setModalState(() => selectedSku = val);
-                  },
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: const Color(0xFFF0FDF4), borderRadius: BorderRadius.circular(6), border: Border.all(color: const Color(0xFFBBF7D0))),
+                  child: Text('Total Disposisi: $totalAlloc Cup', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF166534))),
                 ),
-                const SizedBox(height: 12),
-                TextField(controller: qtyCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Jumlah Cup yang Dibawa', border: OutlineInputBorder())),
               ],
             ),
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
-              onPressed: () {
-                final qty = int.tryParse(qtyCtrl.text) ?? 0;
-                if (qty <= 0) return;
-                setState(() {
-                  for (var w in _warehouseStock) {
-                    if (w['sku'] == selectedSku) {
-                      if ((w['central_stock'] as int) < qty) return;
-                      w['central_stock'] = (w['central_stock'] as int) - qty;
-                    }
-                  }
-                  for (var s in _staffList) {
-                    if (s['id'] == selectedSellerId) {
-                      s['current_stock'] = (s['current_stock'] as int) + qty;
-                      s['morning_stock'] = (s['morning_stock'] as int) + qty;
-                    }
-                  }
-                });
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Alokasi stok berhasil dikirim ke gerobak!')));
-              },
-              child: const Text('Kirim Stok'),
+            content: SizedBox(
+              width: 540,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Pilih Unit Gerobak & Petugas:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF374151))),
+                    const SizedBox(height: 6),
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedSellerId,
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: _staffList.map((s) => DropdownMenuItem(
+                        value: s['id'].toString(),
+                        child: Text('${s['cart_id']} • ${s['name']} (Sisa saat ini: ${s['current_stock']} cup)'),
+                      )).toList(),
+                      onChanged: (val) {
+                        if (val != null) setModalState(() => selectedSellerId = val);
+                      },
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Preset Disposisi Cepat
+                    Row(
+                      children: [
+                        const Text('Preset Cepat:', style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280))),
+                        const SizedBox(width: 8),
+                        _buildPresetChip('+10 Tiap Menu (60 Cup)', () {
+                          setModalState(() {
+                            allocationMap.updateAll((key, val) => 10);
+                          });
+                        }),
+                        const SizedBox(width: 6),
+                        _buildPresetChip('+15 Tiap Menu (90 Cup)', () {
+                          setModalState(() {
+                            allocationMap.updateAll((key, val) => 15);
+                          });
+                        }),
+                        const SizedBox(width: 6),
+                        _buildPresetChip('+20 Tiap Menu (120 Cup)', () {
+                          setModalState(() {
+                            allocationMap.updateAll((key, val) => 20);
+                          });
+                        }),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    const Text('Rincian Kuota 6 Menu Resmi:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF374151))),
+                    const SizedBox(height: 8),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Column(
+                        children: _warehouseStock.map((w) {
+                          final sku = w['sku'].toString();
+                          final currentVal = allocationMap[sku] ?? 0;
+                          final avail = w['central_stock'] as int;
+
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(w['name'].toString(), style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                                      Text('Sedia di Gudang: $avail Porsi', style: TextStyle(fontSize: 10.5, color: avail < 100 ? Colors.red : const Color(0xFF6B7280))),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove_circle_outline, size: 20, color: Color(0xFF6B7280)),
+                                      onPressed: currentVal > 0 ? () => setModalState(() => allocationMap[sku] = currentVal - 5) : null,
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                    Container(
+                                      width: 44,
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                                      padding: const EdgeInsets.symmetric(vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF9FAFB),
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: const Color(0xFFD1D5DB)),
+                                      ),
+                                      child: Text('$currentVal', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add_circle_outline, size: 20, color: Color(0xFF1E3932)),
+                                      onPressed: avail > currentVal ? () => setModalState(() => allocationMap[sku] = currentVal + 5) : null,
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Batal', style: TextStyle(color: Color(0xFF6B7280))),
+              ),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1E3932),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                ),
+                icon: const Icon(Icons.check_circle_outline, size: 16),
+                label: const Text('Simpan & Disposisikan Bawaan', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  if (totalAlloc <= 0) return;
+                  setState(() {
+                    for (var entry in allocationMap.entries) {
+                      for (var w in _warehouseStock) {
+                        if (w['sku'] == entry.key) {
+                          w['central_stock'] = (w['central_stock'] as int) - entry.value;
+                        }
+                      }
+                    }
+                    for (var s in _staffList) {
+                      if (s['id'] == selectedSellerId) {
+                        s['current_stock'] = (s['current_stock'] as int) + totalAlloc;
+                        s['morning_stock'] = (s['morning_stock'] as int) + totalAlloc;
+                        if (s['operational_status'] == 'NOT_STARTED') {
+                          s['operational_status'] = 'ACTIVE_SELLING';
+                          s['clock_in'] = '06:15 WIB';
+                        }
+                      }
+                    }
+                  });
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Disposisi $totalAlloc Porsi berhasil dikirim ke armada!'),
+                      backgroundColor: const Color(0xFF1E3932),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPresetChip(String label, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF3F4F6),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
         ),
+        child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF374151))),
       ),
     );
   }
@@ -3996,56 +4215,399 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // SUB-PAGES: DISTRIBUSI PAGI
+  // SUB-PAGES: DISTRIBUSI & DISPOSISI BAWAAN PAGI (ENTERPRISE LOGISTICS)
   // ===========================================================================
   Widget _buildStockDistributionView() {
+    final int totalMorning = _staffList.fold<int>(0, (sum, s) => sum + ((s['morning_stock'] ?? 0) as int));
+    final int totalSold = _staffList.fold<int>(0, (sum, s) => sum + ((s['cups_sold'] ?? 0) as int));
+    final int totalBox = _staffList.fold<int>(0, (sum, s) => sum + ((s['current_stock'] ?? 0) as int));
+    final int activeUnits = _staffList.where((s) => s['operational_status'] == 'ACTIVE_SELLING').length;
+    final int lowStockUnits = _staffList.where((s) => (s['current_stock'] as int) < 20 && s['operational_status'] == 'ACTIVE_SELLING').length;
+    final double penetrationRate = totalMorning > 0 ? (totalSold / totalMorning * 100) : 0.0;
+
+    final filterOptions = [
+      'Semua (${_staffList.length})',
+      'Aktif Jualan ($activeUnits)',
+      'Stok Menipis ($lowStockUnits)',
+      'Standby (${_staffList.length - activeUnits})',
+    ];
+
+    final filteredList = _staffList.where((s) {
+      if (_distributionFilter.startsWith('Aktif Jualan')) {
+        return s['operational_status'] == 'ACTIVE_SELLING';
+      } else if (_distributionFilter.startsWith('Stok Menipis')) {
+        return (s['current_stock'] as int) < 20 && s['operational_status'] == 'ACTIVE_SELLING';
+      } else if (_distributionFilter.startsWith('Standby')) {
+        return s['operational_status'] != 'ACTIVE_SELLING';
+      }
+      return true;
+    }).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. PAGE HEADER & QUICK ACTIONS
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Rekap Bawaan Pagi & Pengurangan Penjualan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
-              onPressed: _showDistributeStockDialog,
-              child: const Text('Bagi Stok Pagi'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Distribusi & Disposisi Bawaan Pagi',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Color(0xFF111827), letterSpacing: -0.3),
+                ),
+                SizedBox(height: 3),
+                Text(
+                  'Kontrol kuota 6 menu resmi ke armada gerobak, disposisi serah terima shift pagi (05:30 - 07:00), dan sisa box',
+                  style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3932),
+                    side: const BorderSide(color: Color(0xFF1E3932)),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: _autoDistributeMorningAll,
+                  icon: const Icon(Icons.auto_fix_high_outlined, size: 16),
+                  label: const Text('Auto-Disposisi Armada (Rata)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3932),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  ),
+                  onPressed: () => _showDistributeStockDialog(),
+                  icon: const Icon(Icons.add_shopping_cart_outlined, size: 16),
+                  label: const Text('+ Formulir Disposisi', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ],
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
-        _tableContainer(
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(2),
-              2: FlexColumnWidth(1.4),
-              3: FlexColumnWidth(1.4),
-              4: FlexColumnWidth(1.4),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(color: Color(0xFFFAFAFA), border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0)))),
-                children: [
-                  _cleanTh('Petugas Lapangan'),
-                  _cleanTh('Lokasi Gerobak'),
-                  _cleanTh('Stok Awal Pagi'),
-                  _cleanTh('Terjual Siang'),
-                  _cleanTh('Sisa Box'),
-                ],
+        // 2. LOGISTICS KPI CARDS
+        Row(
+          children: [
+            Expanded(
+              child: _buildWarehouseKpiCard(
+                'Total Bawaan Pagi',
+                '$totalMorning Porsi',
+                'Alokasi seluruh armada',
+                Icons.inventory_2_outlined,
+                const Color(0xFF059669),
               ),
-              for (final s in _staffList)
-                TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: _buildWarehouseKpiCard(
+                'Terjual Lapangan',
+                '$totalSold Porsi',
+                '${penetrationRate.toStringAsFixed(1)}% penetrasi terserap',
+                Icons.point_of_sale_outlined,
+                const Color(0xFF2563EB),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: _buildWarehouseKpiCard(
+                'Sisa Stok Berputar di Box',
+                '$totalBox Porsi',
+                'Stok fisik di gerobak aktif',
+                Icons.takeout_dining_outlined,
+                const Color(0xFFD97706),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: _buildWarehouseKpiCard(
+                'Kesiapan Armada',
+                '$activeUnits / ${_staffList.length} Unit Siap',
+                lowStockUnits > 0 ? '$lowStockUnits butuh tambahan' : 'Semua unit tercukupi',
+                Icons.electric_rickshaw_outlined,
+                const Color(0xFF1E3932),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 18),
+
+        // 3. PRO DISPOSITION TABLE CONTAINER
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Filter Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _cleanTd(s['name'], bold: true),
-                    _cleanTd(s['cart_id']),
-                    _cleanTd('${s['morning_stock']} Cup'),
-                    _cleanTd('${s['cups_sold']} Cup', color: const Color(0xFF10B981), bold: true),
-                    _cleanTd('${s['current_stock']} Cup', color: (s['current_stock'] as int) < 20 ? Colors.red : null, bold: (s['current_stock'] as int) < 20),
+                    Row(
+                      children: const [
+                        Icon(Icons.format_list_bulleted, size: 16, color: Color(0xFF1E3932)),
+                        SizedBox(width: 8),
+                        Text(
+                          'Matriks Disposisi Bawaan Pagi per Armada',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF111827)),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: filterOptions.map((opt) {
+                        final isSel = _distributionFilter == opt || (_distributionFilter == 'Semua' && opt.startsWith('Semua'));
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: InkWell(
+                            onTap: () => setState(() => _distributionFilter = opt),
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: isSel ? const Color(0xFF1E3932) : const Color(0xFFF3F4F6),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                opt,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
+                                  color: isSel ? Colors.white : const Color(0xFF4B5563),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ],
                 ),
+              ),
+              const Divider(height: 1, color: Color(0xFFE5E7EB)),
+
+              // Table
+              Table(
+                columnWidths: const {
+                  0: FlexColumnWidth(2.6), // Armada & Petugas
+                  1: FlexColumnWidth(2.8), // Kuota 6 Menu Pagi
+                  2: FlexColumnWidth(2.2), // Penjualan & Progress
+                  3: FlexColumnWidth(1.6), // Sisa di Box
+                  4: FlexColumnWidth(1.6), // Status
+                  5: FlexColumnWidth(2.4), // Aksi Disposisi Cepat
+                },
+                children: [
+                  TableRow(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF9FAFB),
+                      border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
+                    ),
+                    children: [
+                      _cleanTh('Armada & Petugas'),
+                      _cleanTh('Alokasi Bawaan Pagi'),
+                      _cleanTh('Penjualan Lapangan'),
+                      _cleanTh('Sisa Box'),
+                      _cleanTh('Status Shift'),
+                      _cleanTh('Aksi Disposisi Cepat'),
+                    ],
+                  ),
+                  for (final s in filteredList)
+                    TableRow(
+                      decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
+                      ),
+                      children: [
+                        // Col 0: Armada & Petugas
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 34,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1E3932).withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.coffee_maker_outlined, color: Color(0xFF1E3932), size: 18),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(s['name'].toString(), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Color(0xFF111827))),
+                                    const SizedBox(height: 2),
+                                    Text('${s['cart_id']} • ${s['location']}', style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                                    const SizedBox(height: 3),
+                                    Text('Mulai: ${s['clock_in']}', style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF059669))),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Col 1: Alokasi Bawaan Pagi (6 Menu)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text('${s['morning_stock']} Porsi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E3932))),
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(4)),
+                                    child: const Text('6 Menu Siap', style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: Color(0xFF4B5563))),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                (s['morning_stock'] as int) > 0
+                                    ? 'Soft, Strong, Butter, Amr, Cok, Mat'
+                                    : 'Belum dialokasikan',
+                                style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280)),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Col 2: Penjualan Lapangan & Progress Bar
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text('${s['cups_sold']} Porsi', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF059669))),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    (s['morning_stock'] as int) > 0
+                                        ? '(${((s['cups_sold'] as int) / (s['morning_stock'] as int) * 100).toStringAsFixed(0)}%)'
+                                        : '(0%)',
+                                    style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(2),
+                                child: LinearProgressIndicator(
+                                  value: (s['morning_stock'] as int) > 0
+                                      ? ((s['cups_sold'] as int) / (s['morning_stock'] as int)).clamp(0.0, 1.0)
+                                      : 0.0,
+                                  minHeight: 5,
+                                  backgroundColor: const Color(0xFFE5E7EB),
+                                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF059669)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Col 3: Sisa Box
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${s['current_stock']} Porsi',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w800,
+                                  color: (s['current_stock'] as int) < 20 && s['operational_status'] == 'ACTIVE_SELLING'
+                                      ? const Color(0xFFDC2626)
+                                      : const Color(0xFF111827),
+                                ),
+                              ),
+                              if ((s['current_stock'] as int) < 20 && s['operational_status'] == 'ACTIVE_SELLING') ...[
+                                const SizedBox(width: 4),
+                                const Icon(Icons.warning_amber_rounded, size: 14, color: Color(0xFFDC2626)),
+                              ],
+                            ],
+                          ),
+                        ),
+
+                        // Col 4: Status Shift
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: _buildStatusBadge(
+                              s['operational_status'] == 'ACTIVE_SELLING'
+                                  ? ((s['current_stock'] as int) < 20 ? 'Stok Menipis' : 'Aman')
+                                  : 'Standby',
+                            ),
+                          ),
+                        ),
+
+                        // Col 5: Aksi Disposisi Cepat
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () => _quickAddEmergencyStock(s['id'].toString(), 15),
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFEF3C7),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: const Color(0xFFFDE68A)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: const [
+                                      Icon(Icons.bolt, size: 13, color: Color(0xFFB45309)),
+                                      SizedBox(width: 2),
+                                      Text('+15 Cepat', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFB45309))),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              InkWell(
+                                onTap: () => _showDistributeStockDialog(s['id'].toString()),
+                                borderRadius: BorderRadius.circular(4),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3F4F6),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                                  ),
+                                  child: const Text('Disposisi', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E3932))),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ],
           ),
         ),
