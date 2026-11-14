@@ -128,7 +128,7 @@ class _ManualLocationScreenState extends State<ManualLocationScreen> {
         AppField(
           label: 'Cari area atau jalan',
           controller: _q,
-          hint: 'Contoh: Kemang',
+          hint: 'Contoh: Air Tawar, Padang Barat',
           onChanged: (_) => setState(() {}),
         ),
         const SizedBox(height: 8),

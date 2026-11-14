@@ -8,18 +8,28 @@ class MakingScreen extends StatefulWidget {
 }
 
 class _MakingScreenState extends State<MakingScreen> {
-  Timer? _t;
+  Timer? _t, _poll;
   bool _gone = false;
 
   @override
   void initState() {
     super.initState();
-    _t = Timer(const Duration(seconds: 7), _next);
+    _t = Timer(const Duration(seconds: 15), _next);
+    // Realtime polling ke database backend untuk update status dari Seller
+    _poll = Timer.periodic(const Duration(seconds: 2), (_) async {
+      if (!mounted || _gone) return;
+      final o = context.read<OrderProvider>();
+      await o.checkOrderStatus();
+      if (o.orderStatus == 'READY_FOR_PICKUP' || o.orderStatus == 'COMPLETED') {
+        _next();
+      }
+    });
   }
 
   @override
   void dispose() {
     _t?.cancel();
+    _poll?.cancel();
     super.dispose();
   }
 
@@ -129,11 +139,11 @@ class ArriveScreen extends StatelessWidget {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, spacing: 14, children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           child: Container(
             height: 200,
             decoration: BoxDecoration(
-                border: Border.all(color: p.line), borderRadius: BorderRadius.circular(20)),
+                border: Border.all(color: p.line), borderRadius: BorderRadius.circular(12)),
             child: MapView(pins: [c]),
           ),
         ),

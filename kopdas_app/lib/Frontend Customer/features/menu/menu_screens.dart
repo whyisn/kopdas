@@ -46,7 +46,7 @@ class MenuScreen extends StatelessWidget {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(spacing: 8, children: [
-            for (final k in MockData.categories)
+            for (final k in o.allCategories)
               AppChip(label: k, selected: o.category == k, onTap: () => o.setCategory(k)),
           ]),
         ),

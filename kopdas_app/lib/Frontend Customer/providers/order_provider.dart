@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import '../../../services/api_client.dart';
-import '../../../services/auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:kopdas_app/services/api_client.dart';
+import 'package:kopdas_app/services/auth_service.dart';
 import '../core/utils/format.dart';
 import '../data/mock_data.dart';
 import '../data/models/cart_item.dart';
@@ -12,11 +13,17 @@ enum PayMethod { qris, wallet, va }
 
 class OrderProvider extends ChangeNotifier {
   static const serviceFee = 1000;
-  static const payWindow = Duration(seconds: 120);
+  static const payWindow = Duration(seconds: 180);
   final _rand = Random();
 
+  // Data dinamis dari backend database SQLite
+  List<CoffeeCart> _dynamicCarts = [];
+  List<Product> _dynamicProducts = [];
+  List<String> _dynamicCategories = [];
+  bool isLoadingBackend = false;
+
   // Lokasi & gerobak
-  String locName = '';
+  String locName = 'Lokasi kamu saat ini (Padang)';
   double distFactor = 1;
   bool locEmpty = false;
   String? cartId;
@@ -32,7 +39,7 @@ class OrderProvider extends ChangeNotifier {
   bool simulateChange = false;
   List<String> changes = [];
 
-  // Pesanan & pembayaran
+  // Pesanan & pembayaran database + Midtrans
   String backendOrderId = '';
   String qrisAssetUrl = '';
   String orderCode = '';
@@ -41,25 +48,156 @@ class OrderProvider extends ChangeNotifier {
   bool paymentReceived = false;
   DateTime deadline = DateTime.now();
 
+  // Midtrans Payment Gateway credentials & state
+  String midtransClientKey = 'Mid-client-xVYN5mUwjQwAH_-o';
+  String midtransNotificationUrl = 'http://127.0.0.1:8000/api/v1/payments/midtrans/notification';
+  String? midtransSnapToken;
+  String? midtransSnapRedirectUrl;
+  String? midtransQrString;
+  String? midtransQrUrl;
+  String orderStatus = 'PENDING_PAYMENT';
+
   // Serah terima & review
   List<bool> received = [];
   int rating = 0;
   final Set<String> tags = {};
   String review = '';
 
+  // ---------- Sinkronisasi Database Backend ----------
+  List<CoffeeCart> get allCarts =>
+      _dynamicCarts.isNotEmpty ? _dynamicCarts : MockData.carts;
+
+  List<Product> get allMenu =>
+      _dynamicProducts.isNotEmpty ? _dynamicProducts : MockData.menu;
+
+  List<String> get allCategories =>
+      _dynamicCategories.isNotEmpty ? _dynamicCategories : MockData.categories;
+
+  Future<void> fetchBackendData() async {
+    isLoadingBackend = true;
+    notifyListeners();
+
+    try {
+      // 1. Ambil data produk asli dari database
+      final prodRes = await sessionController.api.get('/products') as List<dynamic>;
+      final catRes = await sessionController.api.get('/categories') as List<dynamic>;
+      final locRes = await sessionController.api.get('/locations') as List<dynamic>;
+
+      // Map categories
+      final catMap = <String, String>{};
+      final catList = <String>['Semua'];
+      for (final c in catRes) {
+        final id = c['id'] as String;
+        final name = c['name'] as String;
+        catMap[id] = name;
+        if (!catList.contains(name)) catList.add(name);
+      }
+      _dynamicCategories = catList;
+
+      // Map products
+      final prodList = <Product>[];
+      for (final p in prodRes) {
+        final id = p['id'] as String;
+        final catId = p['category_id'] as String? ?? '';
+        final catName = catMap[catId] ?? 'Coffee';
+        final name = p['name'] as String;
+        final price = (p['price'] as num?)?.toInt() ?? 10000;
+        final desc = p['description'] as String? ?? 'Minuman racikan segar KopiCerdas Padang';
+
+        Color color = const Color(0xFF6F4E37);
+        if (id.contains('01')) color = const Color(0xFF8A5A33);
+        if (id.contains('02')) color = const Color(0xFF3B2A20);
+        if (id.contains('03')) color = const Color(0xFF4A2C20);
+        if (id.contains('04')) color = const Color(0xFF9E2A2B);
+        if (id.contains('05')) color = const Color(0xFFB9763A);
+        if (id.contains('06')) color = const Color(0xFFD9A62F);
+
+        prodList.add(Product(
+          id: id,
+          category: catName,
+          name: name,
+          description: desc,
+          price: price,
+          color: color,
+          isDrink: true,
+        ));
+      }
+      if (prodList.isNotEmpty) _dynamicProducts = prodList;
+
+      // Map locations / carts dari database
+      final cartList = <CoffeeCart>[];
+      int idx = 0;
+      for (final l in locRes) {
+        final id = l['id'] as String;
+        final name = l['name'] as String;
+        final address = l['address'] as String? ?? 'Padang';
+        final isActive = l['is_active'] as bool? ?? true;
+
+        final offsets = [
+          const Offset(228, 66),
+          const Offset(172, 118),
+          const Offset(92, 142),
+          const Offset(118, 62),
+        ];
+        final pos = idx < offsets.length ? offsets[idx] : const Offset(150, 100);
+        final sellerId = 'usr-seller-0${(idx % 2) + 1}';
+
+        cartList.add(CoffeeCart(
+          id: id,
+          sellerId: sellerId,
+          name: name,
+          spot: address,
+          hours: '06.30–21.00 WIB',
+          baseDistance: 150 + (idx * 200),
+          rating: 4.8 + (idx % 2 * 0.1),
+          reviews: 200 + (idx * 110),
+          tag: 'Gerobak Kopi Lapangan Padang',
+          waitMinutes: 4 + (idx * 2),
+          online: isActive,
+          pos: pos,
+        ));
+        idx++;
+      }
+      if (cartList.isNotEmpty) _dynamicCarts = cartList;
+
+    } catch (e) {
+      debugPrint('Note: Menggunakan dataset Padang fallback ($e)');
+    } finally {
+      isLoadingBackend = false;
+      notifyListeners();
+    }
+  }
+
   // ---------- turunan ----------
-  Product productOf(String id) => MockData.menu.firstWhere((m) => m.id == id);
-  CoffeeCart get cart => MockData.carts.firstWhere((c) => c.id == cartId);
+  Product productOf(String id) {
+    try {
+      return allMenu.firstWhere((m) => m.id == id);
+    } catch (_) {
+      return allMenu.first;
+    }
+  }
+
+  CoffeeCart get cart {
+    try {
+      return allCarts.firstWhere((c) => c.id == cartId);
+    } catch (_) {
+      return allCarts.first;
+    }
+  }
+
   List<CoffeeCart> get availableCarts => locEmpty
       ? []
-      : MockData.carts.where((c) => c.online && closed[c.id] != true).toList();
+      : allCarts.where((c) => c.online && closed[c.id] != true).toList();
+
   int distance(CoffeeCart c) => (c.baseDistance * distFactor).round();
   int get subtotal => items.fold(0, (a, i) => a + i.unit * i.qty);
   int get total => subtotal + serviceFee;
   int get count => items.fold(0, (a, i) => a + i.qty);
+
   List<Product> get filteredMenu => category == 'Semua'
-      ? MockData.menu
-      : MockData.menu.where((m) => m.category == category).toList();
+      ? allMenu
+      : allMenu.where((m) => m.category == category).toList();
+
   int get remainingSeconds =>
       max(0, (deadline.difference(DateTime.now()).inMilliseconds / 1000).ceil());
 
@@ -67,9 +205,11 @@ class OrderProvider extends ChangeNotifier {
     final p = productOf(d.pid);
     var u = p.price;
     if (p.isDrink) {
-      u += MockData.sizes.firstWhere((s) => s.name == d.size).extra;
+      u += MockData.sizes.firstWhere((s) => s.name == d.size, orElse: () => MockData.sizes.first).extra;
       for (final a in d.addons) {
-        u += MockData.addons.firstWhere((x) => x.name == a).extra;
+        try {
+          u += MockData.addons.firstWhere((x) => x.name == a).extra;
+        } catch (_) {}
       }
     }
     return u;
@@ -77,14 +217,14 @@ class OrderProvider extends ChangeNotifier {
 
   // ---------- lokasi ----------
   void setGps() {
-    locName = 'Lokasi kamu saat ini';
+    locName = 'Lokasi kamu saat ini (Padang)';
     distFactor = 1;
     locEmpty = false;
     notifyListeners();
   }
 
   void setArea(Area a) {
-    locName = '${a.name}, Jakarta';
+    locName = '${a.name}, Padang';
     locEmpty = a.empty;
     var h = 0;
     for (final ch in a.name.codeUnits) {
@@ -164,9 +304,11 @@ class OrderProvider extends ChangeNotifier {
   bool applyValidation() {
     changes = [];
     if (!simulateChange) return true;
-    final f = items.first;
-    f.unit += 2000;
-    changes.add('Harga ${f.name} naik ${rp(2000)} per item.');
+    if (items.isNotEmpty) {
+      final f = items.first;
+      f.unit += 2000;
+      changes.add('Harga ${f.name} naik ${rp(2000)} per item.');
+    }
     if (items.length > 1) {
       final r = items.removeLast();
       changes.add('${r.name} sedang habis dan dihapus dari pesananmu.');
@@ -176,7 +318,7 @@ class OrderProvider extends ChangeNotifier {
     return false;
   }
 
-  // ---------- konfirmasi & pembayaran ----------
+  // ---------- konfirmasi & pembayaran Midtrans ----------
   Future<bool> createRealOrder() async {
     final currentCart = cart;
     final orderPayload = {
@@ -198,6 +340,8 @@ class OrderProvider extends ChangeNotifier {
       backendOrderId = res['id'] as String? ?? '';
       orderCode = res['order_number'] as String? ?? 'KC-PADANG';
       qrisAssetUrl = res['qris_asset_url'] as String? ?? '';
+      orderStatus = res['order_status'] as String? ?? 'PENDING_PAYMENT';
+
       final exp = res['expires_at'] as String?;
       if (exp != null) {
         deadline = DateTime.tryParse(exp)?.toLocal() ?? DateTime.now().add(payWindow);
@@ -205,6 +349,10 @@ class OrderProvider extends ChangeNotifier {
         deadline = DateTime.now().add(payWindow);
       }
       paymentReceived = false;
+
+      // Buat transaksi Midtrans secara otomatis setelah order terdaftar
+      await initMidtransCharge('snap');
+
       notifyListeners();
       return true;
     } on ApiException catch (e) {
@@ -214,6 +362,7 @@ class OrderProvider extends ChangeNotifier {
       return false;
     } catch (e) {
       // Fallback offline / network error
+      backendOrderId = 'ord-sim-${1000 + _rand.nextInt(9000)}';
       orderCode = 'KC-${1000 + _rand.nextInt(9000)}';
       deadline = DateTime.now().add(payWindow);
       paymentReceived = false;
@@ -222,35 +371,92 @@ class OrderProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> triggerRealPayment() async {
+  /// Menerima pesanan secara simulasi / manual
+  void acceptOrder() {
+    if (orderCode.isEmpty) {
+      orderCode = 'KC-${1000 + _rand.nextInt(9000)}';
+    }
+    if (deadline.isBefore(DateTime.now())) {
+      deadline = DateTime.now().add(payWindow);
+    }
+    notifyListeners();
+  }
+
+  /// Menolak pesanan secara simulasi / manual
+  void rejectOrder() {
+    if (cartId != null) {
+      closed[cartId!] = true;
+    }
+    if (rejectReason.isEmpty) {
+      rejectReason = MockData.rejectReasons[_rand.nextInt(MockData.rejectReasons.length)];
+    }
+    notifyListeners();
+  }
+
+  /// Memanggil endpoint backend untuk membuat transaksi Snap / QRIS Midtrans
+  Future<void> initMidtransCharge(String paymentType) async {
+    if (backendOrderId.isEmpty) return;
+    try {
+      final chargeRes = await sessionController.api.post(
+        '/payments/midtrans/charge',
+        body: {
+          'order_id': backendOrderId,
+          'payment_type': paymentType,
+        },
+      ) as Map<String, dynamic>;
+
+      midtransSnapToken = chargeRes['snap_token'] as String?;
+      midtransSnapRedirectUrl = chargeRes['snap_redirect_url'] as String?;
+      midtransQrString = chargeRes['qr_string'] as String?;
+      midtransQrUrl = chargeRes['qr_url'] as String?;
+      if (chargeRes['client_key'] != null) {
+        midtransClientKey = chargeRes['client_key'] as String;
+      }
+      if (chargeRes['notification_url'] != null) {
+        midtransNotificationUrl = chargeRes['notification_url'] as String;
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Midtrans charge note: $e');
+    }
+  }
+
+  /// Cek status pesanan secara berkala dari endpoint backend database
+  Future<bool> checkOrderStatus() async {
+    if (backendOrderId.isEmpty) return paymentReceived;
+    try {
+      final res = await sessionController.api.get('/customer/orders/$backendOrderId')
+          as Map<String, dynamic>;
+      final payStatus = res['payment_status'] as String? ?? '';
+      orderStatus = res['order_status'] as String? ?? '';
+
+      if (payStatus == 'PAID' || orderStatus == 'CONFIRMED' || orderStatus == 'PREPARING' || orderStatus == 'READY_FOR_PICKUP' || orderStatus == 'COMPLETED') {
+        paymentReceived = true;
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      debugPrint('Check order error: $e');
+    }
+    return paymentReceived;
+  }
+
+  /// Memicu simulasi notifikasi Midtrans ke link lokal (settlement)
+  Future<bool> triggerMidtransLocalSimulation() async {
     if (backendOrderId.isNotEmpty) {
       try {
         await sessionController.api.post(
-          '/webhooks/qris',
-          body: {
-            'event': 'PAYMENT_CONFIRMED',
-            'order_id': backendOrderId,
-            'gross_amount': total,
-          },
+          '/payments/midtrans/simulate-notification?order_id=$backendOrderId&action=settlement',
+          body: {},
         );
-      } catch (_) {
-        // Abaikan jika simulasi webhook dev
+        await checkOrderStatus();
+      } catch (e) {
+        debugPrint('Midtrans sim error: $e');
       }
     }
     paymentReceived = true;
     notifyListeners();
     return true;
-  }
-
-  void acceptOrder() {
-    orderCode = 'KC-${1000 + _rand.nextInt(9000)}';
-    notifyListeners();
-  }
-
-  void rejectOrder() {
-    closed[cartId!] = true;
-    rejectReason = MockData.rejectReasons[_rand.nextInt(MockData.rejectReasons.length)];
-    notifyListeners();
   }
 
   void startPayment() {
@@ -261,7 +467,16 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setPayMethod(PayMethod m) { payMethod = m; notifyListeners(); }
+  void setPayMethod(PayMethod m) {
+    payMethod = m;
+    notifyListeners();
+    if (m == PayMethod.qris) {
+      initMidtransCharge('qris');
+    } else {
+      initMidtransCharge('snap');
+    }
+  }
+
   void markPaid() { paymentReceived = true; notifyListeners(); }
 
   // ---------- serah terima & review ----------
@@ -293,6 +508,11 @@ class OrderProvider extends ChangeNotifier {
     category = 'Semua';
     pickup = 'Secepatnya';
     paymentReceived = false;
+    midtransSnapToken = null;
+    midtransSnapRedirectUrl = null;
+    midtransQrString = null;
+    midtransQrUrl = null;
+    orderStatus = 'PENDING_PAYMENT';
     notifyListeners();
   }
 }

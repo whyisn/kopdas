@@ -176,12 +176,42 @@ class OrderResponse(BaseModel):
     expires_at: Optional[datetime.datetime]
     data_label: str = "REAL"
     items: Optional[List[OrderItemResponse]] = None
+    snap_token: Optional[str] = None
+    snap_redirect_url: Optional[str] = None
+    qr_string: Optional[str] = None
+    qr_url: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 class OrderStatusUpdateRequest(BaseModel):
     status: str = Field(..., description="Status baru pesanan: PREPARING, READY_FOR_PICKUP, COMPLETED, CANCELLED")
+
+class MidtransChargeRequest(BaseModel):
+    order_id: str
+    payment_type: Optional[str] = "snap"  # "snap" atau "qris"
+
+class MidtransChargeResponse(BaseModel):
+    order_id: str
+    order_number: str
+    gross_amount: int
+    payment_type: str
+    snap_token: Optional[str] = None
+    snap_redirect_url: Optional[str] = None
+    qr_string: Optional[str] = None
+    qr_url: Optional[str] = None
+    client_key: str
+    notification_url: str
+
+class MidtransNotificationPayload(BaseModel):
+    order_id: str
+    status_code: str
+    gross_amount: str
+    signature_key: str
+    transaction_status: str
+    transaction_id: Optional[str] = None
+    payment_type: Optional[str] = None
+    fraud_status: Optional[str] = None
 
 class QRISWebhookRequest(BaseModel):
     provider_tx_id: Optional[str] = None

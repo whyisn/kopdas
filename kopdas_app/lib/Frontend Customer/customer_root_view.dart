@@ -27,7 +27,7 @@ class CustomerRootView extends StatelessWidget {
             initialUserName: initialUserName ?? 'Sobat Kopi',
           ),
         ),
-        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()..fetchBackendData()),
       ],
       child: Builder(
         builder: (context) {

@@ -45,6 +45,13 @@ class Settings(BaseSettings):
     QRIS_NMID: str = "ID1020000000001"
     QRIS_IMAGE_URL: str = "/assets/qris/merchant_static.png"
     QRIS_SIMULATOR_SECRET: str = "qris-dev-sim-secret-key"
+
+    # --- Midtrans Payment Gateway ---
+    MIDTRANS_CLIENT_KEY: str = "Mid-client-xVYN5mUwjQwAH_-o"
+    MIDTRANS_SERVER_KEY: str = "Mid-server-525AC7MsYcVbzShFiO7gLtY3"
+    MIDTRANS_KEY_NAME: str = "G701621745-DEFAULT-PAYMENT-CLIENT"
+    MIDTRANS_IS_PRODUCTION: bool = False
+    MIDTRANS_NOTIFICATION_URL: str = "http://127.0.0.1:8000/api/v1/payments/midtrans/notification"
     
     GOOGLE_MAPS_API_KEY: str = ""
     WEATHER_API_KEY: str = ""

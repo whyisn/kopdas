@@ -6,7 +6,7 @@ from app.seed.seed_data import run_seed
 
 # Import routers
 from app.api.v1 import (
-    auth, users, products, inventory, transactions, orders, webhooks, analytics, locations, ai
+    auth, users, products, inventory, transactions, orders, webhooks, analytics, locations, ai, payments
 )
 
 # Buat tabel otomatis jika belum ada
@@ -47,6 +47,7 @@ app.include_router(webhooks.router, prefix=settings.API_V1_STR)
 app.include_router(analytics.router, prefix=settings.API_V1_STR)
 app.include_router(locations.router, prefix=settings.API_V1_STR)
 app.include_router(ai.router, prefix=settings.API_V1_STR)
+app.include_router(payments.router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["Health"])
 def health_check():

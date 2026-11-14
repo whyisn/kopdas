@@ -1,4 +1,4 @@
-import '../../../../services/auth_service.dart';
+import 'package:kopdas_app/services/auth_service.dart';
 import '../../core/core.dart';
 
 class HomeScreen extends StatelessWidget {
