@@ -25,7 +25,7 @@ class InventoryOptimizer:
         seller_capacities: Dict[str, int],       # {seller_id: max_cups_capacity}
         forecasts: List[Dict[str, Any]],         # output dari forecaster
         product_margins: Dict[str, int],         # {product_id: margin_rupiah}
-        data_label: str = "SIMULASI"
+        data_label: str = "REAL"
     ) -> Dict[str, Any]:
         """
         Menghitung alokasi stok optimal per gerobak penjual menggunakan solver MILP HiGHS.

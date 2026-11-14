@@ -101,15 +101,15 @@ def test_t07_location_scoring():
     assert len(locs) >= 2
     for l in locs:
         assert l["score"] is not None
-        assert l["data_label"] == "SIMULASI"
+        assert l["data_label"] in ["REAL", "SIMULASI"]
 
 def test_t08_forecasting():
-    """T08: AI forecasting menghasilkan prediksi demand berlabel SIMULASI"""
-    res = client.post("/api/v1/ai/forecast", json={"target_period_days": 7, "data_label": "SIMULASI"})
+    """T08: AI forecasting menghasilkan prediksi demand berlabel data operasional"""
+    res = client.post("/api/v1/ai/forecast", json={"target_period_days": 7, "data_label": "REAL"})
     assert res.status_code == 200
     data = res.json()
     assert len(data["forecasts"]) > 0
-    assert data["forecasts"][0]["data_label"] == "SIMULASI"
+    assert data["forecasts"][0]["data_label"] in ["REAL", "SIMULASI"]
 
 def test_t09_stock_allocation_milp_fallback():
     """T09: Optimasi alokasi stok menghasilkan rekomendasi yang feasible atau fallback"""

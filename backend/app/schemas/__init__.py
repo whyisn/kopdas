@@ -24,6 +24,18 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class UserCreateRequest(BaseModel):
+    username: str
+    name: str
+    password: str
+    role: str = "SELLER"
+
+class UserUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    is_active: Optional[bool] = None
+    password: Optional[str] = None
+
 # --- Products & Categories ---
 class CategoryBase(BaseModel):
     name: str
@@ -180,6 +192,31 @@ class QRISWebhookRequest(BaseModel):
     signature: Optional[str] = None
 
 # --- Locations ---
+class LocationCreateRequest(BaseModel):
+    name: str
+    latitude: float
+    longitude: float
+    address: Optional[str] = None
+    seller_id: Optional[str] = None
+    source_type: str = "ACTIVE_POINT"
+    is_active: bool = True
+
+class LocationUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    address: Optional[str] = None
+    seller_id: Optional[str] = None
+    source_type: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class LocationTelemetryRequest(BaseModel):
+    latitude: float
+    longitude: float
+    accuracy_m: Optional[float] = None
+    battery_pct: Optional[int] = None
+    status: Optional[str] = "ACTIVE_SELLING"
+
 class LocationResponse(BaseModel):
     id: str
     seller_id: Optional[str] = None
@@ -193,7 +230,7 @@ class LocationResponse(BaseModel):
     score: Optional[float] = None
     factors: Optional[List[str]] = None
     confidence: Optional[float] = None
-    data_label: str = "SIMULASI"
+    data_label: str = "REAL"
 
     class Config:
         from_attributes = True
@@ -203,7 +240,7 @@ class AIForecastRequest(BaseModel):
     target_period_days: int = 7
     location_ids: Optional[List[str]] = None
     product_ids: Optional[List[str]] = None
-    data_label: str = "SIMULASI"
+    data_label: str = "REAL"
 
 class AIRecommendationItem(BaseModel):
     model_config = {"protected_namespaces": ()}
@@ -221,7 +258,7 @@ class AIRecommendationItem(BaseModel):
     rationale: List[str]
     model_version: str
     solver_status: str
-    data_label: str
+    data_label: str = "REAL"
 
 class AIOptimizeResponse(BaseModel):
     recommendations: List[AIRecommendationItem]
@@ -229,4 +266,15 @@ class AIOptimizeResponse(BaseModel):
     estimated_margin: int
     solver_status: str
     processing_time_ms: float
-    data_label: str = "SIMULASI"
+    data_label: str = "REAL"
+
+class AIMetricsResponse(BaseModel):
+    model_config = {"protected_namespaces": ()}
+    model_version: str
+    trained_records_count: int
+    profit_lift_pct: float
+    wape: float
+    rmse: float
+    waste_reduction_pct: float
+    benchmark_comparison: dict
+    data_label: str = "REAL"

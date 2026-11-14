@@ -6,7 +6,7 @@ from app.seed.seed_data import run_seed
 
 # Import routers
 from app.api.v1 import (
-    auth, products, inventory, transactions, orders, webhooks, analytics, locations, ai
+    auth, users, products, inventory, transactions, orders, webhooks, analytics, locations, ai
 )
 
 # Buat tabel otomatis jika belum ada
@@ -37,6 +37,7 @@ app.add_middleware(
 
 # Register routers under /api/v1
 app.include_router(auth.router, prefix=settings.API_V1_STR)
+app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(products.router, prefix=settings.API_V1_STR)
 app.include_router(inventory.router, prefix=settings.API_V1_STR)
 app.include_router(transactions.router, prefix=settings.API_V1_STR)

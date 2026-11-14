@@ -85,7 +85,7 @@ class DemandForecaster:
         self,
         sales_history: List[Dict[str, Any]],
         target_days: int = 7,
-        data_label: str = "SIMULASI"
+        data_label: str = "REAL"
     ) -> List[Dict[str, Any]]:
         """
         Menghasilkan prediksi demand per produk dan lokasi untuk target_days ke depan.

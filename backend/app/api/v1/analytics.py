@@ -1,10 +1,13 @@
 import datetime
+import io
+import csv
 from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.core.database import get_db
-from app.models import Transaction, TransactionItem, Order, OrderItem, Product, User
+from app.models import Transaction, TransactionItem, Order, OrderItem, Product, User, Location
 from app.api.deps import get_optional_current_user
 
 router = APIRouter(prefix="/analytics", tags=["Sales Analytics"])
@@ -22,7 +25,6 @@ def get_sales_analytics(
     - Total Omzet (IDR), Total Transaksi, Total Cup Terjual
     - Rincian penjualan per produk
     """
-    # Enforce role: Seller tidak boleh melihat analitik global seluruh jaringan
     if current_user and current_user.role == "SELLER":
         raise HTTPException(
             status_code=403,
@@ -81,5 +83,47 @@ def get_sales_analytics(
             "period_days": days
         },
         "product_breakdown": product_breakdown,
-        "data_label": "SIMULASI"
+        "data_label": "REAL"
     }
+
+@router.get("/export")
+def export_sales_csv(
+    days: int = 30,
+    db: Session = Depends(get_db)
+):
+    """
+    Ekspor riwayat transaksi penjualan riil ke format CSV streaming.
+    """
+    cutoff_date = datetime.datetime.utcnow() - datetime.timedelta(days=days)
+    txs = db.query(Transaction).filter(
+        Transaction.created_at >= cutoff_date,
+        Transaction.payment_status == "PAID"
+    ).order_by(Transaction.created_at.desc()).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow([
+        "transaction_id", "waktu", "lokasi_id", "lokasi_nama", "seller_id",
+        "total_amount", "metode_bayar", "status"
+    ])
+
+    for t in txs:
+        loc_name = t.location.name if hasattr(t, "location") and t.location else t.location_id
+        writer.writerow([
+            t.id,
+            t.created_at.strftime("%Y-%m-%d %H:%M:%S") if t.created_at else "",
+            t.location_id,
+            loc_name,
+            t.seller_id,
+            t.total_amount,
+            t.payment_method,
+            t.payment_status
+        ])
+
+    csv_data = output.getvalue()
+    filename = f"kopicerdas_sales_{datetime.date.today().isoformat()}.csv"
+    return Response(
+        content=csv_data,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
