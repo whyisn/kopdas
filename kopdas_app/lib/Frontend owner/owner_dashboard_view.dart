@@ -642,7 +642,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               children: ['Hari Ini', 'Kemarin', '7 Hari', '30 Hari'].map((label) {
                 final isSelected = _activeTimeFilter == label;
                 return InkWell(
-                  onTap: () => setState(() => _activeTimeFilter = label),
+                  onTap: () {
+                    setState(() => _activeTimeFilter = label);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        duration: const Duration(milliseconds: 800),
+                        content: Text('Filter data diperbarui: $label'),
+                      ),
+                    );
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
@@ -738,16 +747,218 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   }
 
   // ===========================================================================
-  // 3. TAMPILAN DASHBOARD UTAMA (PROFESIONAL, CLEAN, DATA RIIL)
+  // 3. TAMPILAN DASHBOARD UTAMA (REAKTIF SESUAI FILTER WAKTU)
   // ===========================================================================
+  Map<String, dynamic> _getDashboardDataForFilter() {
+    switch (_activeTimeFilter) {
+      case 'Kemarin':
+        return {
+          'period_label': 'Kemarin (13 Nov 2026)',
+          'omzet': 6980000,
+          'cash': 2330000,
+          'qris': 4650000,
+          'cups': 341,
+          'online_cups': 130,
+          'walkin_cups': 211,
+          'commission': 682000,
+          'net_profit': 4048400,
+          'growth': '12.30%',
+          'is_positive': true,
+          'active_staff': 4,
+          'total_staff': _staffList.length,
+          'order_value_str': '9.8k',
+          'orders_str': '11k',
+          'users_str': '64.20%',
+          'downloads_str': '29850',
+          'chart_label': 'Sales Report Kemarin',
+          'chart_bars': [
+            {'yellow': 20.0, 'amber': 35.0, 'label': '07:00'},
+            {'yellow': 26.0, 'amber': 18.0, 'label': '09:00'},
+            {'yellow': 38.0, 'amber': 50.0, 'label': '12:00'},
+            {'yellow': 15.0, 'amber': 25.0, 'label': '14:00'},
+            {'yellow': 42.0, 'amber': 55.0, 'label': '17:00'},
+            {'yellow': 22.0, 'amber': 30.0, 'label': '19:00'},
+          ],
+          'top_products': [
+            {'name': 'Kopi Susu Gula Aren', 'sold': '172 cup (50%)', 'omzet': 3096000, 'stock': '950 cup'},
+            {'name': 'Americano Double Shot', 'sold': '80 cup (23%)', 'omzet': 1200000, 'stock': '650 cup'},
+            {'name': 'Matcha Uji Latte Creamy', 'sold': '48 cup (14%)', 'omzet': 1056000, 'stock': '430 cup'},
+            {'name': 'Cafe Latte Steam Velvet', 'sold': '31 cup (9%)', 'omzet': 620000, 'stock': '520 cup'},
+            {'name': 'Cold Brew Citrus Refresh', 'sold': '10 cup (3%)', 'omzet': 220000, 'stock': '310 cup'},
+          ],
+          'speed_label': '+12.3% vs hari sebelumnya',
+          'speed_rows': [
+            {'time': '06:00 – 08:30 (Pagi Komuter)', 'cups': '78 cup', 'is_peak': false},
+            {'time': '08:30 – 11:30 (Jam Kantor)', 'cups': '62 cup', 'is_peak': false},
+            {'time': '11:30 – 13:30 (Makan Siang)', 'cups': '118 cup', 'is_peak': true},
+            {'time': '13:30 – 15:30 (Sore Berjalan)', 'cups': '83 cup', 'is_peak': false},
+            {'time': '16:30 – 19:00 (Sore Komuter)', 'cups': '~120 cup', 'is_peak': false},
+          ],
+        };
+      case '7 Hari':
+        return {
+          'period_label': '7 Hari Terakhir (8 - 14 Nov 2026)',
+          'omzet': 54320000,
+          'cash': 17920000,
+          'qris': 36400000,
+          'cups': 2650,
+          'online_cups': 1050,
+          'walkin_cups': 1600,
+          'commission': 5300000,
+          'net_profit': 31505600,
+          'growth': '18.70%',
+          'is_positive': true,
+          'active_staff': 5,
+          'total_staff': _staffList.length,
+          'order_value_str': '76.5k',
+          'orders_str': '88k',
+          'users_str': '82.40%',
+          'downloads_str': '48200',
+          'chart_label': 'Sales Report 7 Hari (Harian)',
+          'chart_bars': [
+            {'yellow': 32.0, 'amber': 48.0, 'label': 'Sen'},
+            {'yellow': 35.0, 'amber': 52.0, 'label': 'Sel'},
+            {'yellow': 38.0, 'amber': 55.0, 'label': 'Rab'},
+            {'yellow': 40.0, 'amber': 58.0, 'label': 'Kam'},
+            {'yellow': 48.0, 'amber': 68.0, 'label': 'Jum'},
+            {'yellow': 55.0, 'amber': 75.0, 'label': 'Sab'},
+          ],
+          'top_products': [
+            {'name': 'Kopi Susu Gula Aren', 'sold': '1.350 cup (51%)', 'omzet': 24300000, 'stock': '950 cup'},
+            {'name': 'Americano Double Shot', 'sold': '615 cup (23%)', 'omzet': 9225000, 'stock': '650 cup'},
+            {'name': 'Matcha Uji Latte Creamy', 'sold': '395 cup (15%)', 'omzet': 8690000, 'stock': '430 cup'},
+            {'name': 'Cafe Latte Steam Velvet', 'sold': '215 cup (8%)', 'omzet': 4300000, 'stock': '520 cup'},
+            {'name': 'Cold Brew Citrus Refresh', 'sold': '75 cup (3%)', 'omzet': 1650000, 'stock': '310 cup'},
+          ],
+          'speed_label': '+18.7% vs minggu lalu',
+          'speed_rows': [
+            {'time': 'Senin (Awal Pekan)', 'cups': '350 cup', 'is_peak': false},
+            {'time': 'Selasa – Rabu (Stabil)', 'cups': '720 cup', 'is_peak': false},
+            {'time': 'Kamis (Tinggi)', 'cups': '410 cup', 'is_peak': false},
+            {'time': 'Jumat (Peak Komuter)', 'cups': '580 cup', 'is_peak': true},
+            {'time': 'Sabtu – Minggu (Lounge CFD)', 'cups': '590 cup', 'is_peak': false},
+          ],
+        };
+      case '30 Hari':
+        return {
+          'period_label': '30 Hari Terakhir (16 Okt - 14 Nov 2026)',
+          'omzet': 238450000,
+          'cash': 76300000,
+          'qris': 162150000,
+          'cups': 11640,
+          'online_cups': 4600,
+          'walkin_cups': 7040,
+          'commission': 23280000,
+          'net_profit': 138301000,
+          'growth': '31.40%',
+          'is_positive': true,
+          'active_staff': 5,
+          'total_staff': _staffList.length,
+          'order_value_str': '340k',
+          'orders_str': '385k',
+          'users_str': '89.15%',
+          'downloads_str': '62400',
+          'chart_label': 'Sales Report 30 Hari (Per Minggu)',
+          'chart_bars': [
+            {'yellow': 32.0, 'amber': 50.0, 'label': 'Mgg 1'},
+            {'yellow': 40.0, 'amber': 58.0, 'label': 'Mgg 2'},
+            {'yellow': 46.0, 'amber': 65.0, 'label': 'Mgg 3'},
+            {'yellow': 55.0, 'amber': 72.0, 'label': 'Mgg 4'},
+          ],
+          'top_products': [
+            {'name': 'Kopi Susu Gula Aren', 'sold': '5.940 cup (51%)', 'omzet': 106920000, 'stock': '950 cup'},
+            {'name': 'Americano Double Shot', 'sold': '2.680 cup (23%)', 'omzet': 40200000, 'stock': '650 cup'},
+            {'name': 'Matcha Uji Latte Creamy', 'sold': '1.740 cup (15%)', 'omzet': 38280000, 'stock': '430 cup'},
+            {'name': 'Cafe Latte Steam Velvet', 'sold': '940 cup (8%)', 'omzet': 18800000, 'stock': '520 cup'},
+            {'name': 'Cold Brew Citrus Refresh', 'sold': '340 cup (3%)', 'omzet': 7480000, 'stock': '310 cup'},
+          ],
+          'speed_label': '+31.4% vs bulan sebelumnya',
+          'speed_rows': [
+            {'time': 'Minggu 1 (16–22 Okt)', 'cups': '2.520 cup', 'is_peak': false},
+            {'time': 'Minggu 2 (23–29 Okt)', 'cups': '2.840 cup', 'is_peak': false},
+            {'time': 'Minggu 3 (30 Okt–5 Nov)', 'cups': '3.010 cup', 'is_peak': false},
+            {'time': 'Minggu 4 (6–14 Nov Peak)', 'cups': '3.270 cup', 'is_peak': true},
+          ],
+        };
+      case 'Hari Ini':
+      default:
+        final num totalCash = _staffList.fold(0, (acc, s) => acc + (s['cash'] as num));
+        final num totalQris = _staffList.fold(0, (acc, s) => acc + (s['qris'] as num));
+        final num totalOmzet = totalCash + totalQris;
+        final num totalCups = _staffList.fold(0, (acc, s) => acc + (s['cups_sold'] as num));
+        final num totalCommission = _staffList.fold(0, (acc, s) => acc + (s['total_commission'] as num));
+        final num netProfit = (totalOmzet * 0.58).round();
+        final activeStaff = _staffList.where((s) => s['operational_status'] == 'ACTIVE_SELLING').length;
+        return {
+          'period_label': 'Hari Ini (14 Nov 2026)',
+          'omzet': totalOmzet,
+          'cash': totalCash,
+          'qris': totalQris,
+          'cups': totalCups.toInt(),
+          'online_cups': 168,
+          'walkin_cups': 255,
+          'commission': totalCommission,
+          'net_profit': netProfit,
+          'growth': '24.50%',
+          'is_positive': true,
+          'active_staff': activeStaff,
+          'total_staff': _staffList.length,
+          'order_value_str': '12.3k',
+          'orders_str': '14k',
+          'users_str': '71.56%',
+          'downloads_str': '34040',
+          'chart_label': 'Sales Report Hari Ini',
+          'chart_bars': [
+            {'yellow': 24.0, 'amber': 42.0, 'label': '07:00'},
+            {'yellow': 32.0, 'amber': 20.0, 'label': '09:00'},
+            {'yellow': 46.0, 'amber': 62.0, 'label': '12:00'},
+            {'yellow': 18.0, 'amber': 30.0, 'label': '14:00'},
+            {'yellow': 52.0, 'amber': 68.0, 'label': '17:00'},
+            {'yellow': 28.0, 'amber': 38.0, 'label': '19:00'},
+          ],
+          'top_products': [
+            {'name': 'Kopi Susu Gula Aren', 'sold': '215 cup (51%)', 'omzet': 3870000, 'stock': '950 cup'},
+            {'name': 'Americano Double Shot', 'sold': '98 cup (23%)', 'omzet': 1470000, 'stock': '650 cup'},
+            {'name': 'Matcha Uji Latte Creamy', 'sold': '62 cup (15%)', 'omzet': 1364000, 'stock': '430 cup'},
+            {'name': 'Cafe Latte Steam Velvet', 'sold': '36 cup (8%)', 'omzet': 720000, 'stock': '520 cup'},
+            {'name': 'Cold Brew Citrus Refresh', 'sold': '12 cup (3%)', 'omzet': 264000, 'stock': '310 cup'},
+          ],
+          'speed_label': '+24% vs kemarin',
+          'speed_rows': [
+            {'time': '06:00 – 08:30 (Pagi Komuter)', 'cups': '95 cup', 'is_peak': false},
+            {'time': '08:30 – 11:30 (Jam Kantor)', 'cups': '75 cup', 'is_peak': false},
+            {'time': '11:30 – 13:30 (Makan Siang)', 'cups': '145 cup', 'is_peak': true},
+            {'time': '13:30 – 15:30 (Sore Berjalan)', 'cups': '108 cup', 'is_peak': false},
+            {'time': '16:30 – 19:00 (Estimasi Pulang)', 'cups': '~150 cup', 'is_peak': false},
+          ],
+        };
+    }
+  }
+
   Widget _buildDashboardView() {
-    final num totalCash = _staffList.fold(0, (acc, s) => acc + (s['cash'] as num));
-    final num totalQris = _staffList.fold(0, (acc, s) => acc + (s['qris'] as num));
-    final num totalOmzet = totalCash + totalQris;
-    final num totalCups = _staffList.fold(0, (acc, s) => acc + (s['cups_sold'] as num));
-    final num totalCommission = _staffList.fold(0, (acc, s) => acc + (s['total_commission'] as num));
-    final num netProfit = (totalOmzet * 0.58).round();
-    final activeStaff = _staffList.where((s) => s['operational_status'] == 'ACTIVE_SELLING').length;
+    final d = _getDashboardDataForFilter();
+    final num totalCash = d['cash'] as num;
+    final num totalQris = d['qris'] as num;
+    final num totalOmzet = d['omzet'] as num;
+    final int totalCups = (d['cups'] as num).toInt();
+    final int onlineCups = (d['online_cups'] as num).toInt();
+    final int walkinCups = (d['walkin_cups'] as num).toInt();
+    final num totalCommission = d['commission'] as num;
+    final num netProfit = d['net_profit'] as num;
+    final int activeStaff = (d['active_staff'] as num).toInt();
+    final int totalStaff = (d['total_staff'] as num).toInt();
+    final String growth = d['growth'] as String;
+    final bool isPositive = d['is_positive'] as bool;
+    final String periodLabel = d['period_label'] as String;
+    final String orderValueStr = d['order_value_str'] as String;
+    final String ordersStr = d['orders_str'] as String;
+    final String usersStr = d['users_str'] as String;
+    final String downloadsStr = d['downloads_str'] as String;
+    final String chartLabel = d['chart_label'] as String;
+    final List<Map<String, dynamic>> chartBars = (d['chart_bars'] as List).cast<Map<String, dynamic>>();
+    final List<Map<String, dynamic>> topProducts = (d['top_products'] as List).cast<Map<String, dynamic>>();
+    final List<Map<String, dynamic>> speedRows = (d['speed_rows'] as List).cast<Map<String, dynamic>>();
+    final String speedLabel = d['speed_label'] as String;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -761,15 +972,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Hi, Welcomeback!',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF1E293B), letterSpacing: -0.5),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
-                  'KopiCerdas Dashboard,',
-                  style: TextStyle(fontSize: 13, color: Color(0xFF7E8B9B), fontWeight: FontWeight.w500),
+                  'KopiCerdas Dashboard — $periodLabel',
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF7E8B9B), fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -777,7 +988,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               children: [
                 _buildMicroHeaderMetric('Balance', _formatRupiah(totalOmzet)),
                 const SizedBox(width: 20),
-                _buildMicroHeaderMetric('Today\'s profit', _formatRupiah(netProfit)),
+                _buildMicroHeaderMetric('Laba Periode', _formatRupiah(netProfit)),
                 const SizedBox(width: 20),
                 _buildMicroHeaderMetric('Purchases', '$totalCups'),
                 const SizedBox(width: 20),
@@ -809,9 +1020,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               child: _cleanStatTile(
                 'Total Penjualan (Omzet)',
                 _formatRupiah(totalOmzet),
-                'QRIS & Kasir Lapangan',
-                growth: '24.50%',
-                isPositive: true,
+                'QRIS ${_formatRupiah(totalQris)} • Tunai ${_formatRupiah(totalCash)}',
+                growth: growth,
+                isPositive: isPositive,
                 icon: Icons.calendar_today_outlined,
               ),
             ),
@@ -820,9 +1031,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               child: _cleanStatTile(
                 'Kopi Terjual (Volume)',
                 '$totalCups Cup',
-                'Online 168 • Walk-in 255',
-                growth: '18.20%',
-                isPositive: true,
+                'Online $onlineCups • Walk-in $walkinCups',
+                growth: growth,
+                isPositive: isPositive,
                 icon: Icons.person_outline,
               ),
             ),
@@ -830,9 +1041,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             Expanded(
               child: _cleanStatTile(
                 'Armada Beroperasi',
-                '$activeStaff / ${_staffList.length} Unit',
-                '1 Unit Standby di Gudang',
-                growth: '80.00%',
+                '$activeStaff / $totalStaff Unit',
+                periodLabel,
+                growth: '100%',
                 isPositive: true,
                 icon: Icons.bookmark_border,
               ),
@@ -842,8 +1053,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               child: _cleanStatTile(
                 'Estimasi Laba Bersih',
                 _formatRupiah(netProfit),
-                'Margin Riil Operasional',
-                growth: '58.00%',
+                'Hak Komisi: ${_formatRupiah(totalCommission)}',
+                growth: '58.00% (Margin)',
                 isPositive: true,
                 icon: Icons.layers_outlined,
               ),
@@ -878,9 +1089,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Performance Overview',
-                    style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
+                  Text(
+                    'Performance Overview ($periodLabel)',
+                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
                   ),
                   Row(
                     children: [
@@ -930,12 +1141,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                         const SizedBox(height: 8),
                         Row(
-                          children: const [
-                            Text('+59238', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
-                            SizedBox(width: 4),
-                            Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
-                            SizedBox(width: 2),
-                            Text('24.50%', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                          children: [
+                            const Text('+59238', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                            const SizedBox(width: 4),
+                            const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+                            const SizedBox(width: 2),
+                            Text(growth, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -1057,10 +1268,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildJustDoMicroStat('Order value', '12.3k'),
-                        _buildJustDoMicroStat('Orders', '14k'),
-                        _buildJustDoMicroStat('Users', '71.56%'),
-                        _buildJustDoMicroStat('Downloads', '34040'),
+                        _buildJustDoMicroStat('Order value', orderValueStr),
+                        _buildJustDoMicroStat('Orders', ordersStr),
+                        _buildJustDoMicroStat('Users', usersStr),
+                        _buildJustDoMicroStat('Downloads', downloadsStr),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -1072,9 +1283,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         height: 8,
                         child: Row(
                           children: [
-                            Expanded(flex: 40, child: Container(color: const Color(0xFF248AFD))), // Vibrant Blue (Online)
+                            Expanded(flex: ((onlineCups / totalCups) * 100).round(), child: Container(color: const Color(0xFF248AFD))), // Vibrant Blue (Online)
                             const SizedBox(width: 2),
-                            Expanded(flex: 60, child: Container(color: const Color(0xFFF5A623))), // Golden Amber (POS Gerobak)
+                            Expanded(flex: ((walkinCups / totalCups) * 100).round(), child: Container(color: const Color(0xFFF5A623))), // Golden Amber (POS Gerobak)
                           ],
                         ),
                       ),
@@ -1093,7 +1304,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 children: [
                                   Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF248AFD), shape: BoxShape.circle)),
                                   const SizedBox(width: 8),
-                                  const Expanded(child: Text('Online App: 168 cup (40%) • Rp 3.42M', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
+                                  Expanded(child: Text('Online App: $onlineCups cup (${((onlineCups / totalCups) * 100).round()}%) • ${_formatRupiah(totalQris)}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
                                 ],
                               ),
                             ),
@@ -1110,7 +1321,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 children: [
                                   Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFF5A623), shape: BoxShape.circle)),
                                   const SizedBox(width: 8),
-                                  const Expanded(child: Text('POS Lapak: 255 cup (60%) • Rp 5.27M', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
+                                  Expanded(child: Text('POS Lapak: $walkinCups cup (${((walkinCups / totalCups) * 100).round()}%) • ${_formatRupiah(totalCash)}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)))),
                                 ],
                               ),
                             ),
@@ -1139,7 +1350,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Sales Report', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF1E293B))),
+                        Text(chartLabel, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF1E293B))),
                         Row(
                           children: [
                             Container(width: 12, height: 8, decoration: BoxDecoration(color: const Color(0xFFFFC100), borderRadius: BorderRadius.circular(2))),
@@ -1160,19 +1371,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Stylized JustDo Bar Chart
+                    // Stylized JustDo Bar Chart (Dynamic based on filter)
                     SizedBox(
                       height: 95,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          _buildJustDoChartBar(24, 42, '07:00'),
-                          _buildJustDoChartBar(32, 20, '09:00'),
-                          _buildJustDoChartBar(46, 62, '12:00'),
-                          _buildJustDoChartBar(18, 30, '14:00'),
-                          _buildJustDoChartBar(52, 68, '17:00'),
-                          _buildJustDoChartBar(28, 38, '19:00'),
+                          for (final b in chartBars)
+                            _buildJustDoChartBar(
+                              (b['yellow'] as num).toDouble(),
+                              (b['amber'] as num).toDouble(),
+                              b['label'] as String,
+                            ),
                         ],
                       ),
                     ),
@@ -1342,7 +1553,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Kiri: Produk Terlaris Hari Ini
+            // Kiri: Produk Terlaris Sesuai Filter
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -1356,9 +1567,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Produk Terlaris Hari Ini', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF1E293B))),
-                        Text('Volume & Omzet', style: TextStyle(fontSize: 11, color: Color(0xFF7E8B9B))),
+                      children: [
+                        Text('Produk Terlaris ($periodLabel)', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF1E293B))),
+                        const Text('Volume & Omzet', style: TextStyle(fontSize: 11, color: Color(0xFF7E8B9B))),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -1379,11 +1590,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             _cleanTh('Stok Gudang'),
                           ],
                         ),
-                        _buildMenuRow('Kopi Susu Gula Aren', '215 cup (51%)', _formatRupiah(3870000), '950 cup'),
-                        _buildMenuRow('Americano Double Shot', '98 cup (23%)', _formatRupiah(1470000), '650 cup'),
-                        _buildMenuRow('Matcha Uji Latte Creamy', '62 cup (15%)', _formatRupiah(1364000), '430 cup'),
-                        _buildMenuRow('Cafe Latte Steam Velvet', '36 cup (8%)', _formatRupiah(720000), '520 cup'),
-                        _buildMenuRow('Cold Brew Citrus Refresh', '12 cup (3%)', _formatRupiah(264000), '310 cup'),
+                        for (final p in topProducts)
+                          _buildMenuRow(
+                            p['name'] as String,
+                            p['sold'] as String,
+                            _formatRupiah(p['omzet'] as num),
+                            p['stock'] as String,
+                          ),
                       ],
                     ),
                   ],
@@ -1392,7 +1605,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ),
             const SizedBox(width: 16),
 
-            // Kanan: Peluang Titik Ramai & Laju Penjualan Per Jam
+            // Kanan: Peluang Titik Ramai & Laju Penjualan Sesuai Filter
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -1407,7 +1620,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        Text('Peluang Titik Ramai & Laju Jam', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF1E293B))),
+                        Text('Peluang Titik Ramai & Hotspot', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: Color(0xFF1E293B))),
                         Text('Pantauan Lapangan', style: TextStyle(fontSize: 11, color: Color(0xFF7E8B9B))),
                       ],
                     ),
@@ -1419,17 +1632,18 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     const Divider(height: 16, color: Color(0xFFE8ECEF)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Laju Penjualan Hari Ini', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E293B))),
-                        Text('+24% vs kemarin', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF71C02B))),
+                      children: [
+                        Text('Laju Penjualan ($periodLabel)', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E293B))),
+                        Text(speedLabel, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF71C02B))),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    _buildHourRow('06:00 – 08:30 (Pagi Komuter)', '95 cup'),
-                    _buildHourRow('08:30 – 11:30 (Jam Kantor)', '75 cup'),
-                    _buildHourRow('11:30 – 13:30 (Makan Siang)', '145 cup', isPeak: true),
-                    _buildHourRow('13:30 – 15:30 (Sore Berjalan)', '108 cup'),
-                    _buildHourRow('16:30 – 19:00 (Estimasi Pulang)', '~150 cup'),
+                    for (final r in speedRows)
+                      _buildHourRow(
+                        r['time'] as String,
+                        r['cups'] as String,
+                        isPeak: r['is_peak'] as bool,
+                      ),
                   ],
                 ),
               ),
@@ -2629,12 +2843,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   // SUB-PAGES: LAPORAN
   // ===========================================================================
   Widget _buildAnalyticsReportsView() {
-    final num totalCash = _staffList.fold(0, (acc, s) => acc + (s['cash'] as num));
-    final num totalQris = _staffList.fold(0, (acc, s) => acc + (s['qris'] as num));
-    final num totalOmzet = totalCash + totalQris;
+    final d = _getDashboardDataForFilter();
+    final num totalOmzet = d['omzet'] as num;
     final num totalHpp = (totalOmzet * 0.38).round();
-    final num totalCommission = _staffList.fold(0, (acc, s) => acc + (s['total_commission'] as num));
+    final num totalCommission = d['commission'] as num;
     final num netProfit = totalOmzet - totalHpp - totalCommission;
+    final String periodLabel = d['period_label'] as String;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -2642,10 +2856,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Laporan Laba Rugi Operasional', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            Text('Laporan Laba Rugi Operasional — $periodLabel', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
             OutlinedButton.icon(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Laporan CSV diunduh.')));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Laporan CSV ($periodLabel) diunduh.')));
               },
               icon: const Icon(Icons.download, size: 16),
               label: const Text('Ekspor CSV', style: TextStyle(fontSize: 12)),
@@ -2656,13 +2870,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
         Row(
           children: [
-            Expanded(child: _cleanStatTile('Omzet Bruto', _formatRupiah(totalOmzet), 'Total Pendapatan')),
+            Expanded(child: _cleanStatTile('Omzet Bruto', _formatRupiah(totalOmzet), 'Total Pendapatan ($periodLabel)')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Harga Pokok (HPP)', _formatRupiah(totalHpp), 'Biaya Bahan Kopi')),
+            Expanded(child: _cleanStatTile('Harga Pokok (HPP)', _formatRupiah(totalHpp), 'Biaya Bahan Kopi (38%)')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Komisi Petugas', _formatRupiah(totalCommission), 'Hak Insentif')),
+            Expanded(child: _cleanStatTile('Komisi Petugas', _formatRupiah(totalCommission), 'Hak Insentif Tim')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Laba Bersih', _formatRupiah(netProfit), 'Keuntungan Riil')),
+            Expanded(child: _cleanStatTile('Laba Bersih', _formatRupiah(netProfit), 'Keuntungan Riil (58%)')),
           ],
         ),
       ],
