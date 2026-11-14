@@ -200,7 +200,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: const Color(0xFF0F172A).withValues(alpha: 0.08), borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: const Color(0xFF0F172A).withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
                 child: const Icon(Icons.local_shipping_outlined, color: Color(0xFF0F172A)),
               ),
               const SizedBox(width: 12),
@@ -356,85 +356,87 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         color: Color(0xFF0F172A), // Slate 900
         border: Border(right: BorderSide(color: Color(0xFF1E293B), width: 1)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Brand Title
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: const Color(0xFF38BDF8).withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(Icons.coffee, color: Color(0xFF38BDF8), size: 22),
-                ),
-                const SizedBox(width: 12),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('KOPICERDAS AI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 0.5)),
-                    Text('OWNER EXECUTIVE SUITE', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 1, color: Color(0xFF1E293B)),
-
-          // Navigation Links
-          const SizedBox(height: 16),
-          _sidebarItem(0, Icons.grid_view, 'Executive Dashboard'),
-          _sidebarItem(1, Icons.inventory_2_outlined, 'Stok Gudang & Gerobak'),
-          _sidebarItem(2, Icons.psychology_outlined, 'AI Demand & Alokasi (MILP)'),
-          _sidebarItem(3, Icons.point_of_sale_outlined, 'Transaksi & Pembayaran QRIS'),
-          _sidebarItem(4, Icons.map_outlined, 'Peta & Scoring Lokasi Gerobak'),
-          _sidebarItem(5, Icons.menu_book_outlined, 'Master Produk & HPP'),
-
-          const Spacer(),
-
-          // System Health & Fast Action
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF334155)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Brand Title
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Row(
                 children: [
-                  Row(
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: const Color(0xFF38BDF8).withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
+                    child: const Icon(Icons.coffee, color: Color(0xFF38BDF8), size: 22),
+                  ),
+                  const SizedBox(width: 12),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
-                      const SizedBox(width: 8),
-                      const Text('Backend REST API', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                      Text('KOPICERDAS AI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 0.5)),
+                      Text('OWNER EXECUTIVE SUITE', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  const Text('FastAPI :8000 • Synced', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF38BDF8),
-                        foregroundColor: const Color(0xFF0F172A),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                      ),
-                      onPressed: _showDistributeModal,
-                      icon: const Icon(Icons.send_outlined, size: 16),
-                      label: const Text('Kirim Stok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                    ),
-                  )
                 ],
               ),
             ),
-          ),
-        ],
+            const Divider(height: 1, color: Color(0xFF1E293B)),
+
+            // Navigation Links
+            const SizedBox(height: 16),
+            _sidebarItem(0, Icons.grid_view, 'Executive Dashboard'),
+            _sidebarItem(1, Icons.inventory_2_outlined, 'Stok Gudang & Gerobak'),
+            _sidebarItem(2, Icons.psychology_outlined, 'AI Demand & Alokasi (MILP)'),
+            _sidebarItem(3, Icons.point_of_sale_outlined, 'Transaksi & Pembayaran QRIS'),
+            _sidebarItem(4, Icons.map_outlined, 'Peta & Scoring Lokasi Gerobak'),
+            _sidebarItem(5, Icons.menu_book_outlined, 'Master Produk & HPP'),
+
+            const SizedBox(height: 24),
+
+            // System Health & Fast Action
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E293B),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF334155)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
+                        const SizedBox(width: 8),
+                        const Text('Backend REST API', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const Text('FastAPI :8000 • Synced', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF38BDF8),
+                          foregroundColor: const Color(0xFF0F172A),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        onPressed: _showDistributeModal,
+                        icon: const Icon(Icons.send_outlined, size: 16),
+                        label: const Text('Kirim Stok', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -451,7 +453,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFF1E293B) : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
-            border: isSelected ? Border.all(color: const Color(0xFF38BDF8).withValues(alpha: 0.3)) : null,
+            border: isSelected ? Border.all(color: const Color(0xFF38BDF8).withOpacity(0.3)) : null,
           ),
           child: Row(
             children: [
@@ -567,7 +569,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: const Color(0xFFFDE68A)),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
           ),
           child: Row(
             children: [
@@ -604,7 +606,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: const Color(0xFFE2E8F0)),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 8, offset: const Offset(0, 2))],
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 8, offset: const Offset(0, 2))],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1149,7 +1151,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1160,7 +1162,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               Text(title, style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w600)),
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                 child: Icon(icon, color: color, size: 20),
               ),
             ],
@@ -1217,7 +1219,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
         alignment: Alignment.centerLeft,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(6)),
+          decoration: BoxDecoration(color: color.withOpacity(0.12), borderRadius: BorderRadius.circular(6)),
           child: Text(text, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w800)),
         ),
       ),
