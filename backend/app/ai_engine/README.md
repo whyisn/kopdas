@@ -1,4 +1,4 @@
-# KopiCerdas AI — Prototipe Mesin AI (forecast + optimasi stok & lokasi)
+# Kopi Cerdas — Prototipe Mesin AI (forecast + optimasi stok & lokasi)
 
 > **Semua data di folder ini SIMULASI.** Pola permintaan sengaja ditanam di `generate_data.py`.
 > Hasil backtest menunjukkan *metode bekerja pada data yang polanya diketahui*, bukan bukti dampak di lapangan.

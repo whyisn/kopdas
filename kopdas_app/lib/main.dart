@@ -12,7 +12,7 @@ class KopiCerdasApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'KopiCerdas AI',
+      title: 'Kopi Cerdas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

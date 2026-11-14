@@ -532,7 +532,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   void _showDistributeStockDialog([String? defaultStaffId]) {
     String selectedSellerId = defaultStaffId ?? _staffList.first['id'];
     
-    // Setiap barang dimulai dari 0 sesuai SOP KopiCerdas
+    // Setiap barang dimulai dari 0 sesuai SOP Kopi Cerdas
     final Map<String, int> allocationMap = {
       'KPS-01': 0,
       'KPS-02': 0,
@@ -1142,7 +1142,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     final csvBuffer = StringBuffer();
     csvBuffer.writeln('No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Penerimaan_Cash_IDR,Penerimaan_QRIS_IDR,Total_Omzet_DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan');
     for (final r in records) {
-      csvBuffer.writeln('${r['no']},${r['tgl']},"${r['sumber']}",${r['kanal']},${r['metode']},${r['cash']},${r['qris']},${r['dpp']},0.5%,${r['pph']},${r['kjs']},"Penjualan KopiCerdas Lapangan"');
+      csvBuffer.writeln('${r['no']},${r['tgl']},"${r['sumber']}",${r['kanal']},${r['metode']},${r['cash']},${r['qris']},${r['dpp']},0.5%,${r['pph']},${r['kjs']},"Penjualan Kopi Cerdas Lapangan"');
     }
     csvBuffer.writeln('TOTAL,14/11/2026,"Konsolidasi Seluruh Kanal",Semua,Cash+QRIS,2840000,5850000,8690000,0.5%,43450,411128-420,"Total Omzet & PPh Final UMKM PP 55/2022"');
     final String csvData = csvBuffer.toString();
@@ -1448,7 +1448,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                         ),
                         onPressed: () {
                           // Real Browser File Download!
-                          downloadWebFile(csvData, 'Laporan_Pajak_KopiCerdas_14Nov2026.csv');
+                          downloadWebFile(csvData, 'Laporan_Pajak_Kopi_Cerdas_14Nov2026.csv');
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Color(0xFF065F46),
@@ -1459,7 +1459,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Text(
-                                      'File "Laporan_Pajak_KopiCerdas_14Nov2026.csv" berhasil diunduh ke folder Downloads!',
+                                      'File "Laporan_Pajak_Kopi_Cerdas_14Nov2026.csv" berhasil diunduh ke folder Downloads!',
                                       style: TextStyle(fontWeight: FontWeight.w600),
                                     ),
                                   ),
@@ -1606,7 +1606,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'KopiCerdas AI',
+                                'Kopi Cerdas',
                                 style: TextStyle(
                                   color: Color(0xFF111827),
                                   fontWeight: FontWeight.w800,
@@ -1682,7 +1682,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Owner KopiCerdas', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
+                                Text('Owner Kopi Cerdas', style: TextStyle(color: Color(0xFF111827), fontSize: 12, fontWeight: FontWeight.w700)),
                                 Text('Administrator Bisnis', style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
                               ],
                             ),
@@ -1857,7 +1857,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 const SizedBox(height: 1),
                 const Text(
-                  'KopiCerdas AI — Smart Operational & Intelligence Management',
+                  'Kopi Cerdas — Smart Operational & Intelligence Management',
                   style: TextStyle(
                     fontSize: 11,
                     color: Color(0xFF6B7280),
@@ -1997,7 +1997,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Owner KopiCerdas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                  Text('Owner Kopi Cerdas', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
                   Text('Administrator Bisnis', style: TextStyle(fontSize: 10, color: Color(0xFF6B7280))),
                 ],
               ),
@@ -2023,7 +2023,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       case 10: return 'Analisis AI Permintaan & Optimasi Stok';
       case 11: return 'Laporan Keuangan & Pelaporan Pajak Resmi';
       case 12: return 'Pengaturan Sistem Operasional';
-      default: return 'Portal Owner KopiCerdas';
+      default: return 'Portal Owner Kopi Cerdas';
     }
   }
 
@@ -4248,7 +4248,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Monitoring persediaan fisik 6 menu resmi KopiCerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
+                  'Monitoring persediaan fisik 6 menu resmi Kopi Cerdas, sisa stok gudang pusat, dan pantauan alokasi gerobak',
                   style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
@@ -4370,7 +4370,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
-                              'Menampilkan  dari  menu resmi KopiCerdas',
+                              'Menampilkan  dari  menu resmi Kopi Cerdas',
                               style: const TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                             ),
                           ],
@@ -4753,7 +4753,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'SOP KopiCerdas: Setiap tanggal baru, stok gerobak di-reset ke 0 untuk ditop-up pagi hari. Setiap pulang shift sore, petugas wajib membalikkan seluruh sisa kopi ke Gudang Pusat sehingga stok harian gerobak kembali = 0.',
+                  'SOP Kopi Cerdas: Setiap tanggal baru, stok gerobak di-reset ke 0 untuk ditop-up pagi hari. Setiap pulang shift sore, petugas wajib membalikkan seluruh sisa kopi ke Gudang Pusat sehingga stok harian gerobak kembali = 0.',
                   style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Color(0xFF166534)),
                 ),
               ),
@@ -6471,7 +6471,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(decoration: const InputDecoration(labelText: 'Nama Usaha', border: OutlineInputBorder()), controller: TextEditingController(text: 'KopiCerdas Jaringan Gerobak')),
+              TextField(decoration: const InputDecoration(labelText: 'Nama Usaha', border: OutlineInputBorder()), controller: TextEditingController(text: 'Kopi Cerdas Jaringan Gerobak')),
               const SizedBox(height: 12),
               TextField(decoration: const InputDecoration(labelText: 'Jam Buka Shift Pagi', border: OutlineInputBorder()), controller: TextEditingController(text: '05:30 WIB')),
               const SizedBox(height: 12),

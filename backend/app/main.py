@@ -1,8 +1,13 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
-from app.core.database import Base, engine
+from app.core.database import Base, engine, SessionLocal
+from app.core.schema_upgrades import ensure_schema_upgrades
 from app.seed.seed_data import run_seed
+from app.seed.menu_catalog import apply_menu_upgrade
 
 # Import routers
 from app.api.v1 import (
@@ -12,16 +17,29 @@ from app.api.v1 import (
 # Buat tabel otomatis jika belum ada
 Base.metadata.create_all(bind=engine)
 
+# Tambah kolom baru pada tabel lama secara aditif (idempotent)
+ensure_schema_upgrades(engine)
+
 # Inisialisasi seed data
 try:
     run_seed()
 except Exception as e:
     print(f"Seed note: {e}")
 
+# Perkaya menu kasir: gambar produk & grup varian (idempotent, tanpa menimpa data lama)
+try:
+    db = SessionLocal()
+    try:
+        apply_menu_upgrade(db)
+    finally:
+        db.close()
+except Exception as e:
+    print(f"Menu upgrade note: {e}")
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Backend API Single Source of Truth untuk KopiCerdas AI (Smart Coffee Network) - Hackathon 24 Jam",
+    description="Backend API Single Source of Truth untuk Kopi Cerdas (Smart Coffee Network) - Hackathon 24 Jam",
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -47,6 +65,10 @@ app.include_router(webhooks.router, prefix=settings.API_V1_STR)
 app.include_router(analytics.router, prefix=settings.API_V1_STR)
 app.include_router(locations.router, prefix=settings.API_V1_STR)
 app.include_router(ai.router, prefix=settings.API_V1_STR)
+
+# Gambar produk kasir (image_url relatif, mis. /static/products/americano.jpg)
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR, check_dir=False), name="static")
 
 @app.get("/health", tags=["Health"])
 def health_check():

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 r = json.load(open("results.json"))["kebijakan"]
 names = list(r)
-labels = ["Manual\n(kebiasaan)", "Rumus\n(minggu lalu +10%)", "KopiCerdas AI\n(forecast + MILP)"]
+labels = ["Manual\n(kebiasaan)", "Rumus\n(minggu lalu +10%)", "Kopi Cerdas\n(forecast + MILP)"]
 colors = ["#9AA5B1", "#9AA5B1", "#8B5A2B"]
 
 fig, axes = plt.subplots(1, 3, figsize=(11, 3.6), dpi=200)

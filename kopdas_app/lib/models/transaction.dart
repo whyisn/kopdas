@@ -5,6 +5,7 @@ class TransactionItemModel {
   final int quantity;
   final int unitPrice;
   final int subtotal;
+  final String? variantLabel;
 
   TransactionItemModel({
     required this.id,
@@ -13,6 +14,7 @@ class TransactionItemModel {
     required this.quantity,
     required this.unitPrice,
     required this.subtotal,
+    this.variantLabel,
   });
 
   factory TransactionItemModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class TransactionItemModel {
       quantity: json['quantity'] as int,
       unitPrice: json['unit_price'] as int,
       subtotal: json['subtotal'] as int,
+      variantLabel: json['variant_label'] as String?,
     );
   }
 }

@@ -45,6 +45,7 @@ class Product(Base):
     cost_price = Column(Integer, default=0)        # Cost/modal for margin in IDR
     status = Column(String(20), default="ACTIVE")
     image_url = Column(String(255), nullable=True)
+    options = Column(Text, nullable=True)  # JSON grup varian (ukuran/penyajian/tambahan)
 
     category = relationship("Category", back_populates="products")
     inventories = relationship("Inventory", back_populates="product")
@@ -117,6 +118,7 @@ class TransactionItem(Base):
     quantity = Column(Integer, nullable=False)
     unit_price = Column(Integer, nullable=False)
     subtotal = Column(Integer, nullable=False)
+    variant_label = Column(Text, nullable=True)  # mis. "Large · Ice · Extra Shot"
 
     transaction = relationship("Transaction", back_populates="items")
     product = relationship("Product")

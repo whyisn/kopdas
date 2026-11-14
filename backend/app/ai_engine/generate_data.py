@@ -1,5 +1,5 @@
 """
-KopiCerdas AI - Generator dataset SIMULASI 12 minggu.
+Kopi Cerdas - Generator dataset SIMULASI 12 minggu.
 
 Semua angka di sini sintetis (is_simulated = 1). Pola sengaja ditanam agar
 model forecast dan optimasi bisa diuji:

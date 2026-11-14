@@ -1,1 +1,1 @@
-# KopiCerdas AI App Package
+# Kopi Cerdas App Package
