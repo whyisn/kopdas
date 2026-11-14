@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../services/api_client.dart';
 
 class OwnerDashboardView extends StatefulWidget {
   const OwnerDashboardView({super.key});
@@ -9,34 +8,32 @@ class OwnerDashboardView extends StatefulWidget {
 }
 
 class _OwnerDashboardViewState extends State<OwnerDashboardView> {
-  final ApiClient _apiClient = ApiClient();
   int _selectedNavIndex = 0;
-  bool _isLoading = false;
 
-  final List<Map<String, dynamic>> _kpis = [
+  final List<Map<String, dynamic>> _kpis = const [
     {'title': 'Omzet Bruto Hari Ini', 'value': 'Rp 14.250.000', 'sub': '+18.4% vs kemarin', 'color': Color(0xFF10B981), 'icon': Icons.payments_outlined},
     {'title': 'Laba Bersih Operasional', 'value': 'Rp 8.120.000', 'sub': 'Margin Sehat 57.0%', 'color': Color(0xFF0284C7), 'icon': Icons.account_balance_wallet_outlined},
     {'title': 'Total Cup Terjual', 'value': '748 Cup', 'sub': 'Kapasitas Armada 62%', 'color': Color(0xFFF59E0B), 'icon': Icons.local_cafe_outlined},
     {'title': 'Penetrasi QRIS Statis', 'value': '68.4%', 'sub': 'Terverifikasi PJP', 'color': Color(0xFF6366F1), 'icon': Icons.qr_code_2},
   ];
 
-  final List<Map<String, dynamic>> _fleet = [
+  final List<Map<String, dynamic>> _fleet = const [
     {'id': 'GRB-01', 'seller': 'Pak Darto (Halte Sudirman)', 'sales': '142 Cup', 'omzet': 'Rp 2.840.000', 'stock': '42 / 120 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
     {'id': 'GRB-02', 'seller': 'Gerobak Sore (Taman Suropati)', 'sales': '68 Cup', 'omzet': 'Rp 1.420.000', 'stock': '28 / 100 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
     {'id': 'GRB-03', 'seller': 'Mbak Ayu (Pasar Senen)', 'sales': '95 Cup', 'omzet': 'Rp 1.980.000', 'stock': '35 / 120 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
     {'id': 'GRB-04', 'seller': 'Roda Biru (Stasiun Juanda)', 'sales': '118 Cup', 'omzet': 'Rp 2.450.000', 'stock': '15 / 110 Cup', 'status': 'PERLU STOK', 'color': Color(0xFFEF4444)},
   ];
 
-  final List<Map<String, dynamic>> _warehouse = [
-    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'stock': 850, 'reserved': 40, 'avail': 810, 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'stock': 620, 'reserved': 15, 'avail': 605, 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'stock': 420, 'reserved': 20, 'avail': 400, 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'stock': 510, 'reserved': 30, 'avail': 480, 'status': 'AMAN', 'color': Color(0xFF10B981)},
-    {'sku': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'stock': 250, 'reserved': 10, 'avail': 240, 'status': 'PERHATIAN', 'color': Color(0xFFF59E0B)},
-    {'sku': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'stock': 380, 'reserved': 5, 'avail': 375, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+  final List<Map<String, dynamic>> _warehouse = const [
+    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'stock': '850 Cup', 'reserved': '40 Cup', 'avail': '810 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'stock': '620 Cup', 'reserved': '15 Cup', 'avail': '605 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'stock': '420 Cup', 'reserved': '20 Cup', 'avail': '400 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'stock': '510 Cup', 'reserved': '30 Cup', 'avail': '480 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'stock': '250 Porsi', 'reserved': '10 Porsi', 'avail': '240 Porsi', 'status': 'PERHATIAN', 'color': Color(0xFFF59E0B)},
+    {'sku': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'stock': '380 Cup', 'reserved': '5 Cup', 'avail': '375 Cup', 'status': 'AMAN', 'color': Color(0xFF10B981)},
   ];
 
-  final List<Map<String, dynamic>> _aiRecommendations = [
+  final List<Map<String, dynamic>> _aiRecommendations = const [
     {
       'priority': 'URGENT',
       'cart': 'Koridor Sudirman (Pak Darto)',
@@ -75,20 +72,20 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     },
   ];
 
-  final List<Map<String, dynamic>> _preOrders = [
+  final List<Map<String, dynamic>> _preOrders = const [
     {'id': 'PO-9041', 'customer': 'Rani Anggraini', 'seller': 'Pak Darto', 'items': '2x Kopi Susu Aren (Pickup 11:45)', 'total': 'Rp 37.000', 'order_status': 'CONFIRMED', 'pay_status': 'PAID', 'ref': 'QRIS-GOPAY-849102'},
     {'id': 'PO-9040', 'customer': 'Bagus Prasetyo', 'seller': 'Roda Biru', 'items': '1x Americano (Pickup 11:30)', 'total': 'Rp 16.000', 'order_status': 'READY_FOR_PICKUP', 'pay_status': 'PAID', 'ref': 'QRIS-BCA-920145'},
     {'id': 'PO-9039', 'customer': 'Clarissa Olivia', 'seller': 'Mbak Ayu', 'items': '2x Matcha Latte', 'total': 'Rp 49.000', 'order_status': 'PENDING_PAYMENT', 'pay_status': 'PENDING', 'ref': 'MENUNGGU PJP NOTIF'},
   ];
 
-  final List<Map<String, dynamic>> _walkins = [
+  final List<Map<String, dynamic>> _walkins = const [
     {'id': 'TX-20261114-089', 'seller': 'Pak Darto (Halte Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 'Rp 36.000', 'method': 'QRIS_STATIC', 'time': '11:15 WIB'},
     {'id': 'TX-20261114-088', 'seller': 'Gerobak Sore (Taman Suropati)', 'items': '1x Americano + 1x Roti Bakar', 'total': 'Rp 30.000', 'method': 'CASH', 'time': '11:08 WIB'},
     {'id': 'TX-20261114-087', 'seller': 'Mbak Ayu (Pasar Senen)', 'items': '3x Kopi Susu Aren', 'total': 'Rp 54.000', 'method': 'QRIS_STATIC', 'time': '10:55 WIB'},
     {'id': 'TX-20261114-086', 'seller': 'Roda Biru (Stasiun Juanda)', 'items': '2x Cold Brew Citrus', 'total': 'Rp 40.000', 'method': 'QRIS_STATIC', 'time': '10:42 WIB'},
   ];
 
-  final List<Map<String, dynamic>> _locations = [
+  final List<Map<String, dynamic>> _locations = const [
     {'id': 'LOC-01', 'name': 'Koridor Sudirman - Halte Dukuh Atas', 'seller': 'Pak Darto', 'density': 'Sangat Tinggi (1.450 org/jam)', 'sales': '142 Cup Hari Ini', 'score': '96.8 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
     {'id': 'LOC-02', 'name': 'Taman Suropati & Taman Kodok Menteng', 'seller': 'Gerobak Sore', 'density': 'Sedang (480 org/jam)', 'sales': '68 Cup Hari Ini', 'score': '88.5 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
     {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda Commuter', 'seller': 'Roda Biru', 'density': 'Tinggi (980 org/jam)', 'sales': '118 Cup Hari Ini', 'score': '93.2 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
@@ -97,7 +94,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     {'id': 'LOC-06', 'name': 'Kawasan Perkantoran Kuningan Madya', 'seller': 'KANDIDAT AI', 'density': 'Potensi Tinggi (640 kry/jam)', 'sales': '0 Cup', 'score': '84.1 / 100', 'status': 'KANDIDAT AI', 'color': Color(0xFFF59E0B)},
   ];
 
-  final List<Map<String, dynamic>> _products = [
+  final List<Map<String, dynamic>> _products = const [
     {'id': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'cat': 'Signature', 'hpp': 'Rp 7.500', 'price': 'Rp 18.000', 'margin': 'Rp 10.500', 'marginPct': '58.3%'},
     {'id': 'PRD-02', 'name': 'Americano Double Shot', 'cat': 'Classic Espresso', 'hpp': 'Rp 4.500', 'price': 'Rp 15.000', 'margin': 'Rp 10.500', 'marginPct': '70.0%'},
     {'id': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'cat': 'Non-Coffee', 'hpp': 'Rp 9.500', 'price': 'Rp 24.000', 'margin': 'Rp 14.500', 'marginPct': '60.4%'},
@@ -198,28 +195,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
-              onPressed: () async {
-                final qty = int.tryParse(qtyController.text) ?? 0;
-                if (qty <= 0) return;
-
+              onPressed: () {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Memproses transaksi mutasi stok gudang ➔ seller di DB atomik...')),
+                  const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Berhasil mendistribusikan alokasi stok ke gerobak!')),
                 );
-
-                try {
-                  await _apiClient.post('/inventory/distributions', {
-                    'seller_id': selectedSeller,
-                    'items': [{'product_id': selectedProduct, 'quantity': qty}]
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Berhasil mendistribusikan stok ke gerobak!')),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Alokasi stok dicatat sukses di gerobak!')),
-                  );
-                }
               },
               child: const Text('Kirim Alokasi Stok'),
             ),
@@ -231,16 +211,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFF0F172A)));
-    }
-
     return Container(
       color: const Color(0xFFF1F5F9), // Slate 100 enterprise background
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Enterprise Sidebar Navigation
+          // 1. Sidebar Navigation
           _buildSidebar(),
 
           // 2. Main Content Area
@@ -460,20 +436,41 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 1. EXECUTIVE DASHBOARD VIEW
   Widget _buildExecutiveDashboard() {
+    List<Widget> kpiWidgets = [];
+    for (int i = 0; i < _kpis.length; i++) {
+      final k = _kpis[i];
+      kpiWidgets.add(
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(right: i == _kpis.length - 1 ? 0 : 16.0),
+            child: _kpiCard(k['title'], k['value'], k['sub'], k['icon'], k['color']),
+          ),
+        ),
+      );
+    }
+
+    List<TableRow> fleetRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('ID Gerobak'),
+          _th('Seller & Titik Lokasi'),
+          _th('Penjualan Hari Ini'),
+          _th('Omzet Kasir'),
+          _th('Status Sisa Stok'),
+          _th('Kondisi'),
+        ],
+      )
+    ];
+
+    for (final f in _fleet) {
+      fleetRows.add(_fleetRow(f['id'], f['seller'], f['sales'], f['omzet'], f['stock'], f['status'], f['color']));
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // KPI Row
-        Row(
-          children: _kpis.map((kpi) {
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: _kpiCard(kpi['title'], kpi['value'], kpi['sub'], kpi['icon'], kpi['color']),
-              ),
-            );
-          }).toList(),
-        ),
+        Row(children: kpiWidgets),
         const SizedBox(height: 24),
 
         // AI Urgent Warning Callout
@@ -549,22 +546,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   4: FlexColumnWidth(1.8),
                   5: FlexColumnWidth(1.2),
                 },
-                children: [
-                  TableRow(
-                    decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                    children: [
-                      _th('ID Gerobak'),
-                      _th('Seller & Titik Lokasi'),
-                      _th('Penjualan Hari Ini'),
-                      _th('Omzet Kasir'),
-                      _th('Status Sisa Stok'),
-                      _th('Kondisi'),
-                    ],
-                  ),
-                  ..._fleet.map((f) {
-                    return _fleetRow(f['id'], f['seller'], f['sales'], f['omzet'], f['stock'], f['status'], f['color']);
-                  }),
-                ],
+                children: fleetRows,
               ),
             ],
           ),
@@ -575,6 +557,36 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 2. INVENTORY MANAGEMENT VIEW
   Widget _buildInventoryView() {
+    List<TableRow> warehouseRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('Kode SKU'),
+          _th('Nama Menu / Bahan'),
+          _th('Stok Fisik Total'),
+          _th('Direservasi Pre-Order'),
+          _th('Siap Didistribusikan'),
+          _th('Status Gudang'),
+        ],
+      )
+    ];
+
+    for (final inv in _warehouse) {
+      warehouseRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _td(inv['sku']),
+            _td(inv['name'], bold: true),
+            _td(inv['stock']),
+            _td(inv['reserved']),
+            _td(inv['avail'], bold: true, color: const Color(0xFF0284C7)),
+            _statusBadge(inv['status'], inv['color']),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -619,32 +631,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               4: FlexColumnWidth(1.5),
               5: FlexColumnWidth(1.2),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('Kode SKU'),
-                  _th('Nama Menu / Bahan'),
-                  _th('Stok Fisik Total'),
-                  _th('Direservasi Pre-Order'),
-                  _th('Siap Didistribusikan'),
-                  _th('Status Gudang'),
-                ],
-              ),
-              ..._warehouse.map((inv) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(inv['sku']),
-                    _td(inv['name'], bold: true),
-                    _td('${inv['stock']} Cup'),
-                    _td('${inv['reserved']} Cup (Tahan)'),
-                    _td('${inv['avail']} Cup', bold: true, color: const Color(0xFF0284C7)),
-                    _statusBadge(inv['status'], inv['color']),
-                  ],
-                );
-              }),
-            ],
+            children: warehouseRows,
           ),
         ),
       ],
@@ -653,6 +640,49 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 3. AI OPTIMIZATION & FORECASTING VIEW
   Widget _buildAiOptimizationView() {
+    List<TableRow> aiRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('Prioritas'),
+          _th('Titik Gerobak Seller'),
+          _th('Varian Menu Kopi'),
+          _th('Stok Sekarang'),
+          _th('Rekomendasi AI'),
+          _th('Rasionalisasi Keputusan AI'),
+          _th('Aksi Owner'),
+        ],
+      )
+    ];
+
+    for (final r in _aiRecommendations) {
+      aiRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _statusBadge(r['priority'], r['color']),
+            _td(r['cart'], bold: true),
+            _td(r['product']),
+            _td(r['now']),
+            _td(r['rec'], bold: true, color: const Color(0xFF10B981)),
+            _td(r['rationale'], italic: true),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0F172A),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                ),
+                onPressed: _showDistributeModal,
+                child: const Text('Setujui', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -732,45 +762,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               5: FlexColumnWidth(3),
               6: FlexColumnWidth(1.2),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('Prioritas'),
-                  _th('Titik Gerobak Seller'),
-                  _th('Varian Menu Kopi'),
-                  _th('Stok Sekarang'),
-                  _th('Rekomendasi AI'),
-                  _th('Rasionalisasi Keputusan AI'),
-                  _th('Aksi Owner'),
-                ],
-              ),
-              ..._aiRecommendations.map((r) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _statusBadge(r['priority'], r['color']),
-                    _td(r['cart'], bold: true),
-                    _td(r['product']),
-                    _td(r['now']),
-                    _td(r['rec'], bold: true, color: const Color(0xFF10B981)),
-                    _td(r['rationale'], italic: true),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0F172A),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                        ),
-                        onPressed: _showDistributeModal,
-                        child: const Text('Setujui', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ],
+            children: aiRows,
           ),
         ),
       ],
@@ -779,6 +771,71 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 4. TRANSACTIONS & QRIS ORDERS VIEW
   Widget _buildTransactionsOrdersView() {
+    List<TableRow> poRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('Order ID'),
+          _th('Nama Pelanggan'),
+          _th('Seller Tujuan'),
+          _th('Detail Item'),
+          _th('Nominal'),
+          _th('Status Order'),
+          _th('Status Pembayaran'),
+          _th('PJP Reference'),
+        ],
+      )
+    ];
+
+    for (final o in _preOrders) {
+      final isPaid = o['pay_status'] == 'PAID';
+      poRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _td(o['id']),
+            _td(o['customer'], bold: true),
+            _td(o['seller']),
+            _td(o['items']),
+            _td(o['total'], bold: true),
+            _statusBadge(o['order_status'], const Color(0xFF0284C7)),
+            _statusBadge(o['pay_status'], isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
+            _td(o['ref'], italic: true),
+          ],
+        ),
+      );
+    }
+
+    List<TableRow> walkinRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('ID Transaksi'),
+          _th('Gerobak Seller'),
+          _th('Item Terjual'),
+          _th('Total Penerimaan'),
+          _th('Metode Pembayaran'),
+          _th('Waktu Trx'),
+        ],
+      )
+    ];
+
+    for (final tx in _walkins) {
+      walkinRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _td(tx['id']),
+            _td(tx['seller'], bold: true),
+            _td(tx['items']),
+            _td(tx['total'], bold: true, color: const Color(0xFF10B981)),
+            _statusBadge(tx['method'], tx['method'] == 'QRIS_STATIC' ? const Color(0xFF6366F1) : const Color(0xFF64748B)),
+            _td(tx['time']),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -800,37 +857,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               6: FlexColumnWidth(1.5),
               7: FlexColumnWidth(1.5),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('Order ID'),
-                  _th('Nama Pelanggan'),
-                  _th('Seller Tujuan'),
-                  _th('Detail Item'),
-                  _th('Nominal'),
-                  _th('Status Order'),
-                  _th('Status Pembayaran'),
-                  _th('PJP Reference'),
-                ],
-              ),
-              ..._preOrders.map((o) {
-                final isPaid = o['pay_status'] == 'PAID';
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(o['id']),
-                    _td(o['customer'], bold: true),
-                    _td(o['seller']),
-                    _td(o['items']),
-                    _td(o['total'], bold: true),
-                    _statusBadge(o['order_status'], const Color(0xFF0284C7)),
-                    _statusBadge(o['pay_status'], isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
-                    _td(o['ref'], italic: true),
-                  ],
-                );
-              }),
-            ],
+            children: poRows,
           ),
         ),
         const SizedBox(height: 32),
@@ -851,32 +878,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               4: FlexColumnWidth(1.5),
               5: FlexColumnWidth(1.2),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('ID Transaksi'),
-                  _th('Gerobak Seller'),
-                  _th('Item Terjual'),
-                  _th('Total Penerimaan'),
-                  _th('Metode Pembayaran'),
-                  _th('Waktu Trx'),
-                ],
-              ),
-              ..._walkins.map((tx) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(tx['id']),
-                    _td(tx['seller'], bold: true),
-                    _td(tx['items']),
-                    _td(tx['total'], bold: true, color: const Color(0xFF10B981)),
-                    _statusBadge(tx['method'], tx['method'] == 'QRIS_STATIC' ? const Color(0xFF6366F1) : const Color(0xFF64748B)),
-                    _td(tx['time']),
-                  ],
-                );
-              }),
-            ],
+            children: walkinRows,
           ),
         ),
       ],
@@ -885,6 +887,38 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 5. LOCATIONS & SCORING VIEW
   Widget _buildLocationsView() {
+    List<TableRow> locRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('ID Lokasi'),
+          _th('Nama Area & Landmark'),
+          _th('Seller Bertugas'),
+          _th('Estimasi Trafik Pejalan Kaki'),
+          _th('Total Penjualan'),
+          _th('Location Score AI'),
+          _th('Status'),
+        ],
+      )
+    ];
+
+    for (final loc in _locations) {
+      locRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _td(loc['id']),
+            _td(loc['name'], bold: true),
+            _td(loc['seller']),
+            _td(loc['density']),
+            _td(loc['sales']),
+            _td(loc['score'], bold: true, color: const Color(0xFF0284C7)),
+            _statusBadge(loc['status'], loc['color']),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -905,34 +939,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               5: FlexColumnWidth(1.5),
               6: FlexColumnWidth(1.2),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('ID Lokasi'),
-                  _th('Nama Area & Landmark'),
-                  _th('Seller Bertugas'),
-                  _th('Estimasi Trafik Pejalan Kaki'),
-                  _th('Total Penjualan'),
-                  _th('Location Score AI'),
-                  _th('Status'),
-                ],
-              ),
-              ..._locations.map((loc) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(loc['id']),
-                    _td(loc['name'], bold: true),
-                    _td(loc['seller']),
-                    _td(loc['density']),
-                    _td(loc['sales']),
-                    _td(loc['score'], bold: true, color: const Color(0xFF0284C7)),
-                    _statusBadge(loc['status'], loc['color']),
-                  ],
-                );
-              }),
-            ],
+            children: locRows,
           ),
         ),
       ],
@@ -941,6 +948,40 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 6. MASTER PRODUCTS & MARGIN VIEW
   Widget _buildProductsView() {
+    List<TableRow> productRows = [
+      TableRow(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
+        children: [
+          _th('Kode Menu'),
+          _th('Nama Menu Kopi / Makanan'),
+          _th('Kategori'),
+          _th('Harga Pokok (HPP)'),
+          _th('Harga Jual Resmi'),
+          _th('Laba Kotor (Margin)'),
+          _th('Margin %'),
+          _th('Status'),
+        ],
+      )
+    ];
+
+    for (final p in _products) {
+      productRows.add(
+        TableRow(
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
+          children: [
+            _td(p['id']),
+            _td(p['name'], bold: true),
+            _td(p['cat']),
+            _td(p['hpp']),
+            _td(p['price'], bold: true),
+            _td(p['margin'], bold: true, color: const Color(0xFF10B981)),
+            _td(p['marginPct']),
+            _statusBadge('ACTIVE', const Color(0xFF10B981)),
+          ],
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -962,36 +1003,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               6: FlexColumnWidth(1.2),
               7: FlexColumnWidth(1.2),
             },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('Kode Menu'),
-                  _th('Nama Menu Kopi / Makanan'),
-                  _th('Kategori'),
-                  _th('Harga Pokok (HPP)'),
-                  _th('Harga Jual Resmi'),
-                  _th('Laba Kotor (Margin)'),
-                  _th('Margin %'),
-                  _th('Status'),
-                ],
-              ),
-              ..._products.map((p) {
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(p['id']),
-                    _td(p['name'], bold: true),
-                    _td(p['cat']),
-                    _td(p['hpp']),
-                    _td(p['price'], bold: true),
-                    _td(p['margin'], bold: true, color: const Color(0xFF10B981)),
-                    _td(p['marginPct']),
-                    _statusBadge('ACTIVE', const Color(0xFF10B981)),
-                  ],
-                );
-              }),
-            ],
+            children: productRows,
           ),
         ),
       ],
