@@ -2036,13 +2036,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           children: [
             _build3STab('Semua Tim Lapangan (5)', true),
             const SizedBox(width: 6),
-            _build3STab('⚡ 4 Unit Aktif Jualan', false),
+            _build3STab('4 Unit Aktif Jualan', false),
             const SizedBox(width: 6),
-            _build3STab('📦 1 Standby Gudang', false),
+            _build3STab('1 Standby Gudang', false),
             const SizedBox(width: 6),
-            _build3STab('💵 Rekonsiliasi Kas Siap (4)', false),
+            _build3STab('Rekonsiliasi Kas Siap (4)', false),
             const SizedBox(width: 6),
-            _build3STab('🤖 Analisis AI Permintaan (5)', false),
+            _build3STab('Analisis AI Permintaan (5)', false),
           ],
         ),
         const SizedBox(height: 14),
@@ -2067,7 +2067,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               ),
               InkWell(
                 onTap: _showDistributeStockDialog,
-                child: const Text('Beri Tambahan Stok ➔', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFD97706))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('Beri Tambahan Stok', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFD97706))),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 13, color: Color(0xFFD97706)),
+                  ],
+                ),
               ),
             ],
           ),
@@ -2294,7 +2301,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'Indeks Es Kopi +38%',
                     'Sangat Padat',
                     '14.800 org/jam (Peak 16:30)',
-                    '⚠️ Stok kritis sisa 15 cup! Segera kirim 20 cup restock dari gudang sebelum jam 16:30.',
+                    'Stok kritis sisa 15 cup! Segera kirim 20 cup restock dari gudang sebelum jam 16:30.',
                     isWarning: true,
                   ),
                   _buildAiAnalysisRow(
@@ -2308,7 +2315,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'Demand Kopi Susu Aren stabil',
                     'Tinggi Komuter',
                     '12.200 org/jam (Kantor Pulang)',
-                    '✅ Optimal! Target 118% tercapai. Sisa 42 cup aman hingga penutupan shift.',
+                    'Optimal: Target 118% tercapai. Sisa 42 cup aman hingga penutupan shift.',
                     isWarning: false,
                   ),
                   _buildAiAnalysisRow(
@@ -2322,7 +2329,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'Tinggi Es Kopi Hitam & Aren',
                     'Stabil Ramai',
                     '8.500 org/jam (Pedagang)',
-                    '✅ Target 95 cup tercapai. Sisa 35 cup mencukupi closing shift pukul 16:00 WIB.',
+                    'Target 95 cup tercapai. Sisa 35 cup mencukupi closing shift pukul 16:00 WIB.',
                     isWarning: false,
                   ),
                   _buildAiAnalysisRow(
@@ -2334,9 +2341,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'Terserap: 68 cup',
                     '27°C Sejuk Teduh',
                     'Permintaan kopi hangat malam',
-                    'Sedang ➔ Puncak Sore',
+                    'Sedang ke Puncak Sore',
                     '4.200 org/jam (Peak 18:00–21:00)',
-                    'ℹ️ Demand bergeser ke malam hari. Siapkan varian hangat dan Matcha.',
+                    'Demand bergeser ke malam hari. Siapkan varian hangat dan Matcha.',
                     isWarning: false,
                   ),
                   _buildAiAnalysisRow(
@@ -2350,7 +2357,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'Demand komuter kantor',
                     'Padat Kantor',
                     '10.000 org/jam (16:30–18:30)',
-                    '🚀 Peluang ekspansi: Deploy GRB-05 dengan seller Rizky untuk menangkap arus pulang kerja.',
+                    'Peluang ekspansi: Deploy GRB-05 dengan seller Rizky untuk menangkap arus pulang kerja.',
                     isWarning: false,
                   ),
                 ],
@@ -2789,7 +2796,14 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             const SizedBox(height: 8),
                             InkWell(
                               onTap: _showTaxReportExportDialog,
-                              child: const Text('Lihat Format SPT & Unduh CSV ➔', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Text('Lihat Format SPT & Unduh CSV', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
+                                  SizedBox(width: 4),
+                                  Icon(Icons.arrow_forward, size: 13, color: Color(0xFF065F46)),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -3062,7 +3076,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            isBalance ? '✓ BALANCE' : (isStandby ? 'STANDBY' : '! SELISIH'),
+            isBalance ? 'BALANCE' : (isStandby ? 'STANDBY' : 'SELISIH'),
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,
