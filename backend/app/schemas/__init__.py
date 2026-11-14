@@ -38,8 +38,8 @@ class ProductBase(BaseModel):
     category_id: str
     name: str
     description: Optional[str] = None
-    price: int
-    cost_price: int = 0
+    price: int = Field(..., ge=0, description="Harga jual tidak boleh negatif")
+    cost_price: int = Field(0, ge=0, description="HPP tidak boleh negatif")
     status: str = "ACTIVE"
     image_url: Optional[str] = None
 
@@ -66,11 +66,11 @@ class InventoryResponse(BaseModel):
 
 class DistributionItem(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas distribusi harus positif")
 
 class DistributionRequest(BaseModel):
     seller_id: str
-    items: List[DistributionItem]
+    items: List[DistributionItem] = Field(..., min_length=1, description="Daftar item tidak boleh kosong")
     notes: Optional[str] = "Distribusi stok dari gudang pusat"
 
 class StockMovementResponse(BaseModel):
@@ -91,14 +91,14 @@ class StockMovementResponse(BaseModel):
 # --- Walk-in Transactions ---
 class TransactionItemRequest(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas transaksi harus positif")
 
 class TransactionCreateRequest(BaseModel):
     seller_id: str
     location_id: str
-    payment_method: str = "CASH" # CASH or QRIS_STATIC
+    payment_method: str = Field("CASH", pattern="^(CASH|QRIS_STATIC)$", description="Hanya CASH atau QRIS_STATIC")
     idempotency_key: Optional[str] = None
-    items: List[TransactionItemRequest]
+    items: List[TransactionItemRequest] = Field(..., min_length=1, description="Daftar item transaksi tidak boleh kosong")
 
 class TransactionItemResponse(BaseModel):
     id: str
@@ -116,6 +116,7 @@ class TransactionResponse(BaseModel):
     seller_id: str
     location_id: str
     total_amount: int
+    total: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     payment_method: str
     payment_status: str
     created_at: datetime.datetime
@@ -127,21 +128,34 @@ class TransactionResponse(BaseModel):
 # --- Pre-orders & QRIS Payments ---
 class OrderItemRequest(BaseModel):
     product_id: str
-    quantity: int
+    quantity: int = Field(..., gt=0, description="Kuantitas order harus positif")
 
 class OrderCreateRequest(BaseModel):
     customer_id: Optional[str] = "guest-customer"
     seller_id: str
     location_id: str
-    items: List[OrderItemRequest]
+    items: List[OrderItemRequest] = Field(..., min_length=1, description="Daftar item order tidak boleh kosong")
+
+class OrderItemResponse(BaseModel):
+    id: str
+    product_id: str
+    product_name: Optional[str] = None
+    quantity: int
+    unit_price: int
+    subtotal: int
+
+    class Config:
+        from_attributes = True
 
 class OrderResponse(BaseModel):
     id: str
     order_number: str
     customer_id: Optional[str]
+    customer_name: Optional[str] = None  # Kompatibilitas UI Customer/Owner
     seller_id: str
     location_id: str
     total_amount: int
+    total: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     order_status: str
     payment_method: str
     payment_status: str
@@ -149,9 +163,13 @@ class OrderResponse(BaseModel):
     created_at: datetime.datetime
     expires_at: Optional[datetime.datetime]
     data_label: str = "REAL"
+    items: Optional[List[OrderItemResponse]] = None
 
     class Config:
         from_attributes = True
+
+class OrderStatusUpdateRequest(BaseModel):
+    status: str = Field(..., description="Status baru pesanan: PREPARING, READY_FOR_PICKUP, COMPLETED, CANCELLED")
 
 class QRISWebhookRequest(BaseModel):
     provider_tx_id: str
@@ -165,6 +183,7 @@ class QRISWebhookRequest(BaseModel):
 class LocationResponse(BaseModel):
     id: str
     seller_id: Optional[str] = None
+    seller_name: Optional[str] = None  # Kompatibilitas UI Owner Dashboard
     name: str
     latitude: float
     longitude: float
@@ -172,7 +191,9 @@ class LocationResponse(BaseModel):
     source_type: str
     is_active: bool
     score: Optional[float] = None
-    data_label: str = "REAL"
+    factors: Optional[List[str]] = None
+    confidence: Optional[float] = None
+    data_label: str = "SIMULASI"
 
     class Config:
         from_attributes = True
@@ -194,6 +215,7 @@ class AIRecommendationItem(BaseModel):
     product_name: str
     predicted_demand: int
     recommended_stock: int
+    recommended_quantity: Optional[int] = None  # Alias kompatibilitas kontrak Flutter
     confidence: float
     data_quality: str
     rationale: List[str]

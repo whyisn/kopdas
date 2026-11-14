@@ -1,6 +1,8 @@
-from typing import List, Dict, Any
+import datetime
+from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from app.core.database import get_db
 from app.models import Product, Location, Inventory, Transaction, TransactionItem
 from app.schemas import AIForecastRequest, AIOptimizeResponse, AIRecommendationItem
@@ -13,37 +15,64 @@ router = APIRouter(prefix="/ai", tags=["AI & Intelligence"])
 def generate_forecast(req: AIForecastRequest, db: Session = Depends(get_db)):
     """
     Menghasilkan prediksi demand penjualan produk per lokasi
-    menggunakan model time-series baseline / WMA.
+    menggunakan agregasi harian dan model ML Poisson EM / WMA.
     """
-    # Ambil histori transaksi
-    tx_items = db.query(
+    # 1. Agregasi penjualan harian dari database (mempertahankan tanggal & identitas produk/lokasi)
+    daily_sales_query = db.query(
         Transaction.location_id,
         TransactionItem.product_id,
-        TransactionItem.quantity,
-        Transaction.created_at
-    ).join(TransactionItem, TransactionItem.transaction_id == Transaction.id).all()
+        func.date(Transaction.created_at).label("sale_date"),
+        func.sum(TransactionItem.quantity).label("total_qty")
+    ).join(TransactionItem, TransactionItem.transaction_id == Transaction.id)
 
-    sales_history = [
-        {
-            "location_id": row[0],
-            "product_id": row[1],
-            "quantity": row[2],
+    if req.location_ids:
+        daily_sales_query = daily_sales_query.filter(Transaction.location_id.in_(req.location_ids))
+    if req.product_ids:
+        daily_sales_query = daily_sales_query.filter(TransactionItem.product_id.in_(req.product_ids))
+
+    daily_sales = daily_sales_query.group_by(
+        Transaction.location_id,
+        TransactionItem.product_id,
+        func.date(Transaction.created_at)
+    ).order_by("sale_date").all()
+
+    sales_history = []
+    for loc_id, prod_id, s_date, qty in daily_sales:
+        try:
+            d_obj = datetime.date.fromisoformat(str(s_date))
+            dow = d_obj.weekday()
+            weekend = 1 if dow >= 5 else 0
+        except Exception:
+            dow = 2
+            weekend = 0
+
+        sales_history.append({
+            "location_id": loc_id,
+            "product_id": prod_id,
+            "date": str(s_date),
+            "dow": dow,
+            "weekend": weekend,
+            "quantity": int(qty or 0),
             "stockout_flag": False
-        }
-        for row in tx_items
-    ]
+        })
 
-    # Jika histori masih sedikit, gabungkan dengan baseline seed
-    if len(sales_history) < 5:
-        prods = db.query(Product).all()
-        locs = db.query(Location).filter(Location.source_type == "ACTIVE_POINT").all()
-        for l in locs:
-            for p in prods:
+    # Jika histori kosong untuk filter yang diminta, buat baseline estimasi awal
+    if not sales_history:
+        prods = db.query(Product).filter(Product.status == "ACTIVE")
+        if req.product_ids:
+            prods = prods.filter(Product.id.in_(req.product_ids))
+        locs = db.query(Location).filter(Location.source_type == "ACTIVE_POINT")
+        if req.location_ids:
+            locs = locs.filter(Location.id.in_(req.location_ids))
+        for l in locs.all():
+            for p in prods.all():
                 sales_history.append({
                     "location_id": l.id,
                     "product_id": p.id,
                     "quantity": 12,
-                    "stockout_flag": False
+                    "stockout_flag": False,
+                    "dow": 2,
+                    "weekend": 0
                 })
 
     forecast_results = forecaster.forecast_sales(
@@ -62,19 +91,28 @@ def generate_forecast(req: AIForecastRequest, db: Session = Depends(get_db)):
 def optimize_stock_allocation(db: Session = Depends(get_db)):
     """
     Menghitung rekomendasi alokasi stok per gerobak seller
-    menggunakan solver MILP (dengan batasan kapasitas gerobak & stok gudang)
+    menggunakan solver MILP (dengan batasan kapasitas gerobak & stok gudang aktual)
     atau Rule-Based Fallback.
     """
-    # 1. Stok gudang pusat
+    # 1. Stok gudang pusat aktual (stok tidak ada = 0)
     central_invs = db.query(Inventory).filter(
         Inventory.scope_type == "WAREHOUSE",
         Inventory.scope_id == "central"
     ).all()
     central_dict = {inv.product_id: inv.quantity for inv in central_invs}
 
-    # 2. Seller and capacities
+    # 2. Seller and capacities (memperhitungkan stok gerobak yang sudah ada)
     sellers = db.query(Location).filter(Location.source_type == "ACTIVE_POINT").all()
-    capacities = {s.id: 120 for s in sellers} # Rata-rata kapasitas gerobak 120 cup
+    capacities = {}
+    for s in sellers:
+        existing_stock = 0
+        if s.seller_id:
+            existing_stock = db.query(func.sum(Inventory.quantity)).filter(
+                Inventory.scope_type == "SELLER",
+                Inventory.scope_id == s.seller_id
+            ).scalar() or 0
+        # Kapasitas gerobak 120 cup dikurangi stok seller yang sudah tersimpan
+        capacities[s.id] = max(20, 120 - int(existing_stock))
 
     # 3. Product margins
     products = db.query(Product).all()

@@ -4,6 +4,7 @@ from app.core.database import get_db
 from app.models import User
 from app.schemas import LoginRequest, Token, UserResponse
 from app.core.security import verify_password, create_access_token
+from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -28,8 +29,8 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
     )
 
 @router.get("/me", response_model=UserResponse)
-def get_current_user_info(user_id: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User tidak ditemukan")
-    return user
+def get_current_user_info(current_user: User = Depends(get_current_user)):
+    """
+    Mengambil informasi profil pengguna yang sedang login berdasarkan JWT Bearer token.
+    """
+    return current_user

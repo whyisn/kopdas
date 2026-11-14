@@ -1,10 +1,12 @@
-from typing import List
+import uuid
+from typing import List, Optional
 import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.models import Product, Category
+from app.models import Product, Category, User
 from app.schemas import ProductResponse, CategoryResponse, ProductBase
+from app.api.deps import get_optional_current_user
 
 router = APIRouter(prefix="", tags=["Products & Categories"])
 
@@ -35,8 +37,23 @@ def get_products(category_id: str = None, db: Session = Depends(get_db)):
     return results
 
 @router.post("/products", response_model=ProductResponse)
-def create_product(req: ProductBase, db: Session = Depends(get_db)):
-    prod_id = f"prd-{int(datetime.datetime.utcnow().timestamp())}"
+def create_product(
+    req: ProductBase,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user and current_user.role != "OWNER":
+        raise HTTPException(status_code=403, detail="Hanya OWNER yang dapat menambahkan produk baru")
+
+    # Validasi keberadaan kategori
+    cat = db.query(Category).filter(Category.id == req.category_id).first()
+    if not cat:
+        raise HTTPException(status_code=400, detail=f"Kategori '{req.category_id}' tidak valid atau tidak ditemukan")
+
+    if req.price < 0 or req.cost_price < 0:
+        raise HTTPException(status_code=400, detail="Harga jual dan HPP tidak boleh negatif")
+
+    prod_id = f"prd-{uuid.uuid4().hex[:8]}"
     new_prod = Product(
         id=prod_id,
         category_id=req.category_id,
@@ -50,4 +67,14 @@ def create_product(req: ProductBase, db: Session = Depends(get_db)):
     db.add(new_prod)
     db.commit()
     db.refresh(new_prod)
-    return new_prod
+    return ProductResponse(
+        id=new_prod.id,
+        category_id=new_prod.category_id,
+        name=new_prod.name,
+        description=new_prod.description,
+        price=new_prod.price,
+        cost_price=new_prod.cost_price,
+        status=new_prod.status,
+        image_url=new_prod.image_url,
+        category_name=cat.name
+    )

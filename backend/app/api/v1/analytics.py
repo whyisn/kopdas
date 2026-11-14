@@ -1,32 +1,70 @@
-from typing import Dict, Any, List
-from fastapi import APIRouter, Depends
+import datetime
+from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.core.database import get_db
-from app.models import Transaction, TransactionItem, Product, User
+from app.models import Transaction, TransactionItem, Order, OrderItem, Product, User
+from app.api.deps import get_optional_current_user
 
 router = APIRouter(prefix="/analytics", tags=["Sales Analytics"])
 
 @router.get("/sales")
-def get_sales_analytics(days: int = 7, db: Session = Depends(get_db)):
+def get_sales_analytics(
+    days: int = 7,
+    current_user: Optional[User] = Depends(get_optional_current_user),
+    db: Session = Depends(get_db)
+):
     """
     Agregasi data penjualan aktual dari database:
-    - Total Omzet (IDR)
-    - Total Transaksi
-    - Total Cup Terjual
-    - Rincian penjualan per kategori & produk
-    - Performa per seller
+    - Memfilter periode berdasarkan parameter 'days'
+    - Menggabungkan transaksi walk-in dan pre-order berstatus PAID
+    - Total Omzet (IDR), Total Transaksi, Total Cup Terjual
+    - Rincian penjualan per produk
     """
-    total_revenue = db.query(func.sum(Transaction.total_amount)).scalar() or 0
-    total_tx = db.query(func.count(Transaction.id)).scalar() or 0
-    total_cups = db.query(func.sum(TransactionItem.quantity)).scalar() or 0
+    # Enforce role: Seller tidak boleh melihat analitik global seluruh jaringan
+    if current_user and current_user.role == "SELLER":
+        raise HTTPException(
+            status_code=403,
+            detail="Akses ditolak: Seller tidak memiliki izin untuk melihat analitik global jaringan"
+        )
 
-    # Penjualan per produk
+    cutoff_date = datetime.datetime.utcnow() - datetime.timedelta(days=days)
+
+    # 1. Agregasi Transaksi Walk-in
+    tx_rev, tx_count = db.query(
+        func.coalesce(func.sum(Transaction.total_amount), 0),
+        func.count(Transaction.id)
+    ).filter(Transaction.created_at >= cutoff_date, Transaction.payment_status == "PAID").first() or (0, 0)
+
+    # 2. Agregasi Pre-Order Customer PAID
+    order_rev, order_count = db.query(
+        func.coalesce(func.sum(Order.total_amount), 0),
+        func.count(Order.id)
+    ).filter(Order.created_at >= cutoff_date, Order.payment_status == "PAID").first() or (0, 0)
+
+    total_revenue = int(tx_rev + order_rev)
+    total_tx = int(tx_count + order_count)
+
+    # 3. Total Cup Terjual (Walk-in + Pre-Order PAID)
+    tx_cups = db.query(func.coalesce(func.sum(TransactionItem.quantity), 0))\
+        .join(Transaction, Transaction.id == TransactionItem.transaction_id)\
+        .filter(Transaction.created_at >= cutoff_date, Transaction.payment_status == "PAID").scalar() or 0
+
+    order_cups = db.query(func.coalesce(func.sum(OrderItem.quantity), 0))\
+        .join(Order, Order.id == OrderItem.order_id)\
+        .filter(Order.created_at >= cutoff_date, Order.payment_status == "PAID").scalar() or 0
+
+    total_cups = int(tx_cups + order_cups)
+
+    # 4. Rincian Penjualan per Produk (Walk-in)
     prod_sales = db.query(
         Product.name,
-        func.sum(TransactionItem.quantity).label("cups_sold"),
-        func.sum(TransactionItem.subtotal).label("revenue")
+        func.coalesce(func.sum(TransactionItem.quantity), 0).label("cups_sold"),
+        func.coalesce(func.sum(TransactionItem.subtotal), 0).label("revenue")
     ).join(TransactionItem, TransactionItem.product_id == Product.id)\
+     .join(Transaction, Transaction.id == TransactionItem.transaction_id)\
+     .filter(Transaction.created_at >= cutoff_date, Transaction.payment_status == "PAID")\
      .group_by(Product.id).all()
 
     product_breakdown = [
@@ -43,5 +81,5 @@ def get_sales_analytics(days: int = 7, db: Session = Depends(get_db)):
             "period_days": days
         },
         "product_breakdown": product_breakdown,
-        "data_label": "REAL"
+        "data_label": "SIMULASI"
     }

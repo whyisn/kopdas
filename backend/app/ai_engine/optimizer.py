@@ -63,14 +63,14 @@ class InventoryOptimizer:
             lb_list = []
             ub_list = []
 
-            # 1. Kendala Kapasitas Gudang Pusat per Produk
+            # 1. Kendala Kapasitas Gudang Pusat per Produk (stok tidak tersedia = 0, tidak boleh mengalokasikan stok fiktif)
             products = list(set(fc["product_id"] for fc in forecasts))
             for p_id in products:
                 row = np.zeros(N)
                 for i, fc in enumerate(forecasts):
                     if fc["product_id"] == p_id:
                         row[i] = 1.0
-                max_avail = float(central_inventory.get(p_id, 1000))
+                max_avail = float(central_inventory.get(p_id, 0.0))
                 constraint_rows.append(row)
                 lb_list.append(0.0)
                 ub_list.append(max_avail)
@@ -82,7 +82,7 @@ class InventoryOptimizer:
                 for i, fc in enumerate(forecasts):
                     if fc["location_id"] == loc_id:
                         row[i] = 1.0
-                max_cap = float(seller_capacities.get(loc_id, 90))
+                max_cap = float(seller_capacities.get(loc_id, 80))
                 constraint_rows.append(row)
                 lb_list.append(0.0)
                 ub_list.append(max_cap)
@@ -95,8 +95,8 @@ class InventoryOptimizer:
             bounds = Bounds(0, uppers)
             constraints = LinearConstraint(A, lb, ub)
 
-            # Eksekusi Solver HiGHS (built-in di scipy >= 1.9)
-            res = milp(c=c, constraints=constraints, integrality=integrality, bounds=bounds)
+            # Eksekusi Solver HiGHS dengan batas waktu 5 detik
+            res = milp(c=c, constraints=constraints, integrality=integrality, bounds=bounds, options={"time_limit": 5.0})
 
             if res.success:
                 allocations = np.round(res.x).astype(int)
@@ -117,6 +117,7 @@ class InventoryOptimizer:
                         "product_name": fc.get("product_name", p_id),
                         "predicted_demand": int(fc.get("predicted_demand", 0)),
                         "recommended_stock": allocated,
+                        "recommended_quantity": allocated,  # Kompatibilitas UI Flutter
                         "confidence": float(fc.get("confidence", 0.75)),
                         "data_quality": fc.get("data_quality", "HIGH"),
                         "rationale": rationale,
@@ -125,11 +126,11 @@ class InventoryOptimizer:
                         "data_label": data_label
                     })
             else:
-                solver_status = f"RULE_BASED_FALLBACK ({res.status_message})"
+                solver_status = "RULE_BASED_FALLBACK"
                 recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label)
 
         except Exception as e:
-            solver_status = f"RULE_BASED_FALLBACK ({str(e)})"
+            solver_status = "RULE_BASED_FALLBACK"
             recommendations = self._rule_based_fallback(central_inventory, seller_capacities, forecasts, product_margins, data_label)
 
         total_cups = sum(r["recommended_stock"] for r in recommendations)
@@ -155,24 +156,32 @@ class InventoryOptimizer:
     ) -> List[Dict[str, Any]]:
         """
         Fallback algoritma proporsional bila MILP solver tidak aktif.
+        Menjamin tidak ada alokasi jika stok gudang 0 dan total alokasi
+        tidak pernah melampaui kapasitas fisik gerobak seller.
         """
         results = []
-        num_sellers = max(1, len(set(fc["location_id"] for fc in forecasts)))
-        num_prods_per_seller = max(1, len(forecasts) // num_sellers)
+        allocated_per_seller: Dict[str, int] = {}
+        remaining_warehouse: Dict[str, int] = {k: int(v) for k, v in central_inventory.items()}
 
         for fc in forecasts:
             s_id = fc["location_id"]
             p_id = fc["product_id"]
-            dem = int(fc.get("predicted_demand", 20))
-            avail = int(central_inventory.get(p_id, 100))
+            dem = int(fc.get("predicted_demand", 0))
+            avail = int(remaining_warehouse.get(p_id, 0))
             cap = int(seller_capacities.get(s_id, 80))
 
-            # Batasi dengan stok dan batas kapasitas
-            recommended = min(dem, avail // num_sellers, cap // num_prods_per_seller)
+            already_allocated = allocated_per_seller.get(s_id, 0)
+            remaining_cap = max(0, cap - already_allocated)
+
+            # Batasi dengan demand, sisa stok gudang, dan sisa kapasitas fisik
+            recommended = min(dem, avail, remaining_cap)
             recommended = max(0, recommended)
 
+            allocated_per_seller[s_id] = already_allocated + recommended
+            remaining_warehouse[p_id] = max(0, avail - recommended)
+
             rationale = list(fc.get("rationale", []))
-            rationale.append("Dialokasikan melalui Rule-Based Fallback (proporsional kapasitas).")
+            rationale.append("Dialokasikan melalui Rule-Based Fallback (dibatasi stok gudang aktual & sisa kapasitas gerobak).")
 
             results.append({
                 "period_start": fc["period_start"],
@@ -183,6 +192,7 @@ class InventoryOptimizer:
                 "product_name": fc.get("product_name", p_id),
                 "predicted_demand": dem,
                 "recommended_stock": recommended,
+                "recommended_quantity": recommended,  # Kompatibilitas UI Flutter
                 "confidence": max(0.5, float(fc.get("confidence", 0.6)) - 0.1),
                 "data_quality": "LIMITED",
                 "rationale": rationale,
