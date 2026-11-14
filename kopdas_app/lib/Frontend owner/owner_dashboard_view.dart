@@ -344,6 +344,128 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
+  void _confirmReturnStock(Map<String, dynamic> staff) {
+    final int rem = (staff['current_stock'] as int);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Row(
+          children: const [
+            Icon(Icons.assignment_return_outlined, color: Color(0xFFDC2626), size: 22),
+            SizedBox(width: 8),
+            Text('Konfirmasi Retur Sisa Kopi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          ],
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin membalikkan sisa $rem porsi kopi dari gerobak ${staff['cart_id']} (${staff['name']}) ke Gudang Pusat?\n\n'
+          'Sesuai SOP pulang shift, sisa kopi akan dikembalikan ke Gudang Pusat dan sisa box gerobak menjadi 0 (tutup shift). Data penjualan hari ini (${staff['cups_sold']} cup) tetap tersimpan aman.',
+          style: const TextStyle(fontSize: 13, color: Color(0xFF374151), height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal', style: TextStyle(color: Color(0xFF6B7280))),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFDC2626),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _returnStockToWarehouse(staff['id'].toString());
+            },
+            child: const Text('Ya, Retur ke 0'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmReturnAllStock() {
+    final int totalBox = _staffList.fold<int>(0, (sum, s) => sum + ((s['current_stock'] ?? 0) as int));
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Row(
+          children: const [
+            Icon(Icons.assignment_return_outlined, color: Color(0xFFD97706), size: 22),
+            SizedBox(width: 8),
+            Text('Konfirmasi Tutup Shift Semua Armada', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          ],
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin melakukan Tutup Shift untuk semua gerobak?\n\n'
+          'Total $totalBox porsi sisa kopi dari semua unit akan dikembalikan ke Gudang Pusat dan seluruh stok box gerobak menjadi 0. Catatan penjualan hari ini tetap tersimpan aman.',
+          style: const TextStyle(fontSize: 13, color: Color(0xFF374151), height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal', style: TextStyle(color: Color(0xFF6B7280))),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFD97706),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _returnAllStockToWarehouse();
+            },
+            child: const Text('Ya, Tutup Shift Semua'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmResetNewDate() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Row(
+          children: const [
+            Icon(Icons.restart_alt, color: Color(0xFF2563EB), size: 22),
+            SizedBox(width: 8),
+            Text('Konfirmasi Buka Shift Tanggal Baru', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          ],
+        ),
+        content: const Text(
+          'Apakah Anda yakin ingin memulai tanggal baru?\n\n'
+          'Semua gerobak akan disiapkan untuk memulai shift baru dari stok 0 dan siap menerima top-up pagi hari.',
+          style: TextStyle(fontSize: 13, color: Color(0xFF374151), height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal', style: TextStyle(color: Color(0xFF6B7280))),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF2563EB),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _resetNewDateTopup();
+            },
+            child: const Text('Ya, Buka Shift Baru'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _returnStockToWarehouse(String staffId) {
     setState(() {
       for (var s in _staffList) {
@@ -356,7 +478,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           s['operational_status'] = 'SHIFT_COMPLETED';
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('SOP Pulang Shift: Sisa $remaining porsi kopi ${s['name']} dikembalikan ke Gudang. Stok gerobak kini 0!'),
+              content: Text('SOP Pulang Shift: Sisa $remaining porsi kopi ${s['name']} dikembalikan ke Gudang. Sisa box gerobak kini 0, penjualan hari ini (${s['cups_sold']} cup) tetap aman.'),
               backgroundColor: const Color(0xFF1E3932),
             ),
           );
@@ -392,9 +514,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       for (var s in _staffList) {
         s['morning_stock'] = 0;
         s['current_stock'] = 0;
-        s['cups_sold'] = 0;
-        s['cash'] = 0;
-        s['qris'] = 0;
         s['operational_status'] = 'NOT_STARTED';
         s['clock_in'] = 'Belum Mulai';
       }
@@ -436,7 +555,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   children: const [
                     Icon(Icons.local_shipping_outlined, color: Color(0xFF1E3932), size: 20),
                     SizedBox(width: 8),
-                    Text('Formulir Disposisi & Top-Up Stok', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827))),
+                    Text('Formulir Top-Up Bawaan Gerobak', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827))),
                   ],
                 ),
                 Container(
@@ -472,30 +591,29 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    // Preset Disposisi Cepat
-                    Row(
+                    // Preset Disposisi Cepat (Wrap agar tidak overflow)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 6,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         const Text('Preset Cepat:', style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280))),
-                        const SizedBox(width: 8),
-                        _buildPresetChip('Mulai 0 (Kosong)', () {
+                        _buildPresetChip('Kosongkan', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 0);
                           });
                         }),
-                        const SizedBox(width: 6),
-                        _buildPresetChip('+10 Tiap Menu (60 Cup)', () {
+                        _buildPresetChip('+10 Tiap Menu', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 10);
                           });
                         }),
-                        const SizedBox(width: 6),
-                        _buildPresetChip('+15 Tiap Menu (90 Cup)', () {
+                        _buildPresetChip('+15 Tiap Menu', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 15);
                           });
                         }),
-                        const SizedBox(width: 6),
-                        _buildPresetChip('+20 Tiap Menu (120 Cup)', () {
+                        _buildPresetChip('+20 Tiap Menu', () {
                           setModalState(() {
                             allocationMap.updateAll((key, val) => 20);
                           });
@@ -504,7 +622,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     ),
                     const SizedBox(height: 14),
 
-                    const Text('Rincian Kuota 6 Menu Resmi (Dimulai dari 0):', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF374151))),
+                    const Text('Rincian Kuota 6 Menu Resmi:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF374151))),
                     const SizedBox(height: 8),
 
                     Container(
@@ -601,8 +719,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       if (s['id'] == selectedSellerId) {
                         s['current_stock'] = (s['current_stock'] as int) + totalAlloc;
                         s['morning_stock'] = (s['morning_stock'] as int) + totalAlloc;
-                        if (s['operational_status'] == 'NOT_STARTED') {
-                          s['operational_status'] = 'ACTIVE_SELLING';
+                        s['operational_status'] = 'ACTIVE_SELLING';
+                        if (s['clock_in'] == 'Belum Mulai' || s['clock_in'] == null || s['clock_in'] == '') {
                           s['clock_in'] = '06:15 WIB';
                         }
                       }
@@ -4354,7 +4472,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Rekap persentase penjualan tim sebulan, kontrol top-up tanggal baru (mulai 0), dan SOP retur sisa kopi ke nol',
+                  'Rekap persentase penjualan tim sebulan, kontrol top-up tanggal baru, dan SOP retur sisa kopi ke nol saat tutup shift',
                   style: TextStyle(fontSize: 12.5, color: Color(0xFF6B7280)),
                 ),
               ],
@@ -4368,7 +4486,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                   ),
-                  onPressed: _resetNewDateTopup,
+                  onPressed: _confirmResetNewDate,
                   icon: const Icon(Icons.restart_alt, size: 16),
                   label: const Text('Reset Tanggal Baru (Buka Shift)', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
                 ),
@@ -4380,7 +4498,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                   ),
-                  onPressed: _returnAllStockToWarehouse,
+                  onPressed: _confirmReturnAllStock,
                   icon: const Icon(Icons.assignment_return_outlined, size: 16),
                   label: const Text('Tutup Shift Semua (Retur ke 0)', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
                 ),
@@ -4394,7 +4512,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ),
                   onPressed: () => _showDistributeStockDialog(),
                   icon: const Icon(Icons.add_shopping_cart_outlined, size: 16),
-                  label: const Text('+ Top-Up (Mulai 0)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  label: const Text('+ Top-Up Bawaan', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -4442,7 +4560,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               child: _buildWarehouseKpiCard(
                 'Top-Up Pagi Hari Ini',
                 '$totalMorning Porsi',
-                'Dimulai dari stok 0 pagi hari',
+                'Alokasi keberangkatan armada',
                 Icons.inventory_2_outlined,
                 const Color(0xFF059669),
               ),
@@ -4534,7 +4652,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 columnWidths: const {
                   0: FlexColumnWidth(2.6), // Armada & Petugas
                   1: FlexColumnWidth(2.8), // Rekap Penjualan & % Tim
-                  2: FlexColumnWidth(2.2), // Top-Up Pagi (Mulai 0)
+                  2: FlexColumnWidth(2.2), // Top-Up Pagi
                   3: FlexColumnWidth(1.8), // Sisa Box (Target = 0)
                   4: FlexColumnWidth(1.6), // Status Shift
                   5: FlexColumnWidth(2.6), // Aksi Disposisi & SOP Retur
@@ -4548,7 +4666,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     children: [
                       _cleanTh('Armada & Petugas'),
                       _cleanTh('Rekap Penjualan & % Tim'),
-                      _cleanTh('Top-Up Pagi (Dari 0)'),
+                      _cleanTh('Top-Up Pagi'),
                       _cleanTh('Sisa Box (Target = 0)'),
                       _cleanTh('Status Shift'),
                       _cleanTh('Aksi Disposisi & Retur'),
@@ -4641,7 +4759,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             ),
                           ),
 
-                          // Col 2: Top-Up Pagi (Dari 0)
+                          // Col 2: Top-Up Pagi
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                             child: Column(
@@ -4650,15 +4768,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 Row(
                                   children: [
                                     Text('${s['morning_stock']} Porsi', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827))),
-                                    const SizedBox(width: 5),
-                                    const Text('(Top-Up)', style: TextStyle(fontSize: 10.5, color: Color(0xFF6B7280))),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   (s['morning_stock'] as int) > 0
                                       ? 'Soft, Strong, Butter, Amr, Cok, Mat'
-                                      : 'Stok awal: 0 Porsi',
+                                      : 'Belum ada alokasi',
                                   style: const TextStyle(fontSize: 10.5, color: Color(0xFF6B7280)),
                                 ),
                               ],
@@ -4715,19 +4831,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: _buildStatusBadge(
-                                s['operational_status'] == 'ACTIVE_SELLING'
+                                rem > 0
                                     ? (rem < 20 ? 'Stok Menipis' : 'Aman')
                                     : (s['operational_status'] == 'SHIFT_COMPLETED' ? 'Standby' : 'Standby'),
                               ),
                             ),
                           ),
 
-                          // Col 5: Aksi Disposisi & SOP Retur (Tanpa +15)
+                          // Col 5: Aksi Disposisi & SOP Retur
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                             child: Row(
                               children: [
-                                // Tombol Top-Up (Mulai 0)
+                                // Tombol Top-Up
                                 InkWell(
                                   onTap: () => _showDistributeStockDialog(s['id'].toString()),
                                   borderRadius: BorderRadius.circular(4),
@@ -4749,9 +4865,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                                 ),
                                 const SizedBox(width: 6),
 
-                                // Tombol Retur Sisa ke Nol (SOP Pulang Shift)
+                                // Tombol Retur Sisa ke Nol (SOP Pulang Shift dengan Dialog Konfirmasi)
                                 InkWell(
-                                  onTap: rem > 0 ? () => _returnStockToWarehouse(s['id'].toString()) : null,
+                                  onTap: rem > 0 ? () => _confirmReturnStock(s) : null,
                                   borderRadius: BorderRadius.circular(4),
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
