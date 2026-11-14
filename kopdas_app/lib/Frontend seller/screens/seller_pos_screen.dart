@@ -18,20 +18,10 @@ import '../../widgets/status_badge.dart';
 
 class _CartLine {
   final ProductModel product;
-  final List<String> optionIds;
-  final String? variantLabel;
   final int unitPrice;
   int qty;
 
-  _CartLine(this.product, List<String> optionIds, this.qty)
-      : optionIds = List.unmodifiable(optionIds),
-        variantLabel = product.variantLabelFor(optionIds),
-        unitPrice = product.unitPriceFor(optionIds);
-}
-
-String _cartKey(String productId, List<String> optionIds) {
-  final sorted = optionIds.toList()..sort();
-  return '$productId::${sorted.join(',')}';
+  _CartLine(this.product, this.qty) : unitPrice = product.price;
 }
 
 class SellerPosScreen extends StatefulWidget {
@@ -127,24 +117,22 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
 
   bool _addToCart(
     ProductModel p, {
-    List<String>? optionIds,
     int qty = 1,
     StateSetter? modalSetState,
   }) {
-    final ids = optionIds ?? p.defaultOptionIds;
     final available = _availableByProduct[p.id] ?? 0;
     final current = _inCartForProduct(p.id);
     if (current + qty > available) {
       showAppSnackBar(context, 'Stok ${p.name} tidak mencukupi.', isError: true);
       return false;
     }
-    final key = _cartKey(p.id, ids);
+    final key = p.id;
     _updateCart(() {
       final existing = _cart[key];
       if (existing != null) {
         existing.qty += qty;
       } else {
-        _cart[key] = _CartLine(p, ids, qty);
+        _cart[key] = _CartLine(p, qty);
       }
     }, modalSetState);
     return true;
@@ -206,7 +194,6 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
             {
               'product_id': l.product.id,
               'quantity': l.qty,
-              if (l.optionIds.isNotEmpty) 'option_ids': l.optionIds,
             },
         ],
         idempotencyKey: _idempotencyKey,
@@ -618,14 +605,10 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
     final available = _availableByProduct[p.id] ?? 0;
     final inCart = _inCartForProduct(p.id);
 
-    void onAdd(List<String> optionIds, int qty) {
-      final ok = _addToCart(p, optionIds: optionIds, qty: qty);
+    void onAdd(int qty) {
+      final ok = _addToCart(p, qty: qty);
       if (ok) {
-        final label = p.variantLabelFor(optionIds);
-        showAppSnackBar(
-          context,
-          '${p.name}${label == null ? '' : ' ($label)'} ×$qty masuk keranjang.',
-        );
+        showAppSnackBar(context, '${p.name} ×$qty masuk keranjang.');
       }
     }
 
@@ -806,7 +789,7 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
   }
 
   Widget _buildCartLine(_CartLine l, StateSetter? modalSetState) {
-    final key = _cartKey(l.product.id, l.optionIds);
+    final key = l.product.id;
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -840,19 +823,6 @@ class _SellerPosScreenState extends State<SellerPosScreen> {
                     color: AppConstants.textDark,
                   ),
                 ),
-                if (l.variantLabel != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    l.variantLabel!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 10.5,
-                      color: Colors.black54,
-                      height: 1.3,
-                    ),
-                  ),
-                ],
                 const SizedBox(height: 3),
                 Text(
                   '${formatRupiah(l.unitPrice)} / cup',

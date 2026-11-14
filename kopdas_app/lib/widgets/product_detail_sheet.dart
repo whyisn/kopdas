@@ -5,16 +5,16 @@ import '../core/formatters.dart';
 import '../models/product.dart';
 import 'product_image.dart';
 
-/// Preview detail minuman: gambar besar, deskripsi, pilihan varian berbiaya,
-/// jumlah, dan tombol tambah ke keranjang. Dipakai sebagai isi bottom sheet
-/// (layar sempit, diberi [scrollController]) atau dialog (layar lebar).
+/// Preview detail minuman: gambar besar, deskripsi, harga, jumlah, dan tombol
+/// tambah ke keranjang. Dipakai sebagai isi bottom sheet (layar sempit, diberi
+/// [scrollController]) atau dialog (layar lebar).
 class ProductDetailSheet extends StatefulWidget {
   final ProductModel product;
   final int available;
   final int inCart;
   final ScrollController? scrollController;
   final bool isDialog;
-  final void Function(List<String> optionIds, int qty) onAdd;
+  final void Function(int qty) onAdd;
 
   const ProductDetailSheet({
     super.key,
@@ -31,47 +31,9 @@ class ProductDetailSheet extends StatefulWidget {
 }
 
 class _ProductDetailSheetState extends State<ProductDetailSheet> {
-  final Map<String, String> _single = {};
-  final Set<String> _multi = {};
   int _qty = 1;
 
-  @override
-  void initState() {
-    super.initState();
-    for (final g in widget.product.options) {
-      if (!g.multi && g.choices.isNotEmpty) {
-        _single[g.id] = g.choices.first.id;
-      }
-    }
-  }
-
   int get _remaining => widget.available - widget.inCart;
-
-  List<String> get _selectedIds {
-    final ids = <String>[];
-    for (final g in widget.product.options) {
-      if (g.multi) {
-        for (final c in g.choices) {
-          if (_multi.contains(c.id)) ids.add(c.id);
-        }
-      } else if (_single[g.id] != null) {
-        ids.add(_single[g.id]!);
-      }
-    }
-    return ids;
-  }
-
-  int get _unitPrice => widget.product.unitPriceFor(_selectedIds);
-
-  void _toggle(ProductOptionGroup g, ProductOptionChoice c) {
-    setState(() {
-      if (g.multi) {
-        _multi.contains(c.id) ? _multi.remove(c.id) : _multi.add(c.id);
-      } else {
-        _single[g.id] = c.id;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +80,6 @@ class _ProductDetailSheetState extends State<ProductDetailSheet> {
                     color: AppConstants.primaryColor,
                   ),
                 ),
-                const Text(
-                  'harga dasar',
-                  style: TextStyle(fontSize: 11, color: Colors.black38),
-                ),
               ],
             ),
             if (p.description != null && p.description!.isNotEmpty) ...[
@@ -136,10 +94,6 @@ class _ProductDetailSheetState extends State<ProductDetailSheet> {
               ),
             ],
             const SizedBox(height: 16),
-            for (final g in p.options) ...[
-              _buildGroup(g),
-              const SizedBox(height: 14),
-            ],
             _buildQtyRow(canAdd),
             const SizedBox(height: 8),
           ],
@@ -269,95 +223,6 @@ class _ProductDetailSheetState extends State<ProductDetailSheet> {
     );
   }
 
-  Widget _buildGroup(ProductOptionGroup g) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              g.name,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: AppConstants.textDark,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              g.multi ? 'boleh lebih dari satu' : 'pilih satu',
-              style: const TextStyle(fontSize: 11, color: Colors.black38),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [for (final c in g.choices) _choiceChip(g, c)],
-        ),
-      ],
-    );
-  }
-
-  Widget _choiceChip(ProductOptionGroup g, ProductOptionChoice c) {
-    final selected = g.multi ? _multi.contains(c.id) : _single[g.id] == c.id;
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: () => _toggle(g, c),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-        decoration: BoxDecoration(
-          color: selected ? AppConstants.primaryColor : AppConstants.surfaceColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected ? AppConstants.primaryColor : Colors.brown.shade200,
-            width: selected ? 1.4 : 1,
-          ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppConstants.primaryColor.withValues(alpha: 0.28),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ]
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (selected) ...[
-              const Icon(Icons.check_circle, size: 16, color: Colors.white),
-              const SizedBox(width: 6),
-            ],
-            Text(
-              c.name,
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
-                color: selected ? Colors.white : AppConstants.textDark,
-              ),
-            ),
-            if (c.priceDelta > 0) ...[
-              const SizedBox(width: 6),
-              Text(
-                '+${formatRupiah(c.priceDelta)}',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: selected ? Colors.white70 : AppConstants.primaryColor,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildQtyRow(bool canAdd) {
     return Row(
       children: [
@@ -430,7 +295,7 @@ class _ProductDetailSheetState extends State<ProductDetailSheet> {
   }
 
   Widget _buildBottomBar(bool canAdd) {
-    final total = _unitPrice * _qty;
+    final total = widget.product.price * _qty;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
       decoration: BoxDecoration(
@@ -478,7 +343,7 @@ class _ProductDetailSheetState extends State<ProductDetailSheet> {
             child: FilledButton.icon(
               onPressed: canAdd
                   ? () {
-                      widget.onAdd(_selectedIds, _qty);
+                      widget.onAdd(_qty);
                       Navigator.of(context).pop();
                     }
                   : null,

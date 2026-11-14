@@ -98,7 +98,7 @@ void main() {
       WidgetTester tester, {
       required int available,
       int inCart = 0,
-      required void Function(List<String>, int) onAdd,
+      required void Function(int) onAdd,
     }) async {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -130,78 +130,49 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('menampilkan detail, varian default, dan subtotal dasar',
+    testWidgets('menampilkan detail tanpa opsi varian, subtotal harga dasar',
         (tester) async {
-      await pumpSheet(tester, available: 50, onAdd: (_, _) {});
+      await pumpSheet(tester, available: 50, onAdd: (_) {});
       expect(find.text('Cappuccino'), findsOneWidget);
       expect(find.text('Espresso dengan steamed milk dan foam tebal yang lembut'),
           findsOneWidget);
-      expect(find.text('Ukuran'), findsOneWidget);
-      expect(find.text('Penyajian'), findsOneWidget);
-      expect(find.text('Tambahan'), findsOneWidget);
-      expect(find.text('Rp 14.000'), findsWidgets); // harga dasar + subtotal
+      // Data backend tetap membawa options, tetapi UI tidak boleh menampilkannya.
+      expect(find.text('Ukuran'), findsNothing);
+      expect(find.text('Penyajian'), findsNothing);
+      expect(find.text('Tambahan'), findsNothing);
+      expect(find.text('Regular'), findsNothing);
+      expect(find.text('Large'), findsNothing);
+      expect(find.text('Ice'), findsNothing);
+      expect(find.text('Hot'), findsNothing);
+      expect(find.text('Extra Milk'), findsNothing);
+      expect(find.text('Extra Sugar'), findsNothing);
+      expect(find.text('Rp 14.000'), findsWidgets); // harga + subtotal
       expect(find.text('Tambah ke Keranjang'), findsOneWidget);
     });
 
-    testWidgets('pilihan varian mengubah subtotal live', (tester) async {
-      await pumpSheet(tester, available: 50, onAdd: (_, _) {});
-      await tester.ensureVisible(find.text('Large'));
-      await tester.tap(find.text('Large'));
-      await tester.pumpAndSettle();
-      expect(find.text('Rp 17.000'), findsOneWidget);
-
-      await tester.ensureVisible(find.text('Extra Shot'));
-      await tester.tap(find.text('Extra Shot'));
-      await tester.pumpAndSettle();
-      expect(find.text('Rp 21.000'), findsOneWidget);
-
-      // qty 2 → subtotal 42.000
+    testWidgets('subtotal mengikuti qty dengan harga dasar', (tester) async {
+      await pumpSheet(tester, available: 50, onAdd: (_) {});
+      expect(find.text('Rp 14.000'), findsWidgets);
       await tester.ensureVisible(find.byIcon(Icons.add));
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
-      expect(find.text('Rp 42.000'), findsOneWidget);
+      // qty 2 × harga dasar 14.000 = 28.000, tanpa delta varian
+      expect(find.text('Rp 28.000'), findsOneWidget);
     });
 
-    testWidgets('tambah ke keranjang mengirim opsi & qty benar', (tester) async {
-      List<String>? ids;
+    testWidgets('tambah ke keranjang mengirim qty benar', (tester) async {
       int? qty;
-      await pumpSheet(tester, available: 50, onAdd: (o, q) {
-        ids = o;
-        qty = q;
-      });
-      await tester.ensureVisible(find.text('Large'));
-      await tester.tap(find.text('Large'));
-      await tester.ensureVisible(find.text('Ice'));
-      await tester.tap(find.text('Ice'));
-      await tester.ensureVisible(find.text('Extra Shot'));
-      await tester.tap(find.text('Extra Shot'));
+      await pumpSheet(tester, available: 50, onAdd: (q) => qty = q);
       await tester.ensureVisible(find.byIcon(Icons.add));
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Tambah ke Keranjang'));
       await tester.pumpAndSettle();
-      expect(ids, ['large', 'ice', 'extra_shot']);
       expect(qty, 2);
     });
 
-    testWidgets('multi-extra terakumulasi, single-select hanya satu',
-        (tester) async {
-      List<String>? ids;
-      await pumpSheet(tester, available: 50, onAdd: (o, _) => ids = o);
-      await tester.ensureVisible(find.text('Extra Shot'));
-      await tester.tap(find.text('Extra Shot'));
-      await tester.ensureVisible(find.text('Extra Milk'));
-      await tester.tap(find.text('Extra Milk'));
-      await tester.pumpAndSettle();
-      // 14000 + 4000 + 3000 = 21000
-      expect(find.text('Rp 21.000'), findsOneWidget);
-      await tester.tap(find.text('Tambah ke Keranjang'));
-      await tester.pumpAndSettle();
-      expect(ids, ['regular', 'hot', 'extra_shot', 'extra_milk']);
-    });
-
     testWidgets('stok habis menonaktifkan tombol tambah', (tester) async {
-      await pumpSheet(tester, available: 0, onAdd: (_, _) {});
+      await pumpSheet(tester, available: 0, onAdd: (_) {});
       expect(find.text('Stok tidak cukup'), findsOneWidget);
       final button = tester.widget<FilledButton>(find.byType(FilledButton));
       expect(button.onPressed, isNull);
@@ -209,7 +180,7 @@ void main() {
     });
 
     testWidgets('qty tidak melebihi sisa stok', (tester) async {
-      await pumpSheet(tester, available: 5, inCart: 4, onAdd: (_, _) {});
+      await pumpSheet(tester, available: 5, inCart: 4, onAdd: (_) {});
       // sisa 1: tombol + qty disabled sejak awal
       await tester.ensureVisible(find.byIcon(Icons.add));
       final plusInkWell = tester.widget<InkWell>(find.ancestor(
