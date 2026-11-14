@@ -3871,10 +3871,10 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     TableRow(
                       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6)))),
                       children: [
-                        _cleanTd('\n', bold: true),
-                        _cleanTd(' cup'),
-                        _cleanTd(' cup', bold: true, color: const Color(0xFFD97706)),
-                        _cleanTd(' cup', bold: true, color: const Color(0xFF059669)),
+                        _cleanTd('${s['name']}\n${s['cart_id']}', bold: true),
+                        _cleanTd('${s['morning_stock']} cup'),
+                        _cleanTd('${s['current_stock']} cup', bold: true, color: const Color(0xFFD97706)),
+                        _cleanTd('${s['cups_sold']} cup', bold: true, color: const Color(0xFF059669)),
                         _cleanTd(_formatRupiah(s['qris'] as num)),
                         _cleanTd(_formatRupiah(s['cash'] as num), bold: true),
                         _cleanTd(_formatRupiah((s['cash_submitted'] ?? s['cash']) as num)),

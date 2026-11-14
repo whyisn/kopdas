@@ -61,6 +61,16 @@ class ApiClient {
     );
   }
 
+  Future<dynamic> put(String path, {Object? body}) {
+    return _send(
+      () => _client.put(
+        _uri(path),
+        headers: _headers,
+        body: body == null ? null : jsonEncode(body),
+      ),
+    );
+  }
+
   Future<dynamic> _send(Future<http.Response> Function() run) async {
     http.Response res;
     try {

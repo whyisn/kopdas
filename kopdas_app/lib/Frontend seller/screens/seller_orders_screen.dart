@@ -198,7 +198,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                     selectedColor: AppConstants.primaryColor.withValues(alpha: 0.15),
                     checkmarkColor: AppConstants.primaryColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? AppConstants.primaryColor : Colors.black87,
+                      color: isSelected ? AppConstants.primaryColor : const Color(0xFF1F2937),
                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                       fontSize: 13,
                     ),
