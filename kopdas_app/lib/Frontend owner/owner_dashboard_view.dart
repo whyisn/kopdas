@@ -49,9 +49,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 1940000,
       'cash_submitted': 900000,
       'cash_status': 'BALANCE',
-      'commission_rate': 2000,
-      'total_commission': 284000,
-      'commission_paid': false,
       'gps_status': 'Live (4m akurasi)',
       'lat_long': '-6.2088, 106.8227',
       'lat': -6.2088,
@@ -77,9 +74,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 900000,
       'cash_submitted': 520000,
       'cash_status': 'BALANCE',
-      'commission_rate': 2000,
-      'total_commission': 136000,
-      'commission_paid': false,
       'gps_status': 'Live (6m akurasi)',
       'lat_long': '-6.1994, 106.8326',
       'lat': -6.1994,
@@ -105,9 +99,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 1340000,
       'cash_submitted': 640000,
       'cash_status': 'BALANCE',
-      'commission_rate': 2000,
-      'total_commission': 190000,
-      'commission_paid': false,
       'gps_status': 'Live (5m akurasi)',
       'lat_long': '-6.1744, 106.8432',
       'lat': -6.1744,
@@ -133,9 +124,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 1670000,
       'cash_submitted': 780000,
       'cash_status': 'BALANCE',
-      'commission_rate': 2000,
-      'total_commission': 236000,
-      'commission_paid': false,
       'gps_status': 'Live (3m akurasi)',
       'lat_long': '-6.1668, 106.8312',
       'lat': -6.1668,
@@ -161,9 +149,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       'qris': 0,
       'cash_submitted': 0,
       'cash_status': 'STANDBY',
-      'commission_rate': 1500,
-      'total_commission': 0,
-      'commission_paid': false,
       'gps_status': 'Offline',
       'lat_long': '-6.2185, 106.8302',
       'lat': -6.2185,
@@ -258,9 +243,8 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   'cups_sold': 0,
                   'cash': 0,
                   'qris': 0,
-                  'commission_rate': 2000,
-                  'total_commission': 0,
-                  'commission_paid': false,
+                  'cash_submitted': 0,
+                  'cash_status': 'NOT_STARTED',
                   'gps_status': 'Offline',
                   'lat_long': '-6.1950, 106.8300',
                   'lat': -6.1950,
@@ -770,17 +754,17 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // MODAL 3: Tax Report Official CSV Export Dialog (Requirement 8)
   void _showTaxReportExportDialog() {
-    const String csvData = '''No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Omzet_Bruto_IDR,DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan
-INV-20261114-001,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,Tunai,900000,900000,0.5%,4500,411128-420,Penjualan 45 Cup Walk-in
-INV-20261114-002,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,QRIS,1940000,1940000,0.5%,9700,411128-420,Penjualan 97 Cup QRIS Statis
-INV-20261114-003,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,Tunai,520000,520000,0.5%,2600,411128-420,Penjualan 26 Cup Walk-in
-INV-20261114-004,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,QRIS,900000,900000,0.5%,4500,411128-420,Penjualan 42 Cup QRIS Statis
-INV-20261114-005,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,Tunai,640000,640000,0.5%,3200,411128-420,Penjualan 32 Cup Walk-in
-INV-20261114-006,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,QRIS,1340000,1340000,0.5%,6700,411128-420,Penjualan 63 Cup QRIS Statis
-INV-20261114-007,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,Tunai,780000,780000,0.5%,3900,411128-420,Penjualan 39 Cup Walk-in
-INV-20261114-008,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,QRIS,1580000,1580000,0.5%,7900,411128-420,Penjualan 79 Cup QRIS Statis
-INV-20261114-009,14/11/2026,Pre-Order App Discovery (Semua Gerobak),Online App,QRIS Dinamis,3420000,3420000,0.5%,17100,411128-420,Pre-Order Online 168 Cup
-TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128-420,Total DPP & PPh Final UMKM PP 55/2022''';
+    const String csvData = '''No_Bukti,Tanggal,Sumber_Pendapatan,Kanal,Metode_Bayar,Penerimaan_Cash_IDR,Penerimaan_QRIS_IDR,Total_Omzet_IDR,DPP_IDR,Tarif_PPh,PPh_Final_Terutang_IDR,KAP_KJS,Keterangan
+INV-20261114-001,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,Tunai,900000,0,900000,900000,0.5%,4500,411128-420,Penjualan 45 Cup Walk-in Tunai
+INV-20261114-002,14/11/2026,Walk-in Gerobak (GRB-01 Sudirman),Offline POS,QRIS,0,1940000,1940000,1940000,0.5%,9700,411128-420,Penjualan 97 Cup QRIS Statis
+INV-20261114-003,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,Tunai,520000,0,520000,520000,0.5%,2600,411128-420,Penjualan 26 Cup Walk-in Tunai
+INV-20261114-004,14/11/2026,Walk-in Gerobak (GRB-02 Suropati),Offline POS,QRIS,0,900000,900000,900000,0.5%,4500,411128-420,Penjualan 42 Cup QRIS Statis
+INV-20261114-005,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,Tunai,640000,0,640000,640000,0.5%,3200,411128-420,Penjualan 32 Cup Walk-in Tunai
+INV-20261114-006,14/11/2026,Walk-in Gerobak (GRB-03 Senen),Offline POS,QRIS,0,1340000,1340000,1340000,0.5%,6700,411128-420,Penjualan 63 Cup QRIS Statis
+INV-20261114-007,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,Tunai,780000,0,780000,780000,0.5%,3900,411128-420,Penjualan 39 Cup Walk-in Tunai
+INV-20261114-008,14/11/2026,Walk-in Gerobak (GRB-04 Juanda),Offline POS,QRIS,0,1580000,1580000,1580000,0.5%,7900,411128-420,Penjualan 79 Cup QRIS Statis
+INV-20261114-009,14/11/2026,Pre-Order App Discovery (Semua Gerobak),Online App,QRIS Dinamis,0,3420000,3420000,3420000,0.5%,17100,411128-420,Pre-Order Online 168 Cup QRIS Dinamis
+TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,2840000,5850000,8690000,8690000,0.5%,43450,411128-420,Total Penerimaan: Cash Rp 2.84M | QRIS Rp 5.85M | PPh Final 0.5% PP 55/2022''';
 
     showDialog(
       context: context,
@@ -788,7 +772,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
-          width: 760,
+          width: 820,
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -811,8 +795,8 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Laporan Pelaporan Pajak Resmi (PP 55/2022 & PB1)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF111827))),
-                          Text('Format Standar e-Bupot / SPT Masa DJP Online (Format CSV/Excel)', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+                          Text('Laporan Keuangan & Pelaporan Pajak Resmi (Cash vs QRIS)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF111827))),
+                          Text('Format Standar e-Bupot / SPT Masa DJP Online (Format CSV/Excel — Tanpa Potongan Komisi)', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
                         ],
                       ),
                     ],
@@ -822,9 +806,51 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
               ),
               const SizedBox(height: 16),
 
-              // Tax Summary Metric Cards
+              // Tax Summary Metric Cards (Cash, QRIS, Total DPP, PPh Final)
               Row(
                 children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFBEB),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFFDE68A)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('Penerimaan Cash (Tunai)', style: TextStyle(fontSize: 11, color: Color(0xFF92400E), fontWeight: FontWeight.w600)),
+                          SizedBox(height: 4),
+                          Text('Rp 2.840.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF78350F))),
+                          SizedBox(height: 2),
+                          Text('32.7% Omzet • Kas Gerobak', style: TextStyle(fontSize: 10, color: Color(0xFFB45309))),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFF6FF),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFBFDBFE)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('Penerimaan QRIS (Non-Tunai)', style: TextStyle(fontSize: 11, color: Color(0xFF1E40AF), fontWeight: FontWeight.w600)),
+                          SizedBox(height: 4),
+                          Text('Rp 5.850.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A))),
+                          SizedBox(height: 2),
+                          Text('67.3% Omzet • Rekening Bank', style: TextStyle(fontSize: 10, color: Color(0xFF2563EB))),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -836,16 +862,16 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('Dasar Pengenaan Pajak (DPP)', style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280))),
+                          Text('Dasar Pengenaan Pajak (DPP)', style: TextStyle(fontSize: 11, color: Color(0xFF4B5563), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 8.690.000', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
+                          Text('Rp 8.690.000', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF111827))),
                           SizedBox(height: 2),
-                          Text('Omzet Bruto Konsolidasi', style: TextStyle(fontSize: 10.5, color: Color(0xFF059669))),
+                          Text('Omzet Bruto Konsolidasi', style: TextStyle(fontSize: 10, color: Color(0xFF059669))),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -857,32 +883,11 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('PPh Final UMKM 0.5% Terutang', style: TextStyle(fontSize: 11.5, color: Color(0xFF065F46))),
+                          Text('PPh Final UMKM (0.5%)', style: TextStyle(fontSize: 11, color: Color(0xFF065F46), fontWeight: FontWeight.w600)),
                           SizedBox(height: 4),
-                          Text('Rp 43.450', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
+                          Text('Rp 43.450', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF065F46))),
                           SizedBox(height: 2),
-                          Text('PP 55/2022 (KAP 411128 KJS 420)', style: TextStyle(fontSize: 10.5, color: Color(0xFF047857))),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF0FDF4),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFFBBF7D0)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('Opsi PB1 / Pajak Restoran 10%', style: TextStyle(fontSize: 11.5, color: Color(0xFF166534))),
-                          SizedBox(height: 4),
-                          Text('Rp 869.000', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF166534))),
-                          SizedBox(height: 2),
-                          Text('Jika Ditetapkan Bapenda', style: TextStyle(fontSize: 10.5, color: Color(0xFF15803D))),
+                          Text('PP 55/2022 (KAP 411128-420)', style: TextStyle(fontSize: 10, color: Color(0xFF047857))),
                         ],
                       ),
                     ),
@@ -1013,7 +1018,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
       case 6: return _buildStockDistributionView();
       case 7: return _buildSalesMonitoringView();
       case 8: return _buildOrdersMonitoringView();
-      case 9: return _buildCommissionSystemView();
+      case 9: return _buildAnalyticsReportsView(); // Komisi ditiadakan, dialihkan ke Laporan Keuangan
       case 10: return _buildTrafficRadarView();
       case 11: return _buildAnalyticsReportsView();
       case 12: return _buildSettingsView();
@@ -1112,7 +1117,6 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                     _sidebarCategoryHeader('SISTEM & INTELIJEN'),
                     _navItem(10, Icons.psychology_outlined, 'Analisis AI Permintaan'),
                     _navItem(8, Icons.qr_code_scanner, 'Pesanan Online QRIS'),
-                    _navItem(9, Icons.military_tech_outlined, 'Komisi Tim'),
                     _navItem(12, Icons.settings_outlined, 'Pengaturan Sistem'),
                   ],
                 ),
@@ -1482,7 +1486,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
       case 6: return 'Distribusi Stok Bawaan Pagi';
       case 7: return 'Log Penjualan Lapangan & Kasir';
       case 8: return 'Daftar Pesanan Online QRIS';
-      case 9: return 'Sistem Komisi Tim Lapangan';
+      case 9: return 'Laporan Keuangan & Pajak';
       case 10: return 'Analisis AI Permintaan & Optimasi Stok';
       case 11: return 'Laporan Keuangan & Pelaporan Pajak Resmi';
       case 12: return 'Pengaturan Sistem Operasional';
@@ -1504,8 +1508,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
           'cups': 341,
           'online_cups': 130,
           'walkin_cups': 211,
-          'commission': 682000,
-          'net_profit': 4048400,
+          'net_profit': 4558000,
           'growth': '12.30%',
           'is_positive': true,
           'active_staff': 4,
@@ -1548,8 +1551,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
           'cups': 2650,
           'online_cups': 1050,
           'walkin_cups': 1600,
-          'commission': 5300000,
-          'net_profit': 31505600,
+          'net_profit': 35470000,
           'growth': '18.70%',
           'is_positive': true,
           'active_staff': 5,
@@ -1592,8 +1594,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
           'cups': 11640,
           'online_cups': 4600,
           'walkin_cups': 7040,
-          'commission': 23280000,
-          'net_profit': 138301000,
+          'net_profit': 155708000,
           'growth': '31.40%',
           'is_positive': true,
           'active_staff': 5,
@@ -1630,8 +1631,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
         final num totalQris = _staffList.fold(0, (acc, s) => acc + (s['qris'] as num));
         final num totalOmzet = totalCash + totalQris;
         final num totalCups = _staffList.fold(0, (acc, s) => acc + (s['cups_sold'] as num));
-        final num totalCommission = _staffList.fold(0, (acc, s) => acc + (s['total_commission'] as num));
-        final num netProfit = (totalOmzet * 0.58).round();
+        final num netProfit = (totalOmzet * 0.653).round();
         final activeStaff = _staffList.where((s) => s['operational_status'] == 'ACTIVE_SELLING').length;
         return {
           'period_label': 'Hari Ini (14 Nov 2026)',
@@ -1641,7 +1641,6 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
           'cups': totalCups.toInt(),
           'online_cups': 168,
           'walkin_cups': 255,
-          'commission': totalCommission,
           'net_profit': netProfit,
           'growth': '24.50%',
           'is_positive': true,
@@ -1682,11 +1681,11 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
   Widget _buildDashboardView() {
     final d = _getDashboardDataForFilter();
     final num totalCash = d['cash'] as num;
+    final num totalQris = d['qris'] as num;
     final num totalOmzet = d['omzet'] as num;
     final int totalCups = (d['cups'] as num).toInt();
     final int onlineCups = (d['online_cups'] as num).toInt();
     final int walkinCups = (d['walkin_cups'] as num).toInt();
-    final num totalCommission = d['commission'] as num;
     final num netProfit = d['net_profit'] as num;
     final int activeStaff = (d['active_staff'] as num).toInt();
     final int totalStaff = (d['total_staff'] as num).toInt();
@@ -1844,7 +1843,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                       child: _buildConsolidatedColumn(
                         'Estimasi Laba Bersih',
                         _formatRupiah(netProfit),
-                        'Margin 58% Bersih (Komisi: ${_formatRupiah(totalCommission)})',
+                        'Margin 65.3% Bersih (Omzet - HPP Bahan)',
                         const Color(0xFF059669),
                       ),
                     ),
@@ -1855,7 +1854,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                       child: _buildConsolidatedColumn(
                         'Kas Lapangan Belum Setor',
                         _formatRupiah(totalCash),
-                        'Menunggu Rekonsiliasi Tutup Shift',
+                        'Penerimaan Cash Fisik di Gerobak',
                         const Color(0xFFD97706),
                       ),
                     ),
@@ -1945,13 +1944,13 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                     ),
                     const SizedBox(height: 14),
 
-                    _buildTopSellerRow('1', 'Budi Santoso (GRB-01)', '142 / 120 Cup (118%)', 'Omzet: Rp 2.840.000 • Komisi: Rp 284.000', 1.0, const Color(0xFF059669)),
+                    _buildTopSellerRow('1', 'Budi Santoso (GRB-01)', '142 / 120 Cup (118%)', 'Omzet: Rp 2.840.000 • Cash: Rp 900.000 | QRIS: Rp 1.940.000', 1.0, const Color(0xFF059669)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('2', 'Hendra Wijaya (GRB-04)', '118 / 110 Cup (107%)', 'Omzet: Rp 2.360.000 • Sisa 15 Cup', 0.95, const Color(0xFF0D9488)),
+                    _buildTopSellerRow('2', 'Hendra Wijaya (GRB-04)', '118 / 110 Cup (107%)', 'Omzet: Rp 2.360.000 • Cash: Rp 780.000 | QRIS: Rp 1.580.000', 0.95, const Color(0xFF0D9488)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('3', 'Siti Rahmawati (GRB-03)', '95 / 120 Cup (79%)', 'Omzet: Rp 1.980.000 • Komisi: Rp 190.000', 0.79, const Color(0xFF2563EB)),
+                    _buildTopSellerRow('3', 'Siti Rahmawati (GRB-03)', '95 / 120 Cup (79%)', 'Omzet: Rp 1.980.000 • Cash: Rp 640.000 | QRIS: Rp 1.340.000', 0.79, const Color(0xFF2563EB)),
                     const SizedBox(height: 12),
-                    _buildTopSellerRow('4', 'Ahmad Fauzi (GRB-02)', '68 / 120 Cup (56%)', 'Omzet: Rp 1.420.000 • Komisi: Rp 136.000', 0.56, const Color(0xFFD97706)),
+                    _buildTopSellerRow('4', 'Ahmad Fauzi (GRB-02)', '68 / 120 Cup (56%)', 'Omzet: Rp 1.420.000 • Cash: Rp 520.000 | QRIS: Rp 900.000', 0.56, const Color(0xFFD97706)),
                   ],
                 ),
               ),
@@ -2498,11 +2497,11 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              'Laporan Keuangan Rinci & Kepatuhan Pelaporan Pajak Resmi',
+                              'Laporan Keuangan Rinci: Arus Kas Tunai vs QRIS & Pelaporan Pajak Resmi',
                               style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF111827)),
                             ),
                             Text(
-                              'Rincian kanal pendapatan (Walk-in vs Pre-Order Online), breakdown HPP bahan baku, komisi tim, dan kepatuhan pajak PPh Final 0.5% (PP 55/2022)',
+                              'Rincian penerimaan Cash tunai & QRIS digital, breakdown HPP bahan baku, laba bersih (tanpa potongan komisi), dan kepatuhan pajak PPh Final 0.5% (PP 55/2022)',
                               style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                             ),
                           ],
@@ -2530,7 +2529,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Col 1: Rincian Pendapatan
+                    // Col 1: Penerimaan Uang Tunai / Cash Lapangan
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(14),
@@ -2542,23 +2541,20 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('1. Sumber Pendapatan (Omzet)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
+                            const Text('1. Penerimaan Kas Tunai (Cash)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
                             const SizedBox(height: 10),
-                            _buildFinanceRow('Walk-In POS Gerobak (255 cup)', 'Rp 5.270.000', '60.6%'),
-                            _buildFinanceRow('  • Uang Tunai / Cash Lapangan', 'Rp 2.840.000', '53.9%'),
-                            _buildFinanceRow('  • QRIS Statis Lapak', 'Rp 2.430.000', '46.1%'),
-                            const SizedBox(height: 4),
-                            _buildFinanceRow('Pre-Order Online App (168 cup)', 'Rp 3.420.000', '39.4%'),
-                            _buildFinanceRow('  • QRIS Dinamis Otomatis', 'Rp 3.420.000', '100%'),
+                            _buildFinanceRow('Walk-In Cash POS Gerobak', _formatRupiah(totalCash), '100% Cash'),
+                            _buildFinanceRow('Porsi terhadap Total Omzet', '${((totalCash / (totalOmzet == 0 ? 1 : totalOmzet)) * 100).toStringAsFixed(1)}%', 'Tunai Fisik'),
+                            _buildFinanceRow('Pengeluaran Es & Sanitasi Unit', 'Rp 210.000', 'Beban Tunai'),
                             const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Total Omzet Bruto (DPP)', _formatRupiah(totalOmzet), '100%', isTotal: true),
+                            _buildFinanceRow('Kas Bersih Siap Disetor', _formatRupiah(totalCash > 210000 ? totalCash - 210000 : totalCash), 'Fisik Aman', isTotal: true, color: const Color(0xFFD97706)),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(width: 14),
 
-                    // Col 2: HPP Bahan
+                    // Col 2: Penerimaan Digital / QRIS
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(14),
@@ -2570,21 +2566,20 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('2. Beban Pokok Penjualan (HPP)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
+                            const Text('2. Penerimaan Digital (QRIS)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
                             const SizedBox(height: 10),
-                            _buildFinanceRow('Biji Kopi Blend Robusta-Arabika', 'Rp 1.142.100', 'Rp 2.700/cup'),
-                            _buildFinanceRow('Fresh Milk & Oatmilk Barista', 'Rp 888.300', 'Rp 2.100/cup'),
-                            _buildFinanceRow('Cup, Lid, Straw & Seal Kopi', 'Rp 465.300', 'Rp 1.100/cup'),
-                            _buildFinanceRow('Gula Aren Organik & Sirup', 'Rp 308.300', 'Rp 728/cup'),
+                            _buildFinanceRow('QRIS Statis Lapak POS Gerobak', _formatRupiah((totalQris * 0.415).round()), 'Lapak Offline'),
+                            _buildFinanceRow('QRIS Dinamis App Pre-Order', _formatRupiah((totalQris * 0.585).round()), 'Online Order'),
+                            _buildFinanceRow('Porsi terhadap Total Omzet', '${((totalQris / (totalOmzet == 0 ? 1 : totalOmzet)) * 100).toStringAsFixed(1)}%', 'Non-Tunai'),
                             const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Total HPP Bahan Baku', 'Rp 2.804.000', '32.3% Omzet', isTotal: true),
+                            _buildFinanceRow('Total Saldo QRIS Bank', _formatRupiah(totalQris), 'H+0 Otomatis', isTotal: true, color: const Color(0xFF1E3932)),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(width: 14),
 
-                    // Col 3: Hak Tim & Laba
+                    // Col 3: HPP Bahan & Laba Bersih (Tanpa Komisi)
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(14),
@@ -2596,14 +2591,13 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('3. Komisi & Laba Bersih', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
+                            const Text('3. Laba Bersih (Tanpa Komisi)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
                             const SizedBox(height: 10),
-                            _buildFinanceRow('Komisi Petugas Lapangan', _formatRupiah(totalCommission), 'Rp 2.000/cup'),
-                            _buildFinanceRow('Biaya Es Batu & Kebersihan Unit', 'Rp 210.000', 'Operasional'),
+                            _buildFinanceRow('Total Omzet (Cash + QRIS)', _formatRupiah(totalOmzet), '100% DPP'),
+                            _buildFinanceRow('Harga Pokok Bahan (HPP)', 'Rp 2.804.000', '32.3% Omzet'),
+                            _buildFinanceRow('Biaya Es Batu & Unit Gerobak', 'Rp 210.000', 'Operasional'),
                             const Divider(height: 12, color: Color(0xFFE5E7EB)),
-                            _buildFinanceRow('Total Beban Operasional', _formatRupiah(totalCommission + 210000), '12.2%'),
-                            const SizedBox(height: 6),
-                            _buildFinanceRow('Estimasi Laba Bersih', _formatRupiah(netProfit), '58.0% Margin', isTotal: true, color: const Color(0xFF059669)),
+                            _buildFinanceRow('Estimasi Laba Bersih', _formatRupiah(totalOmzet - 2804000 - 210000), 'Margin 65.3%', isTotal: true, color: const Color(0xFF059669)),
                           ],
                         ),
                       ),
@@ -2624,7 +2618,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
                           children: [
                             const Text('4. Kepatuhan Pajak Resmi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF065F46))),
                             const SizedBox(height: 10),
-                            _buildFinanceRow('Dasar Pengenaan Pajak (DPP)', _formatRupiah(totalOmzet), 'Omzet Bruto'),
+                            _buildFinanceRow('Dasar Pengenaan Pajak (DPP)', _formatRupiah(totalOmzet), 'Cash + QRIS'),
                             _buildFinanceRow('Skema: PPh Final UMKM PP 55', 'Tarif: 0.5%', 'KAP 411128'),
                             _buildFinanceRow('PPh Final Terutang (0.5%)', 'Rp 43.450', 'Disetor SPT', isTotal: true, color: const Color(0xFF065F46)),
                             const Divider(height: 12, color: Color(0xFFA7F3D0)),
@@ -3968,65 +3962,6 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
   }
 
   // ===========================================================================
-  // SUB-PAGES: KOMISI TIM
-  // ===========================================================================
-  Widget _buildCommissionSystemView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Rekap Hak Komisi Petugas (Rp 2.000 / cup)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        const SizedBox(height: 12),
-        _tableContainer(
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(2),
-              2: FlexColumnWidth(1.4),
-              3: FlexColumnWidth(1.6),
-              4: FlexColumnWidth(1.4),
-              5: FlexColumnWidth(1.2),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(color: Color(0xFFFAFAFA), border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0)))),
-                children: [
-                  _cleanTh('Nama Petugas'),
-                  _cleanTh('Unit Gerobak'),
-                  _cleanTh('Cup Terjual'),
-                  _cleanTh('Hak Komisi'),
-                  _cleanTh('Status'),
-                  _cleanTh('Aksi'),
-                ],
-              ),
-              for (final s in _staffList)
-                TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))),
-                  children: [
-                    _cleanTd(s['name'], bold: true),
-                    _cleanTd(s['cart_id']),
-                    _cleanTd('${s['cups_sold']} Cup'),
-                    _cleanTd(_formatRupiah(s['total_commission'] as num), bold: true, color: const Color(0xFF0F172A)),
-                    _cleanStatusPill(s['commission_paid'] ? 'Sudah Cair' : 'Siap Cair', s['commission_paid']),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: InkWell(
-                        onTap: s['commission_paid'] ? null : () {
-                          setState(() => s['commission_paid'] = true);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Komisi ${s['name']} dicairkan.')));
-                        },
-                        child: Text(s['commission_paid'] ? 'Selesai' : 'Cairkan', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: s['commission_paid'] ? const Color(0xFF94A3B8) : const Color(0xFF0284C7))),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ===========================================================================
   // SUB-PAGES: ANALISIS LOKASI
   // ===========================================================================
   Widget _buildTrafficRadarView() {
@@ -4079,10 +4014,11 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
   Widget _buildAnalyticsReportsView() {
     final d = _getDashboardDataForFilter();
     final num totalOmzet = d['omzet'] as num;
+    final num totalCash = d['cash'] as num;
+    final num totalQris = d['qris'] as num;
     final num totalHpp = (totalOmzet * 0.323).round();
-    final num totalCommission = d['commission'] as num;
     final num operationalCost = 210000;
-    final num netProfit = totalOmzet - totalHpp - totalCommission - operationalCost;
+    final num netProfit = totalOmzet - totalHpp - operationalCost;
     final String periodLabel = d['period_label'] as String;
 
     return Column(
@@ -4094,9 +4030,9 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Laporan Keuangan Rinci & Pelaporan Pajak Resmi — $periodLabel', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF111827))),
+                Text('Laporan Keuangan Rinci: Arus Kas Tunai vs QRIS — $periodLabel', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF111827))),
                 const SizedBox(height: 2),
-                const Text('Rincian sumber pendapatan, HPP bahan baku, komisi tim, dan kepatuhan perpajakan UMKM (PP 55/2022)', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+                const Text('Rincian penerimaan Cash tunai, QRIS digital, HPP bahan baku, laba bersih (tanpa potongan komisi), dan kepatuhan perpajakan UMKM (PP 55/2022)', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
               ],
             ),
             ElevatedButton.icon(
@@ -4116,14 +4052,84 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
 
         Row(
           children: [
-            Expanded(child: _cleanStatTile('Omzet Bruto (DPP)', _formatRupiah(totalOmzet), 'Total Pendapatan Seluruh Kanal', isPositive: true, growth: '+24.5%')),
+            Expanded(child: _cleanStatTile('Total Omzet Bruto (DPP)', _formatRupiah(totalOmzet), 'Total Pendapatan Seluruh Kanal', isPositive: true, growth: '+24.5%')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Harga Pokok (HPP)', _formatRupiah(totalHpp), 'Biaya Biji, Susu, Cup & Bahan (32.3%)')),
+            Expanded(child: _cleanStatTile('Penerimaan Cash (Tunai)', _formatRupiah(totalCash), '32.7% Omzet • Kas Gerobak Lapangan')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Komisi Petugas', _formatRupiah(totalCommission), 'Hak Insentif Tim Lapangan')),
+            Expanded(child: _cleanStatTile('Penerimaan QRIS (Non-Tunai)', _formatRupiah(totalQris), '67.3% Omzet • Rekening Bank Utama')),
             const SizedBox(width: 12),
-            Expanded(child: _cleanStatTile('Laba Bersih Riil', _formatRupiah(netProfit), 'Margin Keuntungan 55.6%', isPositive: true, growth: '58.0%')),
+            Expanded(child: _cleanStatTile('Laba Bersih Riil', _formatRupiah(netProfit), 'Margin 65.3% • Komisi Ditiadakan', isPositive: true, growth: '65.3%')),
           ],
+        ),
+        const SizedBox(height: 18),
+
+        // Detail Komparasi Cash vs QRIS
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Rincian Kanal Penerimaan: Cash (Tunai) vs QRIS (Non-Tunai)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF111827))),
+              const SizedBox(height: 6),
+              const Text('Pemisahan dana kas fisik di gerobak dan transaksi digital otomatis rekening penampung:', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280))),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFBEB),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFFDE68A)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('1. Arus Kas Tunai (Cash Lapangan)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E))),
+                          const SizedBox(height: 8),
+                          _buildFinanceRow('Total Kas Diterima Penjualan POS', _formatRupiah(totalCash), '100% Cash'),
+                          _buildFinanceRow('Porsi terhadap Total Omzet Usaha', '32.7%', 'Tunai Fisik'),
+                          _buildFinanceRow('Biaya Lapangan Terbayar Tunai (Es/Unit)', 'Rp 210.000', 'Beban Tunai'),
+                          const Divider(height: 12, color: Color(0xFFFDE68A)),
+                          _buildFinanceRow('Total Kas Fisik Siap Disetor ke Owner', _formatRupiah(totalCash - 210000), 'Rekonsiliasi Tutup Shift', isTotal: true, color: const Color(0xFF78350F)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFF6FF),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFBFDBFE)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('2. Penerimaan Non-Tunai (QRIS Digital)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E40AF))),
+                          const SizedBox(height: 8),
+                          _buildFinanceRow('QRIS Statis Lapak Gerobak (POS)', 'Rp 2.430.000', '41.5% QRIS'),
+                          _buildFinanceRow('QRIS Dinamis Aplikasi Pre-Order', 'Rp 3.420.000', '58.5% QRIS'),
+                          _buildFinanceRow('Biaya MDR QRIS (0.0% Bebas MDR)', 'Rp 0', 'Kebijakan BI'),
+                          const Divider(height: 12, color: Color(0xFFBFDBFE)),
+                          _buildFinanceRow('Total Dana Masuk Rekening Bank', _formatRupiah(totalQris), 'H+0 Settlement Otomatis', isTotal: true, color: const Color(0xFF1E3A8A)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 18),
 
@@ -4233,7 +4239,7 @@ TOTAL,14/11/2026,Konsolidasi Seluruh Kanal,-,-,8690000,8690000,0.5%,43450,411128
               const SizedBox(height: 12),
               TextField(decoration: const InputDecoration(labelText: 'Jam Buka Shift Pagi', border: OutlineInputBorder()), controller: TextEditingController(text: '05:30 WIB')),
               const SizedBox(height: 12),
-              TextField(decoration: const InputDecoration(labelText: 'Rate Komisi Standar per Cup', border: OutlineInputBorder()), controller: TextEditingController(text: 'Rp 2.000')),
+              TextField(decoration: const InputDecoration(labelText: 'Tarif PPh Final UMKM Resmi', border: OutlineInputBorder()), controller: TextEditingController(text: '0.5% (PP 55/2022)')),
               const SizedBox(height: 16),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0F172A), foregroundColor: Colors.white),
