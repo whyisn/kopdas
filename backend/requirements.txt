@@ -1,0 +1,28 @@
+# ========================================================
+# KopiCerdas AI (KopDas) - Backend & AI Dependencies
+# Versi terkunci (pinned) untuk mencegah dependency conflict
+# PIC: Backend Developer & AI Engineer
+# ========================================================
+
+# Core Web Framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.0
+pydantic==2.9.2
+pydantic-settings==2.6.1
+
+# Database & ORM
+sqlalchemy==2.0.36
+
+# Security & Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.17
+
+# AI, Data Analysis & Optimization (MILP)
+pulp==2.9.0
+
+# HTTP Client for Integrations (Maps, Weather, Webhook Simulator)
+httpx==0.27.2
+
+# Testing & QA (Skenario T01-T12)
+pytest==8.3.3
