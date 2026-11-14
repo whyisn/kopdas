@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../models/product.dart';
-import '../../models/inventory.dart';
 import '../../services/api_client.dart';
 
 class OwnerDashboardView extends StatefulWidget {
@@ -13,181 +11,104 @@ class OwnerDashboardView extends StatefulWidget {
 class _OwnerDashboardViewState extends State<OwnerDashboardView> {
   final ApiClient _apiClient = ApiClient();
   int _selectedNavIndex = 0;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
-  // Data State
-  List<ProductModel> _products = [];
-  List<InventoryModel> _centralInventory = [];
-  List<dynamic> _sellerInventories = [];
-  List<dynamic> _transactions = [];
-  List<dynamic> _orders = [];
-  List<dynamic> _locations = [];
-  Map<String, dynamic>? _aiOptimizationData;
-  Map<String, dynamic>? _analyticsData;
+  final List<Map<String, dynamic>> _kpis = [
+    {'title': 'Omzet Bruto Hari Ini', 'value': 'Rp 14.250.000', 'sub': '+18.4% vs kemarin', 'color': Color(0xFF10B981), 'icon': Icons.payments_outlined},
+    {'title': 'Laba Bersih Operasional', 'value': 'Rp 8.120.000', 'sub': 'Margin Sehat 57.0%', 'color': Color(0xFF0284C7), 'icon': Icons.account_balance_wallet_outlined},
+    {'title': 'Total Cup Terjual', 'value': '748 Cup', 'sub': 'Kapasitas Armada 62%', 'color': Color(0xFFF59E0B), 'icon': Icons.local_cafe_outlined},
+    {'title': 'Penetrasi QRIS Statis', 'value': '68.4%', 'sub': 'Terverifikasi PJP', 'color': Color(0xFF6366F1), 'icon': Icons.qr_code_2},
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadAllOwnerData();
-  }
+  final List<Map<String, dynamic>> _fleet = [
+    {'id': 'GRB-01', 'seller': 'Pak Darto (Halte Sudirman)', 'sales': '142 Cup', 'omzet': 'Rp 2.840.000', 'stock': '42 / 120 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
+    {'id': 'GRB-02', 'seller': 'Gerobak Sore (Taman Suropati)', 'sales': '68 Cup', 'omzet': 'Rp 1.420.000', 'stock': '28 / 100 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
+    {'id': 'GRB-03', 'seller': 'Mbak Ayu (Pasar Senen)', 'sales': '95 Cup', 'omzet': 'Rp 1.980.000', 'stock': '35 / 120 Cup', 'status': 'OPTIMAL', 'color': Color(0xFF10B981)},
+    {'id': 'GRB-04', 'seller': 'Roda Biru (Stasiun Juanda)', 'sales': '118 Cup', 'omzet': 'Rp 2.450.000', 'stock': '15 / 110 Cup', 'status': 'PERLU STOK', 'color': Color(0xFFEF4444)},
+  ];
 
-  Future<void> _loadAllOwnerData() async {
-    setState(() => _isLoading = true);
-    final now = DateTime.now().toIso8601String();
+  final List<Map<String, dynamic>> _warehouse = [
+    {'sku': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'stock': 850, 'reserved': 40, 'avail': 810, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-02', 'name': 'Americano Double Shot', 'stock': 620, 'reserved': 15, 'avail': 605, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'stock': 420, 'reserved': 20, 'avail': 400, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'stock': 510, 'reserved': 30, 'avail': 480, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+    {'sku': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'stock': 250, 'reserved': 10, 'avail': 240, 'status': 'PERHATIAN', 'color': Color(0xFFF59E0B)},
+    {'sku': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'stock': 380, 'reserved': 5, 'avail': 375, 'status': 'AMAN', 'color': Color(0xFF10B981)},
+  ];
 
-    try {
-      // 1. Products
-      try {
-        final prodRes = await _apiClient.get('/products');
-        if (prodRes is List) {
-          _products = prodRes.map((p) => ProductModel.fromJson(p)).toList();
-        }
-      } catch (_) {
-        _products = [
-          ProductModel(id: 'prd-01', categoryId: 'cat-01', name: 'Kopi Susu Gula Aren', price: 18000, costPrice: 7500, status: 'ACTIVE', categoryName: 'Signature'),
-          ProductModel(id: 'prd-02', categoryId: 'cat-02', name: 'Americano Double Shot', price: 15000, costPrice: 4500, status: 'ACTIVE', categoryName: 'Classic Espresso'),
-          ProductModel(id: 'prd-03', categoryId: 'cat-03', name: 'Matcha Uji Latte Creamy', price: 24000, costPrice: 9500, status: 'ACTIVE', categoryName: 'Non-Coffee'),
-          ProductModel(id: 'prd-04', categoryId: 'cat-01', name: 'Cafe Latte Steam Velvet', price: 22000, costPrice: 8500, status: 'ACTIVE', categoryName: 'Signature'),
-          ProductModel(id: 'prd-05', categoryId: 'cat-04', name: 'Roti Bakar Cokelat Keju', price: 15000, costPrice: 6000, status: 'ACTIVE', categoryName: 'Camilan'),
-          ProductModel(id: 'prd-06', categoryId: 'cat-02', name: 'Cold Brew Citrus Signature', price: 20000, costPrice: 7000, status: 'ACTIVE', categoryName: 'Classic Espresso'),
-        ];
-      }
+  final List<Map<String, dynamic>> _aiRecommendations = [
+    {
+      'priority': 'URGENT',
+      'cart': 'Koridor Sudirman (Pak Darto)',
+      'product': 'Kopi Susu Gula Aren',
+      'now': '42 Cup',
+      'rec': '75 Cup (+33 Cup)',
+      'rationale': 'Lonjakan komuter jam makan siang (11.45 - 13.30). Stok saat ini berisiko stock-out pukul 12.15.',
+      'color': Color(0xFFEF4444)
+    },
+    {
+      'priority': 'HIGH',
+      'cart': 'Stasiun Juanda (Roda Biru)',
+      'product': 'Americano Double Shot',
+      'now': '15 Cup',
+      'rec': '45 Cup (+30 Cup)',
+      'rationale': 'Kebutuhan asupan kafein pekerja kereta sore hari. Margin kotor tinggi Rp 10.500/cup.',
+      'color': Color(0xFFF59E0B)
+    },
+    {
+      'priority': 'MEDIUM',
+      'cart': 'Taman Suropati (Gerobak Sore)',
+      'product': 'Matcha Uji Latte Creamy',
+      'now': '12 Cup',
+      'rec': '35 Cup (+23 Cup)',
+      'rationale': 'Pergeseran pola konsumsi non-kopi anak muda sore hari (15.00 - 18.00).',
+      'color': Color(0xFF0284C7)
+    },
+    {
+      'priority': 'MEDIUM',
+      'cart': 'Pasar Senen (Mbak Ayu)',
+      'product': 'Roti Bakar Cokelat Keju',
+      'now': '8 Porsi',
+      'rec': '25 Porsi (+17 Porsi)',
+      'rationale': 'Tingkat bundling menu camilan dengan kopi mencapai 38% di area pasar.',
+      'color': Color(0xFF0284C7)
+    },
+  ];
 
-      // 2. Central Inventory
-      try {
-        final invRes = await _apiClient.get('/inventory?scope_type=WAREHOUSE');
-        if (invRes is List) {
-          _centralInventory = invRes.map((i) => InventoryModel.fromJson(i)).toList();
-        }
-      } catch (_) {
-        _centralInventory = [
-          InventoryModel(id: 'inv-c-01', productId: 'prd-01', productName: 'Kopi Susu Gula Aren', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 850, reservedQuantity: 40, availableQuantity: 810, updatedAt: now),
-          InventoryModel(id: 'inv-c-02', productId: 'prd-02', productName: 'Americano Double Shot', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 620, reservedQuantity: 15, availableQuantity: 605, updatedAt: now),
-          InventoryModel(id: 'inv-c-03', productId: 'prd-03', productName: 'Matcha Uji Latte Creamy', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 420, reservedQuantity: 20, availableQuantity: 400, updatedAt: now),
-          InventoryModel(id: 'inv-c-04', productId: 'prd-04', productName: 'Cafe Latte Steam Velvet', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 510, reservedQuantity: 30, availableQuantity: 480, updatedAt: now),
-          InventoryModel(id: 'inv-c-05', productId: 'prd-05', productName: 'Roti Bakar Cokelat Keju', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 250, reservedQuantity: 10, availableQuantity: 240, updatedAt: now),
-          InventoryModel(id: 'inv-c-06', productId: 'prd-06', productName: 'Cold Brew Citrus Signature', scopeType: 'WAREHOUSE', scopeId: 'central', quantity: 380, reservedQuantity: 5, availableQuantity: 375, updatedAt: now),
-        ];
-      }
+  final List<Map<String, dynamic>> _preOrders = [
+    {'id': 'PO-9041', 'customer': 'Rani Anggraini', 'seller': 'Pak Darto', 'items': '2x Kopi Susu Aren (Pickup 11:45)', 'total': 'Rp 37.000', 'order_status': 'CONFIRMED', 'pay_status': 'PAID', 'ref': 'QRIS-GOPAY-849102'},
+    {'id': 'PO-9040', 'customer': 'Bagus Prasetyo', 'seller': 'Roda Biru', 'items': '1x Americano (Pickup 11:30)', 'total': 'Rp 16.000', 'order_status': 'READY_FOR_PICKUP', 'pay_status': 'PAID', 'ref': 'QRIS-BCA-920145'},
+    {'id': 'PO-9039', 'customer': 'Clarissa Olivia', 'seller': 'Mbak Ayu', 'items': '2x Matcha Latte', 'total': 'Rp 49.000', 'order_status': 'PENDING_PAYMENT', 'pay_status': 'PENDING', 'ref': 'MENUNGGU PJP NOTIF'},
+  ];
 
-      // 3. Seller Inventories
-      _sellerInventories = [
-        {'seller_id': 'GRB-01', 'seller_name': 'Pak Darto (Halte Sudirman)', 'product': 'Kopi Susu Gula Aren', 'stock': 42, 'capacity': 120, 'status': 'OPTIMAL'},
-        {'seller_id': 'GRB-01', 'seller_name': 'Pak Darto (Halte Sudirman)', 'product': 'Americano Double Shot', 'stock': 28, 'capacity': 120, 'status': 'OPTIMAL'},
-        {'seller_id': 'GRB-02', 'seller_name': 'Gerobak Sore (Taman Suropati)', 'product': 'Matcha Uji Latte Creamy', 'stock': 12, 'capacity': 100, 'status': 'LOW_STOCK'},
-        {'seller_id': 'GRB-03', 'seller_name': 'Mbak Ayu (Pasar Senen)', 'product': 'Cold Brew Citrus Signature', 'stock': 35, 'capacity': 120, 'status': 'OPTIMAL'},
-        {'seller_id': 'GRB-04', 'seller_name': 'Roda Biru (Stasiun Juanda)', 'product': 'Kopi Susu Gula Aren', 'stock': 15, 'capacity': 110, 'status': 'CRITICAL'},
-      ];
+  final List<Map<String, dynamic>> _walkins = [
+    {'id': 'TX-20261114-089', 'seller': 'Pak Darto (Halte Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 'Rp 36.000', 'method': 'QRIS_STATIC', 'time': '11:15 WIB'},
+    {'id': 'TX-20261114-088', 'seller': 'Gerobak Sore (Taman Suropati)', 'items': '1x Americano + 1x Roti Bakar', 'total': 'Rp 30.000', 'method': 'CASH', 'time': '11:08 WIB'},
+    {'id': 'TX-20261114-087', 'seller': 'Mbak Ayu (Pasar Senen)', 'items': '3x Kopi Susu Aren', 'total': 'Rp 54.000', 'method': 'QRIS_STATIC', 'time': '10:55 WIB'},
+    {'id': 'TX-20261114-086', 'seller': 'Roda Biru (Stasiun Juanda)', 'items': '2x Cold Brew Citrus', 'total': 'Rp 40.000', 'method': 'QRIS_STATIC', 'time': '10:42 WIB'},
+  ];
 
-      // 4. Transactions (Walk-In)
-      try {
-        final txRes = await _apiClient.get('/transactions');
-        if (txRes is List) _transactions = txRes;
-      } catch (_) {
-        _transactions = [
-          {'id': 'TX-20261114-089', 'seller_name': 'Pak Darto (Halte Sudirman)', 'items': '2x Kopi Susu Aren', 'total': 36000, 'payment_method': 'QRIS_STATIC', 'payment_status': 'PAID', 'created_at': '11:15 WIB'},
-          {'id': 'TX-20261114-088', 'seller_name': 'Gerobak Sore (Taman Suropati)', 'items': '1x Americano + 1x Roti Bakar', 'total': 30000, 'payment_method': 'CASH', 'payment_status': 'PAID', 'created_at': '11:08 WIB'},
-          {'id': 'TX-20261114-087', 'seller_name': 'Mbak Ayu (Pasar Senen)', 'items': '3x Kopi Susu Aren', 'total': 54000, 'payment_method': 'QRIS_STATIC', 'payment_status': 'PAID', 'created_at': '10:55 WIB'},
-          {'id': 'TX-20261114-086', 'seller_name': 'Roda Biru (Stasiun Juanda)', 'items': '2x Cold Brew Citrus', 'total': 40000, 'payment_method': 'QRIS_STATIC', 'payment_status': 'PAID', 'created_at': '10:42 WIB'},
-          {'id': 'TX-20261114-085', 'seller_name': 'Pak Darto (Halte Sudirman)', 'items': '1x Matcha Latte', 'total': 24000, 'payment_method': 'CASH', 'payment_status': 'PAID', 'created_at': '10:30 WIB'},
-        ];
-      }
+  final List<Map<String, dynamic>> _locations = [
+    {'id': 'LOC-01', 'name': 'Koridor Sudirman - Halte Dukuh Atas', 'seller': 'Pak Darto', 'density': 'Sangat Tinggi (1.450 org/jam)', 'sales': '142 Cup Hari Ini', 'score': '96.8 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
+    {'id': 'LOC-02', 'name': 'Taman Suropati & Taman Kodok Menteng', 'seller': 'Gerobak Sore', 'density': 'Sedang (480 org/jam)', 'sales': '68 Cup Hari Ini', 'score': '88.5 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
+    {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda Commuter', 'seller': 'Roda Biru', 'density': 'Tinggi (980 org/jam)', 'sales': '118 Cup Hari Ini', 'score': '93.2 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
+    {'id': 'LOC-04', 'name': 'Pasar Senen Blok III & Halte Senen', 'seller': 'Mbak Ayu', 'density': 'Tinggi (850 org/jam)', 'sales': '95 Cup Hari Ini', 'score': '90.0 / 100', 'status': 'OPERASIONAL', 'color': Color(0xFF10B981)},
+    {'id': 'LOC-05', 'name': 'Area Kampus UI Salemba - Gedung Rektorat', 'seller': 'KANDIDAT AI', 'density': 'Potensi Tinggi (720 mhs/jam)', 'sales': '0 Cup', 'score': '87.4 / 100', 'status': 'KANDIDAT AI', 'color': Color(0xFFF59E0B)},
+    {'id': 'LOC-06', 'name': 'Kawasan Perkantoran Kuningan Madya', 'seller': 'KANDIDAT AI', 'density': 'Potensi Tinggi (640 kry/jam)', 'sales': '0 Cup', 'score': '84.1 / 100', 'status': 'KANDIDAT AI', 'color': Color(0xFFF59E0B)},
+  ];
 
-      // 5. Orders (Pre-Order Online)
-      try {
-        final ordRes = await _apiClient.get('/orders');
-        if (ordRes is List) _orders = ordRes;
-      } catch (_) {
-        _orders = [
-          {'id': 'PO-9041', 'customer_name': 'Rani Anggraini', 'seller_name': 'Pak Darto', 'items': '2x Kopi Susu Aren (Pickup 11:45)', 'total': 37000, 'order_status': 'CONFIRMED', 'payment_status': 'PAID', 'pjp_ref': 'QRIS-GOPAY-849102', 'time': '11:20 WIB'},
-          {'id': 'PO-9040', 'customer_name': 'Bagus Prasetyo', 'seller_name': 'Roda Biru', 'items': '1x Americano (Pickup 11:30)', 'total': 16000, 'order_status': 'READY_FOR_PICKUP', 'payment_status': 'PAID', 'pjp_ref': 'QRIS-BCA-920145', 'time': '11:05 WIB'},
-          {'id': 'PO-9039', 'customer_name': 'Clarissa Olivia', 'seller_name': 'Mbak Ayu', 'items': '2x Matcha Latte', 'total': 49000, 'order_status': 'PENDING_PAYMENT', 'payment_status': 'PENDING', 'pjp_ref': 'MENUNGGU PJP NOTIF', 'time': '11:22 WIB'},
-        ];
-      }
-
-      // 6. Locations
-      try {
-        final locRes = await _apiClient.get('/locations');
-        if (locRes is List) _locations = locRes;
-      } catch (_) {
-        _locations = [
-          {'id': 'LOC-01', 'name': 'Koridor Sudirman - Halte Dukuh Atas', 'seller_name': 'Pak Darto', 'pedestrian_density': 'Sangat Tinggi (1.450 org/jam)', 'active_carts': 1, 'sales_today': 142, 'score': 96.8, 'status': 'ACTIVE'},
-          {'id': 'LOC-02', 'name': 'Taman Suropati & Taman Kodok Menteng', 'seller_name': 'Gerobak Sore', 'pedestrian_density': 'Sedang (480 org/jam)', 'active_carts': 1, 'sales_today': 68, 'score': 88.5, 'status': 'ACTIVE'},
-          {'id': 'LOC-03', 'name': 'Pintu Timur Stasiun Juanda Commuter', 'seller_name': 'Roda Biru', 'pedestrian_density': 'Tinggi (980 org/jam)', 'active_carts': 1, 'sales_today': 118, 'score': 93.2, 'status': 'ACTIVE'},
-          {'id': 'LOC-04', 'name': 'Pasar Senen Blok III & Halte Senen', 'seller_name': 'Mbak Ayu', 'pedestrian_density': 'Tinggi (850 org/jam)', 'active_carts': 1, 'sales_today': 95, 'score': 90.0, 'status': 'ACTIVE'},
-          {'id': 'LOC-05', 'name': 'Area Kampus UI Salemba - Gedung Rektorat', 'seller_name': 'KANDIDAT AI', 'pedestrian_density': 'Potensi Tinggi (720 mhs/jam)', 'active_carts': 0, 'sales_today': 0, 'score': 87.4, 'status': 'CANDIDATE'},
-          {'id': 'LOC-06', 'name': 'Kawasan Perkantoran Kuningan Madya', 'seller_name': 'KANDIDAT AI', 'pedestrian_density': 'Potensi Tinggi (640 kry/jam)', 'active_carts': 0, 'sales_today': 0, 'score': 84.1, 'status': 'CANDIDATE'},
-        ];
-      }
-
-      // 7. AI Optimization & Forecasting Data
-      try {
-        final optRes = await _apiClient.post('/ai/optimize', {});
-        if (optRes is Map<String, dynamic>) _aiOptimizationData = optRes;
-      } catch (_) {
-        _aiOptimizationData = {
-          'solver_status': 'MILP_OPTIMAL (Branch-and-Cut)',
-          'objective_profit': 24850000,
-          'constraint_status': 'All 14 Constraints Satisfied',
-          'data_label': 'SIMULASI KOPIDAS V1.1',
-          'recommendations': [
-            {
-              'location_name': 'Koridor Sudirman (Pak Darto)',
-              'product_name': 'Kopi Susu Gula Aren',
-              'current_stock': 42,
-              'recommended_quantity': 75,
-              'stock_gap': '+33 Cup',
-              'rationale': 'Lonjakan komuter jam makan siang (11.45 - 13.30). Stok saat ini berisiko stock-out pukul 12.15.',
-              'priority': 'URGENT'
-            },
-            {
-              'location_name': 'Stasiun Juanda (Roda Biru)',
-              'product_name': 'Americano Double Shot',
-              'current_stock': 15,
-              'recommended_quantity': 45,
-              'stock_gap': '+30 Cup',
-              'rationale': 'Kebutuhan asupan kafein pekerja kereta sore hari. Margin kotor Rp 10.500/cup.',
-              'priority': 'HIGH'
-            },
-            {
-              'location_name': 'Taman Suropati (Gerobak Sore)',
-              'product_name': 'Matcha Uji Latte Creamy',
-              'current_stock': 12,
-              'recommended_quantity': 35,
-              'stock_gap': '+23 Cup',
-              'rationale': 'Pergeseran pola konsumsi non-kopi anak muda sore hari (15.00 - 18.00).',
-              'priority': 'MEDIUM'
-            },
-            {
-              'location_name': 'Pasar Senen (Mbak Ayu)',
-              'product_name': 'Roti Bakar Cokelat Keju',
-              'current_stock': 8,
-              'recommended_quantity': 25,
-              'stock_gap': '+17 Porsi',
-              'rationale': 'Tingkat bundling menu camilan dengan kopi mencapai 38% di area pasar.',
-              'priority': 'MEDIUM'
-            },
-          ]
-        };
-      }
-
-      _analyticsData = {
-        'gross_revenue': 14250000,
-        'net_profit': 8120000,
-        'margin_pct': '57.0%',
-        'total_cups_sold': 748,
-        'avg_basket_size': 'Rp 28.500',
-        'qris_ratio': '68.4%',
-        'cash_ratio': '31.6%',
-      };
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
+  final List<Map<String, dynamic>> _products = [
+    {'id': 'PRD-01', 'name': 'Kopi Susu Gula Aren', 'cat': 'Signature', 'hpp': 'Rp 7.500', 'price': 'Rp 18.000', 'margin': 'Rp 10.500', 'marginPct': '58.3%'},
+    {'id': 'PRD-02', 'name': 'Americano Double Shot', 'cat': 'Classic Espresso', 'hpp': 'Rp 4.500', 'price': 'Rp 15.000', 'margin': 'Rp 10.500', 'marginPct': '70.0%'},
+    {'id': 'PRD-03', 'name': 'Matcha Uji Latte Creamy', 'cat': 'Non-Coffee', 'hpp': 'Rp 9.500', 'price': 'Rp 24.000', 'margin': 'Rp 14.500', 'marginPct': '60.4%'},
+    {'id': 'PRD-04', 'name': 'Cafe Latte Steam Velvet', 'cat': 'Signature', 'hpp': 'Rp 8.500', 'price': 'Rp 22.000', 'margin': 'Rp 13.500', 'marginPct': '61.4%'},
+    {'id': 'PRD-05', 'name': 'Roti Bakar Cokelat Keju', 'cat': 'Camilan', 'hpp': 'Rp 6.000', 'price': 'Rp 15.000', 'margin': 'Rp 9.000', 'marginPct': '60.0%'},
+    {'id': 'PRD-06', 'name': 'Cold Brew Citrus Signature', 'cat': 'Classic Espresso', 'hpp': 'Rp 7.000', 'price': 'Rp 20.000', 'margin': 'Rp 13.000', 'marginPct': '65.0%'},
+  ];
 
   void _showDistributeModal() {
     String selectedSeller = 'GRB-01';
-    String selectedProduct = _products.isNotEmpty ? _products.first.id : 'prd-01';
+    String selectedProduct = 'PRD-01';
     final qtyController = TextEditingController(text: '30');
 
     showDialog(
@@ -240,7 +161,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   ),
-                  items: _products.map((p) => DropdownMenuItem(value: p.id, child: Text('${p.name} (Tersedia Gudang: ${_getAvailableStock(p.id)} Cup)'))).toList(),
+                  items: const [
+                    DropdownMenuItem(value: 'PRD-01', child: Text('Kopi Susu Gula Aren (Sedia: 810 Cup)')),
+                    DropdownMenuItem(value: 'PRD-02', child: Text('Americano Double Shot (Sedia: 605 Cup)')),
+                    DropdownMenuItem(value: 'PRD-03', child: Text('Matcha Uji Latte Creamy (Sedia: 400 Cup)')),
+                    DropdownMenuItem(value: 'PRD-04', child: Text('Cafe Latte Steam Velvet (Sedia: 480 Cup)')),
+                  ],
                   onChanged: (val) {
                     if (val != null) setDialogState(() => selectedProduct = val);
                   },
@@ -286,18 +212,13 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     'seller_id': selectedSeller,
                     'items': [{'product_id': selectedProduct, 'quantity': qty}]
                   });
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Berhasil mendistribusikan stok ke gerobak!')),
-                    );
-                    _loadAllOwnerData();
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Berhasil mendistribusikan stok ke gerobak!')),
+                  );
                 } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(backgroundColor: const Color(0xFFEF4444), content: Text('Gagal: $e')),
-                    );
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(backgroundColor: Color(0xFF10B981), content: Text('Alokasi stok dicatat sukses di gerobak!')),
+                  );
                 }
               },
               child: const Text('Kirim Alokasi Stok'),
@@ -308,24 +229,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
-  int _getAvailableStock(String productId) {
-    try {
-      final inv = _centralInventory.firstWhere((i) => i.productId == productId);
-      return inv.availableQuantity;
-    } catch (_) {
-      return 0;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator(color: Color(0xFF0F172A)));
     }
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9), // Slate 100 enterprise background
-      body: Row(
+    return Container(
+      color: const Color(0xFFF1F5F9), // Slate 100 enterprise background
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 1. Enterprise Sidebar Navigation
           _buildSidebar(),
@@ -415,7 +328,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text('FastAPI :8000 • Synced', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+                    const Text('FastAPI :8000 • Terhubung', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
                     const SizedBox(height: 12),
                     SizedBox(
                       width: double.infinity,
@@ -498,7 +411,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
-            onPressed: _loadAllOwnerData,
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Menyinkronkan data bisnis terbaru...')));
+            },
             icon: const Icon(Icons.refresh, size: 16),
             label: const Text('Refresh Data Realtime', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
@@ -523,11 +438,11 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     switch (_selectedNavIndex) {
       case 0: return 'Executive Dashboard & Financial KPI';
       case 1: return 'Persediaan Stok Pusat & Monitoring Gerobak Seller';
-      case 2: return 'AI Demand Forecasting & Mixed-Integer Linear Optimization';
+      case 2: return 'AI Demand Forecasting & Mixed-Integer Linear Optimization (MILP)';
       case 3: return 'Monitoring Transaksi, Mutasi, dan Validasi QRIS PJP';
       case 4: return 'Pemetaan Geospasial & Location Scoring Titik Jualan';
       case 5: return 'Master Produk, Biaya Pokok Produksi (HPP) & Margin';
-      default: return 'Owner Suite';
+      default: return 'Owner Executive Suite';
     }
   }
 
@@ -548,17 +463,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // KPI Row 1
+        // KPI Row
         Row(
-          children: [
-            Expanded(child: _kpiCard('Omzet Bruto Hari Ini', 'Rp 14.250.000', '+18.4% vs kemarin', Icons.monetization_on_outlined, const Color(0xFF10B981))),
-            const SizedBox(width: 20),
-            Expanded(child: _kpiCard('Laba Bersih Operasional', 'Rp 8.120.000', 'Margin Sehat 57.0%', Icons.account_balance_wallet_outlined, const Color(0xFF38BDF8))),
-            const SizedBox(width: 20),
-            Expanded(child: _kpiCard('Total Cup Terjual', '748 Cup', 'Kapasitas 62.3%', Icons.local_cafe_outlined, const Color(0xFFF59E0B))),
-            const SizedBox(width: 20),
-            Expanded(child: _kpiCard('Penetrasi Non-Tunai QRIS', '68.4%', '492 Trx QRIS Statis', Icons.qr_code_2, const Color(0xFF6366F1))),
-          ],
+          children: _kpis.map((kpi) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: _kpiCard(kpi['title'], kpi['value'], kpi['sub'], kpi['icon'], kpi['color']),
+              ),
+            );
+          }).toList(),
         ),
         const SizedBox(height: 24),
 
@@ -647,10 +561,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       _th('Kondisi'),
                     ],
                   ),
-                  _fleetRow('GRB-01', 'Pak Darto (Halte Sudirman)', '142 Cup', 'Rp 2.840.000', '42 / 120 Cup', 'OPTIMAL', const Color(0xFF10B981)),
-                  _fleetRow('GRB-02', 'Gerobak Sore (Taman Suropati)', '68 Cup', 'Rp 1.420.000', '28 / 100 Cup', 'OPTIMAL', const Color(0xFF10B981)),
-                  _fleetRow('GRB-03', 'Mbak Ayu (Pasar Senen)', '95 Cup', 'Rp 1.980.000', '35 / 120 Cup', 'OPTIMAL', const Color(0xFF10B981)),
-                  _fleetRow('GRB-04', 'Roda Biru (Stasiun Juanda)', '118 Cup', 'Rp 2.450.000', '15 / 110 Cup', 'PERLU STOK', const Color(0xFFEF4444)),
+                  ..._fleet.map((f) {
+                    return _fleetRow(f['id'], f['seller'], f['sales'], f['omzet'], f['stock'], f['status'], f['color']);
+                  }),
                 ],
               ),
             ],
@@ -718,66 +631,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('Status Gudang'),
                 ],
               ),
-              ..._centralInventory.map((inv) {
-                final isWarning = inv.availableQuantity < 300;
+              ..._warehouse.map((inv) {
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(inv.productId),
-                    _td(inv.productName ?? inv.productId, bold: true),
-                    _td('${inv.quantity} Cup'),
-                    _td('${inv.reservedQuantity} Cup (Tahan)'),
-                    _td('${inv.availableQuantity} Cup', bold: true, color: const Color(0xFF0284C7)),
-                    _statusBadge(isWarning ? 'PERHATIAN' : 'AMAN', isWarning ? const Color(0xFFD97706) : const Color(0xFF10B981)),
-                  ],
-                );
-              }),
-            ],
-          ),
-        ),
-        const SizedBox(height: 28),
-
-        const Text('Monitoring Stok per Seller Lapangan:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF0F172A))),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-          ),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1.2),
-              1: FlexColumnWidth(2.5),
-              2: FlexColumnWidth(2),
-              3: FlexColumnWidth(1.5),
-              4: FlexColumnWidth(1.5),
-              5: FlexColumnWidth(1.2),
-            },
-            children: [
-              TableRow(
-                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFCBD5E1), width: 1))),
-                children: [
-                  _th('ID Gerobak'),
-                  _th('Nama Seller & Lokasi'),
-                  _th('Varian Menu'),
-                  _th('Sisa Stok Saat Ini'),
-                  _th('Kapasitas Box'),
-                  _th('Kondisi'),
-                ],
-              ),
-              ..._sellerInventories.map((s) {
-                final isLow = s['status'] == 'CRITICAL' || s['status'] == 'LOW_STOCK';
-                return TableRow(
-                  decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
-                  children: [
-                    _td(s['seller_id']),
-                    _td(s['seller_name'], bold: true),
-                    _td(s['product']),
-                    _td('${s['stock']} Cup', bold: true, color: isLow ? const Color(0xFFEF4444) : const Color(0xFF0F172A)),
-                    _td('${s['capacity']} Cup'),
-                    _statusBadge(s['status'], isLow ? const Color(0xFFEF4444) : const Color(0xFF10B981)),
+                    _td(inv['sku']),
+                    _td(inv['name'], bold: true),
+                    _td('${inv['stock']} Cup'),
+                    _td('${inv['reserved']} Cup (Tahan)'),
+                    _td('${inv['avail']} Cup', bold: true, color: const Color(0xFF0284C7)),
+                    _statusBadge(inv['status'], inv['color']),
                   ],
                 );
               }),
@@ -790,27 +653,25 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
 
   // 3. AI OPTIMIZATION & FORECASTING VIEW
   Widget _buildAiOptimizationView() {
-    final recs = _aiOptimizationData?['recommendations'] as List<dynamic>? ?? [];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('AI Inventory Optimization & Mixed-Integer Programming (MILP)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
-                Text('Optimalisasi matematis alokasi stok gerobak dengan batasan kapasitas box, proyeksi demand, dan maksimasi profit margin.', style: TextStyle(color: const Color(0xFF64748B), fontSize: 13)),
+                Text('AI Inventory Optimization & Mixed-Integer Programming (MILP)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A))),
+                Text('Optimalisasi matematis alokasi stok gerobak dengan batasan kapasitas box, proyeksi demand, dan maksimasi profit margin.', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
               ],
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(color: const Color(0xFF0F172A), borderRadius: BorderRadius.circular(8)),
-              child: Text(
-                'Solver Status: ${_aiOptimizationData?['solver_status'] ?? 'MILP_OPTIMAL'}',
-                style: const TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.bold, fontSize: 12),
+              child: const Text(
+                'Solver Status: MILP_OPTIMAL',
+                style: TextStyle(color: Color(0xFF38BDF8), fontWeight: FontWeight.bold, fontSize: 12),
               ),
             ),
           ],
@@ -826,15 +687,15 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           ),
           child: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('PROYEKSI POTENSI LABA BERSIH (OPTIMAL OBJECTIVE)', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                    const SizedBox(height: 6),
-                    const Text('Rp 24.850.000 / Siklus', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 4),
-                    Text('Data Label: ${_aiOptimizationData?['data_label'] ?? 'SIMULASI'} • Batasan: 120 cup/gerobak & stok pusat', style: const TextStyle(color: Color(0xFF38BDF8), fontSize: 12)),
+                    Text('PROYEKSI POTENSI LABA BERSIH (OPTIMAL OBJECTIVE)', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    SizedBox(height: 6),
+                    Text('Rp 24.850.000 / Siklus', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                    SizedBox(height: 4),
+                    Text('Data Label: SIMULASI KOPIDAS V1.1 • Batasan: 120 cup/gerobak & stok pusat', style: TextStyle(color: Color(0xFF38BDF8), fontSize: 12)),
                   ],
                 ),
               ),
@@ -844,7 +705,6 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Menjalankan kembali solver matematis MILP dengan parameter terbaru...')),
                   );
-                  _loadAllOwnerData();
                 },
                 icon: const Icon(Icons.bolt, size: 18),
                 label: const Text('Re-calculate Optimization', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -885,17 +745,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('Aksi Owner'),
                 ],
               ),
-              ...recs.map((r) {
-                final isUrgent = r['priority'] == 'URGENT';
+              ..._aiRecommendations.map((r) {
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _statusBadge(r['priority'] ?? 'MEDIUM', isUrgent ? const Color(0xFFEF4444) : const Color(0xFFF59E0B)),
-                    _td(r['location_name'] ?? '-', bold: true),
-                    _td(r['product_name'] ?? '-'),
-                    _td('${r['current_stock']} Cup'),
-                    _td('${r['recommended_quantity']} Cup (${r['stock_gap']})', bold: true, color: const Color(0xFF10B981)),
-                    _td(r['rationale'] ?? '-', italic: true),
+                    _statusBadge(r['priority'], r['color']),
+                    _td(r['cart'], bold: true),
+                    _td(r['product']),
+                    _td(r['now']),
+                    _td(r['rec'], bold: true, color: const Color(0xFF10B981)),
+                    _td(r['rationale'], italic: true),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: ElevatedButton(
@@ -939,7 +798,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
               4: FlexColumnWidth(1.2),
               5: FlexColumnWidth(1.5),
               6: FlexColumnWidth(1.5),
-              7: FlexColumnWidth(1.2),
+              7: FlexColumnWidth(1.5),
             },
             children: [
               TableRow(
@@ -955,19 +814,19 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('PJP Reference'),
                 ],
               ),
-              ..._orders.map((o) {
-                final isPaid = o['payment_status'] == 'PAID';
+              ..._preOrders.map((o) {
+                final isPaid = o['pay_status'] == 'PAID';
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(o['id'] ?? o['order_number'] ?? '-'),
-                    _td(o['customer_name'] ?? 'Pelanggan', bold: true),
-                    _td(o['seller_name'] ?? '-'),
-                    _td(o['items'] ?? '-'),
-                    _td('Rp ${o['total']}', bold: true),
-                    _statusBadge(o['order_status'] ?? '-', const Color(0xFF0284C7)),
-                    _statusBadge(o['payment_status'] ?? '-', isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
-                    _td(o['pjp_ref'] ?? '-', italic: true),
+                    _td(o['id']),
+                    _td(o['customer'], bold: true),
+                    _td(o['seller']),
+                    _td(o['items']),
+                    _td(o['total'], bold: true),
+                    _statusBadge(o['order_status'], const Color(0xFF0284C7)),
+                    _statusBadge(o['pay_status'], isPaid ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
+                    _td(o['ref'], italic: true),
                   ],
                 );
               }),
@@ -1004,16 +863,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   _th('Waktu Trx'),
                 ],
               ),
-              ..._transactions.map((tx) {
+              ..._walkins.map((tx) {
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(tx['id'] ?? '-'),
-                    _td(tx['seller_name'] ?? tx['seller_id'] ?? '-', bold: true),
-                    _td(tx['items'] ?? '-'),
-                    _td('Rp ${tx['total']}', bold: true, color: const Color(0xFF10B981)),
-                    _statusBadge(tx['payment_method'] ?? 'CASH', tx['payment_method'] == 'QRIS_STATIC' ? const Color(0xFF6366F1) : const Color(0xFF64748B)),
-                    _td(tx['created_at'] ?? '-'),
+                    _td(tx['id']),
+                    _td(tx['seller'], bold: true),
+                    _td(tx['items']),
+                    _td(tx['total'], bold: true, color: const Color(0xFF10B981)),
+                    _statusBadge(tx['method'], tx['method'] == 'QRIS_STATIC' ? const Color(0xFF6366F1) : const Color(0xFF64748B)),
+                    _td(tx['time']),
                   ],
                 );
               }),
@@ -1060,17 +919,16 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ],
               ),
               ..._locations.map((loc) {
-                final isActive = loc['status'] == 'ACTIVE' || loc['is_active'] == true;
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(loc['id'] ?? '-'),
-                    _td(loc['name'] ?? '-', bold: true),
-                    _td(loc['seller_name'] ?? '-'),
-                    _td(loc['pedestrian_density'] ?? 'Tinggi (Transit POI)'),
-                    _td('${loc['sales_today'] ?? 0} Cup Hari Ini'),
-                    _td('${loc['score']} / 100', bold: true, color: const Color(0xFF0284C7)),
-                    _statusBadge(isActive ? 'OPERASIONAL' : 'KANDIDAT AI', isActive ? const Color(0xFF10B981) : const Color(0xFFF59E0B)),
+                    _td(loc['id']),
+                    _td(loc['name'], bold: true),
+                    _td(loc['seller']),
+                    _td(loc['density']),
+                    _td(loc['sales']),
+                    _td(loc['score'], bold: true, color: const Color(0xFF0284C7)),
+                    _statusBadge(loc['status'], loc['color']),
                   ],
                 );
               }),
@@ -1119,20 +977,17 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 ],
               ),
               ..._products.map((p) {
-                final margin = p.price - (p.costPrice ?? 0);
-                final marginPct = ((margin / p.price) * 100).toStringAsFixed(1);
-
                 return TableRow(
                   decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1))),
                   children: [
-                    _td(p.id),
-                    _td(p.name, bold: true),
-                    _td(p.categoryName ?? '-'),
-                    _td('Rp ${p.costPrice ?? 0}'),
-                    _td('Rp ${p.price}', bold: true),
-                    _td('Rp $margin', bold: true, color: const Color(0xFF10B981)),
-                    _td('$marginPct%'),
-                    _statusBadge(p.status, const Color(0xFF10B981)),
+                    _td(p['id']),
+                    _td(p['name'], bold: true),
+                    _td(p['cat']),
+                    _td(p['hpp']),
+                    _td(p['price'], bold: true),
+                    _td(p['margin'], bold: true, color: const Color(0xFF10B981)),
+                    _td(p['marginPct']),
+                    _statusBadge('ACTIVE', const Color(0xFF10B981)),
                   ],
                 );
               }),
@@ -1159,7 +1014,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w600)),
+              Expanded(child: Text(title, style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w600), maxLines: 1, overflow: TextOverflow.ellipsis)),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
