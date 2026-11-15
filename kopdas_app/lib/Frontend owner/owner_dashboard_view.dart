@@ -6150,6 +6150,48 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
     );
   }
 
+  Widget _buildWeatherSessionItem(String timeLabel, String tempCondition, String note, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, size: 12, color: const Color(0xFF1E3932)),
+                  const SizedBox(width: 4),
+                  Text(
+                    timeLabel,
+                    style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF1E3932)),
+                  ),
+                ],
+              ),
+              Text(
+                tempCondition,
+                style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+          Text(
+            note,
+            style: const TextStyle(fontSize: 9.5, color: Color(0xFF4B5563), height: 1.3),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildExecutiveAiBriefingCard() {
     return Container(
       decoration: BoxDecoration(
@@ -6160,9 +6202,9 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Briefing
+          // 1. Header Briefing
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
             ),
@@ -6184,12 +6226,12 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
                         Text(
-                          'Analisis Operasional AI Hari Minggu — Kota Padang',
+                          'Analisis Penjualan & Disposisi Operasional AI — Kota Padang',
                           style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: Color(0xFF111827)),
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Prakiraan cuaca lapangan, pemetaan mobilitas akhir pekan, dan arahan stok kopi siap saji (ready-to-drink)',
+                          'Prakiraan cuaca 1 hari, pola mobilitas hari libur, dan rekomendasi alokasi stok 100% siap saji',
                           style: TextStyle(fontSize: 11.5, color: Color(0xFF6B7280)),
                         ),
                       ],
@@ -6197,7 +6239,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF3F4F6),
                     borderRadius: BorderRadius.circular(4),
@@ -6209,7 +6251,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                       Icon(Icons.wb_sunny_outlined, size: 12, color: Color(0xFF1E3932)),
                       SizedBox(width: 5),
                       Text(
-                        '28°C Cerah Berawan • BMKG Padang',
+                        'BMKG Padang • 28°C Cerah Berawan',
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
                       ),
                     ],
@@ -6219,44 +6261,177 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
             ),
           ),
 
-          // Narrative Prose
+          // 2. Body Briefing
           Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 2.1 Analisis Cuaca Lapangan 1 Hari Kota Padang
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF9FAFB),
                     borderRadius: BorderRadius.circular(6),
-                    border: const Border(
-                      left: BorderSide(color: Color(0xFF1E3932), width: 3.5),
-                      top: BorderSide(color: Color(0xFFE5E7EB)),
-                      right: BorderSide(color: Color(0xFFE5E7EB)),
-                      bottom: BorderSide(color: Color(0xFFE5E7EB)),
-                    ),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Ringkasan Intelijen Lapangan & Pola Hari Minggu:',
-                        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(Icons.wb_cloudy_outlined, size: 14, color: Color(0xFF1E3932)),
+                              SizedBox(width: 6),
+                              Text(
+                                'Prakiraan & Analisa Cuaca 1 Hari — Kota Padang (Live BMKG):',
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFECFDF5),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: const Color(0xFFA7F3D0)),
+                            ),
+                            child: const Text(
+                              'Potensi Hujan: 15% (Sangat Rendah)',
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF047857)),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 6),
-                      Text(
-                        '• Kondisi Lapangan Hari Minggu: Seluruh kawasan kantor protokol (Khatib Sulaiman) dan kampus (UNP) libur total, serta GOR H. Agus Salim saat ini ditutup. Pola mobilitas warga Kota Padang di akhir pekan terpusat masif di pesisir Pantai Padang (Taplau) untuk olahraga/jogging pagi dan rekreasi sunset sore, serta aktivitas belanja mingguan Pasar Raya dan sentra kuliner Kota Tua / Pondok.\n\n'
-                        '• Konsep Kopi Siap Saji (Ready-to-Drink): Seluruh armada membawa stok produk siap saji dari hub gudang pusat dalam coolbox berinsulasi tebal dengan es kristal. Tidak ada proses seduh di tempat (seller tidak menyeduh di gerobak), sehingga setiap transaksi berlangsung cepat (10-15 detik) untuk menangani lonjakan antrean pembeli.\n\n'
-                        '• Rencana Disposisi Cerdas: 4 armada gerobak difokuskan penuh ke titik keramaian hari libur: Taplau Sektor Utara (Muaro Lasak & Danau Cimpago), Taplau Sektor Selatan (Tugu IORA & Pantai Purus), Pasar Raya & Kota Tua Pondok, dan Sunset Point Flamboyan dengan total alokasi 640 cup siap saji.',
-                        style: TextStyle(fontSize: 12, color: Color(0xFF1F2937), height: 1.55),
+                      const SizedBox(height: 8),
+
+                      // 4 Sesi Cuaca Hari Ini (Pagi, Siang, Sore, Malam)
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isWide = constraints.maxWidth > 750;
+                          final sessions = [
+                            _buildWeatherSessionItem(
+                              'Pagi (06:00 - 10:30)',
+                              '26°C Cerah Sejuk',
+                              'Olahraga Pantai Taplau ramai; pesepeda & pelari memburu Kopi Aren & Lemon Tea dingin.',
+                              Icons.wb_twilight_outlined,
+                            ),
+                            _buildWeatherSessionItem(
+                              'Siang (10:30 - 15:00)',
+                              '31°C Panas Terik',
+                              'Puncak dahaga komuter di Pasar Raya & Kota Tua; varian non-coffee dingin laris pesat.',
+                              Icons.wb_sunny_outlined,
+                            ),
+                            _buildWeatherSessionItem(
+                              'Sore (15:00 - 18:30)',
+                              '28°C Berawan Hangat',
+                              'Sunset Taplau & Batang Arau memuncak; lonjakan Thai Tea & Lemon Tea dingin (+55%).',
+                              Icons.beach_access_outlined,
+                            ),
+                            _buildWeatherSessionItem(
+                              'Malam (18:30 - 21:00)',
+                              '25°C Teduh Nyaman',
+                              'Shift selesai kondusif; rekonsiliasi kas tunai & QRIS serta pengecekan sisa coolbox.',
+                              Icons.nights_stay_outlined,
+                            ),
+                          ];
+
+                          if (isWide) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (int i = 0; i < sessions.length; i++) ...[
+                                  if (i > 0) const SizedBox(width: 8),
+                                  Expanded(child: sessions[i]),
+                                ],
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                Row(children: [Expanded(child: sessions[0]), const SizedBox(width: 8), Expanded(child: sessions[1])]),
+                                const SizedBox(height: 8),
+                                Row(children: [Expanded(child: sessions[2]), const SizedBox(width: 8), Expanded(child: sessions[3])]),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Kesimpulan Analisa Cuaca
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: const Color(0xFFE5E7EB)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Icon(Icons.check_circle_outline, size: 13, color: Color(0xFF059669)),
+                            SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                'Analisis Dampak Cuaca AI: Cuaca cerah berawan (28°C) dengan indeks kelembapan 78% RH sangat kondusif untuk penjualan gerobak outdoor. Suhu panas pesisir di siang dan sore hari mendorong 72% alokasi berupa minuman dingin siap saji di coolbox berinsulasi es kristal untuk perputaran omzet maksimal.',
+                                style: TextStyle(fontSize: 11, color: Color(0xFF374151), height: 1.4),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // 2.2 Analisis Intelijen Mobilitas Hari Minggu & Model Siap Saji
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF9FAFB),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 3.5,
+                        height: 82,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E3932),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              'Analisis Kepadatan Lapangan & Pola Hari Minggu (Kota Padang):',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              '• Kondisi Riil Hari Libur: Kawasan kantor dinas Khatib Sulaiman dan kampus UNP Air Tawar libur penuh, serta GOR H. Agus Salim ditutup. Pusat keramaian warga Kota Padang beralih masif ke Pantai Padang (Taplau) untuk olahraga/jogging pagi dan wisata sunset sore, belanja mingguan Pasar Raya, serta kuliner keluarga Kota Tua / Pondok.\n'
+                              '• Konsep 100% Kopi Siap Saji (Ready-to-Drink): Seluruh armada membawa minuman sealed siap minum dari hub gudang pusat dalam coolbox es kristal. Tidak ada waktu tunggu menyeduh di gerobak, transaksi cepat 10-15 detik per pelanggan untuk menyerap antrean pejalan kaki.\n'
+                              '• Disposisi Taktis 4 Armada: 2 armada dikerahkan ke Taplau (Sektor Utara & Sektor Selatan), 1 armada di Pasar Raya & Kota Tua Pondok, dan 1 armada di Sunset Point Flamboyan dengan total alokasi 640 cup siap saji.',
+                              style: TextStyle(fontSize: 11.5, color: Color(0xFF1F2937), height: 1.45),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 14),
 
-                // 4 Integrated Metric Items (Clean & Neutral, No Alay Colors)
+                // 2.3 4 Metric Items
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isWide = constraints.maxWidth > 800;
@@ -6375,6 +6550,23 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F4F6),
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: const Color(0xFFE5E7EB)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.wb_sunny_outlined, size: 11, color: Color(0xFF1E3932)),
+                        SizedBox(width: 4),
+                        Text('28°C BMKG', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF374151))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF3F4F6),
@@ -6407,7 +6599,7 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
           const Divider(height: 1, color: Color(0xFFE5E7EB)),
           const SizedBox(height: 12),
 
-          // 2. Body 2 Kolom Lega: Kiri (Menu Siap Saji + Jadwal), Kanan (Kenapa Bawa Segitu + Tombol)
+          // 2. Body 2 Kolom: Kiri (Menu Siap Saji + Jadwal), Kanan (Kenapa Bawa Segitu + Tombol)
           LayoutBuilder(
             builder: (context, constraints) {
               final isWide = constraints.maxWidth > 850;
@@ -6482,30 +6674,41 @@ class _OwnerDashboardViewState extends State<OwnerDashboardView> {
                     decoration: BoxDecoration(
                       color: const Color(0xFFF9FAFB),
                       borderRadius: BorderRadius.circular(6),
-                      border: const Border(
-                        left: BorderSide(color: Color(0xFF1E3932), width: 3),
-                        top: BorderSide(color: Color(0xFFE5E7EB)),
-                        right: BorderSide(color: Color(0xFFE5E7EB)),
-                        bottom: BorderSide(color: Color(0xFFE5E7EB)),
-                      ),
+                      border: Border.all(color: const Color(0xFFE5E7EB)),
                     ),
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: const [
-                            Icon(Icons.psychology_outlined, size: 14, color: Color(0xFF1E3932)),
-                            SizedBox(width: 5),
-                            Text(
-                              'Kenapa Bawa Segitu? — Analisis Kepadatan Hari Minggu:',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                            ),
-                          ],
+                        Container(
+                          width: 3.5,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E3932),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          kenapaBawaSegitu,
-                          style: const TextStyle(fontSize: 11, color: Color(0xFF374151), height: 1.45),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: const [
+                                  Icon(Icons.psychology_outlined, size: 14, color: Color(0xFF1E3932)),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Kenapa Bawa Segitu? — Analisis Kepadatan Hari Minggu:',
+                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                kenapaBawaSegitu,
+                                style: const TextStyle(fontSize: 11, color: Color(0xFF374151), height: 1.45),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
