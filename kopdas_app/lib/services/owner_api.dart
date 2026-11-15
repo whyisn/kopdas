@@ -77,6 +77,15 @@ class OwnerApi {
       return {};
     }
   }
+
+  Future<Map<String, dynamic>> getOperationalIntelligence() async {
+    try {
+      final res = await _api.get('/ai/operational-intelligence');
+      return res is Map<String, dynamic> ? res : {};
+    } catch (_) {
+      return {};
+    }
+  }
 }
 
 final OwnerApi ownerApi = OwnerApi();
